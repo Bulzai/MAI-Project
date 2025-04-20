@@ -13,6 +13,26 @@ namespace TarodevController
         private Vector2 _frameVelocity;
         private bool _cachedQueryStartInColliders;
 
+
+        #region BulletStuff
+
+        [SerializeField] private BulletData bulletData;
+        [SerializeField] private Transform firePoint; // This is your gun barrel
+
+        private float _lastShotTime;
+        private Vector2 _aimInput;
+
+        private void Shoot(Vector2 direction)
+        {
+            if (direction == Vector2.zero) return;
+
+            GameObject bullet = Instantiate(bulletData.bulletPrefab, firePoint.position, Quaternion.identity);
+            bullet.GetComponent<Bullet>().Initialize(direction.normalized, bulletData);
+        }
+
+        #endregion
+
+
         #region Interface
 
         public Vector2 FrameInput => _frameInput.Move;
@@ -35,8 +55,26 @@ namespace TarodevController
         {
             _time += Time.deltaTime;
             GatherInput();
+
+            //shooting stuff
+            handleShootingInput();
+
         }
 
+        private void handleShootingInput()
+        {
+            // Right stick aim input
+            _aimInput = new Vector2(Input.GetAxis("RightStickHorizontal"), Input.GetAxis("RightStickVertical"));
+
+            // Only shoot if stick is moved and cooldown passed or R1 is pressed
+            bool wantsToShoot = Input.GetButton("Fire1"); // R1 should be mapped to "Fire1" in Input Manager
+
+            if (wantsToShoot && Time.time > _lastShotTime + bulletData.cooldown)
+            {
+                Shoot(_aimInput);
+                _lastShotTime = Time.time;
+            }
+        }
         private void GatherInput()
         {
             _frameInput = new FrameInput
