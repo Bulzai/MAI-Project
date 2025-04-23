@@ -18,6 +18,7 @@ public class PlayerAimWeapon : MonoBehaviour
     public class OnShootEventArgs : EventArgs
     {
         public Vector3 gunEndPointPosition;
+        public Vector3 shootDirection;
     }
 
     private void Start()
@@ -31,7 +32,7 @@ public class PlayerAimWeapon : MonoBehaviour
         if (direction == Vector2.zero) return;
 
         GameObject bullet = Instantiate(bulletData.bulletPrefab, firePoint.position, Quaternion.identity);
-
+        bullet.transform.eulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(direction));
         Bullet bulletScript = bullet.GetComponent<Bullet>();
         if (bulletScript == null)
         {
@@ -86,8 +87,18 @@ public class PlayerAimWeapon : MonoBehaviour
             _lastShotTime = Time.time;
             OnShoot?.Invoke(this, new OnShootEventArgs
             {
-                gunEndPointPosition = firePoint.transform.position
+                gunEndPointPosition = firePoint.transform.position,
+                shootDirection = _currentAimDirection
             });
         }
+    }
+
+    public float GetAngleFromVectorFloat(Vector2 dir)
+    {
+        dir = dir.normalized;
+        float n = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        if (n < 0) n += 360;
+
+        return n;
     }
 }

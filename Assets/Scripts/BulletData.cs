@@ -13,6 +13,8 @@ public class BulletData : ScriptableObject
     public Sprite bulletSprite;
     public GameObject hitEffectPrefab;
     public GameObject bulletPrefab;
-
+    public float launchForce = 10f;
+    public bool useGravity = true;
+    public float gravityScale = 1f;
 }
 

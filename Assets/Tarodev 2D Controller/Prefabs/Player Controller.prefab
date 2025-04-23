@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8308064975635529236}
   - component: {fileID: 5588853437513715808}
+  - component: {fileID: 5892977899446029454}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -116,6 +117,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5892977899446029454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671573836678418120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d18dfc30a5494fb4b891f39c0789d774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAimWeapon: {fileID: 3130827549848309865}
+  cameraShaker: {fileID: 0}
 --- !u!1 &1544650614272011804
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,7 +143,7 @@ GameObject:
   - component: {fileID: 1544650614272011792}
   - component: {fileID: 1544650614272011793}
   - component: {fileID: 1544650614272011794}
-  - component: {fileID: 5576472357719319975}
+  - component: {fileID: 3130827549848309865}
   m_Layer: 6
   m_Name: Player Controller
   m_TagString: Player
@@ -228,7 +243,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.7}
   m_Size: {x: 0.9, y: 1.4}
   m_Direction: 0
---- !u!114 &5576472357719319975
+--- !u!114 &3130827549848309865
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
