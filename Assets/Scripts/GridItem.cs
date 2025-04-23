@@ -9,18 +9,6 @@ public class GridItem : MonoBehaviour
     public bool Placed { get; private set; }
     public BoundsInt area;
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    #region Grid Methods
 
     public bool CanBePlaced()
     {
@@ -45,10 +33,6 @@ public class GridItem : MonoBehaviour
         GridPlacementSystem.gridPlacementSystem.TakeArea(areaTemp);
         GameEvents.ToggleGrid();
     }
-
-
-    #endregion Grid Methods
-
 
 
 }
