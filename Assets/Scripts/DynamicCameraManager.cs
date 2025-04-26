@@ -2,19 +2,25 @@ using UnityEngine;
 
 public class DynamicCamera2DManager : MonoBehaviour
 {
-    public Camera MyCam;
+    public Camera DynamicCamera;
     public Transform[] FocusObjects;
-    public float speed = 3f;
+    public float speed = 1f;
     public float minOrthographicSize = 5f;
     public float maxOrthographicSize = 20f;
     public float padding = 0.1f; // Padding around objects in screen space (0-1)
     public Vector3 fallbackPosition = Vector3.zero; // Position to use when no valid targets
     public float fallbackSize = 10f; // Size to use when no valid targets
 
+    void Start()
+    {
+        if (DynamicCamera == null)
+            DynamicCamera = Camera.main; // Auto-assigns the main camera [note: because the D&D didn't work in the Inspector of this script]
+    }
+
     void Update()
     {
-        // Ensure we're using orthographic projection for 2D
-        MyCam.orthographic = true;
+        // Ensure we're using orthographic projection for 2D - [note: EVEN THOUGH in the Inspector the Main Camera "Projection" is set to "Perspective" - since it is smoother than Orthographic]
+        DynamicCamera.orthographic = true;
 
         // Filter out null transforms
         var validTransforms = System.Array.FindAll(FocusObjects, t => t != null);
@@ -22,14 +28,14 @@ public class DynamicCamera2DManager : MonoBehaviour
         // If no valid transforms, use fallback position and size
         if (validTransforms.Length == 0)
         {
-            MyCam.transform.position = Vector3.Lerp(
-                MyCam.transform.position,
-                new Vector3(fallbackPosition.x, fallbackPosition.y, MyCam.transform.position.z),
+            DynamicCamera.transform.position = Vector3.Lerp(
+                DynamicCamera.transform.position,
+                new Vector3(fallbackPosition.x, fallbackPosition.y, DynamicCamera.transform.position.z),
                 Time.deltaTime * speed
             );
 
-            MyCam.orthographicSize = Mathf.Lerp(
-                MyCam.orthographicSize,
+            DynamicCamera.orthographicSize = Mathf.Lerp(
+                DynamicCamera.orthographicSize,
                 fallbackSize,
                 Time.deltaTime * speed
             );
@@ -51,11 +57,11 @@ public class DynamicCamera2DManager : MonoBehaviour
 
         // Calculate center point
         Vector3 center = (min + max) * 0.5f;
-        center.z = MyCam.transform.position.z; // Maintain camera's z position
+        center.z = DynamicCamera.transform.position.z; // Maintain camera's z position
 
         // Move camera towards center
-        MyCam.transform.position = Vector3.Lerp(
-            MyCam.transform.position,
+        DynamicCamera.transform.position = Vector3.Lerp(
+            DynamicCamera.transform.position,
             center,
             Time.deltaTime * speed
         );
@@ -65,15 +71,15 @@ public class DynamicCamera2DManager : MonoBehaviour
         float height = max.y - min.y;
 
         // Calculate required size based on width/height (add padding)
-        float sizeBasedOnWidth = (width * 0.5f) / MyCam.aspect * (1f + padding);
+        float sizeBasedOnWidth = (width * 0.5f) / DynamicCamera.aspect * (1f + padding);
         float sizeBasedOnHeight = (height * 0.5f) * (1f + padding);
 
         float targetOrthoSize = Mathf.Max(sizeBasedOnWidth, sizeBasedOnHeight);
         targetOrthoSize = Mathf.Clamp(targetOrthoSize, minOrthographicSize, maxOrthographicSize);
 
         // Smoothly adjust orthographic size
-        MyCam.orthographicSize = Mathf.Lerp(
-            MyCam.orthographicSize,
+        DynamicCamera.orthographicSize = Mathf.Lerp(
+            DynamicCamera.orthographicSize,
             targetOrthoSize,
             Time.deltaTime * speed
         );
