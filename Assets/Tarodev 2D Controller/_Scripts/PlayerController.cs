@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace TarodevController
 {
@@ -12,8 +13,11 @@ namespace TarodevController
         private FrameInput _frameInput;
         private Vector2 _frameVelocity;
         private bool _cachedQueryStartInColliders;
+        
+        private Vector2 movementInput = Vector2.zero;
 
-
+        private bool jumpPressed;
+        private bool jumpHeld;
 
         #region Interface
 
@@ -39,15 +43,33 @@ namespace TarodevController
             GatherInput();
 
         }
-
+        public void OnMove(InputAction.CallbackContext context)
+        {
+            movementInput = context.ReadValue<Vector2>();  
+        }
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                jumpPressed = true; // Jump button just pressed
+                jumpHeld = true;    // Also considered held
+            }
+            else if (context.canceled)
+            {
+                jumpHeld = false;   // Released
+            }
+        }
         private void GatherInput()
         {
             _frameInput = new FrameInput
             {
-                JumpDown = Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.C),
-                JumpHeld = Input.GetButton("Jump") || Input.GetKey(KeyCode.C),
-                Move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"))
+                JumpDown = jumpPressed,
+                JumpHeld = jumpHeld,
+                //Move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"))
+                Move = movementInput
+
             };
+            jumpPressed = false;
 
             if (_stats.SnapInput)
             {

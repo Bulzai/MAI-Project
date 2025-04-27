@@ -70,7 +70,7 @@ public class PlayerAimWeapon : MonoBehaviour
         float angle = Mathf.Atan2(_lastValidAimDirection.y, _lastValidAimDirection.x) * Mathf.Rad2Deg;
         aimTransform.eulerAngles = new Vector3(0, 0, angle);
 
-        Debug.Log($"Input: ({horizontal}, {vertical}) | Angle: {Mathf.Atan2(vertical, horizontal) * Mathf.Rad2Deg}");
+        //Debug.Log($"Input: ({horizontal}, {vertical}) | Angle: {Mathf.Atan2(vertical, horizontal) * Mathf.Rad2Deg}");
 
         return _lastValidAimDirection;
     }
