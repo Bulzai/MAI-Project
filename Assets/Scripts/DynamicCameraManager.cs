@@ -3,13 +3,14 @@ using UnityEngine;
 public class DynamicCamera2DManager : MonoBehaviour
 {
     public Camera DynamicCamera;
-    public Transform[] FocusObjects;
     public float speed = 1f;
     public float minOrthographicSize = 5f;
     public float maxOrthographicSize = 20f;
     public float padding = 0.1f; // Padding around objects in screen space (0-1)
     public Vector3 fallbackPosition = Vector3.zero; // Position to use when no valid targets
     public float fallbackSize = 10f; // Size to use when no valid targets
+
+    private Transform[] FocusObjects;
 
     void Start()
     {
@@ -19,7 +20,9 @@ public class DynamicCamera2DManager : MonoBehaviour
 
     void Update()
     {
-        // Ensure we're using orthographic projection for 2D - [note: EVEN THOUGH in the Inspector the Main Camera "Projection" is set to "Perspective" - since it is smoother than Orthographic]
+        UpdateFocusObjects();
+
+        // Ensure we're using orthographic projection for 2D
         DynamicCamera.orthographic = true;
 
         // Filter out null transforms
@@ -57,7 +60,7 @@ public class DynamicCamera2DManager : MonoBehaviour
 
         // Calculate center point
         Vector3 center = (min + max) * 0.5f;
-        center.z = DynamicCamera.transform.position.z; // Maintain camera's z position
+        center.z = DynamicCamera.transform.position.z;
 
         // Move camera towards center
         DynamicCamera.transform.position = Vector3.Lerp(
@@ -85,9 +88,10 @@ public class DynamicCamera2DManager : MonoBehaviour
         );
     }
 
-    // Optional: Public method to update focus objects list
-    public void UpdateFocusObjects(Transform[] newFocusObjects)
+    void UpdateFocusObjects()
     {
-        FocusObjects = newFocusObjects;
+        // Get the Players dynamically and not manually into the Inspector
+        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+        FocusObjects = System.Array.ConvertAll(playerObjects, p => p.transform);
     }
 }
