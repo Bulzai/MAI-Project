@@ -14,13 +14,11 @@ public class SpawnItems : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SpawnObjects();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void SpawnObjects()
