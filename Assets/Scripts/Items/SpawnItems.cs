@@ -8,7 +8,7 @@ public class SpawnItems : MonoBehaviour
     // countdown
     // -- start
     public float startTimeRemaining = 5f;
-    private bool startTimeIsRunning = false;
+    private bool startTimeIsRunning;
     public TMP_Text startTimer;
     // -- item box
     public float itemTimeRemaining = 10f;
@@ -24,19 +24,24 @@ public class SpawnItems : MonoBehaviour
     public List<GameObject> spawnBoxes = new List<GameObject>();
     public GameObject itemBox;
 
+    public GameObject SurpriseBoxObject;
+    public GameObject MainGameObject;
+
     // Start is called before the first frame update
     void Start()
     {
-        startTimeIsRunning = true;
+        StartTimer();
+        startTimer.gameObject.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(startTimeIsRunning)
+        if (startTimeIsRunning)
         {
-            if(startTimeRemaining > 1)
+            if (startTimeRemaining > 1)
             {
+                Debug.Log("Timer at " + startTimeRemaining);
                 startTimeRemaining -= Time.deltaTime;
                 startTimer.text = Mathf.FloorToInt(startTimeRemaining % 60).ToString();
             }
@@ -45,7 +50,7 @@ public class SpawnItems : MonoBehaviour
                 OpenItemBox();
             }
         }
-        if(itemTimerIsRunning)
+        if (itemTimerIsRunning)
         {
             if (itemTimeRemaining > 1)
             {
@@ -57,6 +62,11 @@ public class SpawnItems : MonoBehaviour
                 CloseItemBox();
             }
         }
+    }
+
+    public void StartTimer()
+    {
+        startTimeIsRunning = true;
     }
 
     public void SpawnObjects()
@@ -94,11 +104,12 @@ public class SpawnItems : MonoBehaviour
 
                 // instatate new item in chosen random tile
                 newItem = Instantiate(toSpawn, position, toSpawn.transform.rotation);
-                // destroy after x seconds
-                Destroy(newItem, itemTimeRemaining-1);
 
                 // add new item to have outline
                 itemsInBox.Add(newItem);
+
+                // destroy after x seconds
+                Destroy(newItem, itemTimeRemaining - 1);
 
                 // Remove from list so no other item can spawn in this tile
                 copy_spawnBoxes.RemoveAt(randomTile);
@@ -122,7 +133,7 @@ public class SpawnItems : MonoBehaviour
         // turn on all item box things
         itemBox.SetActive(true);
         itemTimerIsRunning = true;
-        itemTimerText.enabled = true;
+        itemTimerText.gameObject.SetActive(true);
         SpawnObjects();
     }
 
@@ -136,5 +147,8 @@ public class SpawnItems : MonoBehaviour
         // turn of item ui
         itemBox.SetActive(false);
         itemTimerText.enabled = false;
+
+        SurpriseBoxObject.SetActive(false);
+        MainGameObject.SetActive(true);
     }
 }

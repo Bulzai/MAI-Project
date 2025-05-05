@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public GameObject MenuGameObject;
-    public GameObject SurpriseBox;
+    public GameObject SelectPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -23,9 +23,9 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         MenuGameObject.SetActive(false);
-        SurpriseBox.SetActive(true);
-        SurpriseBox.GetComponent<SpawnItems>().SpawnObjects();
-        //Time.timeScale = 1f;
+        SelectPlayer.SetActive(true);
+        
+        Time.timeScale = 1f;
         //SceneManager.LoadScene("MovementScene");
     }
 
