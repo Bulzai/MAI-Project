@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - IB_Selectable
+  - PlayerManager
   layers:
   - Default
   - TransparentFX

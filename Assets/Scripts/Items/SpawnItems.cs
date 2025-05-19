@@ -25,6 +25,7 @@ public class SpawnItems : MonoBehaviour
     public GameObject itemBox;
 
     public GameObject SurpriseBoxObject;
+    public GameObject BuildingObject;
     public GameObject MainGameObject;
 
     // Start is called before the first frame update
@@ -41,7 +42,6 @@ public class SpawnItems : MonoBehaviour
         {
             if (startTimeRemaining > 1)
             {
-                Debug.Log("Timer at " + startTimeRemaining);
                 startTimeRemaining -= Time.deltaTime;
                 startTimer.text = Mathf.FloorToInt(startTimeRemaining % 60).ToString();
             }
@@ -149,6 +149,11 @@ public class SpawnItems : MonoBehaviour
         itemTimerText.enabled = false;
 
         SurpriseBoxObject.SetActive(false);
+        //BuildingObject.SetActive(true);
         MainGameObject.SetActive(true);
+
+        GameObject PlayerManagerGameobject = GameObject.FindGameObjectWithTag("PlayerManager");
+        PlayerManager PlayerManagerScript = PlayerManagerGameobject.GetComponent<PlayerManager>();
+        PlayerManagerScript.ActivatePlayerPrefab();
     }
 }
