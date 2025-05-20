@@ -12,6 +12,7 @@ public class GridPlacementSystem : MonoBehaviour
 
     public static GridPlacementSystem gridPlacementSystem;
 
+    [SerializeField] private Camera placementCamera;
     public GridLayout gridLayout;
     public Tilemap MainTilemap;
     public Tilemap TempTilemap;
@@ -87,7 +88,7 @@ public class GridPlacementSystem : MonoBehaviour
 
             if (!gridItem.Placed)
             {
-                Vector2 touchPos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 touchPos = (Vector2)placementCamera.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int cellPos = gridLayout.LocalToCell(touchPos);
 
                 if (previousPosition != (Vector3)cellPos)
@@ -116,14 +117,20 @@ public class GridPlacementSystem : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log("mouse position" + Input.mousePosition);
         if (!gridItem || gridItem.Placed)
             return;
+        Debug.Log("Over UI? " + EventSystem.current.IsPointerOverGameObject());
 
-        if (EventSystem.current.IsPointerOverGameObject(0))
+        if (EventSystem.current.IsPointerOverGameObject())
             return;
 
-        Vector2 touchPos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int cellPos = gridLayout.LocalToCell(touchPos);
+        Vector3 screenPos = Input.mousePosition;
+        screenPos.z = -placementCamera.transform.position.z;  // e.g. 10 if camera.z == -10
+
+        Vector3 world3 = placementCamera.ScreenToWorldPoint(screenPos);
+        Vector2 world2 = world3;              // drop the Z
+        Vector3Int cellPos = gridLayout.LocalToCell(world3);
 
         if (previousPosition != (Vector3)cellPos)
         {
@@ -144,6 +151,7 @@ public class GridPlacementSystem : MonoBehaviour
         {
             ClearArea();
             Destroy(gridItem.gameObject);
+            GameEvents.ToggleGrid();
         }
     }
 
