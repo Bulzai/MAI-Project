@@ -170,6 +170,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9ef771b2-7848-48bf-ac2a-0d85d3680032
     m_ActionName: Player/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 24f23639-076a-45d1-8512-b9529a1cb5b0
+    m_ActionName: Player/Choose Item[/Mouse/leftButton,/XInputControllerWindows/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -189,8 +193,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   burnTickInterval: 1
-  burnDamagePerTick: 2
+  burnDamagePerTick: 15
   reigniteDelay: 5
+  currentHealth: 0
+  isBurning: 0
 --- !u!1 &2006475144983261237
 GameObject:
   m_ObjectHideFlags: 0

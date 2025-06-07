@@ -5,155 +5,123 @@ using TMPro;
 
 public class SpawnItems : MonoBehaviour
 {
-    // countdown
-    // -- start
-    public float startTimeRemaining = 5f;
-    private bool startTimeIsRunning;
-    public TMP_Text startTimer;
-    // -- item box
-    public float itemTimeRemaining = 10f;
-    private bool itemTimerIsRunning = false;
-    public TMP_Text itemTimerText;
+    [Header("Countdown Settings")]
+    [SerializeField] private float startDelay   = 5f;
+    [SerializeField] private TMP_Text startTimerText;
+    [SerializeField] private float itemDuration = 10f;
+    [SerializeField] private TMP_Text itemTimerText;
 
-    // item spawner details
-    public int numberToSpawn;
-    public List<GameObject> itemPool;
+    [Header("Spawn Settings")]
+    [SerializeField] private int numberToSpawn;
+    [SerializeField] private List<GameObject> itemPool;
+    [SerializeField] private List<GameObject> spawnBoxes;
+
+    [Header("References")]
+    [SerializeField] private GameObject itemBoxUI;
+    [SerializeField] private GameObject surpriseBoxObject;
+    [SerializeField] private GameObject mainGameObject;
+
     private List<GameObject> itemsInBox = new List<GameObject>();
 
-    // box to spawn in
-    public List<GameObject> spawnBoxes = new List<GameObject>();
-    public GameObject itemBox;
-
-    public GameObject SurpriseBoxObject;
-    public GameObject BuildingObject;
-    public GameObject MainGameObject;
-
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        StartTimer();
-        startTimer.gameObject.SetActive(true);
+        OnPickItemStateEntered();
+        GameEvents.OnSurpriseBoxStateEntered += OnPickItemStateEntered;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        if (startTimeIsRunning)
+        GameEvents.OnSurpriseBoxStateEntered -= OnPickItemStateEntered;
+    }
+
+    private void OnPickItemStateEntered()
+    {
+        // Kick off the entire sequence when we enter PickItemState
+        StartCoroutine(PickItemSequence());
+    }
+
+    private IEnumerator PickItemSequence()
+    {
+        // 1) Show start delay timer
+        startTimerText.gameObject.SetActive(true);
+        float t = startDelay;
+        while (t > 0f)
         {
-            if (startTimeRemaining > 1)
-            {
-                startTimeRemaining -= Time.deltaTime;
-                startTimer.text = Mathf.FloorToInt(startTimeRemaining % 60).ToString();
-            }
-            else
-            {
-                OpenItemBox();
-            }
+            startTimerText.text = Mathf.CeilToInt(t).ToString();
+            t -= Time.deltaTime;
+            yield return null;
         }
-        if (itemTimerIsRunning)
-        {
-            if (itemTimeRemaining > 1)
-            {
-                itemTimeRemaining -= Time.deltaTime;
-                itemTimerText.text = "Timer: " + Mathf.FloorToInt(itemTimeRemaining % 60).ToString();
-            }
-            else
-            {
-                CloseItemBox();
-            }
-        }
-    }
+        startTimerText.gameObject.SetActive(false);
 
-    public void StartTimer()
-    {
-        startTimeIsRunning = true;
-    }
-
-    public void SpawnObjects()
-    {
-        int randomItem = 0, randomTile = 0;
-        GameObject toSpawn, newItem;
-        // copy spawn box for this run
-        List<GameObject> copy_spawnBoxes = spawnBoxes;
-
-        // position
-        float screenX, screenY;
-        Vector2 position;
-
-        // run to spawn items
-        for(int i = 0; i < numberToSpawn; i++)
-        {
-            // random int to choose which item to spawn
-            randomItem = Random.Range(0, itemPool.Count);
-            toSpawn = itemPool[randomItem];
-
-            // get spawnrate
-            Itembox_Selectable toSpawnGo = toSpawn.GetComponent<Itembox_Selectable>();
-            float probability = toSpawnGo.GetSpawnRate();
-
-            // check if its probability
-            float check = Random.Range(0, 100);
-            if (check <= probability)
-            {
-                // choose random tile in box
-                randomTile = Random.Range(0, copy_spawnBoxes.Count);
-                MeshCollider collider = copy_spawnBoxes[randomTile].GetComponent<MeshCollider>();
-                screenX = Random.Range(collider.bounds.min.x + 1, collider.bounds.max.x - 1);
-                screenY = Random.Range(collider.bounds.min.y + 1, collider.bounds.max.y - 1);
-                position = new Vector2(screenX, screenY);
-
-                // instatate new item in chosen random tile
-                newItem = Instantiate(toSpawn, position, toSpawn.transform.rotation);
-
-                // add new item to have outline
-                itemsInBox.Add(newItem);
-
-                // destroy after x seconds
-                Destroy(newItem, itemTimeRemaining - 1);
-
-                // Remove from list so no other item can spawn in this tile
-                copy_spawnBoxes.RemoveAt(randomTile);
-            }
-            else
-            {
-                Debug.Log("under probability: check: "+ check +" probability: " + probability);
-                i--;
-            }
-
-            
-        }
-    }
-
-    public void OpenItemBox()
-    {
-        // turn off all start timer things
-        startTimeIsRunning = false;
-        startTimer.enabled = false;
-
-        // turn on all item box things
-        itemBox.SetActive(true);
-        itemTimerIsRunning = true;
-        itemTimerText.gameObject.SetActive(true);
+        // 2) Open the item box and spawn objects
+        itemBoxUI.SetActive(true);
         SpawnObjects();
+
+        // 3) Show item‐selection timer
+        itemTimerText.gameObject.SetActive(true);
+        t = itemDuration;
+        while (t > 0f)
+        {
+            itemTimerText.text = "Timer: " + Mathf.CeilToInt(t).ToString();
+            t -= Time.deltaTime;
+            yield return null;
+        }
+
+        // 4) Clean up & transition
+        itemTimerText.gameObject.SetActive(false);
+        CloseItemBox();
     }
 
-    public void CloseItemBox()
+    private void SpawnObjects()
     {
-        Debug.Log("Time has run out!");
-        itemTimeRemaining = 0;
-        itemTimerText.text = "Timer: " + Mathf.FloorToInt(itemTimeRemaining % 60).ToString();
-        itemTimerIsRunning = false;
+        // Copy list so we can remove used tiles
+        var availableTiles = new List<GameObject>(spawnBoxes);
 
-        // turn of item ui
-        itemBox.SetActive(false);
-        itemTimerText.enabled = false;
+        for (int i = 0; i < numberToSpawn; i++)
+        {
+            // pick item prefab
+            var prefab = itemPool[Random.Range(0, itemPool.Count)];
+            var rate   = prefab.GetComponent<Itembox_Selectable>().GetSpawnRate();
 
-        SurpriseBoxObject.SetActive(false);
-        //BuildingObject.SetActive(true);
-        MainGameObject.SetActive(true);
+            if (Random.Range(0f, 100f) > rate)
+            {
+                i--; // try again
+                continue;
+            }
 
-        GameObject PlayerManagerGameobject = GameObject.FindGameObjectWithTag("PlayerManager");
-        PlayerManager PlayerManagerScript = PlayerManagerGameobject.GetComponent<PlayerManager>();
-        PlayerManagerScript.ActivatePlayerPrefab();
+            // pick a random tile and remove it from the pool
+            int idx = Random.Range(0, availableTiles.Count);
+            var tile = availableTiles[idx];
+            availableTiles.RemoveAt(idx);
+
+            // choose a random point inside its mesh‐bounds
+            var col = tile.GetComponent<MeshCollider>();
+            var x   = Random.Range(col.bounds.min.x + 1, col.bounds.max.x - 1);
+            var y   = Random.Range(col.bounds.min.y + 1, col.bounds.max.y - 1);
+            var pos = new Vector2(x, y);
+
+            // instantiate & schedule destroy
+            var go = Instantiate(prefab, pos, prefab.transform.rotation);
+            itemsInBox.Add(go);
+            Destroy(go, itemDuration - 1f);
+        }
+    }
+
+    private void CloseItemBox()
+    {
+        // hide UI
+        itemBoxUI.SetActive(false);
+        surpriseBoxObject.SetActive(false);
+        mainGameObject.SetActive(true);
+        
+        
+        // activate players, etc.
+        /*var pm = GameObject.FindGameObjectWithTag("PlayerManager")
+            .GetComponent<PlayerManager>();
+        pm.ActivatePlayerPrefab();*/
+        
+        // CHANGE THIS BACK TO PLACEITEMSTATE!!!
+        GameEvents.ChangeState(GameState.MainGameState);
+        
     }
 }

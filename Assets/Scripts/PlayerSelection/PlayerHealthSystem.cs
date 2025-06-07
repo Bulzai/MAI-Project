@@ -1,15 +1,20 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
 
-public class HealthSystem : MonoBehaviour
+public class PlayerHealthSystem : MonoBehaviour
 {
+    
+    private PlayerInput _playerInput;
+    
+    
     public int maxHealth = 100;
     public float burnTickInterval = 1f;
     public int burnDamagePerTick = 5;
     public float reigniteDelay = 5f;
 
-    private int currentHealth;
-    private bool isBurning = false;
+    public int currentHealth;
+    public bool isBurning = false;
 
     private Coroutine burnCoroutine;
     private Coroutine reigniteCoroutine;
@@ -18,14 +23,16 @@ public class HealthSystem : MonoBehaviour
     private GameObject fireSprite;
     private void Start()
     {
+        _playerInput = GetComponent<PlayerInput>();
         currentHealth = maxHealth;
         fireSprite = transform.GetChild(0).GetChild(0).gameObject;
         fireSprite.gameObject.SetActive(false); // start off
-        Invoke("SetOnFire", 3f);
+        //Invoke("SetOnFire", 3f);
     }
 
     public void SetOnFire()
     {
+        Debug.Log("EnteredFireState");
         if (!isBurning)
         {
             isBurning = true;
@@ -79,8 +86,8 @@ public class HealthSystem : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log(" Player died!");
-        isBurning = false;
+        GameEvents.PlayerEliminated(_playerInput);
+        gameObject.SetActive(false);
 
     }
 }

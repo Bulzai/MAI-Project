@@ -263,6 +263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6103cbd480838b4b8274cecca81df15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  placementCamera: {fileID: 1978076457}
   gridLayout: {fileID: 274481739}
   MainTilemap: {fileID: 1705934526}
   TempTilemap: {fileID: 1803012503}

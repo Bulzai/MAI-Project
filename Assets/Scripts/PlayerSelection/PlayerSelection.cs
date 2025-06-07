@@ -1,27 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerSelection : MonoBehaviour
 {
+    
+    
     public GameObject SurpriseBox;
-    public GameObject PlayerSelectionObject;
-
-    // Start is called before the first frame update
-    void Start()
+    public GameObject SelectPlayer;
+    public GameObject GameWorld;
+    public GameObject PlayerSelectionButton;
+    private void OnEnable()
     {
-        
+        GameEvents.OnSurpriseBoxStateEntered += StartSurpriseBoxSequence;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        GameEvents.OnSurpriseBoxStateEntered -= StartSurpriseBoxSequence;
     }
-
     public void StartSurpriseBoxSequence()
     {
+        Debug.Log("supriesebox");
+
+        GameWorld.SetActive(false);
+        SelectPlayer.SetActive(false);
         SurpriseBox.SetActive(true);
-        PlayerSelectionObject.SetActive(false);
+        PlayerSelectionButton.SetActive(false);  
     }
 }
