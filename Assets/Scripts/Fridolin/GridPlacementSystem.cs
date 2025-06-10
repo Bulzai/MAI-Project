@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
+using static UnityEditor.Progress;
 
 
 // also for cursor and movement improvements https://www.youtube.com/watch?v=n5EN2J2FxOQ
@@ -10,18 +11,23 @@ using UnityEngine.Tilemaps;
 public class GridPlacementSystem : MonoBehaviour
 {
 
-    public static GridPlacementSystem gridPlacementSystem;
+    public static GridPlacementSystem Instance { get; private set; }
 
     [SerializeField] private Camera placementCamera;
     public GridLayout gridLayout;
     public Tilemap MainTilemap;
     public Tilemap TempTilemap;
+    public TileBase highlightTile;
 
-    private static Dictionary<TileType, TileBase> tileBases = new Dictionary<TileType, TileBase>();
+
+    public static Dictionary<TileType, TileBase> tileBases = new Dictionary<TileType, TileBase>();
 
     private GridItem gridItem;
     private Vector3 previousPosition;
-    private BoundsInt previousArea;
+
+    // track each Cursor/GridItem's last highlight area
+    private Dictionary<GridItem, BoundsInt> _lastAreas = new();
+
 
     #region Unity Methods
 
@@ -59,7 +65,9 @@ public class GridPlacementSystem : MonoBehaviour
 
     private void Awake()
     {
-        gridPlacementSystem = this;
+        Instance = this;
+        MainTilemap.gameObject.SetActive(false);
+        TempTilemap.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -113,7 +121,7 @@ public class GridPlacementSystem : MonoBehaviour
                 Destroy(gridItem.gameObject);
             }
     }
-    */
+ 
 
     private void Update()
     {
@@ -153,8 +161,7 @@ public class GridPlacementSystem : MonoBehaviour
             Destroy(gridItem.gameObject);
             GameEvents.ToggleGrid();
         }
-    }
-
+    }*/
 
     #endregion
 
@@ -166,22 +173,26 @@ public class GridPlacementSystem : MonoBehaviour
 
     #region Item Placement
 
-    public void InitializeWithItem(GameObject item)
+    public GridItem InitializeWithItem(GameObject item)
     {
         gridItem = Instantiate(item, Vector3.zero, Quaternion.identity).GetComponent<GridItem>();
-        FollowItem();
+        //FollowItem(item);
         GameEvents.ItemSelectionPanelOpened();
+        return gridItem;
     }
-    private void ClearArea()
+    private void ClearArea(BoundsInt areaToClear)
     {
-        TileBase[] toClear = new TileBase[previousArea.size.x * previousArea.size.y * previousArea.size.z];
+        TileBase[] toClear = new TileBase[areaToClear.size.x * areaToClear.size.y * areaToClear.size.z];
         FillTiles(toClear, TileType.Empty);
-        TempTilemap.SetTilesBlock(previousArea, toClear);
+        TempTilemap.SetTilesBlock(areaToClear, toClear);
     }
 
-    private void FollowItem()
+    public void FollowItem(GridItem gridItem)
     {
-        ClearArea();
+        if (_lastAreas.TryGetValue(gridItem, out var oldArea))
+        {
+            ClearArea(oldArea);
+        }
 
         gridItem.area.position = gridLayout.WorldToCell(gridItem.gameObject.transform.position) - new Vector3Int(1,1,0); // adjust to center the item correctly
         BoundsInt buildingArea = gridItem.area;
@@ -205,7 +216,7 @@ public class GridPlacementSystem : MonoBehaviour
         }
 
         TempTilemap.SetTilesBlock(buildingArea, tileArray);
-        previousArea = buildingArea;
+        _lastAreas[gridItem] = buildingArea;
     }
 
     public bool CanTakeArea(BoundsInt area)
@@ -234,6 +245,34 @@ public class GridPlacementSystem : MonoBehaviour
 
     #endregion
 
+
+    public void ShowGrid()
+    {
+        TempTilemap.ClearAllTiles();
+        TempTilemap.gameObject.SetActive(true);
+        MainTilemap.gameObject.SetActive(true);
+
+    }
+
+    public void HideGrid()
+    {
+        TempTilemap.ClearAllTiles();
+        TempTilemap.gameObject.SetActive(false);
+        MainTilemap.gameObject.SetActive(false);
+
+    }
+
+    public void HighlightCell(Vector3 worldPos)
+    {
+        Vector3Int cell = gridLayout.WorldToCell(worldPos);
+        TempTilemap.SetTile(cell, highlightTile);
+    }
+
+    public void ClearCellHighlight(Vector3 worldPos)
+    {
+        Vector3Int cell = gridLayout.WorldToCell(worldPos);
+        TempTilemap.SetTile(cell, null);
+    }
 }
 
 

@@ -38,14 +38,14 @@ public class PlayerManager : MonoBehaviour
         int playerIndex = playerInput.playerIndex;
         playerInput.gameObject.name = $"Player {playerIndex + 1}";
 
-        Debug.Log($"Player joined: {playerInput.gameObject.name}");
+        Debug.Log($"Player joined haha: {playerInput.gameObject.name}");
 
         // ----------- WORK IN PROGRESS
         // Subscribe to the click event on this player's actions
         playerInput.actions["Choose Item"].performed += context => OnClick(playerInput, context);
         // -----------
 
-        playerInput.DeactivateInput();
+        //playerInput.DeactivateInput();
     }
 
     public void DeactivePlayerPrefab()
