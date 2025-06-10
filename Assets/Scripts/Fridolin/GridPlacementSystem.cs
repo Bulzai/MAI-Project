@@ -125,10 +125,8 @@ public class GridPlacementSystem : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("mouse position" + Input.mousePosition);
         if (!gridItem || gridItem.Placed)
             return;
-        Debug.Log("Over UI? " + EventSystem.current.IsPointerOverGameObject());
 
         if (EventSystem.current.IsPointerOverGameObject())
             return;

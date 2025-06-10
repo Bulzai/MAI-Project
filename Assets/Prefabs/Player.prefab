@@ -173,63 +173,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 24f23639-076a-45d1-8512-b9529a1cb5b0
-    m_ActionName: Player/Choose Item[/Mouse/leftButton,/XInputControllerWindows/buttonEast,/DualSenseGamepadHID/buttonEast]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f0fc6061-8426-4198-9da4-99068f2c63fa
-    m_ActionName: Building/MoveCursor[/XInputControllerWindows/leftStick,/DualSenseGamepadHID/leftStick,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 9a4df9ce-d98b-4780-b626-e7c0f3b5ce77
-    m_ActionName: Building/SelectItem[/XInputControllerWindows/buttonSouth,/DualSenseGamepadHID/buttonSouth,/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5416290b-d96b-40bb-bbfc-ae14122dd7d0
-    m_ActionName: UI/Navigate[/XInputControllerWindows/leftStick/up,/DualSenseGamepadHID/leftStick/up,/XInputControllerWindows/rightStick/up,/DualSenseGamepadHID/rightStick/up,/XInputControllerWindows/leftStick/down,/DualSenseGamepadHID/leftStick/down,/XInputControllerWindows/rightStick/down,/DualSenseGamepadHID/rightStick/down,/XInputControllerWindows/leftStick/left,/DualSenseGamepadHID/leftStick/left,/XInputControllerWindows/rightStick/left,/DualSenseGamepadHID/rightStick/left,/XInputControllerWindows/leftStick/right,/DualSenseGamepadHID/leftStick/right,/XInputControllerWindows/rightStick/right,/DualSenseGamepadHID/rightStick/right,/XInputControllerWindows/dpad,/DualSenseGamepadHID/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: beb63679-f9cb-42de-8ccc-bad4ea48b427
-    m_ActionName: UI/Submit[/Keyboard/enter,/XInputControllerWindows/buttonSouth,/DualSenseGamepadHID/buttonSouth]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: df8b9eb9-1c57-4be2-80ee-1ef8ee811b51
-    m_ActionName: UI/Cancel[/Keyboard/escape,/XInputControllerWindows/buttonEast,/DualSenseGamepadHID/buttonEast]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 199c18b0-1e24-4f74-8fb4-ce0cc3f53bdd
-    m_ActionName: UI/Point[/Mouse/position,/Pen/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b83b2f72-470d-4919-9da6-42b1e7d6f252
-    m_ActionName: UI/Click[/Mouse/leftButton,/Pen/tip]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f13eb76e-48a7-49e0-ae95-a46af487fa2c
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5fdb1dce-1a41-4855-8cff-c689fe74128a
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: bafd2758-fe7e-42da-9c26-7d0213756104
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 4e95c6a7-fdeb-4728-9334-8db0fb3efb1a
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: cc2ba862-3dea-45c6-8714-5a8ebc2f0039
-    m_ActionName: UI/TrackedDeviceOrientation
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 4a6424a9-b171-45a0-87bf-5988ec9e6228
-    m_ActionName: Cursor/Move[/XInputControllerWindows/leftStick,/DualSenseGamepadHID/leftStick]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2974eb45-d36a-4af6-a1d4-ade543a8771e
-    m_ActionName: Cursor/Submit[/XInputControllerWindows/buttonSouth,/DualSenseGamepadHID/buttonSouth]
+    m_ActionName: Player/Choose Item[/Mouse/leftButton,/XInputControllerWindows/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -249,8 +193,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   burnTickInterval: 1
-  burnDamagePerTick: 2
+  burnDamagePerTick: 15
   reigniteDelay: 5
+  currentHealth: 0
+  isBurning: 0
 --- !u!1 &2006475144983261237
 GameObject:
   m_ObjectHideFlags: 0
