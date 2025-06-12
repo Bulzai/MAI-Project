@@ -193,7 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   burnTickInterval: 1
-  burnDamagePerTick: 15
+  burnDamagePerTick: 5
   reigniteDelay: 5
   currentHealth: 0
   isBurning: 0
