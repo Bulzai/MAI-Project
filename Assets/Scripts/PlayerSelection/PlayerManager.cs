@@ -19,7 +19,7 @@ public class PlayerManager : MonoBehaviour
     private Dictionary<string, GameObject> PlayerItems;
     // -----------
 
-    
+
     private PlayerInputManager playerInputManager;
     private void Start()
     {
@@ -31,11 +31,11 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnPlayerSelectionStateEntered += EnablePlayerJoining;
         GameEvents.OnPlayerSelectionStateExited += DeactivePlayerPrefab;
         GameEvents.OnPlayerSelectionStateExited += DisablePlayerJoining;
-        
+
         GameEvents.OnMainGameStateEntered += ActivatePlayerPrefab;
         GameEvents.OnMainGameStateExited += DeactivePlayerPrefab;
 
-        
+
         GameEvents.OnPlayerEliminated += HandlePlayerElimination;
     }
 
@@ -55,7 +55,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void HandlePlayerElimination(PlayerInput p)
     {
-        
+
         Debug.Log($"Player {p.playerIndex} was eliminated");
         // Record elimination
         _eliminationOrder.Add(p);
@@ -74,7 +74,7 @@ public class PlayerManager : MonoBehaviour
             GameEvents.ChangeState(GameState.ScoreState);
         }
     }
-    
+
     public IReadOnlyList<PlayerInput> GetRoundRanking()
     {
         // _eliminationOrder is [first out, second out, …, winner]
@@ -96,7 +96,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (players.Contains(playerInput))
             return;
-        
+
         playerInput.transform.position = SpawnPoints[PlayerCount].transform.position;
         PlayerCount++;
         players.Add(playerInput);
@@ -104,14 +104,14 @@ public class PlayerManager : MonoBehaviour
         int playerIndex = playerInput.playerIndex;
         playerInput.gameObject.name = $"Player {playerIndex + 1}";
 
-        Debug.Log($"Player joined haha: {playerInput.gameObject.name}");
+        Debug.Log($"Player joined: {playerInput.gameObject.name}");
 
         // ----------- WORK IN PROGRESS
         // Subscribe to the click event on this player's actions
         playerInput.actions["Choose Item"].performed += context => OnClick(playerInput, context);
         // -----------
 
-        //playerInput.DeactivateInput();
+        playerInput.DeactivateInput();
     }
 
     public void DeactivePlayerPrefab()

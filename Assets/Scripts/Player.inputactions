@@ -804,7 +804,7 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "4a6424a9-b171-45a0-87bf-5988ec9e6228",
                     "expectedControlType": "Vector2",
                     "processors": "",

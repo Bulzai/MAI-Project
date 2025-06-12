@@ -22,7 +22,7 @@ public class SpawnItems : MonoBehaviour
     [SerializeField] private GameObject mainGameObject;
 
     private List<GameObject> itemsInBox = new List<GameObject>();
-
+    
     private void OnEnable()
     {
         OnPickItemStateEntered();
@@ -39,7 +39,7 @@ public class SpawnItems : MonoBehaviour
         // Kick off the entire sequence when we enter PickItemState
         StartCoroutine(PickItemSequence());
     }
-
+    
     private IEnumerator PickItemSequence()
     {
         // 1) Show start delay timer
@@ -52,7 +52,7 @@ public class SpawnItems : MonoBehaviour
             yield return null;
         }
         startTimerText.gameObject.SetActive(false);
-
+        
         // 2) Open the item box and spawn objects
         itemBoxUI.SetActive(true);
         SpawnObjects();

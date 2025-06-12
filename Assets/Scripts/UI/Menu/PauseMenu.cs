@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,6 +38,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
+        Debug.Log("Pause is called in pausemenu");
         pauseMenuUi.SetActive(true);
         Time.timeScale = 0f;
         gameIsPaused = true;
