@@ -146,13 +146,13 @@ public class PlayerManagerFinal : MonoBehaviour
         if (idx < SpawnPoints.Length)
             characterTf.transform.position = SpawnPoints[idx].transform.position;
         else
-            characterTf.transform.position = Vector3.zero;
+            characterTf.transform.position = Vector3.one;
 
         if (idx < spawnPositionsForSelection.Length)
             cursorTf.transform.position = spawnPositionsForSelection[idx].transform.position;
         else
-            cursorTf.transform.position = Vector3.zero;
-
+            cursorTf.transform.position = Vector3.one;
+        
         // hide character until placement
         cursorTf.gameObject.SetActive(false);
 
@@ -198,6 +198,7 @@ public class PlayerManagerFinal : MonoBehaviour
         {
             var character = root.transform.Find("PlayerNoPI").gameObject;
             character.SetActive(true);
+            root.GetComponent<PlayerInput>().ActivateInput();
             root.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
             root.GetComponent<PlayerInput>().ActivateInput();
 
@@ -208,5 +209,9 @@ public class PlayerManagerFinal : MonoBehaviour
             playerHealthSystem.SetOnFire();
 
         }
+
     }
+
+
+
 }

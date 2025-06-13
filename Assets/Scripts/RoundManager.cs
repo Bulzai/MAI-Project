@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class RoundController : MonoBehaviour
 {
@@ -7,7 +8,10 @@ public class RoundController : MonoBehaviour
     [SerializeField] private int maxRounds = 3;
     [SerializeField] private float scoreDisplayTime = 5f;
     public PlayerManager playerManager;
-    
+    public PlayerManagerFinal playerManagerFinal;
+    [SerializeField] PlayerScoreManagerFinal playerScoreManagerFinal;
+
+
     private int currentRound = 0;
 
     private void OnEnable()
@@ -36,13 +40,15 @@ public class RoundController : MonoBehaviour
         var scoreMgr = FindObjectOfType<PlayerScoreManager>();
         if (scoreMgr != null)
             scoreMgr.scoreboardUI.SetActive(false);
+        playerScoreManagerFinal.scoreboardUI.SetActive(false);
 
         // 3) Decide where to go next
         if (currentRound < maxRounds)
         {
-
-            playerManager.ResetEliminations();
-
+            if ( playerManager != null)
+                playerManager.ResetEliminations();
+            if(playerManagerFinal != null)
+                playerManagerFinal.ResetEliminations();
 
             // next round: go back to item‐picking
             GameEvents.ChangeState(GameState.SurpriseBoxState);

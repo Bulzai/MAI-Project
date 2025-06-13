@@ -153,6 +153,8 @@ public class CursorController : MonoBehaviour
         if (!hasPicked)
         {
             Vector2 cursorPos = transform.position;
+            Debug.Log("cursor pos: " + cursorPos);
+
             Collider2D hit = Physics2D.OverlapPoint(cursorPos, selectableLayer);
 
             if (hit != null)
