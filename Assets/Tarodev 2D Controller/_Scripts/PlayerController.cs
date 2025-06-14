@@ -19,6 +19,8 @@ namespace TarodevController
         private bool jumpPressed;
         private bool jumpHeld;
 
+        private PlayerHealthSystem _healthSystem;
+
         #region Interface
 
         public Vector2 FrameInput => _frameInput.Move;
@@ -33,6 +35,7 @@ namespace TarodevController
         {
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<CapsuleCollider2D>();
+            _healthSystem = GetComponent<PlayerHealthSystem>();
 
             _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
         }
@@ -61,12 +64,19 @@ namespace TarodevController
         }
         private void GatherInput()
         {
+            Vector2 adjustedInput = movementInput;
+
+            if (_healthSystem != null && _healthSystem.IsConfused())
+            {
+                adjustedInput = -adjustedInput;
+            }
+
             _frameInput = new FrameInput
             {
                 JumpDown = jumpPressed,
                 JumpHeld = jumpHeld,
                 //Move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"))
-                Move = movementInput
+                Move = adjustedInput
 
             };
             jumpPressed = false;
