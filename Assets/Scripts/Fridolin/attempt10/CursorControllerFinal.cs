@@ -4,6 +4,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using UnityEngine.UI;
 
 public class CursorControllerFinal : MonoBehaviour
 {
@@ -29,7 +30,8 @@ public class CursorControllerFinal : MonoBehaviour
     private GridItem gridItem;
     private Vector3Int lastCell = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
 
-
+    private GameObject GameWorld;
+    private GameObject currentlyHovered;
     private void Awake()
     {
         // this looks up the first PlayerInput in this object or any parent
@@ -38,6 +40,16 @@ public class CursorControllerFinal : MonoBehaviour
             Debug.LogError("CursorController: no PlayerInput in parents!");
         if (selectableLayer.value == 0)
             selectableLayer = LayerMask.GetMask("Selectable");
+
+        var allTransforms = UnityEngine.Object.FindObjectsOfType<Transform>(true);
+        foreach (var t in allTransforms)
+            if (t.name == "Game")
+                GameWorld = t.gameObject;
+
+        if (GameWorld == null)
+            Debug.LogError("Could not find a GameObject named 'Game' in the scene!");
+    
+    
     }
     /*
     private void Update()
@@ -62,25 +74,22 @@ public class CursorControllerFinal : MonoBehaviour
         // need this here but not in the old scene for some reason
         moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
 
+        // move cursor graphic
+        Vector3 delta = new Vector3(moveInput.x, moveInput.y, 0f)
+                        * moveSpeed * Time.deltaTime;
+        transform.position += delta;
+
+
         // before pick: free movement (unchanged)
         if (!hasPicked)
         {
-
-            Vector3 delta = new Vector3(moveInput.x, moveInput.y, 0f)
-                            * moveSpeed * Time.deltaTime;
-            transform.position += delta;
-
+            HandleHoverHighlight();
             return;
         }
 
         // during placement: drive highlight on shared TempTilemap
         if (isInPlacementPhase && gridItem != null && !gridItem.Placed)
         {
-            // move cursor graphic
-            Vector3 delta = new Vector3(moveInput.x, moveInput.y, 0f)
-                            * moveSpeed * Time.deltaTime;
-            transform.position += delta;
-
             // compute which cell we’re over
             var gps = GridPlacementSystem.Instance;
             Vector3Int cell = gps.gridLayout.WorldToCell(transform.position);
@@ -147,19 +156,74 @@ public class CursorControllerFinal : MonoBehaviour
             Destroy(gameObject);
         }
     }*/
+    void LogMyAndParentPositions()
+    {
+        Debug.Log("printing transforms:");
+        Vector2 pos2D = transform.position;
+        Debug.Log("transform.position: " + pos2D);
+        // grabs this Transform plus _all_ parent Transforms
+        var chain = GetComponentsInParent<Transform>();
+        foreach (var t in chain)
+        {
+            Debug.Log($"[{t.gameObject.name}] worldPos = {t.position}, localPos = {t.localPosition}", t.gameObject);
+        }
+    }
+    /*
+    void OnDrawGizmos()
+    {
+        // draws a small green circle at the cursor’s world‐space position
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, 0.1f);
+    }
+    */
+    void LogEveryCursor()
+    {
+        Debug.Log("transform: " + transform.position);
+        foreach (var cc in FindObjectsOfType<CursorControllerFinal>())
+        {
+            Debug.Log(
+              $"[ALL CURSORS] {cc.gameObject.name} @ world={cc.transform.position}",
+              cc.gameObject
+            );
+        }
+    }
 
     public void OnSubmit(InputAction.CallbackContext ctx)
     {
 
+        LogEveryCursor();
         Debug.Log("on submit hit");
         // Only act on the “performed” phase (button-down)
         if (!ctx.performed)
             return;
 
+        Vector2 pos2D = transform.position;
+        Debug.Log($"[{gameObject.name}] world-pos = {transform.position}");
+        Debug.Log($"[{gameObject.name}] world-pos = {transform.position}", this);
+
+        //Debug.Log($"[Cursor] world-pos = {pos2D}   mask = {selectableLayer.value}");
+
+        // flood the area with a tiny circle test
+        Collider2D[] hits = Physics2D.OverlapCircleAll(pos2D, 0.1f, selectableLayer);
+        if (hits.Length == 0)
+        {
+            Debug.Log("OverlapCircleAll found ZERO colliders.");
+        }
+        else
+        {
+            foreach (var h in hits)
+                Debug.Log("    hit → " + h.name + " (layer=" + LayerMask.LayerToName(h.gameObject.layer) + ")");
+        }
+
+        // now try the point query too
+        var single = Physics2D.OverlapPoint(pos2D, selectableLayer);
+        Debug.Log("OverlapPoint     → " + (single ? single.name : "null"));
+
         // 1) SELECTION PHASE
         if (!hasPicked)
         {
             Vector2 cursorPos = transform.position;
+            Debug.Log("cursor pos: " + cursorPos);
             Collider2D hit = Physics2D.OverlapPoint(cursorPos, selectableLayer);
             Debug.Log("hit thing: " + hit);
             if (hit != null)
@@ -193,11 +257,13 @@ public class CursorControllerFinal : MonoBehaviour
                 // This stamps the MainTilemap internally and marks Placed = true
                 gridItem.Place();
 
-                gridItem.transform.SetParent(null);
+                gridItem.transform.SetParent(GameWorld.transform);
 
                 // Tell the GameManager this player is done
                 PlaceItemState.Instance.NotifyPlayerPlaced(playerInput.playerIndex);
-
+                hasPicked = false;
+                isInPlacementPhase = false;
+                gridItem = null;
             }
         }
     }
@@ -247,6 +313,59 @@ public class CursorControllerFinal : MonoBehaviour
         lastCell = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
     }
 
+    private void HandleHoverHighlight()
+    {
+        Debug.Log("handlehoverhighlight started");
+        Vector2 pos2D = transform.position;
+        Collider2D hit = Physics2D.OverlapPoint(pos2D, selectableLayer);
 
+        if (hit != null)
+        {
+            GameObject hitObject = hit.gameObject;
+
+            if (hitObject != currentlyHovered)
+            {
+                // Turn off previous highlight
+                if (currentlyHovered != null)
+                    ToggleOutline(currentlyHovered, false);
+
+                // Turn on new highlight
+                ToggleOutline(hitObject, true);
+                currentlyHovered = hitObject;
+            }
+        }
+        else
+        {
+            if (currentlyHovered != null)
+            {
+                ToggleOutline(currentlyHovered, false);
+                currentlyHovered = null;
+            }
+        }
+    }
+    private void ToggleOutline(GameObject root, bool enable)
+    {
+        // Find child named "Outline" and activate/deactivate it
+
+        Debug.Log("ToggleOutline started");
+        Debug.Log("GameObject to outline:" + root);
+        var outline = root.transform.Find("Outline");
+        if (outline != null)
+        {
+            var ol = outline.GetComponent<Outline>();
+
+            outline.gameObject.SetActive(enable);
+            Debug.Log("outline enabled");
+        }
+
+        // Optional: change the color of the sprite
+        var sprite = root.transform.Find("Sprite");
+        if (sprite != null)
+        {
+            var sr = sprite.GetComponent<SpriteRenderer>();
+            if (sr != null)
+                sr.color = enable ? Color.yellow : Color.white;
+        }
+    }
 
 }

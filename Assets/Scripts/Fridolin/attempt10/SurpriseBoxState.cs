@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class SurpriseBoxState : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class SurpriseBoxState : MonoBehaviour
     [SerializeField] private int numberToSpawn;
 
 
+    private Transform itemBoxItemList;
 
     private List<GameObject> itemsInBox = new List<GameObject>();
 
@@ -37,6 +39,14 @@ public class SurpriseBoxState : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         Debug.Log("SurpriseBoxState.Awake -> setting Instance");
+
+        var go = GameObject.Find("ItemBoxItemList");
+        if (go == null)
+            Debug.LogError("Missing 'ItemBoxItemList' GameObject!");
+        else
+            itemBoxItemList = go.transform;
+
+
     }
 
 
@@ -76,7 +86,7 @@ public class SurpriseBoxState : MonoBehaviour
         {
             // pick item prefab
             var prefab = itemPool[Random.Range(0, itemPool.Count)];
-            var rate = prefab.GetComponent<Itembox_Selectable>().GetSpawnRate();
+            var rate = prefab.GetComponent<SelectableItem>().GetSpawnRate();
 
             if (Random.Range(0f, 100f) > rate)
             {
@@ -96,8 +106,9 @@ public class SurpriseBoxState : MonoBehaviour
             var pos = new Vector2(x, y);
 
             // instantiate
-            var go = Instantiate(prefab, pos, prefab.transform.rotation);
+            var go = Instantiate(prefab, pos, prefab.transform.rotation, itemBoxItemList);
             itemsInBox.Add(go);
+
         }
     }
     private void ActivateItemBox()
@@ -111,6 +122,12 @@ public class SurpriseBoxState : MonoBehaviour
         itemBox.SetActive(false);
         surpriseBoxObject.SetActive(false);
         GameEvents.ChangeState(GameState.MainGameState);
+        // Destroy all spawned items
+        foreach (var go in itemsInBox)
+            if (go != null)
+                Destroy(go);
+
+        itemsInBox.Clear();
 
     }
 
@@ -121,7 +138,13 @@ public class SurpriseBoxState : MonoBehaviour
     {
         Debug.Log("NotifyPlayerPicked idx=" + idx + " prefab=" + prefab.name);
         if (!playerManagerFinal.pickedPrefabByPlayer.ContainsKey(idx))
+        {
             playerManagerFinal.pickedPrefabByPlayer[idx] = prefab;
+            var cursor = playerManagerFinal.playerRoots[idx].transform.Find("CursorNoPIFinal").gameObject;
+            cursor.SetActive(false);
+
+        }
+
 
         if (playerManagerFinal.pickedPrefabByPlayer.Count == playerManagerFinal.PlayerCount)
         {
@@ -131,21 +154,50 @@ public class SurpriseBoxState : MonoBehaviour
             //BeginPlacementPhaseAll();
         }
     }
-
+    /*
     // Reactivate every cursor
     public void ShowAllCursors()
     {
+
         Debug.Log("ShowAllCursors called");
         foreach (var root in playerManagerFinal.playerRoots.Values)
         {
+            var pi = root.GetComponent<PlayerInput>();
             Debug.Log("inputs:" + root.GetComponent<PlayerInput>());
             var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
             cursor.SetActive(true);
             root.GetComponent<PlayerInput>().SwitchCurrentActionMap("Cursor");
             root.GetComponent<PlayerInput>().ActivateInput();
+
+            pi.SwitchCurrentActionMap("Cursor");
+            pi.currentActionMap.Enable();
+            Debug.Log($"After switch: map={pi.currentActionMap.name}");
+            foreach (var a in pi.currentActionMap)
+                Debug.Log($"  {a.name} enabled={a.enabled}");
+
+
+
             Debug.Log("input activated and action map switched to cursor");
 
+        }
+    }*/
+    public void ShowAllCursors()
+    {
+        foreach (var root in playerManagerFinal.playerRoots.Values)
+        {
+            var pi = root.GetComponent<PlayerInput>();
+            var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
 
+            // 1) turn the cursor graphic on
+            cursor.SetActive(true);
+
+            // 2) swap to the Cursor map (this *automatically* enables its actions
+            pi.SwitchCurrentActionMap("Cursor");
+
+            // 3) debug post‐switch
+            Debug.Log($"[POST‐SWITCH] {pi.playerIndex} → map={pi.currentActionMap.name}");
+            foreach (var a in pi.currentActionMap)
+                Debug.Log($"    {a.name} enabled={a.enabled}");
         }
     }
     // is called in playerselection, but should be called here?

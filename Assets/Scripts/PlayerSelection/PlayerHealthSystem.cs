@@ -23,7 +23,7 @@ public class PlayerHealthSystem : MonoBehaviour
     private GameObject fireSprite;
     private void Start()
     {
-        _playerInput = GetComponent<PlayerInput>();
+        _playerInput = GetComponentInParent<PlayerInput>();
         currentHealth = maxHealth;
         fireSprite = transform.GetChild(0).GetChild(0).gameObject;
         fireSprite.gameObject.SetActive(false); // start off
@@ -87,7 +87,7 @@ public class PlayerHealthSystem : MonoBehaviour
     private void Die()
     {
         GameEvents.PlayerEliminated(_playerInput);
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
 
     }
 }

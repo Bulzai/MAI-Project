@@ -29,8 +29,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1385210291290707679}
   - {fileID: 7420930553256529651}
+  - {fileID: 1385210291290707679}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -145,7 +145,7 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: -6527074662856815162, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
+      - m_Target: {fileID: 866655333278656964}
         m_TargetAssemblyTypeName: CursorControllerFinal, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
     m_ActionName: Cursor/Move[/XInputControllerWindows/leftStick,/DualSenseGamepadHID/leftStick]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: -6527074662856815162, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
+      - m_Target: {fileID: 866655333278656964}
         m_TargetAssemblyTypeName: CursorControllerFinal, Assembly-CSharp
         m_MethodName: OnSubmit
         m_Mode: 0
@@ -322,6 +322,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
+--- !u!114 &866655333278656964 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -6527074662856815162, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
+  m_PrefabInstance: {fileID: 2985277707026310146}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8882bb9a750cfa4db3200b305ab84f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7420930553256529651 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5733547724985395953, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}

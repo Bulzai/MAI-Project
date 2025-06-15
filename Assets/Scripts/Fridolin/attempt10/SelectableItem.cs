@@ -9,4 +9,12 @@ public class SelectableItem : MonoBehaviour
     public GameObject originalPrefab;
 
     [HideInInspector] public bool isAvailable = true;
+
+
+    public float spawnRate;
+
+    public float GetSpawnRate()
+    {
+        return spawnRate;
+    }
 }

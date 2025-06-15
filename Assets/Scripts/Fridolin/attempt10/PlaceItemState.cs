@@ -8,6 +8,8 @@ public class PlaceItemState : MonoBehaviour
     public static PlaceItemState Instance { get; private set; }
 
     [SerializeField] private PlayerManagerFinal playerManagerFinal;
+    [SerializeField] private GameObject GameWorld;
+    //[SerializeField] private GridPlacementSystem gridPlacementSystem;
 
 
 
@@ -45,8 +47,8 @@ public class PlaceItemState : MonoBehaviour
         Debug.Log("ShowAllCursors called");
         foreach (var root in playerManagerFinal.playerRoots.Values)
         {
-            var cursor = root.transform.Find("CursorNoPI").gameObject;
-            cursor.SetActive(true);
+            var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
+            cursor.SetActive(false);
             root.GetComponent<PlayerInput>().SwitchCurrentActionMap("Cursor");
         }
     }
@@ -60,11 +62,15 @@ public class PlaceItemState : MonoBehaviour
         playerManagerFinal.pickedPrefabByPlayer.Clear();
         playerManagerFinal.playersThatPlaced.Clear();
         Debug.Log("AllPlayersFinishedPlacing end");
+        HideAllCursors();
+        GameEvents.ChangeState(GameState.MainGameState);
+
     }
 
     private void BeginPlacementPhaseAll()
     {
         Debug.Log("BeginPlacementPhaseAll start");
+        GameWorld.SetActive(true);
 
         if (playerManagerFinal.pickedPrefabByPlayer.Count == 0)
         {
@@ -89,7 +95,7 @@ public class PlaceItemState : MonoBehaviour
             }
 
             // enable cursor, disable character
-            var cursor = root.transform.Find("CursorNoPI").gameObject;
+            var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
             var character = root.transform.Find("PlayerNoPI").gameObject;
             cursor.SetActive(true);
             character.SetActive(false);
@@ -134,7 +140,7 @@ public class PlaceItemState : MonoBehaviour
         // deactivate cursor
         if (playerManagerFinal.playerRoots.TryGetValue(idx, out var root))
         {
-            var cursor = root.transform.Find("CursorNoPI").gameObject;
+            var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
             cursor.SetActive(false);
             Debug.Log("Deactivated cursor idx=" + idx);
         }
@@ -146,8 +152,7 @@ public class PlaceItemState : MonoBehaviour
         {
             Debug.Log("All placed → AllPlayersFinishedPlacing");
             AllPlayersFinishedPlacing();
-            HideAllCursors();
-            GameEvents.ChangeState(GameState.MainGameState);
+
         }
     }
 
