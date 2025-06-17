@@ -124,12 +124,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb083a97c83e5d74a86950fe377e3e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 4
+  maxHealth: 100
   burnTickInterval: 1
-  burnDamagePerTick: 2
+  burnDamagePerTick: 5
   reigniteDelay: 5
   currentHealth: 0
   isBurning: 0
+  isConfused: 0
 --- !u!1 &2006475144983261237
 GameObject:
   m_ObjectHideFlags: 0

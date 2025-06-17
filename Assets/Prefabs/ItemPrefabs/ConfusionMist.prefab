@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2746697600274539264}
   - component: {fileID: 1557431443584269616}
   - component: {fileID: 4359079278336234340}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Confusion Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4840,7 +4840,9 @@ GameObject:
   - component: {fileID: 6236650214373985635}
   - component: {fileID: 6029341905061859689}
   - component: {fileID: 3134206331086861969}
-  m_Layer: 0
+  - component: {fileID: 1425448245275293877}
+  - component: {fileID: -9009477180561910823}
+  m_Layer: 6
   m_Name: ConfusionMist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4861,7 +4863,7 @@ Transform:
   m_Children:
   - {fileID: 2746697600274539264}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6236650214373985635
 SpriteRenderer:
@@ -4901,8 +4903,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 748071933
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d033a5e81b5d54744a7c69d1677276ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4947,7 +4949,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.13007307, y: -0.7199839}
+  m_Offset: {x: -0.13007307, y: 0.091661334}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -4958,7 +4960,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 5.0794067, y: 1.1694278}
+  m_Size: {x: 5.0794067, y: 2.7927182}
   m_EdgeRadius: 0
 --- !u!114 &3134206331086861969
 MonoBehaviour:
@@ -4974,3 +4976,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   confusionDuration: 3
   confusionEffect: {fileID: 1557431443584269616}
+--- !u!114 &1425448245275293877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7599583464345500290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 518014c970783354294a5147c3dd3339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalPrefab: {fileID: 7599583464345500290}
+  isAvailable: 1
+  spawnRate: 90
+--- !u!114 &-9009477180561910823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7599583464345500290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41193822271e73d4685a748ebae9d15e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  area:
+    m_Position: {x: 0, y: 0, z: 0}
+    m_Size: {x: 3, y: 3, z: 3}

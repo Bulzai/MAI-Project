@@ -11,6 +11,7 @@ public class StickyController : MonoBehaviour
     // track stuck players and their timers
     private Dictionary<GameObject, Coroutine> stickyCoroutines = new Dictionary<GameObject, Coroutine>();
 
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Player"))
