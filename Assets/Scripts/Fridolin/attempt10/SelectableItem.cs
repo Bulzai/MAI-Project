@@ -6,7 +6,7 @@ using UnityEngine;
 public class SelectableItem : MonoBehaviour
 {
     [Tooltip("Assign the prefab that we want to actually instantiate later (e.g. in placement).")]
-    public GameObject originalPrefab;
+    [SerializeField] private  GameObject originalPrefab;
 
     [HideInInspector] public bool isAvailable = true;
 

@@ -70,15 +70,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 748071933
-  m_SortingLayer: -1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1301496580, guid: d324dcf33d8b27240bd1937468367576, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.3460002, y: 2.1863077}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -143,8 +143,9 @@ GameObject:
   - component: {fileID: 6802360299223069229}
   - component: {fileID: 214173061233781119}
   - component: {fileID: 6883393471734302117}
+  - component: {fileID: 8371348443203771437}
   m_Layer: 6
-  m_Name: Item2
+  m_Name: Item2 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,8 +218,6 @@ MonoBehaviour:
   area:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 3, y: 3, z: 1}
-  originalPosition: {x: 1, y: 1, z: 0}
-  adjustPosition: {x: 2, y: 2, z: 0}
 --- !u!114 &6883393471734302117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,3 +233,21 @@ MonoBehaviour:
   originalPrefab: {fileID: 7851489484032947958}
   isAvailable: 1
   spawnRate: 90
+--- !u!114 &8371348443203771437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7851489484032947958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 366d6493f627c254282f08d2a0142fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeInDuration: 0.3
+  activeDuration: 3
+  fadeOutDuration: 0.3
+  cooldownDuration: 3
+  blinkInterval: 0.05
+  laserDamage: 50

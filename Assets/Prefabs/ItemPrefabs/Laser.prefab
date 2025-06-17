@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 3231456031975166626}
   - component: {fileID: -6115658831205468735}
   - component: {fileID: 6011929408263724873}
+  - component: {fileID: -1893278444405084796}
+  - component: {fileID: -4165774150104028296}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Untagged
@@ -149,3 +151,33 @@ MonoBehaviour:
   cooldownDuration: 3
   blinkInterval: 0.05
   laserDamage: 50
+--- !u!114 &-1893278444405084796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752839624091513783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41193822271e73d4685a748ebae9d15e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  area:
+    m_Position: {x: 0, y: 0, z: 0}
+    m_Size: {x: 1, y: 4, z: 0}
+--- !u!114 &-4165774150104028296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752839624091513783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 518014c970783354294a5147c3dd3339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalPrefab: {fileID: 0}
+  isAvailable: 1
+  spawnRate: 0

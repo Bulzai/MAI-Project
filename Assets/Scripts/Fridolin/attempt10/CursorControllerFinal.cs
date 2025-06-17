@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class CursorControllerFinal : MonoBehaviour
 {
@@ -71,7 +72,7 @@ public class CursorControllerFinal : MonoBehaviour
 
     void Update()
     {
-        // need this here but not in the old scene for some reason
+        // probably unnecessary
         moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
 
         // move cursor graphic
@@ -219,7 +220,7 @@ public class CursorControllerFinal : MonoBehaviour
         var single = Physics2D.OverlapPoint(pos2D, selectableLayer);
         Debug.Log("OverlapPoint     → " + (single ? single.name : "null"));
 
-        // 1) SELECTION PHASE
+        // 1) Surprisebox PHASE
         if (!hasPicked)
         {
             Vector2 cursorPos = transform.position;
@@ -232,10 +233,27 @@ public class CursorControllerFinal : MonoBehaviour
                 SelectableItem itemScript = hit.GetComponent<SelectableItem>();
                 if (itemScript != null && itemScript.isAvailable)
                 {
+
                     itemScript.isAvailable = false;
                     hit.gameObject.SetActive(false);
+                    var go = hit.gameObject;
+                    Collider2D col = hit.gameObject.GetComponent<Collider2D>();
+                    MonoBehaviour[] scripts = hit.gameObject.GetComponents<MonoBehaviour>();
+                    if (col != null)
+                    {
+                        Debug.Log("col is null");
+                    }
+                    Debug.Log($"!haspicked: [Spawn Debug] Object: {go.name} | Active: {go.activeSelf} | Collider2D: {(col ? col.enabled.ToString() : "null")}");
 
-                    pickedObjectPrefab = itemScript.originalPrefab;
+
+                    go = pickedObjectPrefab; ;
+                    col = go.gameObject.GetComponent<Collider2D>();
+                    scripts = go.GetComponents<MonoBehaviour>();
+                    if (col != null)
+                    {
+                        Debug.Log("col is null");
+                    }
+                    Debug.Log($"PICKEDOBJECTPREFAB: [Spawn Debug] Object: {go.name} | Active: {go.activeSelf} | Collider2D: {(col ? col.enabled.ToString() : "null")}");
 
 
                     SurpriseBoxState.Instance.NotifyPlayerPicked(playerInput.playerIndex, pickedObjectPrefab);
@@ -256,7 +274,14 @@ public class CursorControllerFinal : MonoBehaviour
             {
                 // This stamps the MainTilemap internally and marks Placed = true
                 gridItem.Place();
-
+                // Optional: change the color of the sprite
+                var sprite = gridItem.transform.Find("Sprite");
+                if (sprite != null)
+                {
+                    var sr = sprite.GetComponent<SpriteRenderer>();
+                    if (sr != null)
+                        sr.color =  Color.white;
+                }
                 gridItem.transform.SetParent(GameWorld.transform);
 
                 // Tell the GameManager this player is done
@@ -307,10 +332,39 @@ public class CursorControllerFinal : MonoBehaviour
                              Quaternion.identity,
                              transform);     // <-- parent = this.transform
         gridItem = go.GetComponent<GridItem>();
+        Debug.Log($"go.activeSelf = {go.activeSelf}");         // Is the GameObject itself active?
+        Debug.Log($"go.activeInHierarchy = {go.activeInHierarchy}"); // Is it active in the scene (including parents)?
+
         go.SetActive(true);
+
+        Collider2D col = go.GetComponent<Collider2D>();
+        if (col != null && !col.enabled)
+        {
+            col.enabled = true;
+            Debug.Log("Collider2D was disabled — enabled manually.");
+        }
+
+        // Manually re-enable all scripts
+        foreach (var script in go.GetComponents<MonoBehaviour>())
+        {
+            if (!script.enabled)
+            {
+                script.enabled = true;
+                Debug.Log($"Script {script.GetType().Name} was disabled — enabled manually.");
+            }
+        }
+
         // show the grid once (GameManager already called ShowGrid())
         // reset highlight tracker
         lastCell = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
+        // DIAGNOSTIC REPORT
+        MonoBehaviour[] scripts = go.GetComponents<MonoBehaviour>();
+        if( col != null )
+        {
+            Debug.Log("col is null");
+        }
+        Debug.Log($"[Spawn Debug] Object: {go.name} | Active: {go.activeSelf} | Collider2D: {(col ? col.enabled.ToString() : "null")}");
+
     }
 
     private void HandleHoverHighlight()
@@ -365,6 +419,29 @@ public class CursorControllerFinal : MonoBehaviour
             var sr = sprite.GetComponent<SpriteRenderer>();
             if (sr != null)
                 sr.color = enable ? Color.yellow : Color.white;
+        }
+    }
+    // CursorControllerFinal.cs
+
+    // Make sure these live alongside your other OnXXX(InputAction.CallbackContext) methods:
+    public void OnRotateLeft(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) return;
+        if (isInPlacementPhase && gridItem != null && !gridItem.Placed)
+        {
+            gridItem.RotateCounterclockwise();
+            // Force an immediate redraw of the blue/red highlight
+            GridPlacementSystem.Instance.FollowItem(gridItem);
+        }
+    }
+
+    public void OnRotateRight(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) return;
+        if (isInPlacementPhase && gridItem != null && !gridItem.Placed)
+        {
+            gridItem.RotateClockwise();
+            GridPlacementSystem.Instance.FollowItem(gridItem);
         }
     }
 

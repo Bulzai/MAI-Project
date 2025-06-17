@@ -179,6 +179,38 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9dc6e324-3c96-4991-a640-d65c9f073cb7
     m_ActionName: Cursor/Join[/XInputControllerWindows/start,/DualSenseGamepadHID/start]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 866655333278656964}
+        m_TargetAssemblyTypeName: CursorControllerFinal, Assembly-CSharp
+        m_MethodName: OnRotateRight
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d603d68d-1fe8-4a71-8c17-096637ee7079
+    m_ActionName: Cursor/RotateRight[/DualSenseGamepadHID/rightShoulder,/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 866655333278656964}
+        m_TargetAssemblyTypeName: CursorControllerFinal, Assembly-CSharp
+        m_MethodName: OnRotateLeft
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0a2b9087-3ad1-441b-b733-3af68b2cc61b
+    m_ActionName: Cursor/RotateLeft[/DualSenseGamepadHID/leftShoulder,/Keyboard/q]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: Cursor

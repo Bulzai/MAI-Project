@@ -192,7 +192,7 @@ public class GridPlacementSystem : MonoBehaviour
             ClearArea(oldArea);
         }
 
-        gridItem.area.position = gridLayout.WorldToCell(gridItem.gameObject.transform.position) - new Vector3Int(1,1,0); // adjust to center the item correctly
+        gridItem.area.position = gridLayout.WorldToCell(gridItem.gameObject.transform.position) - gridItem.getAdjustPosition(); // adjust to center the item correctly
         BoundsInt buildingArea = gridItem.area;
 
         TileBase[] baseArray = GetTilesBlock(buildingArea, MainTilemap);
