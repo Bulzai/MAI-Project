@@ -160,15 +160,17 @@ public class CursorController : MonoBehaviour
             if (hit != null)
             {
                 SelectableItem itemScript = hit.GetComponent<SelectableItem>();
+                Debug.Log(" itemscript != null:" + itemScript != null +"itemscript.isavailable:" + itemScript.isAvailable);
                 if (itemScript != null && itemScript.isAvailable)
                 {
                     itemScript.isAvailable = false;
                     hit.gameObject.SetActive(false);
 
-                    pickedObjectPrefab = itemScript.originalPrefab;
+                    if (itemScript.getOriginalPrefab() == null)
+                        Debug.Log(" ITEMSCRIPT PREFAB IS NULL");
 
 
-                    GameManager.Instance.NotifyPlayerPicked(playerInput.playerIndex, pickedObjectPrefab);
+                    GameManager.Instance.NotifyPlayerPicked(playerInput.playerIndex, itemScript.getOriginalPrefab());
                     
 
 

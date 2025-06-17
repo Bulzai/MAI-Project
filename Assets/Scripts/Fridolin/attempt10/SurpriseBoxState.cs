@@ -136,7 +136,8 @@ public class SurpriseBoxState : MonoBehaviour
     // Called by CursorController when a player picks an item
     public void NotifyPlayerPicked(int idx, GameObject prefab)
     {
-        Debug.Log("NotifyPlayerPicked idx=" + idx + " prefab=" + prefab.name);
+        Debug.Log("NotifyPlayerPicked idx=" + idx);
+        Debug.Log(" prefab=" + prefab.name);
         if (!playerManagerFinal.pickedPrefabByPlayer.ContainsKey(idx))
         {
             playerManagerFinal.pickedPrefabByPlayer[idx] = prefab;

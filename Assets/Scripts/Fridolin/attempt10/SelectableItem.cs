@@ -17,4 +17,11 @@ public class SelectableItem : MonoBehaviour
     {
         return spawnRate;
     }
+
+
+    public GameObject getOriginalPrefab()
+    {
+        Debug.Log("getOriginalPrefab:" + originalPrefab);
+        return originalPrefab;
+    }
 }

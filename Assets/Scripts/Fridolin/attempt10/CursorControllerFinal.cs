@@ -236,27 +236,9 @@ public class CursorControllerFinal : MonoBehaviour
 
                     itemScript.isAvailable = false;
                     hit.gameObject.SetActive(false);
-                    var go = hit.gameObject;
-                    Collider2D col = hit.gameObject.GetComponent<Collider2D>();
-                    MonoBehaviour[] scripts = hit.gameObject.GetComponents<MonoBehaviour>();
-                    if (col != null)
-                    {
-                        Debug.Log("col is null");
-                    }
-                    Debug.Log($"!haspicked: [Spawn Debug] Object: {go.name} | Active: {go.activeSelf} | Collider2D: {(col ? col.enabled.ToString() : "null")}");
 
 
-                    go = pickedObjectPrefab; ;
-                    col = go.gameObject.GetComponent<Collider2D>();
-                    scripts = go.GetComponents<MonoBehaviour>();
-                    if (col != null)
-                    {
-                        Debug.Log("col is null");
-                    }
-                    Debug.Log($"PICKEDOBJECTPREFAB: [Spawn Debug] Object: {go.name} | Active: {go.activeSelf} | Collider2D: {(col ? col.enabled.ToString() : "null")}");
-
-
-                    SurpriseBoxState.Instance.NotifyPlayerPicked(playerInput.playerIndex, pickedObjectPrefab);
+                    SurpriseBoxState.Instance.NotifyPlayerPicked(playerInput.playerIndex, itemScript.getOriginalPrefab());
 
 
 

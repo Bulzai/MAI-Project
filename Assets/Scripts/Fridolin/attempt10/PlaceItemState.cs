@@ -87,14 +87,6 @@ public class PlaceItemState : MonoBehaviour
         {
             int idx = kv.Key;
             GameObject prefab = kv.Value;
-            var go =prefab;
-            Collider2D col = prefab.GetComponent<Collider2D>();
-            MonoBehaviour[] scripts = prefab.gameObject.GetComponents<MonoBehaviour>();
-            if (col != null)
-            {
-                Debug.Log("col is null");
-            }
-            Debug.Log($"BEGIN PLACEMENTPHASE ALL: [Spawn Debug] Object: {go.name} | Active: {go.activeSelf} | Collider2D: {(col ? col.enabled.ToString() : "null")}");
 
             if (!playerManagerFinal.playerRoots.TryGetValue(idx, out var root))
             {
