@@ -38,7 +38,6 @@ public class SurpriseBoxState : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        Debug.Log("SurpriseBoxState.Awake -> setting Instance");
 
         var go = GameObject.Find("ItemBoxItemList");
         if (go == null)
@@ -136,8 +135,7 @@ public class SurpriseBoxState : MonoBehaviour
     // Called by CursorController when a player picks an item
     public void NotifyPlayerPicked(int idx, GameObject prefab)
     {
-        Debug.Log("NotifyPlayerPicked idx=" + idx);
-        Debug.Log(" prefab=" + prefab.name);
+
         if (!playerManagerFinal.pickedPrefabByPlayer.ContainsKey(idx))
         {
             playerManagerFinal.pickedPrefabByPlayer[idx] = prefab;
@@ -147,7 +145,7 @@ public class SurpriseBoxState : MonoBehaviour
         }
 
 
-        if (playerManagerFinal.pickedPrefabByPlayer.Count == playerManagerFinal.PlayerCount)
+        if (playerManagerFinal.pickedPrefabByPlayer.Count == playerManagerFinal.playerCount)
         {
             Debug.Log("All picked → BeginPlacementPhaseAll");
             DeactivateItemBox();

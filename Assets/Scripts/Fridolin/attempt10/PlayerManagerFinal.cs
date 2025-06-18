@@ -15,8 +15,10 @@ public class PlayerManagerFinal : MonoBehaviour
     public List<PlayerInput> players = new List<PlayerInput>();
     private List<PlayerInput> _eliminationOrder = new List<PlayerInput>();
 
-    public int PlayerCount;
+    public int playerCount = 0;
 
+    [Header("Player Colors")]
+    public Color[] playerColors = new Color[4];
     [Header("Spawn Positions")]
     public Transform[] spawnPositionsForSelection;
     public Transform[] spawnPositionsForPlacement;
@@ -38,7 +40,6 @@ public class PlayerManagerFinal : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        Debug.Log("PlayerManager.Awake -> setting Instance");
 
     }
 
@@ -118,31 +119,26 @@ public class PlayerManagerFinal : MonoBehaviour
         if (players.Contains(playerInput))
             return;
 
-        PlayerCount++;
+        playerCount++;
         players.Add(playerInput);
 
-        //int playerIndex = playerInput.playerIndex;
-        //playerInput.gameObject.name = $"Player {playerIndex + 1}";
-
-
-        //playerInput.DeactivateInput();
-
         int idx = playerInput.playerIndex;
-        Debug.Log("OnPlayerJoined idx=" + idx + " totalJoined=" + PlayerCount);
+        Debug.Log("OnPlayerJoined idx=" + idx + " totalJoined=" + playerCount);
 
-        // pi.gameObject is already the instantiated root prefab
         GameObject root = playerInput.gameObject;
         root.name = "PlayerRoot_" + idx;
 
-        // find children
+        // Find children
         var cursorTf = root.transform.Find("CursorNoPIFinal");
         var characterTf = root.transform.Find("PlayerNoPI");
+
         if (cursorTf == null || characterTf == null)
         {
-            Debug.LogError("Root prefab missing CursorNoPI or PlayerNoPI");
+            Debug.LogError("Root prefab missing CursorNoPIFinal or PlayerNoPI");
             return;
         }
-        // position at selection spawn
+
+        // Position at selection spawn
         if (idx < SpawnPoints.Length)
             characterTf.transform.position = SpawnPoints[idx].transform.position;
         else
@@ -152,27 +148,44 @@ public class PlayerManagerFinal : MonoBehaviour
             cursorTf.transform.position = spawnPositionsForSelection[idx].transform.position;
         else
             cursorTf.transform.position = Vector3.one;
-        
-        // hide character until placement
+
+        // Hide character until placement
         cursorTf.gameObject.SetActive(false);
 
+        // Cache root
         playerRoots[idx] = root;
         Debug.Log("Cached PlayerRoot for idx=" + idx);
-        root.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-        root.GetComponent<PlayerInput>().ActivateInput();
+
+        // Set color based on player index
+        if (idx < playerColors.Length)
+        {
+            var spriteRenderer = characterTf.Find("Visual/Sprite")?.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = playerColors[idx];
+            }
+            else
+            {
+                Debug.LogWarning($"SpriteRenderer not found for Player {idx}");
+            }
+        }
+
+        // Setup input
+        var pi = root.GetComponent<PlayerInput>();
+        pi.SwitchCurrentActionMap("Player");
+        pi.ActivateInput();
     }
+
 
     public void OnPlayerLeft(PlayerInput pi)
     {
         int idx = pi.playerIndex;
-        PlayerCount = Mathf.Max(0, PlayerCount - 1);
-        Debug.Log("OnPlayerLeft idx=" + idx + " nowJoined=" + PlayerCount);
+        playerCount = Mathf.Max(0, playerCount - 1);
 
         if (playerRoots.TryGetValue(idx, out var root))
         {
             Destroy(root);
             playerRoots.Remove(idx);
-            Debug.Log("Destroyed PlayerRoot for idx=" + idx);
         }
 
         pickedPrefabByPlayer.Remove(idx);

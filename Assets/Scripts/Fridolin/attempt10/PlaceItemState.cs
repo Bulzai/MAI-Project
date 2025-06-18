@@ -143,7 +143,7 @@ public class PlaceItemState : MonoBehaviour
        // Debug.Log("placedCount=" + playerManagerFinal.playersThatPlaced.Count +
               //    " joinedCount=" + playerManagerFinal.PlayerCount);
 
-        if (playerManagerFinal.playersThatPlaced.Count == playerManagerFinal.PlayerCount)
+        if (playerManagerFinal.playersThatPlaced.Count == playerManagerFinal.playerCount)
         {
            // Debug.Log("All placed → AllPlayersFinishedPlacing");
             AllPlayersFinishedPlacing();

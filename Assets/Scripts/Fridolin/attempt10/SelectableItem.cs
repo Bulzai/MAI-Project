@@ -21,7 +21,6 @@ public class SelectableItem : MonoBehaviour
 
     public GameObject getOriginalPrefab()
     {
-        Debug.Log("getOriginalPrefab:" + originalPrefab);
         return originalPrefab;
     }
 }
