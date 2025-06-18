@@ -301,6 +301,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 42200832537817637}
     m_Modifications:
+    - target: {fileID: -8707365222248363852, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8707365222248363852, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8707365222248363852, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 748071933
+      objectReference: {fileID: 0}
     - target: {fileID: 549255075654477025, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
       propertyPath: m_Name
       value: CursorNoPIFinal
