@@ -15,9 +15,11 @@ public class PlayerHealthSystem : MonoBehaviour
 
     public int currentHealth;
     public bool isBurning = false;
+    public bool isConfused = false;
 
     private Coroutine burnCoroutine;
     private Coroutine reigniteCoroutine;
+    private Coroutine confusedCoroutine;
 
 
     private GameObject fireSprite;
@@ -82,6 +84,30 @@ public class PlayerHealthSystem : MonoBehaviour
         {
             Die();
         }
+    }
+
+    public void ApplyConfusion(float duration)
+    {
+        if(confusedCoroutine != null)
+        {
+            StopCoroutine(confusedCoroutine);
+        }
+
+        confusedCoroutine = StartCoroutine(ConfusionRoutine(duration));
+    }
+
+    private IEnumerator ConfusionRoutine(float duration)
+    {
+        isConfused = true;
+        Debug.Log("Reversed controls");
+        yield return new WaitForSeconds(duration);
+        isConfused = false;
+        Debug.Log("Confusion done");
+    }
+
+    public bool IsConfused()
+    {
+        return isConfused;
     }
 
     private void Die()

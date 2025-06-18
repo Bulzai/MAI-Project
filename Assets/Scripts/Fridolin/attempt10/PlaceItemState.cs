@@ -22,7 +22,6 @@ public class PlaceItemState : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        Debug.Log("PlaceItemState.Awake -> setting Instance");
     }
 
     // Start is called before the first frame update
@@ -44,7 +43,6 @@ public class PlaceItemState : MonoBehaviour
 
     public void HideAllCursors()
     {
-        Debug.Log("ShowAllCursors called");
         foreach (var root in playerManagerFinal.playerRoots.Values)
         {
             var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
@@ -56,12 +54,11 @@ public class PlaceItemState : MonoBehaviour
 
     private void AllPlayersFinishedPlacing()
     {
-        Debug.Log("AllPlayersFinishedPlacing start");
 
         GridPlacementSystem.Instance.HideGrid();
         playerManagerFinal.pickedPrefabByPlayer.Clear();
         playerManagerFinal.playersThatPlaced.Clear();
-        Debug.Log("AllPlayersFinishedPlacing end");
+        Debug.Log("AllPlayersFinishedPlacing ");
         HideAllCursors();
         GameEvents.ChangeState(GameState.MainGameState);
 
@@ -81,7 +78,6 @@ public class PlaceItemState : MonoBehaviour
 
         playerManagerFinal.playersThatPlaced.Clear();
         GridPlacementSystem.Instance.ShowGrid();
-        Debug.Log("Grid shown");
 
         foreach (var kv in playerManagerFinal.pickedPrefabByPlayer)
         {
@@ -121,7 +117,6 @@ public class PlaceItemState : MonoBehaviour
             // begin placement on cursor controller
             var cc = cursor.GetComponent<CursorControllerFinal>();
             cc.BeginPlacementPhase(prefab, cc.transform);
-            Debug.Log("BeginPlacementPhase on idx=" + idx);
         }
 
         Debug.Log("BeginPlacementPhaseAll end");
@@ -132,7 +127,7 @@ public class PlaceItemState : MonoBehaviour
     // Called by CursorController when a player places their item
     public void NotifyPlayerPlaced(int idx)
     {
-        Debug.Log("NotifyPlayerPlaced idx=" + idx);
+        //Debug.Log("NotifyPlayerPlaced idx=" + idx);
 
         if (!playerManagerFinal.playersThatPlaced.Contains(idx))
             playerManagerFinal.playersThatPlaced.Add(idx);
@@ -142,15 +137,15 @@ public class PlaceItemState : MonoBehaviour
         {
             var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
             cursor.SetActive(false);
-            Debug.Log("Deactivated cursor idx=" + idx);
+            //Debug.Log("Deactivated cursor idx=" + idx);
         }
 
-        Debug.Log("placedCount=" + playerManagerFinal.playersThatPlaced.Count +
-                  " joinedCount=" + playerManagerFinal.PlayerCount);
+       // Debug.Log("placedCount=" + playerManagerFinal.playersThatPlaced.Count +
+              //    " joinedCount=" + playerManagerFinal.PlayerCount);
 
         if (playerManagerFinal.playersThatPlaced.Count == playerManagerFinal.PlayerCount)
         {
-            Debug.Log("All placed → AllPlayersFinishedPlacing");
+           // Debug.Log("All placed → AllPlayersFinishedPlacing");
             AllPlayersFinishedPlacing();
 
         }

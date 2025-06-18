@@ -192,29 +192,18 @@ public class CursorControllerFinal : MonoBehaviour
     public void OnSubmit(InputAction.CallbackContext ctx)
     {
 
-        LogEveryCursor();
-        Debug.Log("on submit hit");
+        //LogEveryCursor();
         // Only act on the “performed” phase (button-down)
         if (!ctx.performed)
             return;
 
         Vector2 pos2D = transform.position;
-        Debug.Log($"[{gameObject.name}] world-pos = {transform.position}");
-        Debug.Log($"[{gameObject.name}] world-pos = {transform.position}", this);
+
 
         //Debug.Log($"[Cursor] world-pos = {pos2D}   mask = {selectableLayer.value}");
 
         // flood the area with a tiny circle test
         Collider2D[] hits = Physics2D.OverlapCircleAll(pos2D, 0.1f, selectableLayer);
-        if (hits.Length == 0)
-        {
-            Debug.Log("OverlapCircleAll found ZERO colliders.");
-        }
-        else
-        {
-            foreach (var h in hits)
-                Debug.Log("    hit → " + h.name + " (layer=" + LayerMask.LayerToName(h.gameObject.layer) + ")");
-        }
 
         // now try the point query too
         var single = Physics2D.OverlapPoint(pos2D, selectableLayer);
@@ -224,12 +213,9 @@ public class CursorControllerFinal : MonoBehaviour
         if (!hasPicked)
         {
             Vector2 cursorPos = transform.position;
-            Debug.Log("cursor pos: " + cursorPos);
             Collider2D hit = Physics2D.OverlapPoint(cursorPos, selectableLayer);
-            Debug.Log("hit thing: " + hit);
             if (hit != null)
             {
-                Debug.Log("hit thing: " + hit);
                 SelectableItem itemScript = hit.GetComponent<SelectableItem>();
                 if (itemScript != null && itemScript.isAvailable)
                 {
@@ -317,6 +303,7 @@ public class CursorControllerFinal : MonoBehaviour
         Debug.Log($"go.activeSelf = {go.activeSelf}");         // Is the GameObject itself active?
         Debug.Log($"go.activeInHierarchy = {go.activeInHierarchy}"); // Is it active in the scene (including parents)?
 
+        go.GetComponent<Collider2D>().enabled = true;
         go.SetActive(true);
 
         Collider2D col = go.GetComponent<Collider2D>();
@@ -351,7 +338,6 @@ public class CursorControllerFinal : MonoBehaviour
 
     private void HandleHoverHighlight()
     {
-        Debug.Log("handlehoverhighlight started");
         Vector2 pos2D = transform.position;
         Collider2D hit = Physics2D.OverlapPoint(pos2D, selectableLayer);
 
@@ -381,17 +367,13 @@ public class CursorControllerFinal : MonoBehaviour
     }
     private void ToggleOutline(GameObject root, bool enable)
     {
-        // Find child named "Outline" and activate/deactivate it
 
-        Debug.Log("ToggleOutline started");
-        Debug.Log("GameObject to outline:" + root);
         var outline = root.transform.Find("Outline");
         if (outline != null)
         {
             var ol = outline.GetComponent<Outline>();
 
             outline.gameObject.SetActive(enable);
-            Debug.Log("outline enabled");
         }
 
         // Optional: change the color of the sprite

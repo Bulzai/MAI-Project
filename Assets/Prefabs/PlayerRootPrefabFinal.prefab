@@ -305,6 +305,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CursorNoPIFinal
       objectReference: {fileID: 0}
+    - target: {fileID: 549255075654477025, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 5733547724985395953, guid: c7191ae44977c874d84fd6d71ac8d1d9, type: 3}
       propertyPath: m_RootOrder
       value: 0

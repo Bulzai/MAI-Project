@@ -24,7 +24,7 @@ public class LaserController : MonoBehaviour
     private BoxCollider2D boxCollider;
     private bool isActive = false;
 
-    private void Awake()
+    private void Start()
     {
         // Cache all SpriteRenderers on this object and its children
         spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
@@ -32,17 +32,34 @@ public class LaserController : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         boxCollider.isTrigger = true;
 
+    }
+    private void OnEnable()
+    {
+        GameEvents.OnMainGameStateEntered += StartLaser;
+        GameEvents.OnMainGameStateExited += StopLaser;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnMainGameStateEntered -= StartLaser;
+        GameEvents.OnMainGameStateExited -= StopLaser;
+    }
+
+
+    private void StartLaser()
+    {
+        GetComponent<LaserController>().enabled = true;
         // Start invisible and disable collider
         SetAlpha(0f);
         boxCollider.enabled = false;
-    }
-
-    private void OnEnable()
-    {
         // Start the repeating fade-in/out sequence when enabled
         StartCoroutine(FadeLoop());
     }
-
+    private void StopLaser()
+    {
+        SetAlpha(1f);
+        StopCoroutine(FadeLoop());
+    }
     private IEnumerator FadeLoop()
     {
         while (true)
