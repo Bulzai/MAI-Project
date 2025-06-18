@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class PlayerScoreManagerFinal : MonoBehaviour
 {
@@ -20,11 +21,13 @@ public class PlayerScoreManagerFinal : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnScoreStateEntered += ShowScores;
+        GameEvents.OnFinalScoreStateEntered += ShowFinalScores;
     }
 
     private void OnDisable()
     {
         GameEvents.OnScoreStateEntered -= ShowScores;
+        GameEvents.OnFinalScoreStateEntered -= ShowFinalScores;
     }
 
     private void ShowScores()
@@ -55,6 +58,29 @@ public class PlayerScoreManagerFinal : MonoBehaviour
         }
 
         // 3) show the UI
+        scoreboardUI.SetActive(true);
+    }
+    // Show total ranking at the end (highest total first)
+    private void ShowFinalScores()
+    {
+        var sortedFinalRanking = _totalScores
+            .OrderByDescending(kvp => kvp.Value)
+            .ToList();
+
+        for (int i = 0; i < placeTexts.Length; i++)
+        {
+            if (i < sortedFinalRanking.Count)
+            {
+                var entry = sortedFinalRanking[i];
+                placeTexts[i].text =
+                    $"{i + 1}. {entry.Key.gameObject.name} — Total: {entry.Value}";
+            }
+            else
+            {
+                placeTexts[i].text = $"{i + 1}. ---";
+            }
+        }
+
         scoreboardUI.SetActive(true);
     }
 

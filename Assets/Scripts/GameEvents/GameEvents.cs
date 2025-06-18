@@ -11,7 +11,8 @@ public enum GameState
     SurpriseBoxState,
     PlaceItemState,
     MainGameState,
-    ScoreState
+    ScoreState,
+    FinalScoreState
 }
 
 public static class GameEvents
@@ -37,6 +38,8 @@ public static class GameEvents
     public static event Action OnMainGameStateExited;
 
     public static event Action OnScoreStateEntered;
+
+    public static event Action OnFinalScoreStateEntered;
 
     //—— Other events ——//
     public static event Action OnItemSelectionPanelOpened;
@@ -91,6 +94,9 @@ public static class GameEvents
                 break;
             case GameState.ScoreState:
                 OnScoreStateEntered?.Invoke();
+                break;
+            case GameState.FinalScoreState:
+                OnFinalScoreStateEntered?.Invoke();
                 break;
         }
     }

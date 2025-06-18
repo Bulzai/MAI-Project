@@ -57,7 +57,7 @@ public class RoundController : MonoBehaviour
         {
             // all rounds done: show final results
             // we can reuse ScoreState or make a dedicated FinalScoreState
-            GameEvents.ChangeState(GameState.ScoreState);
+            GameEvents.ChangeState(GameState.FinalScoreState);
         }
     }
 }
