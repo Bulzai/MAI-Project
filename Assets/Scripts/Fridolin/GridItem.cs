@@ -38,7 +38,7 @@ public class GridItem : MonoBehaviour
 
     public void Place()
     {
-        Vector3Int positionInt = GridPlacementSystem.Instance.gridLayout.LocalToCell(transform.position) - adjustPosition; // adjust to center the item correctly;
+        Vector3Int positionInt = GridPlacementSystem.Instance.gridLayout.WorldToCell(transform.position) - adjustPosition; // adjust to center the item correctly;
         BoundsInt areaTemp = area;
         areaTemp.position = positionInt;
         Placed = true;

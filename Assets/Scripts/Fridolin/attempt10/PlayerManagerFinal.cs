@@ -195,14 +195,24 @@ public class PlayerManagerFinal : MonoBehaviour
         // Set color based on player index
         if (idx < playerColors.Length)
         {
-            var spriteRenderer = characterTf.Find("Visual/Sprite")?.GetComponent<SpriteRenderer>();
-            if (spriteRenderer != null)
+            var characterSpriteRenderer = characterTf.Find("Visual/Sprite")?.GetComponent<SpriteRenderer>();
+            var cursorSpriteRenderer = cursorTf.GetComponent<SpriteRenderer>();
+
+            if (characterSpriteRenderer != null)
             {
-                spriteRenderer.color = playerColors[idx];
+                characterSpriteRenderer.color = playerColors[idx];
             }
             else
             {
                 Debug.LogWarning($"SpriteRenderer not found for Player {idx}");
+            }
+            if (cursorSpriteRenderer != null)
+            {
+                cursorSpriteRenderer.color = playerColors[idx];
+            }
+            else
+            {
+                Debug.LogWarning($"CursorSpriteRenderer not found for Player {idx}");
             }
         }
 
