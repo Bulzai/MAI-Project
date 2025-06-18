@@ -194,23 +194,37 @@ public class PlayerManagerFinal : MonoBehaviour
     {
         Debug.Log("ActivatePlayerPrefab called");
 
-        foreach (var root in playerRoots.Values)
+        foreach (var kvp in playerRoots)
         {
-            var character = root.transform.Find("PlayerNoPI").gameObject;
-            character.SetActive(true);
-            root.GetComponent<PlayerInput>().ActivateInput();
-            root.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-            root.GetComponent<PlayerInput>().ActivateInput();
+            int idx = kvp.Key;
+            GameObject root = kvp.Value;
 
+            // Activate character & input
+            var characterGO = root.transform.Find("PlayerNoPI").gameObject;
+            characterGO.SetActive(true);
+            var pi = root.GetComponent<PlayerInput>();
+            pi.ActivateInput();
+            pi.SwitchCurrentActionMap("Player");
 
-            PlayerHealthSystem playerHealthSystem = character.GetComponent<PlayerHealthSystem>();
-            playerHealthSystem.currentHealth = playerHealthSystem.maxHealth;
-            playerHealthSystem.isBurning = false;
-            playerHealthSystem.SetOnFire();
+            // Reset health & state
+            var health = characterGO.GetComponent<PlayerHealthSystem>();
+            health.currentHealth = health.maxHealth;
+            health.isBurning = false;
+            health.SetOnFire();
 
+            // **NEW:** Reposition character at spawn point
+            if (idx < spawnPositionsForPlacement.Length)
+            {
+                characterGO.transform.position = spawnPositionsForPlacement[idx].position;
+            }
+            else
+            {
+                Debug.LogWarning($"No placement spawn defined for player {idx}, using default.");
+                characterGO.transform.position = Vector3.zero;
+            }
         }
-
     }
+
 
 
 
