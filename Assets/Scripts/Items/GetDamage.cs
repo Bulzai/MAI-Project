@@ -16,7 +16,7 @@ public class GetDamage : MonoBehaviour
             if (player != null)
             {
                 Debug.Log("Player hit." + damgeAmount + " damage took");
-                player.TakeDamage(damgeAmount);
+                player.TakeDamage(damgeAmount, true);
             }
             else
             {

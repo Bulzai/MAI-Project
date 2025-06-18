@@ -96,6 +96,42 @@ public class PlayerManagerFinal : MonoBehaviour
             GameEvents.ChangeState(GameState.ScoreState);
         }
     }
+    private IEnumerator HandlePlayerEliminationCoroutine(PlayerInput p)
+    {
+        Debug.Log($"Player {p.playerIndex} was eliminated");
+
+        // 1. Play death particles
+        var root = p.gameObject;
+        var particlesTf = root.transform.Find("PlayerNoPI/Visual/Particles/Death Animation");
+
+        if (particlesTf != null)
+        {
+            var ps = particlesTf.GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                ps.Play();
+                // 2. Wait until the particle system is done
+                yield return new WaitWhile(() => ps.IsAlive());
+            }
+        }
+
+        // 3. Record elimination
+        _eliminationOrder.Add(p);
+
+        int aliveCount = players.Count - _eliminationOrder.Count;
+        if (aliveCount <= 1)
+        {
+            Debug.Log("last alive");
+
+            // Add last survivor
+            var winner = players.Except(_eliminationOrder).FirstOrDefault();
+            if (winner != null)
+                _eliminationOrder.Add(winner);
+
+            // Change state *after* animation
+            GameEvents.ChangeState(GameState.ScoreState);
+        }
+    }
 
     public IReadOnlyList<PlayerInput> GetRoundRanking()
     {
@@ -221,6 +257,7 @@ public class PlayerManagerFinal : MonoBehaviour
 
             // Reset health & state
             var health = characterGO.GetComponent<PlayerHealthSystem>();
+            health.spriteRenderer.color = health.originalColor;
             health.currentHealth = health.maxHealth;
             health.isBurning = false;
             health.SetOnFire();
