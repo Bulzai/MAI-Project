@@ -30,4 +30,25 @@ public class ConfusionController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            PlayerHealthSystem healthSystem = collision.GetComponent<PlayerHealthSystem>();
+
+            if (healthSystem != null)
+            {
+                if (confusionEffect != null)
+                    confusionEffect.Play();
+
+                // confusion effect
+                healthSystem.ApplyConfusion(confusionDuration);
+
+                Debug.Log("Confusion applied to player!");
+            }
+
+            // Optionally destroy the trap after activation
+            //Destroy(gameObject, 1f);
+        }
+    }
 }

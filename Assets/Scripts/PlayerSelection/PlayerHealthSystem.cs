@@ -17,6 +17,13 @@ public class PlayerHealthSystem : MonoBehaviour
     public bool isBurning = false;
     public bool isConfused = false;
 
+
+    public SpriteRenderer spriteRenderer;
+    public Color originalColor;
+
+    public ParticleSystem deathParticles;
+
+
     private Coroutine burnCoroutine;
     private Coroutine reigniteCoroutine;
     private Coroutine confusedCoroutine;
@@ -29,6 +36,9 @@ public class PlayerHealthSystem : MonoBehaviour
         currentHealth = maxHealth;
         fireSprite = transform.GetChild(0).GetChild(0).gameObject;
         fireSprite.gameObject.SetActive(false); // start off
+
+        originalColor = spriteRenderer.color;
+
         //Invoke("SetOnFire", 3f);
     }
 
@@ -38,8 +48,8 @@ public class PlayerHealthSystem : MonoBehaviour
         if (!isBurning)
         {
             isBurning = true;
-
-            burnCoroutine = StartCoroutine(BurnOverTime());
+            if(gameObject.activeSelf)
+                burnCoroutine = StartCoroutine(BurnOverTime());
 
             if (fireSprite != null)
                 fireSprite.gameObject.SetActive(true);
@@ -70,20 +80,36 @@ public class PlayerHealthSystem : MonoBehaviour
     {
         while (isBurning)
         {
-            TakeDamage(burnDamagePerTick);
+            TakeDamage(burnDamagePerTick,false);
             yield return new WaitForSeconds(burnTickInterval);
         }
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(int amount, bool isItemDmg)
     {
         currentHealth -= amount;
         Debug.Log("Player took damage! Health: " + currentHealth);
+
+        if(isItemDmg)
+            StartCoroutine(FlashRed());
 
         if (currentHealth <= 0)
         {
             Die();
         }
+    }
+    private IEnumerator FlashRed()
+    {
+        if (spriteRenderer == null)
+        {
+            Debug.LogWarning("No SpriteRenderer assigned for red flash.");
+            yield break;
+        }
+
+
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.3f);
+        spriteRenderer.color = originalColor;
     }
 
     public void ApplyConfusion(float duration)
@@ -113,7 +139,6 @@ public class PlayerHealthSystem : MonoBehaviour
     private void Die()
     {
         GameEvents.PlayerEliminated(_playerInput);
-        //gameObject.SetActive(false);
 
     }
 }
