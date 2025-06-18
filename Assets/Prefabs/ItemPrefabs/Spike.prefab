@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5593501970627458785}
   - component: {fileID: 1369125023753904758}
   - component: {fileID: 7432882348710643068}
-  - component: {fileID: 6812937789551493412}
+  - component: {fileID: 206564354665691013}
   m_Layer: 6
   m_Name: serra_redonda
   m_TagString: Untagged
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 748071933
-  m_SortingLayer: -1
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: bdca095d467c4834d8b40bc493936fee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -121,7 +121,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.745
---- !u!114 &6812937789551493412
+--- !u!114 &206564354665691013
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,9 +130,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1148223735346251668}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 829db496d5ff36547acbce1d46ac4aa5, type: 3}
+  m_Script: {fileID: 11500000, guid: 5187926d2eee180419eecac142a4d13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damgeAmount: 50
 --- !u!1 &4024019629628830832
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +205,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 748071933
-  m_SortingLayer: -1
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.084905684, g: 0.068428025, b: 0.0003203925, a: 1}
@@ -246,7 +247,7 @@ Transform:
   m_GameObject: {fileID: 4711019012961524803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.37001356, y: 0.37001356, z: 0.37001356}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5593501970627458785}
@@ -284,6 +285,9 @@ MonoBehaviour:
   area:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 3, y: 3, z: 3}
+  originalPositionHorizontal: {x: 0, y: 0, z: 0}
+  originalPositionVertical: {x: 0, y: 0, z: 0}
+  adjustPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &6320150467517895385
 MonoBehaviour:
   m_ObjectHideFlags: 0
