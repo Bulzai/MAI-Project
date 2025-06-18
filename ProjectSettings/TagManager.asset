@@ -41,9 +41,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background
-    uniqueID: 748071933
+  - name: Light
+    uniqueID: 3978457119
+    locked: 0
+  - name: OvenOutside
+    uniqueID: 3872615763
+    locked: 0
+  - name: OvenInside
+    uniqueID: 1443477573
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 748071933
     locked: 0
