@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 748071933
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   area:
     m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 3, y: 3, z: 3}
-  originalPositionHorizontal: {x: 0, y: 0, z: 0}
-  originalPositionVertical: {x: 0, y: 0, z: 0}
+    m_Size: {x: 1, y: 5, z: 3}
+  originalPositionHorizontal: {x: 0, y: 2, z: 0}
+  originalPositionVertical: {x: 2, y: 0, z: 0}
   adjustPosition: {x: 0, y: 0, z: 0}

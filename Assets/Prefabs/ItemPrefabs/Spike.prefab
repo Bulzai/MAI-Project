@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 748071933
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: bdca095d467c4834d8b40bc493936fee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -93,7 +93,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1148223735346251668}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -284,9 +284,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   area:
     m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 3, y: 3, z: 3}
-  originalPositionHorizontal: {x: 0, y: 0, z: 0}
-  originalPositionVertical: {x: 0, y: 0, z: 0}
+    m_Size: {x: 6, y: 6, z: 3}
+  originalPositionHorizontal: {x: 2, y: 2, z: 0}
+  originalPositionVertical: {x: 2, y: 2, z: 0}
   adjustPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &6320150467517895385
 MonoBehaviour:
