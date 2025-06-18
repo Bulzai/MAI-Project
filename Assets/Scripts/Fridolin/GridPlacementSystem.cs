@@ -248,7 +248,7 @@ public class GridPlacementSystem : MonoBehaviour
     {
         TempTilemap.ClearAllTiles();
         TempTilemap.gameObject.SetActive(true);
-        MainTilemap.gameObject.SetActive(true);
+        //MainTilemap.gameObject.SetActive(true);
 
     }
 

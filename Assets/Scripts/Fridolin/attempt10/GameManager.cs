@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
         }
 
         playersThatPlaced.Clear();
-        GridPlacementSystem.Instance.ShowGrid();
+        //GridPlacementSystem.Instance.ShowGrid();
         Debug.Log("Grid shown");
 
         foreach (var kv in pickedPrefabByPlayer)
