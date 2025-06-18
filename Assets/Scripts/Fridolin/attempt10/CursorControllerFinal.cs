@@ -199,30 +199,38 @@ public class CursorControllerFinal : MonoBehaviour
 
         Vector2 pos2D = transform.position;
 
+        float radius = 1f;
+        Vector2 direction = Vector2.zero; // or a direction like Vector2.right
+        float distance = 1f; // use > 0 to cast along a path
+
+        RaycastHit2D hit = Physics2D.CircleCast(pos2D, radius, direction, distance, selectableLayer);
 
         //Debug.Log($"[Cursor] world-pos = {pos2D}   mask = {selectableLayer.value}");
 
         // flood the area with a tiny circle test
-        Collider2D[] hits = Physics2D.OverlapCircleAll(pos2D, 0.1f, selectableLayer);
+        //Collider2D[] hits = Physics2D.OverlapCircleAll(pos2D, 0.1f, selectableLayer);
 
         // now try the point query too
-        var single = Physics2D.OverlapPoint(pos2D, selectableLayer);
-        Debug.Log("OverlapPoint     → " + (single ? single.name : "null"));
+        // var single = Physics2D.OverlapPoint(pos2D, selectableLayer);
+        //Debug.Log("OverlapPoint     → " + (single ? single.name : "null"));
 
         // 1) Surprisebox PHASE
         if (!hasPicked)
         {
             Vector2 cursorPos = transform.position;
-            Collider2D hit = Physics2D.OverlapPoint(cursorPos, selectableLayer);
-            if (hit != null)
+            //Collider2D hit = Physics2D.OverlapPoint(cursorPos, selectableLayer);
+            //if (hit != null)
+            if(hit.collider != null)
             {
-                SelectableItem itemScript = hit.GetComponent<SelectableItem>();
+                SelectableItem itemScript = hit.collider.GetComponent<SelectableItem>();
+
+                //SelectableItem itemScript = hit.GetComponent<SelectableItem>();
                 if (itemScript != null && itemScript.isAvailable)
                 {
 
                     itemScript.isAvailable = false;
-                    hit.gameObject.SetActive(false);
-
+                    //hit.gameObject.SetActive(false);
+                    hit.collider.gameObject.SetActive(false);
 
                     SurpriseBoxState.Instance.NotifyPlayerPicked(playerInput.playerIndex, itemScript.getOriginalPrefab());
 
