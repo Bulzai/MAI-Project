@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
-using static UnityEditor.Progress;
 
 
 // also for cursor and movement improvements https://www.youtube.com/watch?v=n5EN2J2FxOQ
