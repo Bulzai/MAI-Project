@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.InputSystem;
 using System.Linq;
 
-public class PlayerScoreManagerFinal : MonoBehaviour
+public class PlayerScoreManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerManager playerManager;

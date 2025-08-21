@@ -8,7 +8,7 @@ public class RoundController : MonoBehaviour
     [SerializeField] private int maxRounds = 3;
     [SerializeField] private float scoreDisplayTime = 5f;
     public PlayerManager playerManagerFinal;
-    [SerializeField] PlayerScoreManagerFinal playerScoreManagerFinal;
+    [SerializeField] PlayerScoreManager playerScoreManager;
 
 
     private int currentRound = 0;
@@ -39,7 +39,7 @@ public class RoundController : MonoBehaviour
         var scoreMgr = FindObjectOfType<PlayerScoreManager>();
         if (scoreMgr != null)
             scoreMgr.scoreboardUI.SetActive(false);
-        playerScoreManagerFinal.scoreboardUI.SetActive(false);
+        playerScoreManager.scoreboardUI.SetActive(false);
 
         // 3) Decide where to go next
         if (currentRound < maxRounds)
