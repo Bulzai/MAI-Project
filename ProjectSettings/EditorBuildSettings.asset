@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/MainScene.unity
+    path: Assets/Scenes/Deprecated/MainScene.unity
     guid: 804e8d775c683954d827cbc6e9eef1b6
   - enabled: 0
-    path: Assets/Scenes/MovementScene.unity
+    path: Assets/Scenes/Deprecated/MovementScene.unity
     guid: 3f7252656b196ff47b5b1823addfff54
   - enabled: 1
     path: Assets/Scenes/FinalScene.unity
