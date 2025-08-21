@@ -7,7 +7,7 @@ using System;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 
-public class CursorControllerFinal : MonoBehaviour
+public class CursorController : MonoBehaviour
 {
     [Header("Movement Settings")]
     private float moveSpeed = 10f;
@@ -180,7 +180,7 @@ public class CursorControllerFinal : MonoBehaviour
     void LogEveryCursor()
     {
         Debug.Log("transform: " + transform.position);
-        foreach (var cc in FindObjectsOfType<CursorControllerFinal>())
+        foreach (var cc in FindObjectsOfType<CursorController>())
         {
             Debug.Log(
               $"[ALL CURSORS] {cc.gameObject.name} @ world={cc.transform.position}",

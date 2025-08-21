@@ -7,7 +7,7 @@ public class SurpriseBoxState : MonoBehaviour
 {
     public static SurpriseBoxState Instance { get; private set; }
 
-    [SerializeField] private PlayerManagerFinal playerManagerFinal;
+    [SerializeField] private PlayerManager playerManager;
 
     public GameObject SurpriseBox;
     public GameObject SelectPlayer;
@@ -135,16 +135,16 @@ public class SurpriseBoxState : MonoBehaviour
     public void NotifyPlayerPicked(int idx, GameObject prefab)
     {
 
-        if (!playerManagerFinal.pickedPrefabByPlayer.ContainsKey(idx))
+        if (!playerManager.pickedPrefabByPlayer.ContainsKey(idx))
         {
-            playerManagerFinal.pickedPrefabByPlayer[idx] = prefab;
-            var cursor = playerManagerFinal.playerRoots[idx].transform.Find("CursorNoPIFinal").gameObject;
+            playerManager.pickedPrefabByPlayer[idx] = prefab;
+            var cursor = playerManager.playerRoots[idx].transform.Find("CursorNoPIFinal").gameObject;
             cursor.SetActive(false);
 
         }
 
 
-        if (playerManagerFinal.pickedPrefabByPlayer.Count == playerManagerFinal.playerCount)
+        if (playerManager.pickedPrefabByPlayer.Count == playerManager.playerCount)
         {
             Debug.Log("All picked → BeginPlacementPhaseAll");
             DeactivateItemBox();
@@ -181,7 +181,7 @@ public class SurpriseBoxState : MonoBehaviour
     }*/
     public void ShowAllCursors()
     {
-        foreach (var root in playerManagerFinal.playerRoots.Values)
+        foreach (var root in playerManager.playerRoots.Values)
         {
             var pi = root.GetComponent<PlayerInput>();
             var cursor = root.transform.Find("CursorNoPIFinal").gameObject;

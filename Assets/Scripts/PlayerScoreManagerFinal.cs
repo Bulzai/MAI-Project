@@ -8,7 +8,7 @@ using System.Linq;
 public class PlayerScoreManagerFinal : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private PlayerManagerFinal   playerManager;
+    [SerializeField] private PlayerManager playerManager;
     [SerializeField] public GameObject      scoreboardUI;
     [SerializeField] private TMP_Text[]      placeTexts;    
 

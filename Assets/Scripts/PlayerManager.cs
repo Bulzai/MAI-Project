@@ -6,9 +6,9 @@ using System.Linq;
 using Unity.VisualScripting;
 
 
-public class PlayerManagerFinal : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
-    public static PlayerManagerFinal Instance { get; private set; }
+    public static PlayerManager Instance { get; private set; }
 
     public Transform[] SpawnPoints;
 

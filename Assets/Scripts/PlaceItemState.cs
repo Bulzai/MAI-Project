@@ -7,7 +7,7 @@ public class PlaceItemState : MonoBehaviour
 {
     public static PlaceItemState Instance { get; private set; }
 
-    [SerializeField] private PlayerManagerFinal playerManagerFinal;
+    [SerializeField] private PlayerManager playerManagerFinal;
     [SerializeField] private GameObject GameWorld;
     //[SerializeField] private GridPlacementSystem gridPlacementSystem;
 
@@ -115,7 +115,7 @@ public class PlaceItemState : MonoBehaviour
             Debug.Log("Switched to Cursor map for idx=" + idx);
 
             // begin placement on cursor controller
-            var cc = cursor.GetComponent<CursorControllerFinal>();
+            var cc = cursor.GetComponent<CursorController>();
             cc.BeginPlacementPhase(prefab, cc.transform);
         }
 

@@ -7,8 +7,7 @@ public class RoundController : MonoBehaviour
     [Header("Round Settings")]
     [SerializeField] private int maxRounds = 3;
     [SerializeField] private float scoreDisplayTime = 5f;
-    public PlayerManager playerManager;
-    public PlayerManagerFinal playerManagerFinal;
+    public PlayerManager playerManagerFinal;
     [SerializeField] PlayerScoreManagerFinal playerScoreManagerFinal;
 
 
@@ -45,8 +44,6 @@ public class RoundController : MonoBehaviour
         // 3) Decide where to go next
         if (currentRound < maxRounds)
         {
-            if ( playerManager != null)
-                playerManager.ResetEliminations();
             if(playerManagerFinal != null)
                 playerManagerFinal.ResetEliminations();
 
