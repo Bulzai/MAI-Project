@@ -557,7 +557,7 @@ GameObject:
   - component: {fileID: 36240429}
   - component: {fileID: 36240428}
   - component: {fileID: 36240427}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: stairsLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1082,7 +1082,7 @@ GameObject:
   - component: {fileID: 64853287}
   - component: {fileID: 64853289}
   - component: {fileID: 64853288}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: flatStick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1215,7 +1215,7 @@ GameObject:
   - component: {fileID: 68732508}
   - component: {fileID: 68732507}
   - component: {fileID: 68732506}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: brickOpen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1487,7 +1487,7 @@ GameObject:
   - component: {fileID: 75295169}
   - component: {fileID: 75295168}
   - component: {fileID: 75295167}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2257,6 +2257,7 @@ Transform:
   - {fileID: 949098016}
   - {fileID: 2016932218}
   - {fileID: 2128824717}
+  - {fileID: 443541809}
   m_Father: {fileID: 2136622801}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4184,7 +4185,7 @@ GameObject:
   - component: {fileID: 431373855}
   - component: {fileID: 431373854}
   - component: {fileID: 431373853}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TBlockDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4348,6 +4349,88 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &443541808
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 114468021}
+    m_Modifications:
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0712929
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 7.642192
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 19.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9999973
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.0023161368
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -0.265
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366111143107458009, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_Name
+      value: squareBig (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366111143107458009, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7745571173846718919, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+--- !u!4 &443541809 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+  m_PrefabInstance: {fileID: 443541808}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &460575333
 GameObject:
   m_ObjectHideFlags: 0
@@ -6204,7 +6287,7 @@ GameObject:
   - component: {fileID: 766338379}
   - component: {fileID: 766338378}
   - component: {fileID: 766338377}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: brickClosed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7839,7 +7922,7 @@ GameObject:
   - component: {fileID: 949098019}
   - component: {fileID: 949098018}
   - component: {fileID: 949098017}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: stairsRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8340,7 +8423,7 @@ GameObject:
   - component: {fileID: 1001125005}
   - component: {fileID: 1001125004}
   - component: {fileID: 1001125003}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: waveMiddle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111305,7 +111388,7 @@ GameObject:
   - component: {fileID: 1464482472}
   - component: {fileID: 1464482474}
   - component: {fileID: 1464482473}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: squareMiddle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111677,7 +111760,7 @@ GameObject:
   - component: {fileID: 1495227764}
   - component: {fileID: 1495227763}
   - component: {fileID: 1495227762}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: miniStairsUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112582,7 +112665,7 @@ GameObject:
   - component: {fileID: 1602669559}
   - component: {fileID: 1602669561}
   - component: {fileID: 1602669560}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: flatFloor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113740,7 +113823,7 @@ GameObject:
   - component: {fileID: 1855515669}
   - component: {fileID: 1855515668}
   - component: {fileID: 1855515667}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: miniStairsDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115592,7 +115675,7 @@ GameObject:
   - component: {fileID: 2103283228}
   - component: {fileID: 2103283227}
   - component: {fileID: 2103283226}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TBlockUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116319,7 +116402,7 @@ GameObject:
   - component: {fileID: 2141491380}
   - component: {fileID: 2141491382}
   - component: {fileID: 2141491381}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: squareSmall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116524,6 +116607,10 @@ PrefabInstance:
     - target: {fileID: 4366111143107458009, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
       propertyPath: m_Name
       value: squareBig
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366111143107458009, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb083a97c83e5d74a86950fe377e3e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 1000
   burnTickInterval: 1
   burnDamagePerTick: 4
   reigniteDelay: 5
@@ -132,6 +132,7 @@ MonoBehaviour:
   isBurning: 0
   isConfused: 0
   spriteRenderer: {fileID: 2969068313154050967}
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
   deathParticles: {fileID: 4753814910961615902}
 --- !u!1 &2006475144983261237
 GameObject:
