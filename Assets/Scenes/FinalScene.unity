@@ -6423,6 +6423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 770550882}
   - component: {fileID: 770550881}
+  - component: {fileID: 770550883}
   m_Layer: 0
   m_Name: RoundManager
   m_TagString: Untagged
@@ -6445,7 +6446,7 @@ MonoBehaviour:
   maxRounds: 3
   scoreDisplayTime: 5
   playerManagerFinal: {fileID: 2041737856}
-  playerScoreManager: {fileID: 2041737855}
+  playerScoreManager: {fileID: 770550883}
 --- !u!4 &770550882
 Transform:
   m_ObjectHideFlags: 0
@@ -6461,6 +6462,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &770550883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770550880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb20f5b1da06db349899c85b2534627d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerManager: {fileID: 2041737856}
+  scoreboardUI: {fileID: 306338041}
+  placeTexts:
+  - {fileID: 2110415854}
+  - {fileID: 2126427089}
+  - {fileID: 838215555}
+  - {fileID: 1119842234}
 --- !u!1 &773824061
 GameObject:
   m_ObjectHideFlags: 0
@@ -115041,7 +115061,6 @@ GameObject:
   - component: {fileID: 2041737853}
   - component: {fileID: 2041737854}
   - component: {fileID: 2041737856}
-  - component: {fileID: 2041737855}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: PlayerManager
@@ -115132,25 +115151,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &2041737855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2041737852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02a6af75ae4eef34894e602827a5cec2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerManager: {fileID: 2041737856}
-  scoreboardUI: {fileID: 306338041}
-  placeTexts:
-  - {fileID: 2110415854}
-  - {fileID: 2126427089}
-  - {fileID: 838215555}
-  - {fileID: 1119842234}
 --- !u!114 &2041737856
 MonoBehaviour:
   m_ObjectHideFlags: 0
