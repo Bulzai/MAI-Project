@@ -165,7 +165,7 @@ public class PlayerManager : MonoBehaviour
         root.name = "PlayerRoot_" + idx;
 
         // Find children
-        var cursorTf = root.transform.Find("CursorNoPIFinal");
+        var cursorTf = root.transform.Find("CursorNoPI");
         var characterTf = root.transform.Find("PlayerNoPI");
 
         if (cursorTf == null || characterTf == null)

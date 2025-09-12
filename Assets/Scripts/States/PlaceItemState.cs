@@ -45,7 +45,7 @@ public class PlaceItemState : MonoBehaviour
     {
         foreach (var root in playerManagerFinal.playerRoots.Values)
         {
-            var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
+            var cursor = root.transform.Find("CursorNoPI").gameObject;
             cursor.SetActive(false);
             root.GetComponent<PlayerInput>().SwitchCurrentActionMap("Cursor");
         }
@@ -91,7 +91,7 @@ public class PlaceItemState : MonoBehaviour
             }
 
             // enable cursor, disable character
-            var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
+            var cursor = root.transform.Find("CursorNoPI").gameObject;
             var character = root.transform.Find("PlayerNoPI").gameObject;
             cursor.SetActive(true);
             character.SetActive(false);
@@ -135,7 +135,7 @@ public class PlaceItemState : MonoBehaviour
         // deactivate cursor
         if (playerManagerFinal.playerRoots.TryGetValue(idx, out var root))
         {
-            var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
+            var cursor = root.transform.Find("CursorNoPI").gameObject;
             cursor.SetActive(false);
             //Debug.Log("Deactivated cursor idx=" + idx);
         }

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -9,8 +9,8 @@ public class PlayerScoreManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerManager playerManager;
-    [SerializeField] public GameObject      scoreboardUI;
-    [SerializeField] private TMP_Text[]      placeTexts;    
+    [SerializeField] public GameObject scoreboardUI;
+    [SerializeField] private TMP_Text[] placeTexts;
 
     // cumulative scores over all rounds
     private Dictionary<PlayerInput, int> _totalScores = new Dictionary<PlayerInput, int>();
@@ -49,11 +49,11 @@ public class PlayerScoreManager : MonoBehaviour
                 _totalScores[pi] += pts;
 
                 placeTexts[i].text =
-                    $"{i+1}. {pi.gameObject.name} — {pts} (Total: {_totalScores[pi]})";
+                    $"{i + 1}. {pi.gameObject.name} — {pts} (Total: {_totalScores[pi]})";
             }
             else
             {
-                placeTexts[i].text = $"{i+1}. ---";
+                placeTexts[i].text = $"{i + 1}. ---";
             }
         }
 

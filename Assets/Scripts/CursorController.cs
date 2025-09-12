@@ -22,7 +22,7 @@ public class CursorController : MonoBehaviour
     private bool isInPlacementPhase = false;       // Toggles behavior after all players have selected
     private GameObject pickedObjectPrefab;         // The prefab that this player picked
     private GameObject attachedInstance = null;    // The runtime instance in placement phase
-
+        
     // Reference to our own PlayerInput (so we can check playerIndex, etc.)
     public PlayerInput playerInput;
 
@@ -49,8 +49,8 @@ public class CursorController : MonoBehaviour
 
         if (GameWorld == null)
             Debug.LogError("Could not find a GameObject named 'Game' in the scene!");
-    
-    
+
+
     }
     /*
     private void Update()
@@ -220,7 +220,7 @@ public class CursorController : MonoBehaviour
             Vector2 cursorPos = transform.position;
             //Collider2D hit = Physics2D.OverlapPoint(cursorPos, selectableLayer);
             //if (hit != null)
-            if(hit.collider != null)
+            if (hit.collider != null)
             {
                 SelectableItem itemScript = hit.collider.GetComponent<SelectableItem>();
 
@@ -256,7 +256,7 @@ public class CursorController : MonoBehaviour
                 {
                     var sr = sprite.GetComponent<SpriteRenderer>();
                     if (sr != null)
-                        sr.color =  Color.white;
+                        sr.color = Color.white;
                 }
                 gridItem.transform.SetParent(GameWorld.transform);
 
@@ -336,7 +336,7 @@ public class CursorController : MonoBehaviour
         lastCell = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
         // DIAGNOSTIC REPORT
         MonoBehaviour[] scripts = go.GetComponents<MonoBehaviour>();
-        if( col != null )
+        if (col != null)
         {
             Debug.Log("col is null");
         }

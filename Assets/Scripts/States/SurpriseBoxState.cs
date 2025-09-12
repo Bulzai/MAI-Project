@@ -138,7 +138,7 @@ public class SurpriseBoxState : MonoBehaviour
         if (!playerManager.pickedPrefabByPlayer.ContainsKey(idx))
         {
             playerManager.pickedPrefabByPlayer[idx] = prefab;
-            var cursor = playerManager.playerRoots[idx].transform.Find("CursorNoPIFinal").gameObject;
+            var cursor = playerManager.playerRoots[idx].transform.Find("CursorNoPI").gameObject;
             cursor.SetActive(false);
 
         }
@@ -184,7 +184,7 @@ public class SurpriseBoxState : MonoBehaviour
         foreach (var root in playerManager.playerRoots.Values)
         {
             var pi = root.GetComponent<PlayerInput>();
-            var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
+            var cursor = root.transform.Find("CursorNoPI").gameObject;
 
             // 1) turn the cursor graphic on
             cursor.SetActive(true);
