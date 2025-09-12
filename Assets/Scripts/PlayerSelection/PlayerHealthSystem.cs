@@ -14,6 +14,7 @@ public class PlayerHealthSystem : MonoBehaviour
     public float reigniteDelay = 5f;
 
     public int currentHealth;
+    
     public bool isBurning = false;
     public bool isConfused = false;
 
@@ -88,7 +89,7 @@ public class PlayerHealthSystem : MonoBehaviour
     public void TakeDamage(int amount, bool isItemDmg)
     {
         currentHealth -= amount;
-        Debug.Log("Player took damage! Health: " + currentHealth);
+        //Debug.Log("Player took damage! Health: " + currentHealth);
 
         if(isItemDmg)
             StartCoroutine(FlashRed());
