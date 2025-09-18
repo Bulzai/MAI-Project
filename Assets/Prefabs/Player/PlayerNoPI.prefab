@@ -148,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86ae75b1f4068ef47aa09d8801b2416f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMultiplier: 1
   affectHorizontal: 1
   affectVertical: 1
 --- !u!114 &7229567304051371680
@@ -165,8 +164,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   auraRadius: 2.5
   slowPercent: 0.5
+  slowSeconds: 2
   auraDuration: 7
-  refreshWindow: 0.25
+  playerTag: Player
+  repelSeconds: 8
+  repelKickSpeed: 25
+  horizontalOnly: 0
 --- !u!1 &2006475144983261237
 GameObject:
   m_ObjectHideFlags: 0

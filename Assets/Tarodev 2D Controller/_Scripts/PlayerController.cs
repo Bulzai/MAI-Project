@@ -21,6 +21,8 @@ namespace TarodevController
 
         private PlayerHealthSystem _healthSystem;
 
+        private Vector2 _externalImpulse;
+
         #region Interface
 
         public Vector2 FrameInput => _frameInput.Move;
@@ -30,6 +32,10 @@ namespace TarodevController
         #endregion
 
         private float _time;
+
+
+        public void AddImpulse(Vector2 deltaVelocity) => _externalImpulse += deltaVelocity;
+
 
         // ======== WALL STATE ========
         private bool _onWall;            // currently touching a wall (airborne)
@@ -110,6 +116,10 @@ namespace TarodevController
             HandleJump();
             HandleDirection();
             HandleGravity();
+
+            //for external forces like knockback
+            _frameVelocity += _externalImpulse;
+            _externalImpulse = Vector2.zero;
 
             ApplyMovement();
         }
