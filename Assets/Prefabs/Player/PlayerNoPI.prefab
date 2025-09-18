@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 1544650614272011793}
   - component: {fileID: 1544650614272011794}
   - component: {fileID: 2351750134312444653}
+  - component: {fileID: 1727573164315709504}
+  - component: {fileID: 7229567304051371680}
   m_Layer: 6
   m_Name: PlayerNoPI
   m_TagString: Player
@@ -134,6 +136,37 @@ MonoBehaviour:
   spriteRenderer: {fileID: 2969068313154050967}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   deathParticles: {fileID: 4753814910961615902}
+--- !u!114 &1727573164315709504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544650614272011804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86ae75b1f4068ef47aa09d8801b2416f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedMultiplier: 1
+  affectHorizontal: 1
+  affectVertical: 1
+--- !u!114 &7229567304051371680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544650614272011804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfc1063f48949c74eb3c84a85391554d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  auraRadius: 2.5
+  slowPercent: 0.5
+  auraDuration: 7
+  refreshWindow: 0.25
 --- !u!1 &2006475144983261237
 GameObject:
   m_ObjectHideFlags: 0
