@@ -29,6 +29,9 @@ public class PlayerHealthSystem : MonoBehaviour
     private Coroutine reigniteCoroutine;
     private Coroutine confusedCoroutine;
 
+    [Header("Knockback")]
+    [SerializeField] private float knockbackMultiplier = 12f; // tweak feel
+    [SerializeField] private float verticalBoost = 2.5f;      // extra lift when grounded 
 
     private GameObject fireSprite;
     private void Start()
@@ -142,4 +145,22 @@ public class PlayerHealthSystem : MonoBehaviour
         GameEvents.PlayerEliminated(_playerInput);
 
     }
+
+    public void Knockback(Vector2 direction, float strength)
+    {
+        // Normalize for safety
+        if (direction.sqrMagnitude > 0.0001f) direction.Normalize();
+
+        // Convert "strength" into a delta-velocity, not force.
+        // We push a little upward if the player is grounded to feel snappier.
+        var pc = GetComponent<TarodevController.PlayerController>();
+        if (pc == null) return;
+
+        // Optional: small vertical boost if mostly horizontal hit
+        Vector2 impulse = direction * (strength * knockbackMultiplier);
+        if (Mathf.Abs(direction.y) < 0.25f) impulse.y += verticalBoost;
+
+        pc.AddImpulse(impulse);
+    }
+
 }
