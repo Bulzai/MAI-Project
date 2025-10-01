@@ -54,7 +54,6 @@ public class ExtingSpawner : MonoBehaviour
     private HashSet<Vector3Int> platformCells;
     private List<Vector3> finalSpawnPositions = new List<Vector3>();
     private Coroutine _spawnRoutine;
-    private bool _positionsReady = false;
     private int _nextIndex = 0;
     private bool _advanceRequested = false;
 
