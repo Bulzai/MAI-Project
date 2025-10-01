@@ -92414,9 +92414,16 @@ MonoBehaviour:
   - {r: 0.011764706, g: 0.8784314, b: 0.11372549, a: 1}
   - {r: 0.015686275, g: 0.18039216, b: 0.8784314, a: 1}
   - {r: 0.5568628, g: 0.34509805, b: 0.34509805, a: 1}
-  spawnPositionsForMenu: []
-  spawnPositionsForItemPlacement: []
-  spawnPositionsForItemSelection: []
+  spawnPositionsForSelection:
+  - {fileID: 2141912829}
+  - {fileID: 123360574}
+  - {fileID: 853680358}
+  - {fileID: 748284515}
+  spawnPositionsForPlacement:
+  - {fileID: 2141912829}
+  - {fileID: 123360574}
+  - {fileID: 853680358}
+  - {fileID: 748284515}
 --- !u!1 &2045283417
 GameObject:
   m_ObjectHideFlags: 0
