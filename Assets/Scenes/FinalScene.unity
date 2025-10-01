@@ -86995,16 +86995,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf6789a6b797885429cd697380020404, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridPlacement: {fileID: 2047139710}
+  triangleSpawns: 7
+  circleSpawns: 3
+  attemptsPerSpawn: 50
+  spawnInterval: 10
+  extinguisherSpacing: 10
   extinguisherPrefab: {fileID: 267320657431022744, guid: e3fd6ad79fb05ab46a85c8d49a1674d7, type: 3}
   previewPrefab: {fileID: 267320657431022744, guid: 34135406c8aea4e43bd76c24b0149d34, type: 3}
   extinguisherContainer: {fileID: 2124248504}
   previewContainer: {fileID: 1508586322}
-  maxPreviewCount: 10
-  gridPlacement: {fileID: 2047139710}
-  triangleSpawns: 3
-  circleSpawns: 2
-  attemptsPerSpawn: 50
-  spawnInterval: 2
   downHeight: 5
   downBase: 7
   sideHeight: 4
