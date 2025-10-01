@@ -52,23 +52,7 @@ public class CursorController : MonoBehaviour
 
 
     }
-    /*
-    private void Update()
-    {
-        // 1) Move the cursor around in world space every frame (unless we already "picked" in selection phase).
-        if (!hasPicked)
-        {
-            Vector3 delta = new Vector3(moveInput.x, moveInput.y, 0f) * moveSpeed * Time.deltaTime;
-            transform.position += delta;
-        }
-        // 2) In placement phase, if we have an attachedInstance, move both cursor + attachedInstance
-        else if (isInPlacementPhase && attachedInstance != null)
-        {
-            Vector3 delta = new Vector3(moveInput.x, moveInput.y, 0f) * moveSpeed * Time.deltaTime;
-            transform.position += delta;
-            attachedInstance.transform.position = transform.position;
-        }
-    }*/
+
 
     void Update()
     {
@@ -88,25 +72,26 @@ public class CursorController : MonoBehaviour
             return;
         }
 
-        // during placement: drive highlight on shared TempTilemap
+                // during placement: drive highlight on shared TempTilemap
         if (isInPlacementPhase && gridItem != null && !gridItem.Placed)
         {
-            // compute which cell we’re over
             var gps = GridPlacementSystem.Instance;
+
+            // 1) Find the nearest cell to the cursor position
             Vector3Int cell = gps.gridLayout.WorldToCell(transform.position);
 
 
-            // clear old highlight
+            Vector3Int snappedCell = cell; // gridItem.getAdjustPosition();
+            Vector3 snappedWorld = gps.gridLayout.CellToWorld(snappedCell);
+            gridItem.transform.position = snappedWorld;
+
+
+            // 5) Update highlights
             if (lastCell.x != int.MinValue)
                 gps.TempTilemap.SetTile(lastCell, null);
 
-            // set new highlight
-            // new:
-            gps.TempTilemap.SetTile(cell, gps.highlightTile);
-            // or use your own highlightTile if you added one
-            lastCell = cell;
-            GridPlacementSystem.Instance.FollowItem(gridItem);
 
+            gps.FollowItem(gridItem);
         }
     }
 
@@ -118,45 +103,6 @@ public class CursorController : MonoBehaviour
         // ReadVector2 from the context:
         moveInput = ctx.ReadValue<Vector2>();
     }
-    /*
-    // THIS MUST be CallbackContext, not InputValue
-    public void OnSubmit(InputAction.CallbackContext ctx)
-    {
-        // Only run on the "performed" phase (i.e. button‐down).
-        if (!ctx.performed) return;
-
-        if (!hasPicked)
-        {
-            Vector2 cursorPos = transform.position;
-            Collider2D hit = Physics2D.OverlapPoint(cursorPos, selectableLayer);
-
-            if (hit != null)
-            {
-                SelectableItem itemScript = hit.GetComponent<SelectableItem>();
-                if (itemScript != null && itemScript.isAvailable)
-                {
-                    itemScript.isAvailable = false;
-                    hit.gameObject.SetActive(false);
-
-                    pickedObjectPrefab = itemScript.originalPrefab;
-                    GameManager.Instance.NotifyPlayerPicked(playerInput.playerIndex, pickedObjectPrefab);
-
-                    hasPicked = true;
-
-                    //GetComponent<SpriteRenderer>().enabled = false;
-                    //GetComponent<Collider2D>().enabled = false;
-                }
-            }
-        }
-        else if (isInPlacementPhase && attachedInstance != null)
-        {
-            attachedInstance.transform.SetParent(null);
-            attachedInstance = null;
-
-            GameManager.Instance.NotifyPlayerPlaced(playerInput.playerIndex);
-            Destroy(gameObject);
-        }
-    }*/
     void LogMyAndParentPositions()
     {
         Debug.Log("printing transforms:");
@@ -169,14 +115,7 @@ public class CursorController : MonoBehaviour
             Debug.Log($"[{t.gameObject.name}] worldPos = {t.position}, localPos = {t.localPosition}", t.gameObject);
         }
     }
-    /*
-    void OnDrawGizmos()
-    {
-        // draws a small green circle at the cursor’s world‐space position
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, 0.1f);
-    }
-    */
+
     void LogEveryCursor()
     {
         Debug.Log("transform: " + transform.position);
@@ -268,31 +207,6 @@ public class CursorController : MonoBehaviour
             }
         }
     }
-
-    /*
-    // This will be called by GameManager when the placement phase begins
-    public void BeginPlacementPhase(GameObject prefabToAttach, Vector3 startPosition)
-    {
-        isInPlacementPhase = true;
-        hasPicked = true; // Already picked.
-
-        // Re-enable the cursor sprite & collider (in case they were hidden)
-        Debug.Log("gonna enable cursor");
-
-        transform.position = startPosition;
-
-        // Instantiate the chosen prefab as a child of this cursor
-        attachedInstance = Instantiate(prefabToAttach, transform.position, Quaternion.identity);
-        attachedInstance.transform.SetParent(transform);
-        attachedInstance.SetActive(true);
-        //GetComponent<SpriteRenderer>().enabled = true;
-        //GetComponent<Collider2D>().enabled = true;
-        lastCell = Vector3Int.zero;  // invalidate
-        hasPicked = true;
-        isInPlacementPhase = true;
-        // optionally move the cursor to its startPosition
-        transform.position = startPosition;
-    }*/
 
     // called once per player by GameManager
     public void BeginPlacementPhase(GameObject prefabToAttach, Transform startPosition)
@@ -393,7 +307,6 @@ public class CursorController : MonoBehaviour
                 sr.color = enable ? Color.yellow : Color.white;
         }
     }
-    // CursorControllerFinal.cs
 
     // Make sure these live alongside your other OnXXX(InputAction.CallbackContext) methods:
     public void OnRotateLeft(InputAction.CallbackContext ctx)

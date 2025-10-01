@@ -119,7 +119,6 @@ public class SurpriseBoxState : MonoBehaviour
     {
         itemBox.SetActive(false);
         surpriseBoxObject.SetActive(false);
-        GameEvents.ChangeState(GameState.MainGameState);
         // Destroy all spawned items
         foreach (var go in itemsInBox)
             if (go != null)

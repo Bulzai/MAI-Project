@@ -24,7 +24,6 @@ public class MainMenu : MonoBehaviour
     {
         MenuGameObject.SetActive(false);
         SelectPlayer.SetActive(true);
-        
         Time.timeScale = 1f;
         //SceneManager.LoadScene("MovementScene");
     }

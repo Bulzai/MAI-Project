@@ -102,4 +102,22 @@ public class GridItem : MonoBehaviour
         return adjustPosition;
     }
 
+    public void ShowPlacementFeedback(bool canPlace)
+    {
+        // 1) Tint the item sprite
+        var sr = GetComponentInChildren<SpriteRenderer>();
+        if (sr != null)
+        {
+            sr.color = canPlace ? Color.white : new Color(1f, 0.4f, 0.4f, 1f); // tint red
+        }
+
+        // 2) Show or hide the forbidden sign overlay
+        var forbidden = transform.Find("ForbiddenSign");
+        if (forbidden != null)
+        {
+            forbidden.gameObject.SetActive(!canPlace);
+        }
+    }
+
+
 }
