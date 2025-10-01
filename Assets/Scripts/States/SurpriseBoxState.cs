@@ -119,7 +119,6 @@ public class SurpriseBoxState : MonoBehaviour
     {
         itemBox.SetActive(false);
         surpriseBoxObject.SetActive(false);
-        GameEvents.ChangeState(GameState.MainGameState);
         // Destroy all spawned items
         foreach (var go in itemsInBox)
             if (go != null)
@@ -152,52 +151,35 @@ public class SurpriseBoxState : MonoBehaviour
             //BeginPlacementPhaseAll();
         }
     }
-    /*
-    // Reactivate every cursor
+
     public void ShowAllCursors()
     {
-
-        Debug.Log("ShowAllCursors called");
-        foreach (var root in playerManagerFinal.playerRoots.Values)
+        foreach (var kvp in playerManager.playerRoots)
         {
-            var pi = root.GetComponent<PlayerInput>();
-            Debug.Log("inputs:" + root.GetComponent<PlayerInput>());
-            var cursor = root.transform.Find("CursorNoPIFinal").gameObject;
-            cursor.SetActive(true);
-            root.GetComponent<PlayerInput>().SwitchCurrentActionMap("Cursor");
-            root.GetComponent<PlayerInput>().ActivateInput();
-
-            pi.SwitchCurrentActionMap("Cursor");
-            pi.currentActionMap.Enable();
-            Debug.Log($"After switch: map={pi.currentActionMap.name}");
-            foreach (var a in pi.currentActionMap)
-                Debug.Log($"  {a.name} enabled={a.enabled}");
-
-
-
-            Debug.Log("input activated and action map switched to cursor");
-
-        }
-    }*/
-    public void ShowAllCursors()
-    {
-        foreach (var root in playerManager.playerRoots.Values)
-        {
+            int idx = kvp.Key;
+            var root = kvp.Value;
             var pi = root.GetComponent<PlayerInput>();
             var cursor = root.transform.Find("CursorNoPI").gameObject;
+
+            // Reset cursor position using PlayerManager
+            playerManager.ResetCursorPositionItemSelection(idx);
 
             // 1) turn the cursor graphic on
             cursor.SetActive(true);
 
-            // 2) swap to the Cursor map (this *automatically* enables its actions
+            // 2) swap to the Cursor map
             pi.SwitchCurrentActionMap("Cursor");
 
             // 3) debug post‐switch
-            Debug.Log($"[POST‐SWITCH] {pi.playerIndex} → map={pi.currentActionMap.name}");
-            foreach (var a in pi.currentActionMap)
-                Debug.Log($"    {a.name} enabled={a.enabled}");
+          //Debug.Log($"[POST‐SWITCH] {pi.playerIndex} → map={pi.currentActionMap.name}");
+          //Debug.Log($"[POST‐SWITCH] {pi.playerIndex} → map={pi.currentActionMap.name}");
+          //foreach (var a in pi.currentActionMap)
+          //    Debug.Log($"    {a.name} enabled={a.enabled}");
         }
     }
+
+
+
     // is called in playerselection, but should be called here?
     private void InitializeSurprisebox()
     {

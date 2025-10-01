@@ -10,11 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5968634451010189029}
   - component: {fileID: 4570053487180672852}
-  - component: {fileID: 8974016448219205035}
-  - component: {fileID: 8959531570399955880}
   - component: {fileID: 8734890636493665059}
   m_Layer: 0
-  m_Name: Extinguisher
+  m_Name: ExtinguisherPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,32 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
---- !u!114 &8974016448219205035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 267320657431022744}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57a61e5d8de0d0943990b716390a25f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifetime: 10
-  blinkDuration: 3
---- !u!114 &8959531570399955880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 267320657431022744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9483ab8884b236743a8e6fdd9b2f64c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &8734890636493665059
 BoxCollider2D:
   m_ObjectHideFlags: 0

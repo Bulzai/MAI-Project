@@ -22,9 +22,9 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
+
         MenuGameObject.SetActive(false);
         SelectPlayer.SetActive(true);
-        
         Time.timeScale = 1f;
         //SceneManager.LoadScene("MovementScene");
     }

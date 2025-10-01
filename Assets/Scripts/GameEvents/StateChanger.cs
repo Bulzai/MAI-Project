@@ -9,4 +9,5 @@ public class StateChanger : MonoBehaviour
     public void GoToPlaceItemState()      => GameEvents.ChangeState(GameState.PlaceItemState);
     public void GoToMainGameState()       => GameEvents.ChangeState(GameState.MainGameState);
     public void GoToScoreState()          => GameEvents.ChangeState(GameState.ScoreState);
+
 }

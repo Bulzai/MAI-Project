@@ -67,99 +67,24 @@ public class GridPlacementSystem : MonoBehaviour
         Instance = this;
         MainTilemap.gameObject.SetActive(false);
         TempTilemap.gameObject.SetActive(false);
+
     }
 
     private void Start()
     {
         string tilePath = "Tiles/";
         tileBases.Add(TileType.Empty, null);
-        tileBases.Add(TileType.White, Resources.Load<TileBase>(tilePath + "TilesGrid_0"));
-        tileBases.Add(TileType.Red, Resources.Load<TileBase>(tilePath + "TilesGrid_2"));
-        tileBases.Add(TileType.Blue, Resources.Load<TileBase>(tilePath + "TilesGrid_4"));
+        tileBases.Add(TileType.White, Resources.Load<TileBase>(tilePath + "TilesGrid_1"));
+        tileBases.Add(TileType.Red, Resources.Load<TileBase>(tilePath + "TilesGrid_1 6"));
+        tileBases.Add(TileType.Turquois, Resources.Load<TileBase>(tilePath + "TilesGrid 1_0"));
+        tileBases.Add(TileType.Violet, Resources.Load<TileBase>(tilePath + "TilesGrid 1_7"));
+        tileBases.Add(TileType.Yellow, Resources.Load<TileBase>(tilePath + "TilesGrid 1_3"));
+        tileBases.Add(TileType.Black, Resources.Load<TileBase>(tilePath + "TilesGrid 1_2"));
+        tileBases.Add(TileType.Orange, Resources.Load<TileBase>(tilePath + "TilesGrid 1_1"));
+        tileBases.Add(TileType.Blue, Resources.Load<TileBase>(tilePath + "TilesGrid 1_8"));
+
+
     }
-
-    /*
-    private void Update()
-    {
-        if (!gridItem)
-        {
-            return;
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (EventSystem.current.IsPointerOverGameObject(0))
-            {
-                return;
-            }
-
-            if (!gridItem.Placed)
-            {
-                Vector2 touchPos = (Vector2)placementCamera.ScreenToWorldPoint(Input.mousePosition);
-                Vector3Int cellPos = gridLayout.LocalToCell(touchPos);
-
-                if (previousPosition != (Vector3)cellPos)
-                {
-                    gridItem.transform.localPosition = gridLayout.CellToLocalInterpolated((Vector3)cellPos)
-                        + new Vector3(.5f, .5f, 0f);
-                    previousPosition = (Vector3)cellPos;
-                    FollowItem();
-                }
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (gridItem.CanBePlaced())
-                {
-                    gridItem.Place();
-                }
-            }
-            else if (Input.GetMouseButtonDown(1)) // Right Click
-            {
-                ClearArea();
-                Destroy(gridItem.gameObject);
-            }
-    }
- 
-
-    private void Update()
-    {
-        if (!gridItem || gridItem.Placed)
-            return;
-
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-
-        Vector3 screenPos = Input.mousePosition;
-        screenPos.z = -placementCamera.transform.position.z;  // e.g. 10 if camera.z == -10
-
-        Vector3 world3 = placementCamera.ScreenToWorldPoint(screenPos);
-        Vector2 world2 = world3;              // drop the Z
-        Vector3Int cellPos = gridLayout.LocalToCell(world3);
-
-        if (previousPosition != (Vector3)cellPos)
-        {
-            gridItem.transform.localPosition = gridLayout.CellToLocalInterpolated((Vector3)cellPos)
-                + new Vector3(.5f, .5f, 0f);
-            previousPosition = (Vector3)cellPos;
-            FollowItem();
-        }
-
-        if (Input.GetMouseButtonDown(0)) // LEFT CLICK
-        {
-            if (gridItem.CanBePlaced())
-            {
-                gridItem.Place();
-            }
-        }
-        else if (Input.GetMouseButtonDown(1)) // RIGHT CLICK
-        {
-            ClearArea();
-            Destroy(gridItem.gameObject);
-            GameEvents.ToggleGrid();
-        }
-    }*/
-
     #endregion
 
 
@@ -201,19 +126,26 @@ public class GridPlacementSystem : MonoBehaviour
 
         for (int i = 0; i < baseArray.Length; i++)
         {
+
+            // this is to show where we can place with blue and if we cannot then with red:
             if (baseArray[i] == tileBases[TileType.White])
             {
-                tileArray[i] = tileBases[TileType.Blue];
+                gridItem.ShowPlacementFeedback(true);
+                //tileArray[i] = tileBases[TileType.Blue];
             }
             else
             {
-                FillTiles(tileArray, TileType.Red);
+                gridItem.ShowPlacementFeedback(false);
+                //FillTiles(tileArray, TileType.Red);
                 break;
             }
+
+
+
         }
 
         TempTilemap.SetTilesBlock(buildingArea, tileArray);
-        _lastAreas[gridItem] = buildingArea;
+        _lastAreas[gridItem] = buildingArea; 
     }
 
     public bool CanTakeArea(BoundsInt area)
@@ -265,10 +197,31 @@ public class GridPlacementSystem : MonoBehaviour
         TempTilemap.SetTile(cell, highlightTile);
     }
 
+
     public void ClearCellHighlight(Vector3 worldPos)
     {
         Vector3Int cell = gridLayout.WorldToCell(worldPos);
         TempTilemap.SetTile(cell, null);
+    }
+    public void OccupyCellsMainTilemap(IEnumerable<Vector3Int> cells, TileType type)
+    {
+        if (!MainTilemap.gameObject.activeSelf)
+            MainTilemap.gameObject.SetActive(true);
+
+        foreach (var cell in cells)
+        {
+
+            MainTilemap.SetTile(cell, tileBases[type]);
+        }
+        MainTilemap.gameObject.SetActive(false);
+    }
+
+    public void HighlightCells(IEnumerable<Vector3Int> cells, TileType type)
+    {
+        foreach (var cell in cells)
+        {
+            TempTilemap.SetTile(cell, tileBases[type]);
+        }
     }
 }
 
@@ -279,5 +232,12 @@ public enum TileType
     Empty,
     White,
     Blue,
-    Red
+    Red,
+    Turquois,
+    Green,
+    Orange,
+    Violet,
+    Yellow,
+    Black
+    
 }

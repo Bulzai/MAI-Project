@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    public Transform[] SpawnPoints;
+    public Transform[] spawnPositionsForGame;
 
     public List<PlayerInput> players = new List<PlayerInput>();
     private List<PlayerInput> _eliminationOrder = new List<PlayerInput>();
@@ -20,8 +20,9 @@ public class PlayerManager : MonoBehaviour
     [Header("Player Colors")]
     public Color[] playerColors = new Color[4];
     [Header("Spawn Positions")]
-    public Transform[] spawnPositionsForSelection;
-    public Transform[] spawnPositionsForPlacement;
+    public Transform[] spawnPositionsForMenu;
+    public Transform[] spawnPositionsForItemPlacement;
+    public Transform[] spawnPositionsForItemSelection;
 
 
     public Dictionary<int, GameObject> playerRoots = new Dictionary<int, GameObject>();
@@ -175,13 +176,13 @@ public class PlayerManager : MonoBehaviour
         }
 
         // Position at selection spawn
-        if (idx < SpawnPoints.Length)
-            characterTf.transform.position = SpawnPoints[idx].transform.position;
+        if (idx < spawnPositionsForMenu.Length)
+            characterTf.transform.position = spawnPositionsForMenu[idx].transform.position;
         else
             characterTf.transform.position = Vector3.one;
 
-        if (idx < spawnPositionsForSelection.Length)
-            cursorTf.transform.position = spawnPositionsForSelection[idx].transform.position;
+        if (idx < spawnPositionsForItemPlacement.Length)
+            cursorTf.transform.position = spawnPositionsForItemPlacement[idx].transform.position;
         else
             cursorTf.transform.position = Vector3.one;
 
@@ -273,9 +274,9 @@ public class PlayerManager : MonoBehaviour
             health.SetOnFire();
 
             // **NEW:** Reposition character at spawn point
-            if (idx < spawnPositionsForPlacement.Length)
+            if (idx < spawnPositionsForGame.Length)
             {
-                characterGO.transform.position = spawnPositionsForPlacement[idx].position;
+                characterGO.transform.position = spawnPositionsForGame[idx].position;
             }
             else
             {
@@ -286,6 +287,24 @@ public class PlayerManager : MonoBehaviour
     }
 
 
+    public void ResetCursorPositionItemPlacement(int idx)
+    {
+        if (playerRoots.TryGetValue(idx, out var root))
+        {
+            var cursor = root.transform.Find("CursorNoPI");
+            if (idx < spawnPositionsForItemPlacement.Length)
+                cursor.position = spawnPositionsForItemPlacement[idx].position;
+        }
+    }
 
+    public void ResetCursorPositionItemSelection(int idx)
+    {
+        if (playerRoots.TryGetValue(idx, out var root))
+        {
+            var cursor = root.transform.Find("CursorNoPI");
+            if (idx < spawnPositionsForItemSelection.Length)
+                cursor.position = spawnPositionsForItemSelection[idx].position;
+        }
+    }
 
 }

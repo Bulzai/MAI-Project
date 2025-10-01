@@ -7,7 +7,7 @@ public class PlaceItemState : MonoBehaviour
 {
     public static PlaceItemState Instance { get; private set; }
 
-    [SerializeField] private PlayerManager playerManagerFinal;
+    [SerializeField] private PlayerManager playerManager;
     [SerializeField] private GameObject GameWorld;
     //[SerializeField] private GridPlacementSystem gridPlacementSystem;
 
@@ -43,7 +43,7 @@ public class PlaceItemState : MonoBehaviour
 
     public void HideAllCursors()
     {
-        foreach (var root in playerManagerFinal.playerRoots.Values)
+        foreach (var root in playerManager.playerRoots.Values)
         {
             var cursor = root.transform.Find("CursorNoPI").gameObject;
             cursor.SetActive(false);
@@ -56,8 +56,8 @@ public class PlaceItemState : MonoBehaviour
     {
 
         GridPlacementSystem.Instance.HideGrid();
-        playerManagerFinal.pickedPrefabByPlayer.Clear();
-        playerManagerFinal.playersThatPlaced.Clear();
+        playerManager.pickedPrefabByPlayer.Clear();
+        playerManager.playersThatPlaced.Clear();
         Debug.Log("AllPlayersFinishedPlacing ");
         HideAllCursors();
         GameEvents.ChangeState(GameState.MainGameState);
@@ -69,22 +69,22 @@ public class PlaceItemState : MonoBehaviour
         Debug.Log("BeginPlacementPhaseAll start");
         GameWorld.SetActive(true);
 
-        if (playerManagerFinal.pickedPrefabByPlayer.Count == 0)
+        if (playerManager.pickedPrefabByPlayer.Count == 0)
         {
             Debug.Log("No picks yet, aborting");
             return;
         }
 
 
-        playerManagerFinal.playersThatPlaced.Clear();
+        playerManager.playersThatPlaced.Clear();
         GridPlacementSystem.Instance.ShowGrid();
 
-        foreach (var kv in playerManagerFinal.pickedPrefabByPlayer)
+        foreach (var kv in playerManager.pickedPrefabByPlayer)
         {
             int idx = kv.Key;
             GameObject prefab = kv.Value;
 
-            if (!playerManagerFinal.playerRoots.TryGetValue(idx, out var root))
+            if (!playerManager.playerRoots.TryGetValue(idx, out var root))
             {
                 Debug.LogError("Missing root for idx=" + idx);
                 continue;
@@ -93,6 +93,7 @@ public class PlaceItemState : MonoBehaviour
             // enable cursor, disable character
             var cursor = root.transform.Find("CursorNoPI").gameObject;
             var character = root.transform.Find("PlayerNoPI").gameObject;
+            playerManager.ResetCursorPositionItemPlacement(idx);
             cursor.SetActive(true);
             character.SetActive(false);
             /*
@@ -129,11 +130,11 @@ public class PlaceItemState : MonoBehaviour
     {
         //Debug.Log("NotifyPlayerPlaced idx=" + idx);
 
-        if (!playerManagerFinal.playersThatPlaced.Contains(idx))
-            playerManagerFinal.playersThatPlaced.Add(idx);
+        if (!playerManager.playersThatPlaced.Contains(idx))
+            playerManager.playersThatPlaced.Add(idx);
 
         // deactivate cursor
-        if (playerManagerFinal.playerRoots.TryGetValue(idx, out var root))
+        if (playerManager.playerRoots.TryGetValue(idx, out var root))
         {
             var cursor = root.transform.Find("CursorNoPI").gameObject;
             cursor.SetActive(false);
@@ -143,7 +144,7 @@ public class PlaceItemState : MonoBehaviour
        // Debug.Log("placedCount=" + playerManagerFinal.playersThatPlaced.Count +
               //    " joinedCount=" + playerManagerFinal.PlayerCount);
 
-        if (playerManagerFinal.playersThatPlaced.Count == playerManagerFinal.playerCount)
+        if (playerManager.playersThatPlaced.Count == playerManager.playerCount)
         {
            // Debug.Log("All placed → AllPlayersFinishedPlacing");
             AllPlayersFinishedPlacing();
