@@ -7,7 +7,7 @@ using System;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 
-public class CursorController : MonoBehaviour
+public class DeprecatedCursorController : MonoBehaviour
 {
     [Header("Movement Settings")]
     private float moveSpeed = 10f;
@@ -22,7 +22,7 @@ public class CursorController : MonoBehaviour
     private bool isInPlacementPhase = false;       // Toggles behavior after all players have selected
     private GameObject pickedObjectPrefab;         // The prefab that this player picked
     private GameObject attachedInstance = null;    // The runtime instance in placement phase
-        
+
     // Reference to our own PlayerInput (so we can check playerIndex, etc.)
     public PlayerInput playerInput;
 
@@ -72,7 +72,7 @@ public class CursorController : MonoBehaviour
             return;
         }
 
-                // during placement: drive highlight on shared TempTilemap
+        // during placement: drive highlight on shared TempTilemap
         if (isInPlacementPhase && gridItem != null && !gridItem.Placed)
         {
             var gps = GridPlacementSystem.Instance;
