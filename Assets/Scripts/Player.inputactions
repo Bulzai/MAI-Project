@@ -846,6 +846,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SkipPlacement",
+                    "type": "Button",
+                    "id": "555d96d6-3968-4eae-bb0e-7d159fd68a8d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1000,6 +1009,28 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "RotateRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "79c2927c-9a15-4d68-a718-4b81a2d38d62",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "SkipPlacement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "312058b6-a862-4983-9caa-80a8a1bf1238",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller;Gamepad",
+                    "action": "SkipPlacement",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
