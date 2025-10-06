@@ -43,6 +43,33 @@ public class Projectile2D : MonoBehaviour
             transform.right = _rb.velocity.normalized;
     }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            var player = other.gameObject.GetComponent<PlayerHealthSystem>();
+            if (player != null)
+            {
+                player.TakeDamage(damage, true);
+
+                // Direction from projectile -> player
+                Vector2 dir = (other.transform.position - transform.position);
+                if (dir.sqrMagnitude > 0.0001f) dir.Normalize();
+
+
+                player.Knockback(dir, knockBackStrength);
+            }
+            else
+            {
+                Debug.Log("No PlayerHealthSystem Script");
+            }
+
+            // then destroy projectile if you like
+            Destroy(gameObject);
+        }
+        Destroy(gameObject);
+
+    }
     // In your projectile's OnTriggerEnter2D:
     void OnTriggerEnter2D(Collider2D other)
     {

@@ -38,4 +38,6 @@ MonoBehaviour:
   WallJumpPower: 27
   WallJumpHorizontalSpeed: 12
   WallJumpCoyoteTime: 0.1
-  WallStickTime: 0.1
+  WallStickTime: 0.06
+  ApexThreshold: 4
+  ApexBonusMultiplier: 1.15
