@@ -111,7 +111,6 @@ public class GridPlacementSystem : MonoBehaviour
 
     public void FollowItem(GridItem gridItem)
     {
-        EnableMainTilemap();
         if (_lastAreas.TryGetValue(gridItem, out var oldArea))
         {
             ClearArea(oldArea);

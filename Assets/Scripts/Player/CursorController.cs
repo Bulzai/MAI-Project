@@ -122,7 +122,7 @@ public class CursorController : MonoBehaviour
     {
         if (gridItem == null || gridItem.Placed) return;
         if (!gridItem.CanBePlaced() && gridItem.requiresSupport == false) return;
-        if (!gridItem.SupportedItemCanBePlaced) return;
+        if (!gridItem.SupportedItemCanBePlaced && gridItem.requiresSupport == true) return;
         gridItem.Place();
 
         gridItem.transform.SetParent(gameWorld.transform);

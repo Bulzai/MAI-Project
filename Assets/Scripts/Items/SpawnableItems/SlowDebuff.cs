@@ -2,7 +2,7 @@ using UnityEngine;
 
 [DefaultExecutionOrder(100)] // run after controller writes rb.velocity
 [DisallowMultipleComponent]
-public class SpeedDebuff : MonoBehaviour
+public class SlowDebuff : MonoBehaviour
 {
     [SerializeField] private bool affectHorizontal = true;
     [SerializeField] private bool affectVertical = false;
