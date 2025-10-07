@@ -75,7 +75,7 @@ public class GridPlacementSystem : MonoBehaviour
         string tilePath = "Tiles/";
         tileBases.Add(TileType.Empty, null);
         tileBases.Add(TileType.White, Resources.Load<TileBase>(tilePath + "TilesGrid_1"));
-        tileBases.Add(TileType.Red, Resources.Load<TileBase>(tilePath + "TilesGrid_1 6"));
+        tileBases.Add(TileType.Red, Resources.Load<TileBase>(tilePath + "TilesGrid 1_6"));
         tileBases.Add(TileType.Turquois, Resources.Load<TileBase>(tilePath + "TilesGrid 1_0"));
         tileBases.Add(TileType.Violet, Resources.Load<TileBase>(tilePath + "TilesGrid 1_7"));
         tileBases.Add(TileType.Yellow, Resources.Load<TileBase>(tilePath + "TilesGrid 1_3"));
@@ -111,6 +111,7 @@ public class GridPlacementSystem : MonoBehaviour
 
     public void FollowItem(GridItem gridItem)
     {
+        EnableMainTilemap();
         if (_lastAreas.TryGetValue(gridItem, out var oldArea))
         {
             ClearArea(oldArea);
@@ -124,29 +125,69 @@ public class GridPlacementSystem : MonoBehaviour
         int size = baseArray.Length;
         TileBase[] tileArray = new TileBase[size];
 
-        for (int i = 0; i < baseArray.Length; i++)
+        if (gridItem.requiresSupport)
         {
-
-            // this is to show where we can place with blue and if we cannot then with red:
-            if (baseArray[i] == tileBases[TileType.White])
-            {
-                gridItem.ShowPlacementFeedback(true);
-                //tileArray[i] = tileBases[TileType.Blue];
-            }
-            else
-            {
-                gridItem.ShowPlacementFeedback(false);
-                //FillTiles(tileArray, TileType.Red);
-                break;
-            }
-
-
-
+            gridItem.ShowPlacementFeedback(HasValidSupport(gridItem,buildingArea));
+            gridItem.SupportedItemCanBePlaced = HasValidSupport(gridItem, buildingArea);
         }
+        else
+        {
+            for (int i = 0; i < baseArray.Length; i++)
+            {
 
+                // this is to show where we can place with blue and if we cannot then with red:
+                if (baseArray[i] == tileBases[TileType.White])
+                {
+                    gridItem.ShowPlacementFeedback(true);
+                    //tileArray[i] = tileBases[TileType.Blue];
+                }
+                else
+                {
+                    gridItem.ShowPlacementFeedback(false);
+                    //FillTiles(tileArray, TileType.Red);
+                    break;
+                }
+
+
+
+            }
+        }
         TempTilemap.SetTilesBlock(buildingArea, tileArray);
         _lastAreas[gridItem] = buildingArea; 
     }
+
+
+    private bool HasValidSupport(GridItem gridItem, BoundsInt area)
+    {
+        // Check each of the four directions around the item
+        foreach (var dir in new Vector3Int[] { Vector3Int.down, Vector3Int.up, Vector3Int.left, Vector3Int.right })
+        {
+            // Shift the area by one cell in the current direction
+            BoundsInt shiftedArea = new BoundsInt(area.position + dir, area.size);
+
+            // Get all tiles in that shifted area from the main tilemap
+            TileBase[] baseArray = GetTilesBlock(shiftedArea, MainTilemap);
+
+            foreach (var b in baseArray)
+            {
+                // skip empty cells
+                if (b == null)
+                    continue;
+                // compare by reference OR name (in case of duplicated tile assets)
+                if (b == tileBases[TileType.Red])
+                {
+                    Debug.Log($"Found valid support tile '{b.name}' in direction {dir}");
+                    return true;
+                }
+             
+            }
+        }
+
+        // No valid adjacent support found
+        return false;
+    }
+
+
 
     public bool CanTakeArea(BoundsInt area)
     {
@@ -223,7 +264,23 @@ public class GridPlacementSystem : MonoBehaviour
             TempTilemap.SetTile(cell, tileBases[type]);
         }
     }
+
+    public void EnableMainTilemap()
+    {
+
+        MainTilemap.gameObject.SetActive(true);
+
+        // If you just want to hide it visually:
+        //var renderer = MainTilemap.GetComponent<TilemapRenderer>();
+        //if (renderer != null)
+        //    renderer.enabled = false;
+
+
+    }
 }
+
+
+
 
 
 public enum TileType

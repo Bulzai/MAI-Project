@@ -5,7 +5,9 @@ using UnityEngine;
 public class GridItem : MonoBehaviour
 {
 
-
+    [Header("Attachment Settings")]
+    public bool requiresSupport = false;               // true for icy/sticky surfaces
+    public bool SupportedItemCanBePlaced;
     public bool Placed { get; private set; }
     public BoundsInt area;
     // Start is called before the first frame update
@@ -15,6 +17,8 @@ public class GridItem : MonoBehaviour
 
     public Vector3Int adjustPosition;
     private bool ItemIsHorizontal = true;
+
+
 
     void Awake()
     {
@@ -38,12 +42,14 @@ public class GridItem : MonoBehaviour
 
     public void Place()
     {
+        if (!requiresSupport)
+        {
         Vector3Int positionInt = GridPlacementSystem.Instance.gridLayout.WorldToCell(transform.position) - adjustPosition; // adjust to center the item correctly;
         BoundsInt areaTemp = area;
         areaTemp.position = positionInt;
         Placed = true;
         GridPlacementSystem.Instance.TakeArea(areaTemp);
-
+        }
     }
 
     // rotating the item

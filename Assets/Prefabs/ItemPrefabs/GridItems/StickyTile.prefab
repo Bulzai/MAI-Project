@@ -175,9 +175,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41193822271e73d4685a748ebae9d15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requiresSupport: 1
+  SupportedItemCanBePlaced: 0
   area:
     m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 5, y: 3, z: 2}
-  originalPositionHorizontal: {x: 2, y: 1, z: 0}
-  originalPositionVertical: {x: 1, y: 2, z: 0}
+    m_Size: {x: 1, y: 1, z: 1}
+  originalPositionHorizontal: {x: 0, y: 0, z: 0}
+  originalPositionVertical: {x: 0, y: 0, z: 0}
   adjustPosition: {x: 0, y: 0, z: 0}

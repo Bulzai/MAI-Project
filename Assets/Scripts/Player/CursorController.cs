@@ -121,8 +121,8 @@ public class CursorController : MonoBehaviour
     private void TryPlaceObject()
     {
         if (gridItem == null || gridItem.Placed) return;
-        if (!gridItem.CanBePlaced()) return;
-
+        if (!gridItem.CanBePlaced() && gridItem.requiresSupport == false) return;
+        if (!gridItem.SupportedItemCanBePlaced) return;
         gridItem.Place();
 
         gridItem.transform.SetParent(gameWorld.transform);
@@ -166,8 +166,10 @@ public class CursorController : MonoBehaviour
     private void HandlePlacementMovement()
     {
         var gps = GridPlacementSystem.Instance;
+
         Vector3Int cell = gps.gridLayout.WorldToCell(transform.position);
         Vector3 snappedWorld = gps.gridLayout.CellToWorld(cell);
+
 
         gridItem.transform.position = snappedWorld;
 
@@ -177,6 +179,7 @@ public class CursorController : MonoBehaviour
         gps.FollowItem(gridItem);
         lastCell = cell;
     }
+
 
     // --- Hover highlight ---
     private void HandleHoverHighlight()
