@@ -35,7 +35,7 @@ public class PlayerItemHandler : MonoBehaviour
 
             case PickUpItem.ItemType.Speed:
                 // ⇩ Self-only: apply to THIS player only
-                var selfBuff = GetComponent<SpeedDebuff>();
+                var selfBuff = GetComponent<SlowDebuff>();
                 if (selfBuff) selfBuff.ApplySpeedModifier(speedMultiplier, speedDuration);
                 break;
 
@@ -60,7 +60,7 @@ public class PlayerItemHandler : MonoBehaviour
                 var otherRb = h.attachedRigidbody ?? h.GetComponentInParent<Rigidbody2D>();
                 if (!otherRb) continue;
 
-                var slow = otherRb.GetComponent<SpeedDebuff>();
+                var slow = otherRb.GetComponent<SlowDebuff>();
                 if (slow) slow.ApplySpeedModifier(slowPercent, slowSeconds);
             }
             t -= Time.deltaTime;
