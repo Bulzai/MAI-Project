@@ -136,6 +136,8 @@ MonoBehaviour:
   spriteRenderer: {fileID: 2969068313154050967}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   deathParticles: {fileID: 4753814910961615902}
+  knockbackMultiplier: 12
+  verticalBoost: 2.5
 --- !u!114 &1727573164315709504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,14 +164,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfc1063f48949c74eb3c84a85391554d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTag: Player
   auraRadius: 2.5
   slowPercent: 0.5
   slowSeconds: 2
   auraDuration: 7
-  playerTag: Player
   repelSeconds: 8
   repelKickSpeed: 25
-  horizontalOnly: 0
+  speedMultiplier: 1.5
+  speedDuration: 3
 --- !u!1 &2006475144983261237
 GameObject:
   m_ObjectHideFlags: 0

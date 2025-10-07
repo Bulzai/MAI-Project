@@ -1,22 +1,25 @@
 ﻿using System.Collections;
 using UnityEngine;
-using TarodevController; // <-- so we can call PlayerController.AddImpulse
+using TarodevController; 
 
+[DefaultExecutionOrder(100)]
 public class PlayerItemHandler : MonoBehaviour
 {
     [Header("Slow Aura")]
+    [SerializeField] private string playerTag = "Player";
     [SerializeField] private float auraRadius = 2.5f;
     [SerializeField, Range(0.1f, 1f)] private float slowPercent = 0.5f;
     [SerializeField] private float slowSeconds = 2f;
     [SerializeField] private float auraDuration = 10f;
 
     [Header("Repel Aura")]
-    [SerializeField] private string playerTag = "Player";
-    [SerializeField] private float repelSeconds = 5f;       // aura time after pickup
-    [SerializeField] private float repelKickSpeed = 14f;    // Δv applied to the other player
-    [SerializeField] private bool horizontalOnly = false;   // set true if you want no vertical knock
-
+    [SerializeField] private float repelSeconds = 5f;
+    [SerializeField] private float repelKickSpeed = 14f;
     private bool repelActive;
+
+    [Header("Speed Aura (SELF ONLY)")]
+    [SerializeField] private float speedMultiplier = 1.5f; // >1 speeds up
+    [SerializeField] private float speedDuration = 4f;     // seconds
 
     public void ApplyItem(PickUpItem.ItemType itemType)
     {
@@ -30,10 +33,19 @@ public class PlayerItemHandler : MonoBehaviour
                 StartCoroutine(EnableRepelAura());
                 break;
 
+            case PickUpItem.ItemType.Speed:
+                // ⇩ Self-only: apply to THIS player only
+                var selfBuff = GetComponent<SpeedDebuff>();
+                if (selfBuff) selfBuff.ApplySpeedModifier(speedMultiplier, speedDuration);
+                break;
+
+            default:
+                Debug.LogWarning("Unknown item type: " + itemType);
+                break;
         }
     }
 
-    // -------- Slow aura (unchanged pattern) --------
+    // ---------- Slow aura (same as before) ----------
     private IEnumerator ApplySlowAura()
     {
         float t = auraDuration;
@@ -48,16 +60,15 @@ public class PlayerItemHandler : MonoBehaviour
                 var otherRb = h.attachedRigidbody ?? h.GetComponentInParent<Rigidbody2D>();
                 if (!otherRb) continue;
 
-                var slow = otherRb.GetComponent<SlowDebuff>(); // your tiny slow script
-                if (slow) slow.SlowFor(slowPercent, slowSeconds);
+                var slow = otherRb.GetComponent<SpeedDebuff>();
+                if (slow) slow.ApplySpeedModifier(slowPercent, slowSeconds);
             }
-
             t -= Time.deltaTime;
             yield return null;
         }
     }
 
-    // -------- Repel aura (timed buff) --------
+    // ---------- Repel aura (unchanged minimal) ----------
     private IEnumerator EnableRepelAura()
     {
         repelActive = true;
@@ -75,11 +86,8 @@ public class PlayerItemHandler : MonoBehaviour
         if (!otherCtrl) return;
 
         Vector2 dir = (otherCtrl.transform.position - transform.position).normalized;
-        if (horizontalOnly) dir = new Vector2(Mathf.Sign(dir.x == 0 ? 1 : dir.x), 0f).normalized;
-
-        otherCtrl.AddImpulse(dir * repelKickSpeed); // instant Δv applied INSIDE their controller tick
+        otherCtrl.AddImpulse(dir * repelKickSpeed); // instant Δv via your controller hook
     }
-
 
     private void OnDrawGizmosSelected()
     {

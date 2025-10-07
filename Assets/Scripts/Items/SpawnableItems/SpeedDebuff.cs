@@ -1,8 +1,8 @@
 using UnityEngine;
 
+[DefaultExecutionOrder(100)] // run after controller writes rb.velocity
 [DisallowMultipleComponent]
-[DefaultExecutionOrder(100)] // run after your movement controller's FixedUpdate
-public class SlowDebuff : MonoBehaviour
+public class SpeedDebuff : MonoBehaviour
 {
     [SerializeField] private bool affectHorizontal = true;
     [SerializeField] private bool affectVertical = false;
@@ -13,21 +13,24 @@ public class SlowDebuff : MonoBehaviour
 
     private void Awake() => rb = GetComponent<Rigidbody2D>();
 
-    /// <summary>Slow to (multiplier * normal) for 'seconds' seconds.</summary>
-    public void SlowFor(float m, float seconds)
+    /// <summary>
+    /// Multiplies velocity by 'm' for 'seconds'.
+    /// m < 1 = slow, m > 1 = speed-up. Calling again restarts the timer.
+    /// </summary>
+    public void ApplySpeedModifier(float m, float seconds)
     {
-        multiplier = Mathf.Clamp01(m);
+        multiplier = m;
         activeUntil = Time.time + Mathf.Max(0.01f, seconds);
     }
 
     private void FixedUpdate()
     {
         if (!rb) return;
-        if (Time.time >= activeUntil) return; // not slowed
+        if (Time.time >= activeUntil || Mathf.Approximately(multiplier, 1f)) return;
 
         var v = rb.velocity;
         if (affectHorizontal) v.x *= multiplier;
         if (affectVertical) v.y *= multiplier;
-        rb.velocity = v; // executed AFTER PlayerController writes velocity
+        rb.velocity = v;
     }
 }
