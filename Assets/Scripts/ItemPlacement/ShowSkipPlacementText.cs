@@ -1,7 +1,16 @@
+using TMPro;
 using UnityEngine;
 
 public class ShowSkipPlacementText : MonoBehaviour
 {
+    private TextMeshProUGUI tmpText;
+
+    private void Awake()
+    {
+        // Cache the component once (better than calling GetComponent repeatedly)
+        tmpText = GetComponent<TextMeshProUGUI>();
+    }
+
     private void OnEnable()
     {
         GameEvents.OnPlaceItemStateEntered += ShowText;
@@ -16,11 +25,11 @@ public class ShowSkipPlacementText : MonoBehaviour
 
     private void ShowText()
     {
-        gameObject.SetActive(true);
+        tmpText.enabled = true;
     }
 
     private void HideText()
     {
-        gameObject.SetActive(false);
+        tmpText.enabled = false;
     }
 }
