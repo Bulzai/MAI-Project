@@ -121,11 +121,22 @@ public class CursorController : MonoBehaviour
     private void TryPlaceObject()
     {
         if (gridItem == null || gridItem.Placed) return;
-        if (!gridItem.CanBePlaced() && gridItem.requiresSupport == false) return;
-        if (!gridItem.SupportedItemCanBePlaced && gridItem.requiresSupport == true) return;
-        gridItem.Place();
 
-        gridItem.transform.SetParent(gameWorld.transform);
+        if (!gridItem.CanBePlaced() && gridItem.requiresSupport == false) return;
+
+        if (!gridItem.SupportedItemCanBePlaced && gridItem.requiresSupport == true) return;
+
+        if (gridItem.attachable && gridItem.ifAttachableAttachHere != null)
+        {
+            Debug.Log("griditem iffattachable inside: " + gridItem.ifAttachableAttachHere);
+
+            gridItem.transform.SetParent(gridItem.ifAttachableAttachHere, true);
+        }
+        gridItem.Place();
+        Debug.Log("griditem iffattachable: " + gridItem.ifAttachableAttachHere);
+
+        if (!gridItem.attachable) gridItem.transform.SetParent(gameWorld.transform);
+
         PlaceItemState.Instance.NotifyPlayerPlaced(playerInput.playerIndex);
         gridItem = null;
     }

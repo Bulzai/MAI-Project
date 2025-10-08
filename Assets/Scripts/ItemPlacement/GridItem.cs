@@ -7,8 +7,11 @@ public class GridItem : MonoBehaviour
 
     [Header("Attachment Settings")]
     public bool requiresSupport = false;               // true for icy/sticky surfaces
-    public bool SupportedItemCanBePlaced;
-    public bool Placed { get; private set; }
+    public bool attachable = false;
+    public Transform ifAttachableAttachHere = null;
+    public bool SupportedItemCanBePlaced { get; set; }
+
+public bool Placed { get; private set; }
     public BoundsInt area;
     // Start is called before the first frame update
     private Vector3Int _originalSize;      // to remember your neutral W×H

@@ -158,32 +158,75 @@ public class GridPlacementSystem : MonoBehaviour
 
     private bool HasValidSupport(GridItem gridItem, BoundsInt area)
     {
+        bool colorCheck = false;
+        bool attachItemCheck = false;
+
         // Check each of the four directions around the item
         foreach (var dir in new Vector3Int[] { Vector3Int.down, Vector3Int.up, Vector3Int.left, Vector3Int.right })
         {
-            // Shift the area by one cell in the current direction
             BoundsInt shiftedArea = new BoundsInt(area.position + dir, area.size);
 
             // Get all tiles in that shifted area from the main tilemap
             TileBase[] baseArray = GetTilesBlock(shiftedArea, MainTilemap);
-
             foreach (var b in baseArray)
             {
                 // skip empty cells
                 if (b == null)
                     continue;
                 // compare by reference OR name (in case of duplicated tile assets)
-                if (b == tileBases[TileType.Red])
+                if (b != tileBases[TileType.White])
                 {
-                    Debug.Log($"Found valid support tile '{b.name}' in direction {dir}");
-                    return true;
+                    colorCheck = true;
                 }
              
             }
         }
 
-        // No valid adjacent support found
-        return false;
+
+        Vector2[] directions = { Vector2.down, Vector2.up, Vector2.left, Vector2.right };
+        Collider2D selfCollider = gridItem.GetComponent<Collider2D>();
+
+        if (gridItem.attachable)
+        {
+            foreach (var dir in directions)
+            {
+                // 2️⃣ --- Check for object support via raycasts ---
+                Vector2 origin = gridItem.transform.position;
+                float snapDistance = 0.3f;
+
+                RaycastHit2D[] hits = Physics2D.RaycastAll(origin, dir, snapDistance);
+
+                Debug.DrawRay(origin, dir * snapDistance, Color.yellow, 0.2f);
+                if (hits.Length < 1) gridItem.ifAttachableAttachHere = null; Debug.Log("we set it null");
+
+                foreach (var hit in hits)
+                {
+                    if (hit.collider == null)
+                        continue;
+
+                    GameObject hitGO = hit.collider.gameObject;
+
+                    // Check if it belongs to a layer you care about
+                    // Example: only treat platforms or ground as attachable
+                    if (hitGO.tag == "MovingObject")
+                    {
+                        attachItemCheck = true;
+                        gridItem.ifAttachableAttachHere = hitGO.transform;
+
+                        Debug.Log($"✅ Found attachable support: {hitGO.name} (Tag: {tag})");
+                        break;
+                    }
+                    else
+                    { gridItem.ifAttachableAttachHere = null; Debug.Log("we set it null"); }
+                }
+            } 
+         
+            // Shift the area by one cell in the current direction
+            //Debug.Log("can we place: " + (attachItemCheck && colorCheck));
+            return attachItemCheck && colorCheck;
+        }
+
+        return colorCheck;
     }
 
 
