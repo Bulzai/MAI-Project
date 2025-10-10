@@ -183,7 +183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8747396166723928498}
   - component: {fileID: 4748275130043081331}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39661,7 +39661,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5524914167262980602}
   - component: {fileID: 7497277323006096960}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
