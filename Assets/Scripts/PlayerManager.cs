@@ -17,6 +17,10 @@ public class PlayerManager : MonoBehaviour
 
     public int playerCount = 0;
 
+
+    [Header("Avatars")]
+    public Sprite[] playerAvatars = new Sprite[4];  // set per slot in Inspector
+
     [Header("Player Colors")]
     public Color[] playerColors = new Color[4];
     [Header("Spawn Positions")]
@@ -163,7 +167,7 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("OnPlayerJoined idx=" + idx + " totalJoined=" + playerCount);
 
         GameObject root = playerInput.gameObject;
-        root.name = "PlayerRoot_" + idx;
+        root.name = "Player_" + idx;
 
         // Find children
         var cursorTf = root.transform.Find("CursorNoPI");
@@ -171,57 +175,66 @@ public class PlayerManager : MonoBehaviour
 
         if (cursorTf == null || characterTf == null)
         {
-            Debug.LogError("Root prefab missing CursorNoPIFinal or PlayerNoPI");
+            Debug.LogError("Root prefab missing CursorNoPI or PlayerNoPI");
             return;
         }
 
-        // Position at selection spawn
+        // Position at selection/menu spawns
         if (idx < spawnPositionsForMenu.Length)
-            characterTf.transform.position = spawnPositionsForMenu[idx].transform.position;
+            characterTf.transform.position = spawnPositionsForMenu[idx].position;
         else
             characterTf.transform.position = Vector3.one;
 
         if (idx < spawnPositionsForItemPlacement.Length)
-            cursorTf.transform.position = spawnPositionsForItemPlacement[idx].transform.position;
+            cursorTf.transform.position = spawnPositionsForItemPlacement[idx].position;
         else
             cursorTf.transform.position = Vector3.one;
 
-        // Hide character until placement
+        // Hide cursor until placement phase
         cursorTf.gameObject.SetActive(false);
 
         // Cache root
         playerRoots[idx] = root;
         Debug.Log("Cached PlayerRoot for idx=" + idx);
 
-        // Set color based on player index
-        if (idx < playerColors.Length)
-        {
-            var characterSpriteRenderer = characterTf.Find("Visual/Sprite")?.GetComponent<SpriteRenderer>();
-            var cursorSpriteRenderer = cursorTf.GetComponent<SpriteRenderer>();
+        // ----- Assign AVATAR + COLOR -----
+        var characterSpriteRenderer = characterTf.Find("Visual/Sprite")?.GetComponent<SpriteRenderer>();
+        var cursorSpriteRenderer = cursorTf.GetComponent<SpriteRenderer>();
 
-            if (characterSpriteRenderer != null)
-            {
+        if (characterSpriteRenderer != null)
+        {
+            // Avatar per player slot
+            if (playerAvatars != null && idx < playerAvatars.Length && playerAvatars[idx] != null)
+                characterSpriteRenderer.sprite = playerAvatars[idx];
+
+            // Optional: tint per player slot
+            if (playerColors != null && idx < playerColors.Length)
                 characterSpriteRenderer.color = playerColors[idx];
-            }
             else
-            {
-                Debug.LogWarning($"SpriteRenderer not found for Player {idx}");
-            }
-            if (cursorSpriteRenderer != null)
-            {
-                cursorSpriteRenderer.color = playerColors[idx];
-            }
-            else
-            {
-                Debug.LogWarning($"CursorSpriteRenderer not found for Player {idx}");
-            }
+                characterSpriteRenderer.color = Color.white;
         }
+        else
+        {
+            Debug.LogWarning($"SpriteRenderer not found for Player {idx} at Visual/Sprite");
+        }
+
+        if (cursorSpriteRenderer != null)
+        {
+            if (playerColors != null && idx < playerColors.Length)
+                cursorSpriteRenderer.color = playerColors[idx];
+        }
+        else
+        {
+            Debug.LogWarning($"CursorSpriteRenderer not found for Player {idx}");
+        }
+        // ----------------------------------
 
         // Setup input
         var pi = root.GetComponent<PlayerInput>();
         pi.SwitchCurrentActionMap("Player");
         pi.ActivateInput();
     }
+
 
 
     public void OnPlayerLeft(PlayerInput pi)
