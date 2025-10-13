@@ -173,7 +173,7 @@ public class CursorController : MonoBehaviour
 
         lastCell = Vector3Int.one * int.MinValue;
     }
-
+    /*
     private void HandlePlacementMovement()
     {
         var gps = GridPlacementSystem.Instance;
@@ -183,6 +183,26 @@ public class CursorController : MonoBehaviour
 
 
         gridItem.transform.position = snappedWorld;
+
+        if (lastCell.x != int.MinValue)
+            gps.TempTilemap.SetTile(lastCell, null);
+
+        gps.FollowItem(gridItem);
+        lastCell = cell;
+    }
+    */
+
+    private void HandlePlacementMovement()
+    {
+        var gps = GridPlacementSystem.Instance;
+
+        Vector3Int cell = gps.gridLayout.WorldToCell(transform.position);
+        Vector3 snappedWorld = gps.gridLayout.CellToWorld(cell) + gps.gridLayout.cellSize / 2f;
+
+        // ✅ Apply item-specific placement offset
+        Vector3 finalPosition = snappedWorld + gridItem.placementOffset;
+
+        gridItem.transform.position = finalPosition;
 
         if (lastCell.x != int.MinValue)
             gps.TempTilemap.SetTile(lastCell, null);

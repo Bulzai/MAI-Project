@@ -451,7 +451,6 @@ public class GridPlacementSystem : MonoBehaviour
         // --- Get shape and grid info ---
         List<Vector3Int> shapeCells = gridItem.GetOccupiedCells();
         GridLayout grid = gridLayout;
-        Debug.Log("shapecells.size." + shapeCells.Count);
 
         // --- Determine facing direction ---
         Vector2 rayDir = Vector2.zero;
@@ -482,7 +481,6 @@ public class GridPlacementSystem : MonoBehaviour
                 break;
             }
         }
-        Debug.Log("valid tiles: " + validTiles);
         // If any tile isn't white → cannot place here
         if (!validTiles)
             return false;
@@ -536,7 +534,6 @@ public class GridPlacementSystem : MonoBehaviour
             }
         }
 
-        Debug.Log(" hitobejcts.count" + hitObjects.Count);
         return validTiles && objectSupport;
     }
 

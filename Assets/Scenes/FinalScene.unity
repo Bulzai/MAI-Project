@@ -4822,19 +4822,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.0712929
+      value: 0.8187459
       objectReference: {fileID: 0}
     - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 7.642192
+      value: 7.8271327
       objectReference: {fileID: 0}
     - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.44
+      value: -5.3903
       objectReference: {fileID: 0}
     - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19.62
+      value: 17.4002
       objectReference: {fileID: 0}
     - target: {fileID: 1011671276980388990, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4875,6 +4875,14 @@ PrefabInstance:
     - target: {fileID: 4366111143107458009, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5331566449806373869, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_Size.y
+      value: 1.1153345
+      objectReference: {fileID: 0}
+    - target: {fileID: 5331566449806373869, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.58149683
       objectReference: {fileID: 0}
     - target: {fileID: 7745571173846718919, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
       propertyPath: m_Layer
@@ -8879,7 +8887,6 @@ MonoBehaviour:
   gridLayout: {fileID: 1955837178}
   MainTilemap: {fileID: 1884788932}
   TempTilemap: {fileID: 1987464038}
-  highlightTile: {fileID: 11400000, guid: 6becb4e72ab66144abff8aad516679f4, type: 2}
 --- !u!4 &880391873
 Transform:
   m_ObjectHideFlags: 0
@@ -18274,7 +18281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1884788930
 Transform:
   m_ObjectHideFlags: 0

@@ -10,39 +10,34 @@ public class GridItem : MonoBehaviour
     public Transform ifAttachableAttachHere = null;
     public bool SupportedItemCanBePlaced { get; set; }
 
-public bool Placed { get; private set; }
-    public BoundsInt area;
+    [Header("Placement Settings")]
+    public Vector3 placementOffset = Vector3.zero;
+
+    [Header("Forbidden Sign Settings")]
+    public Vector3 forbiddenSignOffset = Vector3.zero;  // local positional adjustment
+    public float forbiddenSignScale = 1f;               // scale multiplier
+
+    public bool Placed { get; private set; }
+    //public BoundsInt area;
     // Start is called before the first frame update
     //private Vector3Int _originalSize;      // to remember your neutral W×H
-    public Vector3Int originalPositionHorizontal;
-    public Vector3Int originalPositionVertical;
+    //public Vector3Int originalPositionHorizontal;
+    //public Vector3Int originalPositionVertical;
 
-    public Vector3Int adjustPosition;
+    //public Vector3Int adjustPosition;
     private bool ItemIsHorizontal = true;
 
     public FacingDirection currentFacingDirection;
     //public int length = 1; // 1 or 2
-    public Transform RayCastLocation;
     private List<Vector3Int> occupiedCells = new List<Vector3Int>();
 
 
     void Awake()
     {
         //_originalSize = area.size;
-        adjustPosition = originalPositionHorizontal;
+        //adjustPosition = originalPositionHorizontal;
 
-        // Try to find an existing child called "RayCastLocation"
-        RayCastLocation = transform.Find("RayCastLocation");
 
-        // If none found, create it automatically
-        if (RayCastLocation == null)
-        {
-            GameObject rayObj = new GameObject("RayCastLocation");
-            RayCastLocation = rayObj.transform;
-            RayCastLocation.SetParent(transform);
-
-            Debug.Log($"[GridItem] Created missing RayCastLocation for {name} at {RayCastLocation.localPosition}");
-        }
     }
 
     private void UpdateOccupiedCells()
@@ -136,7 +131,7 @@ public bool Placed { get; private set; }
         GridPlacementSystem.Instance.TakeArea(areaTemp);
         }
     }*/
-
+    /*
     public void RotateClockwise()
     {
         // Rotate visually
@@ -202,7 +197,7 @@ public bool Placed { get; private set; }
 
         //UpdateRaycastLocationOffset();
     }
-
+    */
     /*
     private void UpdatePositionFromRotation()
     {
@@ -222,27 +217,112 @@ public bool Placed { get; private set; }
     }
     */
 
-    public Vector3Int getAdjustPosition()
+    public void RotateClockwise()
     {
-        return adjustPosition;
+        var grid = GridPlacementSystem.Instance.gridLayout;
+
+        // anchor on the same cell center the cursor is using
+        Vector3Int currentCell = grid.WorldToCell(transform.position);
+        Vector3 cellCenter = grid.CellToWorld(currentCell) + grid.cellSize / 2f;
+
+        // apply rotation first
+        transform.Rotate(0f, 0f, -90f);
+
+        // re-apply anchored position using the rotated offset
+        Vector3 worldOffset = transform.rotation * placementOffset;
+        transform.position = cellCenter + worldOffset;
+
+        // update facing dir
+        switch (currentFacingDirection)
+        {
+            case FacingDirection.Up: currentFacingDirection = FacingDirection.Right; break;
+            case FacingDirection.Right: currentFacingDirection = FacingDirection.Down; break;
+            case FacingDirection.Down: currentFacingDirection = FacingDirection.Left; break;
+            case FacingDirection.Left: currentFacingDirection = FacingDirection.Up; break;
+        }
+
+        UpdateOccupiedCells();
     }
 
+    public void RotateCounterclockwise()
+    {
+        var grid = GridPlacementSystem.Instance.gridLayout;
+
+        Vector3Int currentCell = grid.WorldToCell(transform.position);
+        Vector3 cellCenter = grid.CellToWorld(currentCell) + grid.cellSize / 2f;
+
+        transform.Rotate(0f, 0f, 90f);
+
+        Vector3 worldOffset = transform.rotation * placementOffset;
+        transform.position = cellCenter + worldOffset;
+
+        switch (currentFacingDirection)
+        {
+            case FacingDirection.Up: currentFacingDirection = FacingDirection.Left; break;
+            case FacingDirection.Left: currentFacingDirection = FacingDirection.Down; break;
+            case FacingDirection.Down: currentFacingDirection = FacingDirection.Right; break;
+            case FacingDirection.Right: currentFacingDirection = FacingDirection.Up; break;
+        }
+
+        UpdateOccupiedCells();
+    }
+
+    // items cannot be scaled otherwise the forbidden sign is scaled as well
     public void ShowPlacementFeedback(bool canPlace)
     {
-        // 1) Tint the item sprite
+        // 1️⃣ Tint the item sprite
         var sr = GetComponentInChildren<SpriteRenderer>();
         if (sr != null)
+            sr.color = canPlace ? Color.white : new Color(1f, 0.4f, 0.4f, 1f);
+
+        // 2️⃣ Find the ForbiddenSign
+        var forbidden = transform.Find("ForbiddenSign");
+        if (forbidden == null)
+            return;
+
+        var fr = forbidden.GetComponent<SpriteRenderer>();
+        if (fr == null)
+            return;
+
+        // Toggle visibility but keep script active
+        fr.enabled = !canPlace;
+
+        if (!canPlace)
         {
-            sr.color = canPlace ? Color.white : new Color(1f, 0.4f, 0.4f, 1f); // tint red
+            // --- Get center ---
+            Vector3 targetCenter = transform.position;
+
+            var parentSprite = GetComponentInChildren<SpriteRenderer>();
+            var parentCollider = GetComponentInChildren<Collider2D>();
+
+            if (parentSprite != null)
+                targetCenter = parentSprite.bounds.center;
+            else if (parentCollider != null)
+                targetCenter = parentCollider.bounds.center;
+
+            // --- Apply item-specific offset in local space ---
+            Vector3 adjustedCenter = targetCenter + transform.rotation * forbiddenSignOffset;
+
+            // --- Force world-space position ---
+            forbidden.position = adjustedCenter;
+
+            // --- Keep the sign completely independent of parent's transform ---
+            forbidden.SetPositionAndRotation(adjustedCenter, Quaternion.identity);
+
+            // --- Apply world scale that ignores parent scale entirely ---
+            Vector3 worldScale = Vector3.one * forbiddenSignScale;
+            forbidden.localScale = Vector3.one; // neutralize local skew first
+            forbidden.localScale = new Vector3(
+                worldScale.x / transform.lossyScale.x,
+                worldScale.y / transform.lossyScale.y,
+                worldScale.z / transform.lossyScale.z
+            );
         }
 
-        // 2) Show or hide the forbidden sign overlay
-        var forbidden = transform.Find("ForbiddenSign");
-        if (forbidden != null)
-        {
-            forbidden.gameObject.SetActive(!canPlace);
-        }
+
     }
+
+
 
     public enum FacingDirection
     {
