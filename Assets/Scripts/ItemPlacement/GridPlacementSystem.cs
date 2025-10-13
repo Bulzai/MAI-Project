@@ -584,15 +584,15 @@ public class GridPlacementSystem : MonoBehaviour
 
     public void OccupyCellsMainTilemap(IEnumerable<Vector3Int> cells, TileType type)
     {
-        if (!MainTilemap.gameObject.activeSelf)
-            MainTilemap.gameObject.SetActive(true);
+        //if (!MainTilemap.gameObject.activeSelf)
+         //   MainTilemap.gameObject.SetActive(true);
 
         foreach (var cell in cells)
         {
 
             MainTilemap.SetTile(cell, tileBases[type]);
         }
-        MainTilemap.gameObject.SetActive(false);
+        //MainTilemap.gameObject.SetActive(false);
     }
 
     public void HighlightCells(IEnumerable<Vector3Int> cells, TileType type)
@@ -625,8 +625,8 @@ public class GridPlacementSystem : MonoBehaviour
 
     public void TakeCell(Vector3Int cell)
     {
-        if (!MainTilemap.gameObject.activeSelf)
-            MainTilemap.gameObject.SetActive(true);
+        //if (!MainTilemap.gameObject.activeSelf)
+        //    MainTilemap.gameObject.SetActive(true);
 
         // Mark this cell as occupied (blue tile)
         MainTilemap.SetTile(cell, tileBases[TileType.Red]);
