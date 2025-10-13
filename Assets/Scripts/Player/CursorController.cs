@@ -21,6 +21,8 @@ public class CursorController : MonoBehaviour
     // Hover state
     private GameObject currentlyHoveredGO;
     private HoverHighlight currentlyHoveredHighlight;
+    [Header("Movement Bounds")]
+    [SerializeField] private BoxCollider2D movementArea;
 
     private void Awake()
     {
@@ -60,12 +62,31 @@ public class CursorController : MonoBehaviour
         }
     }
 
-    // --- Movement ---
+    public void SetBounds(BoxCollider2D bounds)
+    {
+        movementArea = bounds;
+    }
+
     private void HandleMovement()
     {
         Vector2 movement = moveInput * maxMoveSpeed * Time.deltaTime;
         transform.position += (Vector3)movement;
+
+        if (movementArea)
+            ClampToColliderBounds();
     }
+
+    private void ClampToColliderBounds()
+    {
+        Bounds b = movementArea.bounds;
+        Vector3 pos = transform.position;
+
+        pos.x = Mathf.Clamp(pos.x, b.min.x, b.max.x);
+        pos.y = Mathf.Clamp(pos.y, b.min.y, b.max.y);
+
+        transform.position = pos;
+    }
+
 
     public void OnMove(InputAction.CallbackContext ctx)
     {
