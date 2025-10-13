@@ -13,7 +13,7 @@ public class GridItem : MonoBehaviour
 public bool Placed { get; private set; }
     public BoundsInt area;
     // Start is called before the first frame update
-    private Vector3Int _originalSize;      // to remember your neutral W×H
+    //private Vector3Int _originalSize;      // to remember your neutral W×H
     public Vector3Int originalPositionHorizontal;
     public Vector3Int originalPositionVertical;
 
@@ -28,7 +28,7 @@ public bool Placed { get; private set; }
 
     void Awake()
     {
-        _originalSize = area.size;
+        //_originalSize = area.size;
         adjustPosition = originalPositionHorizontal;
 
         // Try to find an existing child called "RayCastLocation"
@@ -58,13 +58,14 @@ public bool Placed { get; private set; }
 
         var grid = GridPlacementSystem.Instance.gridLayout;
         Bounds bounds = col.bounds;
+        float step = grid.cellSize.x * 0.25f; // smaller step = more reliable coverage
 
-        // Sample every half cell for accuracy
-        float step = grid.cellSize.x * 0.5f;
+        // Expand slightly to avoid missing border points
+        bounds.Expand(0.01f);
 
-        for (float x = bounds.min.x; x < bounds.max.x; x += step)
+        for (float x = bounds.min.x; x <= bounds.max.x; x += step)
         {
-            for (float y = bounds.min.y; y < bounds.max.y; y += step)
+            for (float y = bounds.min.y; y <= bounds.max.y; y += step)
             {
                 Vector2 p = new Vector2(x, y);
                 if (col.OverlapPoint(p))

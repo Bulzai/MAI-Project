@@ -4,13 +4,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
-using static GridItem;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.UI.Image;
 
 
-// also for cursor and movement improvements https://www.youtube.com/watch?v=n5EN2J2FxOQ
-// see https://www.youtube.com/watch?v=gFpmJtO0NT4 for an overview
 public class GridPlacementSystem : MonoBehaviour
 {
 
@@ -20,13 +15,9 @@ public class GridPlacementSystem : MonoBehaviour
     public GridLayout gridLayout;
     public Tilemap MainTilemap;
     public Tilemap TempTilemap;
-    public TileBase highlightTile;
 
 
     public static Dictionary<TileType, TileBase> tileBases = new Dictionary<TileType, TileBase>();
-
-    private GridItem gridItem;
-    private Vector3 previousPosition;
 
     // track each Cursor/GridItem's last highlight area
     private Dictionary<GridItem, BoundsInt> _lastAreas = new();
@@ -99,13 +90,6 @@ public class GridPlacementSystem : MonoBehaviour
 
     #region Item Placement
 
-    public GridItem InitializeWithItem(GameObject item)
-    {
-        gridItem = Instantiate(item, Vector3.zero, Quaternion.identity).GetComponent<GridItem>();
-        //FollowItem(item);
-        GameEvents.ItemSelectionPanelOpened();
-        return gridItem;
-    }
     private void ClearArea(BoundsInt areaToClear)
     {
         TileBase[] toClear = new TileBase[areaToClear.size.x * areaToClear.size.y * areaToClear.size.z];
@@ -119,7 +103,7 @@ public class GridPlacementSystem : MonoBehaviour
         {
             ClearArea(oldArea);
         }
-
+        /*
         gridItem.area.position = gridLayout.WorldToCell(gridItem.gameObject.transform.position) - gridItem.getAdjustPosition(); // adjust to center the item correctly
         BoundsInt buildingArea = gridItem.area;
 
@@ -127,7 +111,7 @@ public class GridPlacementSystem : MonoBehaviour
 
         int size = baseArray.Length;
         TileBase[] tileArray = new TileBase[size];
-
+        */
 
         // Get all occupied cells for the item's current collider shape
         List<Vector3Int> shapeCells = gridItem.GetOccupiedCells();
@@ -456,6 +440,9 @@ public class GridPlacementSystem : MonoBehaviour
         return validSupport && objectSupport;
     }
     */
+
+    // Supported items need their collisionshape where the gridcells should be white,
+    // which is usually above the item, where it should also interact with players
     private bool HasValidSupport(GridItem gridItem)
     {
         bool validTiles = true;
@@ -464,6 +451,7 @@ public class GridPlacementSystem : MonoBehaviour
         // --- Get shape and grid info ---
         List<Vector3Int> shapeCells = gridItem.GetOccupiedCells();
         GridLayout grid = gridLayout;
+        Debug.Log("shapecells.size." + shapeCells.Count);
 
         // --- Determine facing direction ---
         Vector2 rayDir = Vector2.zero;
@@ -494,7 +482,7 @@ public class GridPlacementSystem : MonoBehaviour
                 break;
             }
         }
-
+        Debug.Log("valid tiles: " + validTiles);
         // If any tile isn't white → cannot place here
         if (!validTiles)
             return false;
@@ -548,6 +536,7 @@ public class GridPlacementSystem : MonoBehaviour
             }
         }
 
+        Debug.Log(" hitobejcts.count" + hitObjects.Count);
         return validTiles && objectSupport;
     }
 
@@ -596,18 +585,6 @@ public class GridPlacementSystem : MonoBehaviour
 
     }
 
-    public void HighlightCell(Vector3 worldPos)
-    {
-        Vector3Int cell = gridLayout.WorldToCell(worldPos);
-        TempTilemap.SetTile(cell, highlightTile);
-    }
-
-
-    public void ClearCellHighlight(Vector3 worldPos)
-    {
-        Vector3Int cell = gridLayout.WorldToCell(worldPos);
-        TempTilemap.SetTile(cell, null);
-    }
     public void OccupyCellsMainTilemap(IEnumerable<Vector3Int> cells, TileType type)
     {
         if (!MainTilemap.gameObject.activeSelf)
