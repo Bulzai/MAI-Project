@@ -126,7 +126,7 @@ public class CursorController : MonoBehaviour
 
         if (!gridItem.SupportedItemCanBePlaced && gridItem.requiresSupport == true) return;
 
-        if (gridItem.attachable && gridItem.ifAttachableAttachHere != null)
+        if (gridItem.requiresSupport && gridItem.ifAttachableAttachHere != null)
         {
             Debug.Log("griditem iffattachable inside: " + gridItem.ifAttachableAttachHere);
 
@@ -135,7 +135,7 @@ public class CursorController : MonoBehaviour
         gridItem.Place();
         Debug.Log("griditem iffattachable: " + gridItem.ifAttachableAttachHere);
 
-        if (!gridItem.attachable) gridItem.transform.SetParent(gameWorld.transform);
+        if (!gridItem.requiresSupport) gridItem.transform.SetParent(gameWorld.transform);
 
         PlaceItemState.Instance.NotifyPlayerPlaced(playerInput.playerIndex);
         gridItem = null;

@@ -7,7 +7,6 @@ public class GridItem : MonoBehaviour
 
     [Header("Attachment Settings")]
     public bool requiresSupport = false;               // true for icy/sticky surfaces
-    public bool attachable = false;
     public Transform ifAttachableAttachHere = null;
     public bool SupportedItemCanBePlaced { get; set; }
 
@@ -21,14 +20,96 @@ public bool Placed { get; private set; }
     public Vector3Int adjustPosition;
     private bool ItemIsHorizontal = true;
 
+    public FacingDirection currentFacingDirection;
+    //public int length = 1; // 1 or 2
+    public Transform RayCastLocation;
+    private List<Vector3Int> occupiedCells = new List<Vector3Int>();
 
 
     void Awake()
     {
         _originalSize = area.size;
         adjustPosition = originalPositionHorizontal;
+
+        // Try to find an existing child called "RayCastLocation"
+        RayCastLocation = transform.Find("RayCastLocation");
+
+        // If none found, create it automatically
+        if (RayCastLocation == null)
+        {
+            GameObject rayObj = new GameObject("RayCastLocation");
+            RayCastLocation = rayObj.transform;
+            RayCastLocation.SetParent(transform);
+
+            Debug.Log($"[GridItem] Created missing RayCastLocation for {name} at {RayCastLocation.localPosition}");
+        }
     }
 
+    private void UpdateOccupiedCells()
+    {
+        occupiedCells.Clear();
+
+        Collider2D col = GetComponentInChildren<Collider2D>();
+        if (col == null)
+        {
+            Debug.LogWarning($"[GridItem] No collider found on {name}.");
+            return;
+        }
+
+        var grid = GridPlacementSystem.Instance.gridLayout;
+        Bounds bounds = col.bounds;
+
+        // Sample every half cell for accuracy
+        float step = grid.cellSize.x * 0.5f;
+
+        for (float x = bounds.min.x; x < bounds.max.x; x += step)
+        {
+            for (float y = bounds.min.y; y < bounds.max.y; y += step)
+            {
+                Vector2 p = new Vector2(x, y);
+                if (col.OverlapPoint(p))
+                {
+                    Vector3Int cell = grid.WorldToCell(p);
+                    if (!occupiedCells.Contains(cell))
+                        occupiedCells.Add(cell);
+                }
+            }
+        }
+    }
+    public bool CanBePlaced()
+    {
+        UpdateOccupiedCells();
+
+        foreach (var cell in occupiedCells)
+        {
+            if (!GridPlacementSystem.Instance.CanTakeCell(cell))
+                return false;
+        }
+
+        return true;
+    }
+
+    public void Place()
+    {
+        UpdateOccupiedCells();
+
+        foreach (var cell in occupiedCells)
+        {
+            GridPlacementSystem.Instance.TakeCell(cell);
+        }
+
+        Placed = true;
+    }
+
+
+    public List<Vector3Int> GetOccupiedCells()
+    {
+        UpdateOccupiedCells();
+        return occupiedCells;
+    }
+
+
+    /*
     public bool CanBePlaced()
     {
         Vector3Int positionInt = GridPlacementSystem.Instance.gridLayout.LocalToCell(transform.position) - adjustPosition; // adjust to center the item correctly;
@@ -53,40 +134,74 @@ public bool Placed { get; private set; }
         Placed = true;
         GridPlacementSystem.Instance.TakeArea(areaTemp);
         }
-    }
+    }*/
 
-    // rotating the item
     public void RotateClockwise()
     {
-        // rotate sprite
+        // Rotate visually
         transform.Rotate(0f, 0f, -90f);
-        //UpdateAreaFromRotation();
-        var oldSize = area.size;
-        var newSize = new Vector3Int(oldSize.y, oldSize.x, oldSize.z);
-        area.size = newSize;
-        //UpdatePositionFromRotation();
+
+        // Swap area dimensions (width <-> height)
+        area.size = new Vector3Int(area.size.y, area.size.x, area.size.z);
+
+        // Flip between horizontal / vertical
         ItemIsHorizontal = !ItemIsHorizontal;
-        if (ItemIsHorizontal == true)
-            adjustPosition = originalPositionHorizontal;
-        else if (ItemIsHorizontal == false)
-            adjustPosition = originalPositionVertical;
+        adjustPosition = ItemIsHorizontal ? originalPositionHorizontal : originalPositionVertical;
+
+        // Update facing direction (clockwise)
+        switch (currentFacingDirection)
+        {
+            case FacingDirection.Up:
+                currentFacingDirection = FacingDirection.Right;
+                break;
+            case FacingDirection.Right:
+                currentFacingDirection = FacingDirection.Down;
+                break;
+            case FacingDirection.Down:
+                currentFacingDirection = FacingDirection.Left;
+                break;
+            case FacingDirection.Left:
+                currentFacingDirection = FacingDirection.Up;
+                break;
+        }
+        UpdateOccupiedCells();
+
+        //UpdateRaycastLocationOffset();
     }
 
     public void RotateCounterclockwise()
     {
+        // Rotate visually
         transform.Rotate(0f, 0f, 90f);
-        //UpdateAreaFromRotation();
-        var oldSize = area.size;
-        var newSize = new Vector3Int(oldSize.y, oldSize.x, oldSize.z);
-        area.size = newSize;
-        ItemIsHorizontal = !ItemIsHorizontal;
-        if (ItemIsHorizontal == true)
-            adjustPosition = originalPositionHorizontal;
-        else if (ItemIsHorizontal == false)
-            adjustPosition = originalPositionVertical;
 
-        //UpdatePositionFromRotation();
+        // Swap area dimensions (width <-> height)
+        area.size = new Vector3Int(area.size.y, area.size.x, area.size.z);
+
+        // Flip between horizontal / vertical
+        ItemIsHorizontal = !ItemIsHorizontal;
+        adjustPosition = ItemIsHorizontal ? originalPositionHorizontal : originalPositionVertical;
+
+        // Update facing direction (counterclockwise)
+        switch (currentFacingDirection)
+        {
+            case FacingDirection.Up:
+                currentFacingDirection = FacingDirection.Left;
+                break;
+            case FacingDirection.Left:
+                currentFacingDirection = FacingDirection.Down;
+                break;
+            case FacingDirection.Down:
+                currentFacingDirection = FacingDirection.Right;
+                break;
+            case FacingDirection.Right:
+                currentFacingDirection = FacingDirection.Up;
+                break;
+        }
+        UpdateOccupiedCells();
+
+        //UpdateRaycastLocationOffset();
     }
+
     /*
     private void UpdatePositionFromRotation()
     {
@@ -127,6 +242,15 @@ public bool Placed { get; private set; }
             forbidden.gameObject.SetActive(!canPlace);
         }
     }
+
+    public enum FacingDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
+
 
 
 }

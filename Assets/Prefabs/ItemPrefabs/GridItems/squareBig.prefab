@@ -150,6 +150,7 @@ Transform:
   - {fileID: 5539283842243068959}
   - {fileID: 42769064031676780}
   - {fileID: 8385507283747247656}
+  - {fileID: 3548471961753597189}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -237,7 +238,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.5623133, y: 0.5669032}
+  m_Offset: {x: 0.5659921, y: 0.5687654}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -248,7 +249,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1550593, y: 1.1457216}
+  m_Size: {x: 1.110913, y: 1.0898578}
   m_EdgeRadius: 0
 --- !u!114 &2066209931725417373
 MonoBehaviour:
@@ -277,13 +278,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41193822271e73d4685a748ebae9d15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiresSupport: 1
+  requiresSupport: 0
+  attachable: 0
+  ifAttachableAttachHere: {fileID: 0}
   area:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 1, y: 1, z: 1}
   originalPositionHorizontal: {x: 0, y: 0, z: 0}
   originalPositionVertical: {x: 0, y: 0, z: 0}
   adjustPosition: {x: 0, y: 0, z: 0}
+  currentFacingDirection: 0
+  length: 1
+  RayCastLocation: {fileID: 0}
 --- !u!1 &7745571173846718919
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,3 +337,34 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 2, y: 2}
   m_UseGraphicAlpha: 0
+--- !u!1 &8757159896602609996
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3548471961753597189}
+  m_Layer: 0
+  m_Name: RayCastLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3548471961753597189
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8757159896602609996}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.38072577, y: 0.38542607, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1011671276980388990}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

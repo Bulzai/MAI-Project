@@ -354,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalPrefab: {fileID: 4711019012961524803}
   isAvailable: 1
-  spawnRate: 90
+  spawnRate: 10
 --- !u!114 &9126652313449543802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,6 +367,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41193822271e73d4685a748ebae9d15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requiresSupport: 0
+  attachable: 0
+  ifAttachableAttachHere: {fileID: 0}
   area:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 6, y: 6, z: 3}
