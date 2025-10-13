@@ -137,6 +137,8 @@ public class CursorController : MonoBehaviour
 
         if (!gridItem.requiresSupport) gridItem.transform.SetParent(gameWorld.transform);
 
+        gridItem.gameObject.layer = LayerMask.NameToLayer("Ground/Wall");
+
         PlaceItemState.Instance.NotifyPlayerPlaced(playerInput.playerIndex);
         gridItem = null;
     }

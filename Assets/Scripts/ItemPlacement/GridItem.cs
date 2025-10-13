@@ -10,6 +10,7 @@ public class GridItem : MonoBehaviour
     public Transform ifAttachableAttachHere = null;
     public bool SupportedItemCanBePlaced { get; set; }
 
+    // here you set where the item should be relative to the cursor
     [Header("Placement Settings")]
     public Vector3 placementOffset = Vector3.zero;
 
