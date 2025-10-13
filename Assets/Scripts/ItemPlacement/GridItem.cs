@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//things to make sure: supported Items should only have a collider thinner than one cell and it should not overlap 2 cells
+// set requires support true for those items
+// placementOffset positions the item relative to the cursor
+// forbiddenSignScale should be adjusted manually depending on item size (for the sign not to stretch, the item should only be scaled uniformly, for example: 1,1,1; 0.5,0.5,0.5
+// forbiddenSignOffset can be left zero
+// supported items need to have 0.25 substracted from their preferred placement position, so it looks like its on top of the item it is attached to 
+
 public class GridItem : MonoBehaviour
 {
 
