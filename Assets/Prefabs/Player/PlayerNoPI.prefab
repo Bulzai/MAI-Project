@@ -173,6 +173,10 @@ MonoBehaviour:
   repelKickSpeed: 25
   speedMultiplier: 1.5
   speedDuration: 3
+  damageAuraRadius: 2.6
+  damagePerTick: 2
+  tickInterval: 1
+  damageAuraDuration: 6
 --- !u!1 &2006475144983261237
 GameObject:
   m_ObjectHideFlags: 0

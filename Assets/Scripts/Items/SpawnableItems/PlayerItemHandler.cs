@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using TarodevController; 
+using TarodevController;
 
 [DefaultExecutionOrder(100)]
 public class PlayerItemHandler : MonoBehaviour
@@ -21,6 +22,13 @@ public class PlayerItemHandler : MonoBehaviour
     [SerializeField] private float speedMultiplier = 1.5f; // >1 speeds up
     [SerializeField] private float speedDuration = 4f;     // seconds
 
+    // ---------- Damage Aura ----------
+    [Header("Damage Aura")]
+    [SerializeField] private float damageAuraRadius = 2.6f;
+    [SerializeField] private int damagePerTick = 2;
+    [SerializeField] private float tickInterval = 1f;     // seconds between ticks
+    [SerializeField] private float damageAuraDuration = 6f; // total active time
+
     public void ApplyItem(PickUpItem.ItemType itemType)
     {
         switch (itemType)
@@ -34,9 +42,13 @@ public class PlayerItemHandler : MonoBehaviour
                 break;
 
             case PickUpItem.ItemType.Speed:
-                // ⇩ Self-only: apply to THIS player only
+                // Self-only: apply to THIS player only
                 var selfBuff = GetComponent<SlowDebuff>();
                 if (selfBuff) selfBuff.ApplySpeedModifier(speedMultiplier, speedDuration);
+                break;
+
+            case PickUpItem.ItemType.Damage: // <--- add to your enum
+                StartCoroutine(ApplyDamageAura());
                 break;
 
             default:
@@ -45,7 +57,7 @@ public class PlayerItemHandler : MonoBehaviour
         }
     }
 
-    // ---------- Slow aura (same as before) ----------
+    // ---------- Slow aura ----------
     private IEnumerator ApplySlowAura()
     {
         float t = auraDuration;
@@ -68,7 +80,7 @@ public class PlayerItemHandler : MonoBehaviour
         }
     }
 
-    // ---------- Repel aura (unchanged minimal) ----------
+    // ---------- Repel aura ----------
     private IEnumerator EnableRepelAura()
     {
         repelActive = true;
@@ -89,9 +101,43 @@ public class PlayerItemHandler : MonoBehaviour
         otherCtrl.AddImpulse(dir * repelKickSpeed); // instant Δv via your controller hook
     }
 
-    private void OnDrawGizmosSelected()
+    // ---------- Damage aura (simple periodic OverlapCircle) ----------
+    private IEnumerator ApplyDamageAura()
     {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, auraRadius);
+        float remaining = damageAuraDuration;
+        var wait = new WaitForSeconds(tickInterval);
+
+        while (remaining > 0f)
+        {
+            DoDamageTick();          // OverlapCircleAll -> apply damage to all players inside
+            remaining -= tickInterval;
+            yield return wait;
+        }
     }
+
+    private void DoDamageTick()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, damageAuraRadius);
+        Debug.Log("Damage Aura Tick, hits: " + hits.Length);
+        // Deduplicate by player root (handles multi-collider rigs)
+        HashSet<Transform> uniquePlayers = new HashSet<Transform>();
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            var col = hits[i];
+            if (!col || col.gameObject == gameObject) continue;
+            if (!col.CompareTag(playerTag)) continue;
+
+            Transform root = col.transform;
+            if (!uniquePlayers.Add(root)) continue;
+
+            var health = root.GetComponent<PlayerHealthSystem>();
+            if (health != null)
+            {
+                // Adjust signature if your health method differs
+                health.TakeDamage(damagePerTick, true);
+            }
+        }
+    }
+
 }
