@@ -34887,6 +34887,7 @@ GameObject:
   - component: {fileID: 3049688987086216734}
   - component: {fileID: 8243611652587404339}
   - component: {fileID: 2131517716200429478}
+  - component: {fileID: 4250324440004334289}
   m_Layer: 6
   m_Name: RepelAura
   m_TagString: Untagged
@@ -34982,6 +34983,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4250324440004334289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6525371900268718356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5691b65a905e3964baac54ad79cee4ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pulseSpeed: 6
+  pulseAmount: 0.07
+  baseScale: {x: 2.118312, y: 2.118312, z: 2.118312}
 --- !u!1 &7424410401097828697
 GameObject:
   m_ObjectHideFlags: 0
