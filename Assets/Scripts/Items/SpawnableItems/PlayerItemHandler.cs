@@ -16,6 +16,7 @@ public class PlayerItemHandler : MonoBehaviour
     [Header("Repel Aura")]
     [SerializeField] private float repelSeconds = 5f;
     [SerializeField] private float repelKickSpeed = 14f;
+    [SerializeField] private GameObject repelAuraVisual;
     private bool repelActive;
 
     [Header("Speed Aura (SELF ONLY)")]
@@ -83,9 +84,14 @@ public class PlayerItemHandler : MonoBehaviour
     // ---------- Repel aura ----------
     private IEnumerator EnableRepelAura()
     {
+        repelAuraVisual.SetActive(true);
+
         repelActive = true;
         yield return new WaitForSeconds(repelSeconds);
         repelActive = false;
+
+        repelAuraVisual.SetActive(false);
+
     }
 
     private void OnCollisionEnter2D(Collision2D col)
