@@ -84,9 +84,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stats: {fileID: 11400000, guid: 05e6a06c5af93134ab98ff12e2c27265, type: 2}
-  slowThreshold: 0.528
+  slowThreshold: 0.609
   slowSpeedMultiplier: 0.4
   analogDeadZone: 0.1
+  iceAccelMultiplier: 0.68
+  iceDecelMultiplier: 0.44
+  iceMaxSpeedMultiplier: 1
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  grounderDistance: 0.05
+  iceLayer: 0
+  iceAffectsAir: 0
+  iceTraction: 0.445
+  iceReverseControl: 0.732
+  iceSlideLossPerSecond: 0.739
 --- !u!50 &1544650614272011793
 Rigidbody2D:
   serializedVersion: 4

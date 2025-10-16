@@ -8,6 +8,7 @@ TagManager:
   - PlayerManager
   - Sticky
   - MovingObject
+  - Ice
   layers:
   - Default
   - TransparentFX

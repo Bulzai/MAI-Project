@@ -23,15 +23,49 @@ namespace TarodevController
 
         private Vector2 _externalImpulse;
 
-        // >>> Two-speed controls
+        // ======== TWO-SPEED WALK ========
         [Header("Two-Speed Movement")]
-        [Tooltip("Below this stick magnitude, use slow mode. At/above, use normal.")]
-        [SerializeField, Range(0f, 1f)] private float slowThreshold = 0.5f;   // 50%
-        [Tooltip("MaxSpeed multiplier when in slow mode.")]
-        [SerializeField, Range(0.05f, 1f)] private float slowSpeedMultiplier = 0.4f; // 40% speed
-        [Tooltip("Treat tiny stick input as zero to prevent creeping.")]
+        [Tooltip("Unterhalb dieser Stick-Magnitude (|x|) Slow-Mode, darüber Normal.")]
+        [SerializeField, Range(0f, 1f)] private float slowThreshold = 0.5f;  // 50%
+        [Tooltip("MaxSpeed-Multiplikator im Slow-Mode.")]
+        [SerializeField, Range(0.05f, 1f)] private float slowSpeedMultiplier = 0.4f;
+        [Tooltip("Kleines Deadzone gegen Kriechen.")]
         [SerializeField, Range(0f, 0.3f)] private float analogDeadZone = 0.1f;
-        private float _moveSpeedMultiplier = 1f; // computed per-frame
+        private float _moveSpeedMultiplier = 1f; // per Frame berechnet
+
+        // ======== ICE SURFACE ========
+        [Header("Ice Surface (per Ground-Detection)")]
+        [SerializeField, Range(0.1f, 2f)] private float iceAccelMultiplier = 0.6f;
+        [SerializeField, Range(0.01f, 2f)] private float iceDecelMultiplier = 0.1f;
+        [SerializeField, Range(0.5f, 1.5f)] private float iceMaxSpeedMultiplier = 1.05f;
+        [Tooltip("Welche Colliders sind 'Boden'?")]
+        [SerializeField] private LayerMask groundLayers;
+        [Tooltip("Erlaubt Erkennung des Boden-Colliders via CapsuleCast.")]
+        [SerializeField] private float grounderDistance = 0.05f;
+        [Tooltip("Optional: Statt Tag 'Ice' kannst du alternativ eine Layer hier angeben (0 = ignorieren).")]
+        [SerializeField] private int iceLayer = 0;
+        [Tooltip("Wenn true, gilt Eis-Effekt auch in der Luft (z.B. bei sehr glatter Luftkontrolle). Meist false.")]
+        [SerializeField] private bool iceAffectsAir = false;
+        // --- Extra "ice feel" controls ---
+        [Header("Ice Feel")]
+        [Tooltip("How strongly input can steer your velocity on ice (lower = slipperier).")]
+        [SerializeField, Range(0.05f, 1f)] private float iceTraction = 0.18f;
+
+        [Tooltip("Further reduction to steering when reversing direction on ice.")]
+        [SerializeField, Range(0.1f, 1f)] private float iceReverseControl = 0.35f;
+
+        [Tooltip("How quickly speed bleeds off per second with no input on ice (0 = keeps sliding forever).")]
+        [SerializeField, Range(0f, 1f)] private float iceSlideLossPerSecond = 0.25f;
+
+
+        private bool _onIce;                  // aktuell auf Eis?
+        private Collider2D _lastGroundCol;    // gemerkter Boden-Collider
+
+        // ======== WALL STATE ========
+        private bool _onWall;
+        private int _wallDir;
+        private float _lastWallTime;
+        private float _wallStickCounter;
 
         #region Interface
         public Vector2 FrameInput => _frameInput.Move;
@@ -43,12 +77,6 @@ namespace TarodevController
 
         public void AddImpulse(Vector2 deltaVelocity) => _externalImpulse += deltaVelocity;
 
-        // ======== WALL STATE ========
-        private bool _onWall;
-        private int _wallDir;
-        private float _lastWallTime;
-        private float _wallStickCounter;
-
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
@@ -58,6 +86,13 @@ namespace TarodevController
             _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
 
             _wallDir = 1;
+
+            if (groundLayers.value == 0)
+            {
+                // Fallback: verwende die SolidLayers aus _stats, falls LayerMask leer ist
+                groundLayers = _stats != null ? _stats.SolidLayers : Physics2D.AllLayers;
+            }
+            if (grounderDistance <= 0f) grounderDistance = 0.05f;
         }
 
         private void Update()
@@ -86,22 +121,17 @@ namespace TarodevController
 
         private void GatherInput()
         {
-            // Start from raw analog input
             Vector2 adjustedInput = movementInput;
 
-            // Invert if confused
             if (_healthSystem != null && _healthSystem.IsConfused())
                 adjustedInput = -adjustedInput;
 
-            // >>> Two-speed: compute multiplier from *raw* horizontal magnitude (before snapping)
+            // Two-speed: anhand *roher* X-Magnitude (vor Snap) berechnen
             float magX = Mathf.Abs(adjustedInput.x);
-
-            // Deadzone to avoid creeping
             if (magX < analogDeadZone) adjustedInput.x = 0f;
 
             _moveSpeedMultiplier = (magX >= slowThreshold) ? 1f : slowSpeedMultiplier;
 
-            // Now optionally snap to -1/0/1 for classic feel, keeping the multiplier we already computed
             _frameInput = new FrameInput
             {
                 JumpDown = jumpPressed,
@@ -131,7 +161,7 @@ namespace TarodevController
             HandleDirection();
             HandleGravity();
 
-            // external forces like knockback
+            // external forces
             _frameVelocity += _externalImpulse;
             _externalImpulse = Vector2.zero;
 
@@ -146,33 +176,37 @@ namespace TarodevController
         {
             Physics2D.queriesStartInColliders = false;
 
-            bool groundHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0,
-                                                    Vector2.down, _stats.GrounderDistance, _stats.SolidLayers);
-            bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0,
-                                                    Vector2.up, _stats.GrounderDistance, _stats.SolidLayers);
+            // Ground & Ceiling als RaycastHit2D, damit wir den Boden-Collider kennen
+            RaycastHit2D groundInfo = Physics2D.CapsuleCast(
+                _col.bounds.center, _col.size, _col.direction, 0,
+                Vector2.down, grounderDistance, groundLayers
+            );
+            bool groundHit = groundInfo.collider != null;
+
+            RaycastHit2D ceilingInfo = Physics2D.CapsuleCast(
+                _col.bounds.center, _col.size, _col.direction, 0,
+                Vector2.up, grounderDistance, _stats.SolidLayers
+            );
+            bool ceilingHit = ceilingInfo.collider != null;
 
             if (ceilingHit) _frameVelocity.y = Mathf.Min(0, _frameVelocity.y);
 
+            // leichte Corner-Korrektur optional
             if (!_grounded && _rb.velocity.y > 0f && ceilingHit)
             {
                 const float nudge = 0.08f;
                 Vector3 pos = transform.position;
-
-                if (!Physics2D.CapsuleCast(pos + Vector3.left * nudge, _col.size, _col.direction, 0,
-                                           Vector2.up, _stats.GrounderDistance, _stats.SolidLayers))
-                {
+                if (!Physics2D.CapsuleCast(pos + Vector3.left * nudge, _col.size, _col.direction, 0, Vector2.up, grounderDistance, _stats.SolidLayers))
                     transform.position += Vector3.left * nudge;
-                }
-                else if (!Physics2D.CapsuleCast(pos + Vector3.right * nudge, _col.size, _col.direction, 0,
-                                                Vector2.up, _stats.GrounderDistance, _stats.SolidLayers))
-                {
+                else if (!Physics2D.CapsuleCast(pos + Vector3.right * nudge, _col.size, _col.direction, 0, Vector2.up, grounderDistance, _stats.SolidLayers))
                     transform.position += Vector3.right * nudge;
-                }
             }
 
+            // Ground state change
             if (!_grounded && groundHit)
             {
                 _grounded = true;
+                _frameLeftGrounded = float.MinValue;
                 _coyoteUsable = true;
                 _bufferedJumpUsable = true;
                 _endedJumpEarly = false;
@@ -185,6 +219,19 @@ namespace TarodevController
                 GroundedChanged?.Invoke(false, 0);
             }
 
+            // ICE detection (nur wenn Boden berührt wird)
+            _onIce = false;
+            _lastGroundCol = null;
+            if (groundHit)
+            {
+                _lastGroundCol = groundInfo.collider;
+
+                // Erkennung über Tag "Ice" ODER optional über eine Ice-Layer-ID
+                if (_lastGroundCol.CompareTag("Ice")) _onIce = true;
+                else if (iceLayer > 0 && _lastGroundCol.gameObject.layer == iceLayer) _onIce = true;
+            }
+
+            // WALLS
             if (!_grounded)
             {
                 bool leftHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0,
@@ -287,23 +334,57 @@ namespace TarodevController
                 return;
             }
 
+            bool iceActive = ((_grounded || iceAffectsAir) && _onIce);
+
+            // --- No input: deceleration / slide ---
             if (_frameInput.Move.x == 0)
             {
-                var deceleration = _grounded ? _stats.GroundDeceleration : _stats.AirDeceleration;
-                _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, deceleration * Time.fixedDeltaTime);
+                if (iceActive)
+                {
+                    // Exponential-like decay: preserves momentum much longer than MoveTowards
+                    // speed *= (1 - k * dt)
+                    float k = Mathf.Clamp01(iceSlideLossPerSecond * Time.fixedDeltaTime);
+                    _frameVelocity.x *= (1f - k);
+                }
+                else
+                {
+                    float decel = _grounded ? _stats.GroundDeceleration : _stats.AirDeceleration;
+                    _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, decel * Time.fixedDeltaTime);
+                }
+                return;
+            }
+
+            // --- Input present: steer toward target speed ---
+            float accel = _stats.Acceleration;
+            if (!_grounded && Mathf.Abs(_frameVelocity.y) < _stats.ApexThreshold)
+                accel *= _stats.ApexBonusMultiplier;
+
+            // Two-speed walk support
+            if (_moveSpeedMultiplier < 1f) accel *= _moveSpeedMultiplier;
+            float targetMax = _stats.MaxSpeed * _moveSpeedMultiplier;
+
+            if (iceActive)
+            {
+                // Classic ice: weaker accel + slightly higher cap (optional) from your existing fields
+                accel *= iceAccelMultiplier;
+                targetMax *= iceMaxSpeedMultiplier;
+
+                // Compute desired velocity and steer with limited traction
+                float desired = _frameInput.Move.x * targetMax;
+                float steer = accel * Time.fixedDeltaTime;
+
+                // If reversing direction, reduce steering even more (feels like sliding past)
+                bool reversing = Mathf.Sign(_frameVelocity.x) != Mathf.Sign(desired) && Mathf.Abs(_frameVelocity.x) > 0.01f;
+                if (reversing) steer *= iceReverseControl;
+
+                // Traction limits how fast we can change toward desired
+                steer *= Mathf.Clamp01(iceTraction);
+
+                _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, desired, steer);
             }
             else
             {
-                float accel = _stats.Acceleration;
-                if (!_grounded && Mathf.Abs(_frameVelocity.y) < _stats.ApexThreshold)
-                    accel *= _stats.ApexBonusMultiplier;
-
-                // >>> Scale by slow/normal mode (keeps the feel consistent)
-                if (_moveSpeedMultiplier < 1f)
-                    accel *= _moveSpeedMultiplier;
-
-                float targetMax = _stats.MaxSpeed * _moveSpeedMultiplier;
-
+                // Normal ground/air handling
                 _frameVelocity.x = Mathf.MoveTowards(
                     _frameVelocity.x,
                     _frameInput.Move.x * targetMax,
@@ -311,6 +392,7 @@ namespace TarodevController
                 );
             }
         }
+
         #endregion
 
         #region Gravity
