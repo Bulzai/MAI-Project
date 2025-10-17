@@ -92,10 +92,12 @@ public class PlayerHealthSystem : MonoBehaviour
     public void TakeDamage(int amount, bool isItemDmg)
     {
         currentHealth -= amount;
-        //Debug.Log("Player took damage! Health: " + currentHealth);
 
-        if(isItemDmg)
+        if (isItemDmg)
+        {
             StartCoroutine(FlashRed());
+            Debug.Log("Item damage taken " + amount);
+        }
 
         if (currentHealth <= 0)
         {

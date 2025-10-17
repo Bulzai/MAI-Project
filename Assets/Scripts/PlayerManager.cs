@@ -164,7 +164,6 @@ public class PlayerManager : MonoBehaviour
         players.Add(playerInput);
 
         int idx = playerInput.playerIndex;
-        Debug.Log("OnPlayerJoined idx=" + idx + " totalJoined=" + playerCount);
 
         GameObject root = playerInput.gameObject;
         root.name = "Player_" + idx;

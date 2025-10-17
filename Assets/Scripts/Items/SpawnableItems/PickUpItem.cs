@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PickUpItem : MonoBehaviour
 {
-    public enum ItemType { Slow, Repel, Speed}  
+    public enum ItemType { Slow, Repel, Speed,Damage}  
     public ItemType itemType;
 
     private void OnTriggerEnter2D(Collider2D other)
