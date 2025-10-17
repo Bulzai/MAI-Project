@@ -117,7 +117,7 @@ public class GridPlacementSystem : MonoBehaviour
         List<Vector3Int> shapeCells = gridItem.GetOccupiedCells();
 
 
-        if (gridItem.requiresSupport)
+        if (gridItem.isAttachable)
         {
             gridItem.ShowPlacementFeedback(HasValidSupport(gridItem));
             gridItem.SupportedItemCanBePlaced = HasValidSupport(gridItem);

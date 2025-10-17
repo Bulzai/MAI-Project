@@ -14,7 +14,7 @@ public class GridItem : MonoBehaviour
 {
 
     [Header("Attachment Settings")]
-    public bool requiresSupport = false;               // true for icy/sticky surfaces
+    public bool isAttachable = false;               // true for icy/sticky surfaces
     public Transform ifAttachableAttachHere = null;
     public bool SupportedItemCanBePlaced { get; set; }
 

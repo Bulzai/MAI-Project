@@ -143,11 +143,11 @@ public class CursorController : MonoBehaviour
     {
         if (gridItem == null || gridItem.Placed) return;
 
-        if (!gridItem.CanBePlaced() && gridItem.requiresSupport == false) return;
+        if (!gridItem.CanBePlaced() && gridItem.isAttachable == false) return;
 
-        if (!gridItem.SupportedItemCanBePlaced && gridItem.requiresSupport == true) return;
+        if (!gridItem.SupportedItemCanBePlaced && gridItem.isAttachable == true) return;
 
-        if (gridItem.requiresSupport && gridItem.ifAttachableAttachHere != null)
+        if (gridItem.isAttachable && gridItem.ifAttachableAttachHere != null)
         {
             Debug.Log("griditem iffattachable inside: " + gridItem.ifAttachableAttachHere);
 
@@ -156,7 +156,7 @@ public class CursorController : MonoBehaviour
         gridItem.Place();
         Debug.Log("griditem iffattachable: " + gridItem.ifAttachableAttachHere);
 
-        if (!gridItem.requiresSupport) gridItem.transform.SetParent(gameWorld.transform);
+        if (!gridItem.isAttachable) gridItem.transform.SetParent(gameWorld.transform);
 
         gridItem.gameObject.layer = LayerMask.NameToLayer("Ground/Wall");
 
