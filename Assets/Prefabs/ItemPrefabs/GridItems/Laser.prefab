@@ -179,11 +179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiresSupport: 0
-  attachable: 0
   ifAttachableAttachHere: {fileID: 0}
-  area:
-    m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 1, y: 5, z: 3}
-  originalPositionHorizontal: {x: 0, y: 2, z: 0}
-  originalPositionVertical: {x: 2, y: 0, z: 0}
-  adjustPosition: {x: 0, y: 0, z: 0}
+  placementOffset: {x: 0, y: 0, z: 0}
+  forbiddenSignOffset: {x: 0, y: 0, z: 0}
+  forbiddenSignScale: 1
+  currentFacingDirection: 0
