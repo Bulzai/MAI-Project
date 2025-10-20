@@ -9,6 +9,7 @@ public class CursorController : MonoBehaviour
 
     [Header("Selection Settings")]
     [SerializeField] private LayerMask selectableLayer;
+    [SerializeField] private Transform hoverOrigin; // assign in Inspector
 
     private Vector2 moveInput;
 
@@ -238,7 +239,7 @@ public class CursorController : MonoBehaviour
     // --- Hover highlight ---
     private void HandleHoverHighlight()
     {
-        Vector2 pos = transform.position;
+        Vector2 pos = (Vector2)hoverOrigin.position;
 
         RaycastHit2D hit = Physics2D.CircleCast(pos, 0.5f, Vector2.zero, 0f, selectableLayer);
         GameObject next = ResolveSelectableRoot(hit.collider);
