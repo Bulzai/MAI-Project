@@ -211,9 +211,9 @@ public class PlayerManager : MonoBehaviour
 
             // Optional: tint per player slot
             if (playerColors != null && idx < playerColors.Length)
-                characterSpriteRenderer.color = playerColors[idx];
+                cursorSpriteRenderer.color = playerColors[idx];
             else
-                characterSpriteRenderer.color = Color.white;
+                cursorSpriteRenderer.color = Color.white;
         }
         else
         {
