@@ -27,13 +27,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5391782045131714913}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 1.3450413, y: 0.1886791, z: 0.08268708}
   m_LocalScale: {x: 0.66440225, y: 0.66440225, z: 0.66440225}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &2379427208245926052
 SpriteRenderer:
@@ -126,11 +126,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6259d5d3a4a1c0a4d8728cfab1d6f979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
+  speed: 6
   faceVelocity: 1
   lifetime: 5
   destroyOnAnyHit: 1
-  damage: 1
+  damage: 5
   knockBackStrength: 3
   hitMask:
     serializedVersion: 2
