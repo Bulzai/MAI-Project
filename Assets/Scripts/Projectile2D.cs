@@ -2,7 +2,7 @@ using UnityEngine;
 
 
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class Projectile2D : MonoBehaviour
 {
     [Header("Motion")]
@@ -40,7 +40,7 @@ public class Projectile2D : MonoBehaviour
         if (_t >= lifetime) Destroy(gameObject);
 
         if (faceVelocity && _rb.velocity.sqrMagnitude > 0.0001f)
-            transform.right = _rb.velocity.normalized;
+            transform.right = -_rb.velocity.normalized;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
