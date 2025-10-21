@@ -45,7 +45,7 @@ public class Projectile2D : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && GameEvents.CurrentState == GameState.MainGameState)
         {
             var player = other.gameObject.GetComponent<PlayerHealthSystem>();
             if (player != null)
@@ -73,7 +73,7 @@ public class Projectile2D : MonoBehaviour
     // In your projectile's OnTriggerEnter2D:
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && GameEvents.CurrentState == GameState.MainGameState)
         {
             var player = other.GetComponent<PlayerHealthSystem>();
             if (player != null)

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6294824659946969214}
   - component: {fileID: 3332781097205167274}
   - component: {fileID: -1906088657993667228}
+  - component: {fileID: 7639385418393309525}
   m_Layer: 6
   m_Name: Damage_Shooter
   m_TagString: Untagged
@@ -97,7 +98,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3896460717008147644}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab1c454e01acc7d438bdc885fafd9c01, type: 3}
   m_Name: 
@@ -173,7 +174,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0032985806, y: 0.013194442}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -184,7 +185,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4, y: 4}
+  m_Size: {x: 1.3545274, y: 1.6645949}
   m_EdgeRadius: 0
 --- !u!114 &-1906088657993667228
 MonoBehaviour:
@@ -198,7 +199,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22456bc0c369c824587a5e677cdbfd60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  childrenCollider: {fileID: 0}
+  disableCollider: {fileID: 3332781097205167274}
+  enableCollider: {fileID: 0}
+--- !u!114 &7639385418393309525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3896460717008147644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c558a693b64112049bedc3bcb9ead4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activationDelay: 2
+  scriptsToToggle:
+  - {fileID: 1930771480500770893}
 --- !u!1 &5279988495354092573
 GameObject:
   m_ObjectHideFlags: 0

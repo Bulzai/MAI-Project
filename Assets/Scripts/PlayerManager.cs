@@ -83,14 +83,12 @@ public class PlayerManager : MonoBehaviour
     private void HandlePlayerElimination(PlayerInput p)
     {
 
-        Debug.Log($"Player {p.playerIndex} was eliminated");
         // Record elimination
         _eliminationOrder.Add(p);
 
         int aliveCount = players.Count - _eliminationOrder.Count;
         if (aliveCount <= 1)
         {
-            Debug.Log("last alive");
 
             // the last survivor:
             var winner = players.Except(_eliminationOrder).FirstOrDefault();
@@ -197,7 +195,6 @@ public class PlayerManager : MonoBehaviour
 
         // Cache root
         playerRoots[idx] = root;
-        Debug.Log("Cached PlayerRoot for idx=" + idx);
 
         // ----- Assign AVATAR + COLOR -----
         var characterSpriteRenderer = characterTf.Find("Visual/Sprite")?.GetComponent<SpriteRenderer>();
@@ -267,7 +264,6 @@ public class PlayerManager : MonoBehaviour
 
     public void ActivateCharacterPrefab()
     {
-        Debug.Log("ActivatePlayerPrefab called");
 
         foreach (var kvp in playerRoots)
         {

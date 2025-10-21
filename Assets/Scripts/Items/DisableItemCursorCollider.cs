@@ -1,26 +1,24 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DisableItemCursorCollider : MonoBehaviour
 {
 
-    private BoxCollider2D boxCollider;
-    public Collider2D childrenCollider;
+    public Collider2D disableCollider;
+    public Collider2D enableCollider;
 
 
 
     private void Start()
     {
-        boxCollider = GetComponent<BoxCollider2D>();
-        if (boxCollider == null)
-        {
-            Debug.LogWarning("RotateSpike: No BoxCollider2D found!");
-        }
+        disableCollider = GetComponent<BoxCollider2D>();
+
     }
 
     private void OnEnable()
     {
+
         GameEvents.OnMainGameStateEntered += DisableCursorCollider;
     }
 
@@ -28,10 +26,14 @@ public class DisableItemCursorCollider : MonoBehaviour
 
     void DisableCursorCollider()
     {
-        if (boxCollider != null)
+        if (disableCollider != null)
         {
-            boxCollider.enabled = false;
-            childrenCollider.enabled = true;
+            disableCollider.enabled = false;
+        }
+
+        if(enableCollider != null)
+        {
+            enableCollider.enabled = true;   
         }
     }
 

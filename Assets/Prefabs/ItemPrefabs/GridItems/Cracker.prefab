@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -5115953619965814256}
   - component: {fileID: -3301677677972239573}
   - component: {fileID: 7851160044676837220}
+  - component: {fileID: 7702772660634834249}
   m_Layer: 6
   m_Name: Cracker
   m_TagString: Untagged
@@ -27,6 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4354401948063173012}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.39210624, y: 0.36904117, z: 0.36904117}
@@ -34,7 +36,6 @@ Transform:
   m_Children:
   - {fileID: 1472377271155146765}
   m_Father: {fileID: 0}
-  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3481575997630783764
 SpriteRenderer:
@@ -165,7 +166,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalPrefab: {fileID: 4354401948063173012}
   isAvailable: 1
-  spawnRate: 90
+  spawnRate: 95
+--- !u!114 &7702772660634834249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4354401948063173012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41193822271e73d4685a748ebae9d15e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAttachable: 0
+  ifAttachableAttachHere: {fileID: 0}
+  placementOffset: {x: 1.5, y: 1.5, z: 0}
+  forbiddenSignOffset: {x: 0, y: 0, z: 0}
+  forbiddenSignScale: 10
+  currentFacingDirection: 0
 --- !u!1001 &3347041301234216263
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -21,7 +21,6 @@ public class PlayerSelection : MonoBehaviour
     }
     public void StartSurpriseBoxSequence()
     {
-        Debug.Log("supriesebox");
 
         GameWorld.SetActive(false);
         SelectPlayer.SetActive(false);

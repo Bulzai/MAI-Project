@@ -48,7 +48,6 @@ public class PlayerHealthSystem : MonoBehaviour
 
     public void SetOnFire()
     {
-        Debug.Log("EnteredFireState");
         if (!isBurning)
         {
             isBurning = true;
@@ -58,7 +57,6 @@ public class PlayerHealthSystem : MonoBehaviour
             if (fireSprite != null)
                 fireSprite.gameObject.SetActive(true);
 
-            Debug.Log(" Player is on fire!");
         }
     }
 
@@ -96,7 +94,6 @@ public class PlayerHealthSystem : MonoBehaviour
         if (isItemDmg)
         {
             StartCoroutine(FlashRed());
-            Debug.Log("Item damage taken " + amount);
         }
 
         if (currentHealth <= 0)

@@ -9,29 +9,19 @@ public class RotateSpike : MonoBehaviour
     public float rotationSpeed = 180f; // Degrees per second
 
     private bool shouldRotate = false;
-    private BoxCollider2D boxCollider;
-    private CircleCollider2D killCollider;
 
-    private void Start()
-    {
-        boxCollider = GetComponent<BoxCollider2D>();
-        killCollider = GetComponentInChildren<CircleCollider2D>();
-        if (boxCollider == null)
-        {
-            Debug.LogWarning("RotateSpike: No BoxCollider2D found!");
-        }
-    }
+
 
     private void OnEnable()
     {
-        GameEvents.OnMainGameStateEntered += EnableRotation;
-        GameEvents.OnMainGameStateExited += DisableRotation;
+        shouldRotate = true;
+
     }
 
     private void OnDisable()
     {
-        GameEvents.OnMainGameStateEntered -= EnableRotation;
-        GameEvents.OnMainGameStateExited -= DisableRotation;
+        shouldRotate = false;
+
     }
 
     private void Update()
@@ -42,19 +32,6 @@ public class RotateSpike : MonoBehaviour
         }
     }
 
-    private void EnableRotation()
-    {
-        shouldRotate = true;
-        if (boxCollider != null)
-        {
-            boxCollider.enabled = false;
-            killCollider.enabled = true; // Enable the kill collider
-        }
-    }
 
-    private void DisableRotation()
-    {
-        shouldRotate = false;
-    }
 
 }

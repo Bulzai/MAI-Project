@@ -24,18 +24,6 @@ public class PlaceItemState : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnEnable()
     {
         GameEvents.OnPlaceItemStateEntered += BeginPlacementPhaseAll;
@@ -58,7 +46,6 @@ public class PlaceItemState : MonoBehaviour
         GridPlacementSystem.Instance.HideGrid();
         playerManager.pickedPrefabByPlayer.Clear();
         playerManager.playersThatPlaced.Clear();
-        Debug.Log("AllPlayersFinishedPlacing ");
         HideAllCursors();
         GameEvents.ChangeState(GameState.MainGameState);
 
@@ -66,7 +53,6 @@ public class PlaceItemState : MonoBehaviour
 
     private void BeginPlacementPhaseAll()
     {
-        Debug.Log("BeginPlacementPhaseAll start");
         GameWorld.SetActive(true);
 
         if (playerManager.pickedPrefabByPlayer.Count == 0)
@@ -113,14 +99,12 @@ public class PlaceItemState : MonoBehaviour
             // switch input map
             var pi = root.GetComponent<PlayerInput>();
             pi.SwitchCurrentActionMap("Cursor");
-            Debug.Log("Switched to Cursor map for idx=" + idx);
 
             // begin placement on cursor controller
             var cc = cursor.GetComponent<CursorController>();
             cc.BeginPlacementPhase(prefab, cc.transform);
         }
 
-        Debug.Log("BeginPlacementPhaseAll end");
     }
 
 
