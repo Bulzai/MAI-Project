@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 using Unity.VisualScripting;
+using TarodevController;
 
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
+
+    public PlayerAnimator playerAnimator;
 
     public Transform[] spawnPositionsForGame;
 
@@ -20,6 +23,7 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Avatars")]
     public Sprite[] playerAvatars = new Sprite[4];  // set per slot in Inspector
+    public CharacterAnimationSet[] animationSets = new CharacterAnimationSet[4];
 
     [Header("Player Colors")]
     public Color[] playerColors = new Color[4];
@@ -76,6 +80,12 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnPlayerEliminated -= HandlePlayerElimination;
 
     }
+
+    public void SetCharacter(CharacterAnimationSet chosenSet)
+    {
+        playerAnimator.animationSet = chosenSet;
+    }
+
     public void ResetEliminations()
     {
         _eliminationOrder.Clear();
@@ -226,7 +236,13 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.LogWarning($"CursorSpriteRenderer not found for Player {idx}");
         }
-        // ----------------------------------
+
+        // ------------ASSIGN CHARACTER ANIMATION SET---------------------
+        var characterAnimator = characterTf.Find("Visual")?.GetComponent<PlayerAnimator>();
+        if (characterAnimator != null && idx < animationSets.Length)
+        {
+            characterAnimator.animationSet = animationSets[idx];
+        }
 
         // Setup input
         var pi = root.GetComponent<PlayerInput>();

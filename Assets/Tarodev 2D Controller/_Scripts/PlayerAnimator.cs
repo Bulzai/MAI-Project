@@ -8,8 +8,14 @@ namespace TarodevController
     /// </summary>
     public class PlayerAnimator : MonoBehaviour
     {
+
+        [Header("Animation Set")]
+        public CharacterAnimationSet animationSet;
+        public Animator _anim;              // Animator on "Sprite"
+        [SerializeField] private PlayerHealthSystem _health;
+        private bool _onFire;
+
         [Header("References")]
-        [SerializeField] private Animator _anim;              // Animator on "Sprite"
         [SerializeField] private SpriteRenderer _sprite;      // SpriteRenderer on "Sprite"
         [SerializeField] private Rigidbody2D _rb;             // Player Rigidbody (auto-found if null)
 
@@ -55,6 +61,43 @@ namespace TarodevController
             if (_rb == null) _rb = GetComponentInParent<Rigidbody2D>();
             _player = GetComponentInParent<IPlayerController>();
             _source = GetComponent<AudioSource>();
+
+            _anim.updateMode = AnimatorUpdateMode.Normal;
+
+
+        }
+
+
+        private void HandleAnimatorVariant()
+        {
+            if (_health == null || animationSet == null || _anim == null) return;
+
+            // ✅ force float division
+            float hp01 = (_health.maxHealth > 0)
+                ? Mathf.Clamp01((float)_health.currentHealth / (float)_health.maxHealth)
+                : 1f;
+
+            bool onFire = _health.isBurning;
+
+            RuntimeAnimatorController newCtrl = null;
+            if (!onFire)
+            {
+                if (hp01 > 0.66f) newCtrl = animationSet.fullHealth;
+                else if (hp01 > 0.33f) newCtrl = animationSet.halfHealth;
+                else newCtrl = animationSet.lowHealth;
+            }
+            else
+            {
+                if (hp01 > 0.66f) newCtrl = animationSet.fullHealthFire;
+                else if (hp01 > 0.33f) newCtrl = animationSet.halfHealthFire;
+                else newCtrl = animationSet.lowHealthFire;
+            }
+
+            if (newCtrl != null && _anim.runtimeAnimatorController != newCtrl)
+                _anim.runtimeAnimatorController = newCtrl;
+
+            Debug.Log($"[AnimatorVariant] hp: {_health.currentHealth}/{_health.maxHealth} ({hp01:F2}), " +
+                      $"onFire: {onFire}, set: {(newCtrl ? newCtrl.name : "NULL")}");
         }
 
         private void OnEnable()
@@ -81,6 +124,7 @@ namespace TarodevController
         {
             if (_player == null || _rb == null) return;
 
+            HandleAnimatorVariant();
             HandleSpriteFlip();
             HandleLocomotion();
             //HandleTilt();
