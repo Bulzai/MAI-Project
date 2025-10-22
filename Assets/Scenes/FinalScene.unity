@@ -102073,8 +102073,8 @@ MonoBehaviour:
   players: []
   playerCount: 0
   playerAvatars:
+  - {fileID: 1604492735, guid: 7f5d472440c19284c85facefb6004631, type: 3}
   - {fileID: 21300000, guid: 9ec0ca269ec0b4f4fa12877c83d9dd88, type: 3}
-  - {fileID: 21300000, guid: f747f9f82340a534a8cdcae866586b8c, type: 3}
   - {fileID: 21300000, guid: 9ec0ca269ec0b4f4fa12877c83d9dd88, type: 3}
   - {fileID: 21300000, guid: 9ec0ca269ec0b4f4fa12877c83d9dd88, type: 3}
   playerColors:

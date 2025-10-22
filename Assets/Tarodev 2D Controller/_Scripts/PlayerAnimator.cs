@@ -1,130 +1,187 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TarodevController
 {
     /// <summary>
-    /// VERY primitive animator example.
+    /// Drives the Animator with Speed, Jump, Grounded, and IsRunning.
+    /// Handles tilt, sprite flip, particles, and audio.
     /// </summary>
     public class PlayerAnimator : MonoBehaviour
     {
-        [Header("References")] [SerializeField]
-        private Animator _anim;
+        [Header("References")]
+        [SerializeField] private Animator _anim;              // Animator on "Sprite"
+        [SerializeField] private SpriteRenderer _sprite;      // SpriteRenderer on "Sprite"
+        [SerializeField] private Rigidbody2D _rb;             // Player Rigidbody (auto-found if null)
 
-        [SerializeField] private SpriteRenderer _sprite;
+        [Header("Animation Settings")]
+        [Tooltip("Horizontal speed threshold to be considered running.")]
+        [SerializeField] private float runThreshold = 0.1f;
+        [Tooltip("Approximate maximum ground speed for blending Speed 0..1.")]
+        [SerializeField] private float maxGroundSpeedEstimate = 6f;
+        [Tooltip("Smoothing factor for Speed parameter.")]
+        [SerializeField, Range(0f, 25f)] private float speedLerp = 12f;
 
-        [Header("Settings")] [SerializeField, Range(1f, 3f)]
-        private float _maxIdleSpeed = 2;
+        [Header("Tilt Settings")]
+        [SerializeField] private float _maxTilt = 5f;
+        [SerializeField] private float _tiltSpeed = 20f;
 
-        [SerializeField] private float _maxTilt = 5;
-        [SerializeField] private float _tiltSpeed = 20;
-
-        [Header("Particles")] [SerializeField] private ParticleSystem _jumpParticles;
+        [Header("Particles")]
+        [SerializeField] private ParticleSystem _jumpParticles;
         [SerializeField] private ParticleSystem _launchParticles;
         [SerializeField] private ParticleSystem _moveParticles;
         [SerializeField] private ParticleSystem _landParticles;
 
-        [Header("Audio Clips")] [SerializeField]
-        private AudioClip[] _footsteps;
+        [Header("Audio Clips")]
+        [SerializeField] private AudioClip[] _footsteps;
 
         private AudioSource _source;
         private IPlayerController _player;
         private bool _grounded;
+        private bool _isRunning;
+        private float _speedParam;
         private ParticleSystem.MinMaxGradient _currentGradient;
+
+        // Animator parameter hashes
+        private static readonly int SpeedKey = Animator.StringToHash("Speed");      // float
+        private static readonly int JumpKey = Animator.StringToHash("Jump");       // trigger
+        private static readonly int GroundedKey = Animator.StringToHash("Grounded");   // bool
+        private static readonly int IsRunningKey = Animator.StringToHash("IsRunning");  // bool                                                                                   
+        private static readonly int OnWallKey = Animator.StringToHash("OnWall");
+
+        private float _lastFacingDir = 1f; // 1 = right, -1 = left
 
         private void Awake()
         {
-            _source = GetComponent<AudioSource>();
+            if (_rb == null) _rb = GetComponentInParent<Rigidbody2D>();
             _player = GetComponentInParent<IPlayerController>();
+            _source = GetComponent<AudioSource>();
         }
 
         private void OnEnable()
         {
+            if (_player == null) return;
             _player.Jumped += OnJumped;
             _player.GroundedChanged += OnGroundedChanged;
+            _player.WallStateChanged += OnWallChanged;
 
-            _moveParticles.Play();
+            if (_moveParticles != null) _moveParticles.Play();
         }
 
         private void OnDisable()
         {
+            if (_player == null) return;
             _player.Jumped -= OnJumped;
             _player.GroundedChanged -= OnGroundedChanged;
+            _player.WallStateChanged -= OnWallChanged;
 
-            _moveParticles.Stop();
+            if (_moveParticles != null) _moveParticles.Stop();
         }
 
         private void Update()
         {
-            if (_player == null) return;
-
-            DetectGroundColor();
+            if (_player == null || _rb == null) return;
 
             HandleSpriteFlip();
-
-            HandleIdleSpeed();
-
-            HandleCharacterTilt();
+            HandleLocomotion();
+            //HandleTilt();
+            DetectGroundColor();
         }
 
         private void HandleSpriteFlip()
         {
-            if (_player.FrameInput.x != 0) _sprite.flipX = _player.FrameInput.x < 0;
+            // Prefer velocity for facing direction
+            if (_rb.velocity.x != 0f)
+                _sprite.flipX =  _rb.velocity.x < 0f;
         }
 
-        private void HandleIdleSpeed()
+        private void HandleLocomotion()
         {
-            var inputStrength = Mathf.Abs(_player.FrameInput.x);
-            _anim.SetFloat(IdleSpeedKey, Mathf.Lerp(1, _maxIdleSpeed, inputStrength));
-            _moveParticles.transform.localScale = Vector3.MoveTowards(_moveParticles.transform.localScale, Vector3.one * inputStrength, 2 * Time.deltaTime);
+            // --- Speed parameter ---
+            float hSpeed = Mathf.Abs(_rb.velocity.x);
+            float targetSpeed01 = Mathf.Clamp01(hSpeed / Mathf.Max(maxGroundSpeedEstimate, 0.01f));
+            _speedParam = Mathf.Lerp(_speedParam, targetSpeed01, 1f - Mathf.Exp(-speedLerp * Time.deltaTime));
+            _anim.SetFloat(SpeedKey, _speedParam);
+
+            // --- IsRunning bool ---
+            _isRunning = _grounded && hSpeed > runThreshold;
+            _anim.SetBool(IsRunningKey, _isRunning);
+
+            // --- Move particles scale ---
+            if (_moveParticles != null)
+            {
+                _moveParticles.transform.localScale = Vector3.MoveTowards(
+                    _moveParticles.transform.localScale,
+                    Vector3.one * _speedParam,
+                    2f * Time.deltaTime);
+            }
         }
 
-        private void HandleCharacterTilt()
+        private void HandleTilt()
         {
-            var runningTilt = _grounded ? Quaternion.Euler(0, 0, _maxTilt * _player.FrameInput.x) : Quaternion.identity;
-            _anim.transform.up = Vector3.RotateTowards(_anim.transform.up, runningTilt * Vector2.up, _tiltSpeed * Time.deltaTime, 0f);
+            var desiredTilt = _grounded ? Quaternion.Euler(0, 0, _maxTilt * _player.FrameInput.x) : Quaternion.identity;
+            _anim.transform.up = Vector3.RotateTowards(
+                _anim.transform.up,
+                desiredTilt * Vector2.up,
+                _tiltSpeed * Time.deltaTime,
+                0f);
         }
-
+        private void OnWallChanged(bool onWall, int dir)
+        {
+            _anim.SetBool(OnWallKey, onWall);
+            // Optional: face into the wall
+            if (onWall)
+            {
+                // if your art faces left by default, adjust as needed
+                bool movingRight = dir > 0;
+                _sprite.flipX = /* faceRightByDefault ? !movingRight : movingRight */ movingRight;
+            }
+        }
         private void OnJumped()
         {
             _anim.SetTrigger(JumpKey);
-            _anim.ResetTrigger(GroundedKey);
 
-
-            if (_grounded) // Avoid coyote
+            if (_grounded)
             {
                 SetColor(_jumpParticles);
                 SetColor(_launchParticles);
-                _jumpParticles.Play();
+                if (_jumpParticles != null) _jumpParticles.Play();
             }
         }
 
         private void OnGroundedChanged(bool grounded, float impact)
         {
             _grounded = grounded;
-            
+            _anim.SetBool(GroundedKey, grounded);
+
             if (grounded)
             {
                 DetectGroundColor();
                 SetColor(_landParticles);
 
-                _anim.SetTrigger(GroundedKey);
-                _source.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Length)]);
-                _moveParticles.Play();
+                // play land/footstep audio
+                if (_footsteps != null && _footsteps.Length > 0 && _source != null)
+                    _source.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Length)]);
 
-                _landParticles.transform.localScale = Vector3.one * Mathf.InverseLerp(0, 40, impact);
-                _landParticles.Play();
+                // restart particles
+                if (_moveParticles != null) _moveParticles.Play();
+
+                if (_landParticles != null)
+                {
+                    _landParticles.transform.localScale = Vector3.one * Mathf.InverseLerp(0, 40, impact);
+                    _landParticles.Play();
+                }
             }
             else
             {
-                _moveParticles.Stop();
+                if (_moveParticles != null) _moveParticles.Stop();
             }
         }
 
         private void DetectGroundColor()
         {
-            var hit = Physics2D.Raycast(transform.position, Vector3.down, 2);
-
+            var hit = Physics2D.Raycast(transform.position, Vector3.down, 2f);
             if (!hit || hit.collider.isTrigger || !hit.transform.TryGetComponent(out SpriteRenderer r)) return;
+
             var color = r.color;
             _currentGradient = new ParticleSystem.MinMaxGradient(color * 0.9f, color * 1.2f);
             SetColor(_moveParticles);
@@ -132,12 +189,9 @@ namespace TarodevController
 
         private void SetColor(ParticleSystem ps)
         {
+            if (ps == null) return;
             var main = ps.main;
             main.startColor = _currentGradient;
         }
-
-        private static readonly int GroundedKey = Animator.StringToHash("Grounded");
-        private static readonly int IdleSpeedKey = Animator.StringToHash("IdleSpeed");
-        private static readonly int JumpKey = Animator.StringToHash("Jump");
     }
 }
