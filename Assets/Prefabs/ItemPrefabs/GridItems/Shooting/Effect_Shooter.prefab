@@ -104,7 +104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab1c454e01acc7d438bdc885fafd9c01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 5391782045131714913, guid: 3fef0b08db5e47a4494877a39649558a, type: 3}
+  projectilePrefab:
+  - {fileID: 5391782045131714913, guid: 01a69f6fc33698e419e6dfe82785b148, type: 3}
+  - {fileID: 5391782045131714913, guid: 97d7f499e7905d840b8a8692e0f28105, type: 3}
+  - {fileID: 5391782045131714913, guid: 20db5ada1c15a6842a1d375dee3623c9, type: 3}
   muzzle: {fileID: 2242705295382345368}
   direction: {fileID: 2242705295382345368}
   fireInterval: 1

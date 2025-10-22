@@ -3,7 +3,7 @@ using UnityEngine;
 public class ProjectileLauncher : MonoBehaviour
 {
     [Header("Refs")]
-    public GameObject projectilePrefab;       // prefab with ProjectileSimple2D on root
+    public GameObject[] projectilePrefab;       // prefab with ProjectileSimple2D on root
     public Transform muzzle;                  // where to spawn
     public Transform direction;               // child that defines aim (use its +X / right)
 
@@ -36,7 +36,9 @@ public class ProjectileLauncher : MonoBehaviour
     void FireOne()
     {
         Vector2 dir = direction.right.normalized;        // <- aim defined by child’s +X
-        var go = Instantiate(projectilePrefab, muzzle.position, Quaternion.identity);
+
+        int randomBullet = Random.Range(0, projectilePrefab.Length);
+        var go = Instantiate(projectilePrefab[randomBullet], muzzle.position, Quaternion.identity);
 
         // Optional: ignore self-collision if both have colliders
         var myCol = GetComponent<Collider2D>();
