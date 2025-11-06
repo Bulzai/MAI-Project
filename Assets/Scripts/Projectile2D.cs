@@ -2,7 +2,7 @@ using UnityEngine;
 
 
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class Projectile2D : MonoBehaviour
 {
     [Header("Motion")]
@@ -40,12 +40,12 @@ public class Projectile2D : MonoBehaviour
         if (_t >= lifetime) Destroy(gameObject);
 
         if (faceVelocity && _rb.velocity.sqrMagnitude > 0.0001f)
-            transform.right = _rb.velocity.normalized;
+            transform.right = -_rb.velocity.normalized;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && GameEvents.CurrentState == GameState.MainGameState)
         {
             var player = other.gameObject.GetComponent<PlayerHealthSystem>();
             if (player != null)
@@ -73,7 +73,7 @@ public class Projectile2D : MonoBehaviour
     // In your projectile's OnTriggerEnter2D:
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && GameEvents.CurrentState == GameState.MainGameState)
         {
             var player = other.GetComponent<PlayerHealthSystem>();
             if (player != null)

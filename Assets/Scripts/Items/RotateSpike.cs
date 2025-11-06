@@ -1,60 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RotateSpike : MonoBehaviour
 {
-
     [Header("Rotation Settings")]
-    public float rotationSpeed = 180f; // Degrees per second
+    public float rotationSpeed = 180f; // degrees per second
+
+    [Header("Pivot Point")]
+    [Tooltip("Empty child object placed at the desired rotation center (e.g., handle base).")]
+    public Transform pivotPoint;
 
     private bool shouldRotate = false;
-    private BoxCollider2D boxCollider;
-    private CircleCollider2D killCollider;
 
-    private void Start()
+    private void Awake()
     {
-        boxCollider = GetComponent<BoxCollider2D>();
-        killCollider = GetComponentInChildren<CircleCollider2D>();
-        if (boxCollider == null)
-        {
-            Debug.LogWarning("RotateSpike: No BoxCollider2D found!");
-        }
+        // Auto-find a child named "PivotPoint" if none assigned
+        if (pivotPoint == null)
+            pivotPoint = transform.Find("PivotPoint");
     }
 
-    private void OnEnable()
-    {
-        GameEvents.OnMainGameStateEntered += EnableRotation;
-        GameEvents.OnMainGameStateExited += DisableRotation;
-    }
-
-    private void OnDisable()
-    {
-        GameEvents.OnMainGameStateEntered -= EnableRotation;
-        GameEvents.OnMainGameStateExited -= DisableRotation;
-    }
+    private void OnEnable() => shouldRotate = true;
+    private void OnDisable() => shouldRotate = false;
 
     private void Update()
     {
-        if (shouldRotate)
-        {
-            transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
-        }
-    }
+        if (!shouldRotate || pivotPoint == null) return;
 
-    private void EnableRotation()
-    {
-        shouldRotate = true;
-        if (boxCollider != null)
-        {
-            boxCollider.enabled = false;
-            killCollider.enabled = true; // Enable the kill collider
-        }
+        // Rotate THIS object (the parent with the sprite)
+        // around the pivotPoint's position
+        transform.RotateAround(pivotPoint.position, Vector3.forward, rotationSpeed * Time.deltaTime);
     }
-
-    private void DisableRotation()
-    {
-        shouldRotate = false;
-    }
-
 }

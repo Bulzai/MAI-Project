@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 766559b510acd7548a158a9ff99d876f, type: 3}
+  m_Name: PirateAnimSet
+  m_EditorClassIdentifier: 
+  fullHealth: {fileID: 9100000, guid: 9da25475a7d5a7141ad83f41361818fc, type: 2}
+  halfHealth: {fileID: 9100000, guid: 8a0e3d5acb7addd449a10e1a6dde02d1, type: 2}
+  lowHealth: {fileID: 9100000, guid: 6d1d1ba14452fbf439cebc0fe710c853, type: 2}
+  fullHealthFire: {fileID: 9100000, guid: f983251c74b1d564e9fb3acb8c35ad77, type: 2}
+  halfHealthFire: {fileID: 9100000, guid: 3e9f713342dc57f489255214c1ad0430, type: 2}
+  lowHealthFire: {fileID: 9100000, guid: 6817dce3482c4604bba7c949b4dd20b4, type: 2}

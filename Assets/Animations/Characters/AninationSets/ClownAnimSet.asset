@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 766559b510acd7548a158a9ff99d876f, type: 3}
+  m_Name: ClownAnimSet
+  m_EditorClassIdentifier: 
+  fullHealth: {fileID: 9100000, guid: e2c9d30a298ab2c46b9bae385c75102c, type: 2}
+  halfHealth: {fileID: 9100000, guid: 95c0d392e524b2249afb78aac3683f5f, type: 2}
+  lowHealth: {fileID: 9100000, guid: f1b71ca0ad49bdd4f8cd835940b43256, type: 2}
+  fullHealthFire: {fileID: 9100000, guid: 3f60a27d77ea6a14c8b9582ad1e4ce57, type: 2}
+  halfHealthFire: {fileID: 9100000, guid: 2dd54c3ba108b6844923f30609f7fd52, type: 2}
+  lowHealthFire: {fileID: 9100000, guid: 42735f9ca672f78498b950b723d55489, type: 2}

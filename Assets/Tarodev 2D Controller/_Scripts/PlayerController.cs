@@ -66,6 +66,9 @@ namespace TarodevController
         private int _wallDir;
         private float _lastWallTime;
         private float _wallStickCounter;
+        public event Action<bool, int> WallStateChanged; // (onWall, wallDir: -1 left, +1 right)
+        public bool IsOnWall => _onWall;
+        public int WallDir => _wallDir;
 
         #region Interface
         public Vector2 FrameInput => _frameInput.Move;
@@ -231,13 +234,15 @@ namespace TarodevController
                 else if (iceLayer > 0 && _lastGroundCol.gameObject.layer == iceLayer) _onIce = true;
             }
 
+            // --- before you modify _onWall/_wallDir, cache previous ---
+            bool prevOnWall = _onWall;
+            int prevDir = _wallDir;
+
             // WALLS
             if (!_grounded)
             {
-                bool leftHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0,
-                                                     Vector2.left, _stats.WallCheckDistance, _stats.SolidLayers);
-                bool rightHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0,
-                                                      Vector2.right, _stats.WallCheckDistance, _stats.SolidLayers);
+                bool leftHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, Vector2.left, _stats.WallCheckDistance, _stats.SolidLayers);
+                bool rightHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, Vector2.right, _stats.WallCheckDistance, _stats.SolidLayers);
 
                 bool touchingWall = leftHit || rightHit;
                 if (touchingWall)
@@ -260,6 +265,10 @@ namespace TarodevController
                 _onWall = false;
                 _wallStickCounter = 0;
             }
+
+            // --- after computing, notify changes ---
+            if (prevOnWall != _onWall || prevDir != _wallDir)
+                WallStateChanged?.Invoke(_onWall, _wallDir);
 
             Physics2D.queriesStartInColliders = _cachedQueryStartInColliders;
         }
@@ -433,8 +442,10 @@ namespace TarodevController
 
     public interface IPlayerController
     {
-        public event Action<bool, float> GroundedChanged;
-        public event Action Jumped;
-        public Vector2 FrameInput { get; }
+        event Action<bool, float> GroundedChanged;
+        event Action Jumped;
+        event Action<bool, int> WallStateChanged;  // <— add this
+        Vector2 FrameInput { get; }
     }
+
 }

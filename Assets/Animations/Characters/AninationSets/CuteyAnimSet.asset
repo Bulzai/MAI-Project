@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 766559b510acd7548a158a9ff99d876f, type: 3}
+  m_Name: CuteyAnimSet
+  m_EditorClassIdentifier: 
+  fullHealth: {fileID: 9100000, guid: 87d628f57bfefbd49b311ebc815324ca, type: 2}
+  halfHealth: {fileID: 9100000, guid: 86d656863eec78540bc5639542cf6efa, type: 2}
+  lowHealth: {fileID: 9100000, guid: d96c9f0809eb2e0449899d3d5a7e0f9d, type: 2}
+  fullHealthFire: {fileID: 9100000, guid: 567238c8c04966040ac90207f84956d3, type: 2}
+  halfHealthFire: {fileID: 9100000, guid: d7868e734834ec4478fca3f2fa35cd28, type: 2}
+  lowHealthFire: {fileID: 9100000, guid: 63e3f0d3c2e910345b3a2de7fb4e16a2, type: 2}

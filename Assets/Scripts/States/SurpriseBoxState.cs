@@ -145,7 +145,6 @@ public class SurpriseBoxState : MonoBehaviour
 
         if (playerManager.pickedPrefabByPlayer.Count == playerManager.playerCount)
         {
-            Debug.Log("All picked → BeginPlacementPhaseAll");
             DeactivateItemBox();
             GameEvents.ChangeState(GameState.PlaceItemState);
             //BeginPlacementPhaseAll();

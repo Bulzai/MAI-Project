@@ -190,10 +190,21 @@ public class CursorController : MonoBehaviour
             Debug.LogError("Spawned object missing GridItem component!");
 
         go.SetActive(true);
-        if (go.TryGetComponent(out Collider2D col)) col.enabled = true;
+        if (go.TryGetComponent(out Collider2D col))
+            col.enabled = true;
 
+        // Enable all scripts EXCEPT certain types
         foreach (var script in go.GetComponents<MonoBehaviour>())
+        {
+            if (script == null) continue;
+
+            // Skip the ones you don't want active during placement
+            if (script is ProjectileLauncher || script is RotateSpike)
+                continue;
+
             script.enabled = true;
+        }
+
 
         lastCell = Vector3Int.one * int.MinValue;
     }
@@ -250,6 +261,10 @@ public class CursorController : MonoBehaviour
         if (currentlyHoveredHighlight != null)
             currentlyHoveredHighlight.RemoveHover();
 
+        // Disable scripts on previous hovered object
+        if (currentlyHoveredGO != null)
+            TogglePlacementScripts(currentlyHoveredGO, false);
+
         currentlyHoveredGO = next;
         currentlyHoveredHighlight = null;
 
@@ -260,6 +275,18 @@ public class CursorController : MonoBehaviour
             if (!hh) hh = next.AddComponent<HoverHighlight>();
             hh.AddHover();
             currentlyHoveredHighlight = hh;
+
+            //  If it's a BreakableCracker, make it break
+            // inside HandleHoverHighlight(), when next != null (new hover target)
+            var cracker = next.GetComponent<BreakableCracker>();
+            if (cracker != null)
+            {
+                cracker.BreakInstantly(fastReset: true); // uses hoverRespawnDelay
+            }
+
+
+            // (optional) still enable other hover effects
+            TogglePlacementScripts(next, true); ;
         }
     }
 
@@ -269,9 +296,16 @@ public class CursorController : MonoBehaviour
         {
             currentlyHoveredHighlight.RemoveHover();
             currentlyHoveredHighlight = null;
+        }
+
+        // Disable scripts again when you leave hover
+        if (currentlyHoveredGO != null)
+        {
+            TogglePlacementScripts(currentlyHoveredGO, false);
             currentlyHoveredGO = null;
         }
     }
+
 
     private GameObject ResolveSelectableRoot(Collider2D col)
     {
@@ -312,4 +346,19 @@ public class CursorController : MonoBehaviour
             GridPlacementSystem.Instance.FollowItem(gridItem);
         }
     }
+
+    private void TogglePlacementScripts(GameObject target, bool enable)
+    {
+        if (!target) return;
+
+        var launcher = target.GetComponent<ProjectileLauncher>();
+        if (launcher) launcher.enabled = enable;
+
+        var spike = target.GetComponent<RotateSpike>();
+        if (spike) spike.enabled = enable;
+
+        // Optional: log to verify behavior
+        // Debug.Log($"{target.name}: {(enable ? "ENABLED" : "DISABLED")} placement scripts");
+    }
+
 }

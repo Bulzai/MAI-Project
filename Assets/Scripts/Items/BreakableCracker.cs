@@ -1,14 +1,13 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class BreakableCracker : MonoBehaviour
 {
-    [Header("Settings")]
-    [Tooltip("Time in seconds before the cracker breaks after the player lands on it.")]
-    [SerializeField] private float breakDelay = 1f;
-    [Tooltip("Should the cracker respawn after breaking? (0 = never)")]
-    [SerializeField] private float respawnDelay = 0f;
+    [Header("Timing")]
+    [SerializeField] private float breakDelay = 1f;     // wobble time before breaking
+    [SerializeField] private float respawnDelay = 1.5f; // normal respawn
+    [SerializeField] private float hoverRespawnDelay = 0.5f; // faster respawn for hover-trigger
 
     [Header("Optional Visuals")]
     [SerializeField] private Sprite crackedSprite;
@@ -19,6 +18,7 @@ public class BreakableCracker : MonoBehaviour
     private SpriteRenderer _renderer;
     private Sprite _originalSprite;
     private Collider2D _collider;
+    private SelectableItem _selectable;  // ← to gate picking
     private bool _isBreaking;
     private bool _isBroken;
 
@@ -27,24 +27,34 @@ public class BreakableCracker : MonoBehaviour
         _renderer = GetComponent<SpriteRenderer>();
         _originalSprite = _renderer ? _renderer.sprite : null;
         _collider = GetComponent<Collider2D>();
+        _selectable = GetComponent<SelectableItem>(); // optional
     }
+
+    public bool IsBrokenOrBreaking => _isBroken || _isBreaking;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //  Only trigger if the player hits from above
-        if (_isBroken || _isBreaking) return;
+        if (IsBrokenOrBreaking) return;
         if (!collision.collider.CompareTag("Player")) return;
 
-        StartCoroutine(BreakAfterDelay());
-
- 
+        // Normal break path (uses normal respawn delay)
+        StartCoroutine(BreakAfterDelay(respawnDelay));
     }
 
-    private IEnumerator BreakAfterDelay()
+    /// <summary>
+    /// Called from hover logic. Starts break with faster reset.
+    /// </summary>
+    public void BreakInstantly(bool fastReset = true)
+    {
+        if (IsBrokenOrBreaking) return;
+        StartCoroutine(BreakAfterDelay(fastReset ? hoverRespawnDelay : respawnDelay));
+    }
+
+    private IEnumerator BreakAfterDelay(float chosenRespawnDelay)
     {
         _isBreaking = true;
 
-        // Optional: visual feedback (slight wobble)
+        // wobble during breakDelay
         float elapsed = 0f;
         Vector3 startScale = transform.localScale;
         while (elapsed < breakDelay)
@@ -55,12 +65,12 @@ public class BreakableCracker : MonoBehaviour
             yield return null;
         }
 
-        DoBreak();
         transform.localScale = startScale;
+        DoBreak();
 
-        if (respawnDelay > 0)
+        if (chosenRespawnDelay > 0f)
         {
-            yield return new WaitForSeconds(respawnDelay);
+            yield return new WaitForSeconds(chosenRespawnDelay);
             ResetCracker();
         }
     }
@@ -68,11 +78,14 @@ public class BreakableCracker : MonoBehaviour
     private void DoBreak()
     {
         _isBroken = true;
-        _collider.enabled = false;
+        _isBreaking = false;
 
+        if (_collider) _collider.enabled = false;
 
-        if (_renderer && crackedSprite)
-            _renderer.sprite = crackedSprite;
+        // not pickable while broken
+        if (_selectable) _selectable.isAvailable = false;
+
+        if (_renderer && crackedSprite) _renderer.sprite = crackedSprite;
 
         if (breakVFX)
         {
@@ -80,16 +93,19 @@ public class BreakableCracker : MonoBehaviour
             Destroy(vfx.gameObject, 2f);
         }
 
-        if (breakSFX)
-            AudioSource.PlayClipAtPoint(breakSFX, transform.position, sfxVolume);
+        if (breakSFX) AudioSource.PlayClipAtPoint(breakSFX, transform.position, sfxVolume);
     }
 
     private void ResetCracker()
     {
         _isBroken = false;
         _isBreaking = false;
-        _collider.enabled = true;
-        if (_renderer && _originalSprite)
-            _renderer.sprite = _originalSprite;
+
+        if (_collider) _collider.enabled = true;
+
+        // pickable again after reset
+        if (_selectable) _selectable.isAvailable = true;
+
+        if (_renderer && _originalSprite) _renderer.sprite = _originalSprite;
     }
 }
