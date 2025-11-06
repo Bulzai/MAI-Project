@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerSelectionScreen : MonoBehaviour
 {
+    public GameObject Background;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +21,11 @@ public class PlayerSelectionScreen : MonoBehaviour
     public void StartGame()
     {
 
-        if(PlayerManager.Instance.playerCount >0) GameEvents.ChangeState(GameState.SurpriseBoxState);
+        if (PlayerManager.Instance.playerCount > 0)
+        {
+            GameEvents.ChangeState(GameState.SurpriseBoxState);
+            Background.SetActive(false);
+        }
     }
 
 

@@ -99,7 +99,7 @@ MonoBehaviour:
   respawnDelay: 5
   hoverRespawnDelay: 0.5
   crackedCookieAnimation: {fileID: 7400000, guid: 0fc6e3a31eb11c647b284623d3870893, type: 2}
-  crackedSprite: {fileID: 21300000, guid: ae86733ddf93d9247b74f9b6b21ae518, type: 3}
+  crackedSprite: {fileID: -806098649, guid: 83d93deaf04c4504386c951bc1550a57, type: 3}
   breakVFX: {fileID: 0}
   breakSFX: {fileID: 0}
   sfxVolume: 1
