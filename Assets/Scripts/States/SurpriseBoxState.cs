@@ -38,13 +38,6 @@ public class SurpriseBoxState : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        var go = GameObject.Find("ItemBoxItemList");
-        if (go == null)
-            Debug.LogError("Missing 'ItemBoxItemList' GameObject!");
-        else
-            itemBoxItemList = go.transform;
-
-
     }
 
 
