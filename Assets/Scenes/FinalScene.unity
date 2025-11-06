@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 19490360}
   - component: {fileID: 19490361}
   - component: {fileID: 19490359}
+  - component: {fileID: 19490362}
   m_Layer: 5
   m_Name: PlayButton
   m_TagString: Untagged
@@ -454,6 +455,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 19490362}
+        m_TargetAssemblyTypeName: MenuNavigator, Assembly-CSharp
+        m_MethodName: JumpToElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!224 &19490360
 RectTransform:
   m_ObjectHideFlags: 0
@@ -482,6 +495,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 19490358}
   m_CullTransparentMesh: 1
+--- !u!114 &19490362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19490358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68531ee548ab7ba488c782b6628f3197, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventSystem: {fileID: 1030864345}
+  elementToSelect: {fileID: 649831723}
 --- !u!1 &20603163
 GameObject:
   m_ObjectHideFlags: 0
@@ -15285,7 +15312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68531ee548ab7ba488c782b6628f3197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventSystem: {fileID: 0}
+  eventSystem: {fileID: 1030864345}
   elementToSelect: {fileID: 1816555134}
 --- !u!224 &734148322
 RectTransform:
@@ -18278,7 +18305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 19490358}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1030864346
