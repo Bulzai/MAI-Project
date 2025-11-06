@@ -12,6 +12,8 @@ public class ScoreboardRowUI : MonoBehaviour
     [SerializeField] private TMP_Text roundText; // optional
     [SerializeField] private TMP_Text totalText; // optional
     [SerializeField] private TMP_Text placeText;   // <-- NEW
+    [SerializeField] private Image background;
+    [SerializeField] private Sprite spriteBackground;
 
     private static float EaseOutCubic(float t) => 1 - Mathf.Pow(1 - t, 3);
     public void SetPlace(int place)
@@ -23,6 +25,7 @@ public class ScoreboardRowUI : MonoBehaviour
     {
         if (nameText) nameText.text = pi.gameObject.name;
         if (avatar) avatar.sprite = avatarSprite;
+        if (background) background.sprite = spriteBackground;
     }
 
     public IEnumerator AnimateScores(int oldTotal, int roundGain, int newTotal, int maxTotal, float duration = 1.1f)

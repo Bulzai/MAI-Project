@@ -10,6 +10,9 @@ public class BreakableCracker : MonoBehaviour
     [SerializeField] private float hoverRespawnDelay = 0.5f; // faster respawn for hover-trigger
 
     [Header("Optional Visuals")]
+    public AnimationClip crackedCookieAnimation;
+    Animator animator;
+
     [SerializeField] private Sprite crackedSprite;
     [SerializeField] private ParticleSystem breakVFX;
     [SerializeField] private AudioClip breakSFX;
@@ -28,6 +31,7 @@ public class BreakableCracker : MonoBehaviour
         _originalSprite = _renderer ? _renderer.sprite : null;
         _collider = GetComponent<Collider2D>();
         _selectable = GetComponent<SelectableItem>(); // optional
+        animator = GetComponent<Animator>();
     }
 
     public bool IsBrokenOrBreaking => _isBroken || _isBreaking;
@@ -85,7 +89,8 @@ public class BreakableCracker : MonoBehaviour
         // not pickable while broken
         if (_selectable) _selectable.isAvailable = false;
 
-        if (_renderer && crackedSprite) _renderer.sprite = crackedSprite;
+        //if (_renderer && crackedSprite) _renderer.sprite = crackedSprite;
+        if (_renderer && crackedCookieAnimation) animator.Play(crackedCookieAnimation.name);
 
         if (breakVFX)
         {
