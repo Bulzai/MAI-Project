@@ -21334,7 +21334,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 51d13b6debf0f9e4e803a4b70887e2d1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -22896,8 +22896,8 @@ MonoBehaviour:
   roundText: {fileID: 155879093}
   totalText: {fileID: 436628032}
   placeText: {fileID: 934432382}
-  background: {fileID: 0}
-  spriteBackground: {fileID: 0}
+  background: {fileID: 706772928}
+  spriteBackground: {fileID: 21300000, guid: 35c8199027f43194c90c3befdc3ac640, type: 3}
 --- !u!1 &1486563896
 GameObject:
   m_ObjectHideFlags: 0
@@ -24232,8 +24232,8 @@ MonoBehaviour:
   roundText: {fileID: 1064449989}
   totalText: {fileID: 377911076}
   placeText: {fileID: 1967524041}
-  background: {fileID: 0}
-  spriteBackground: {fileID: 0}
+  background: {fileID: 1596984195}
+  spriteBackground: {fileID: 21300000, guid: d6c638d7c6eeb3848b1fc46928d5a420, type: 3}
 --- !u!1 &1637629939
 GameObject:
   m_ObjectHideFlags: 0
@@ -24919,8 +24919,8 @@ MonoBehaviour:
   roundText: {fileID: 505061608}
   totalText: {fileID: 1626067801}
   placeText: {fileID: 1877318211}
-  background: {fileID: 0}
-  spriteBackground: {fileID: 0}
+  background: {fileID: 1906071679}
+  spriteBackground: {fileID: 21300000, guid: de063768747978543ba28a7c81e165e4, type: 3}
 --- !u!1 &1696209896
 GameObject:
   m_ObjectHideFlags: 0
@@ -117120,8 +117120,8 @@ MonoBehaviour:
   roundText: {fileID: 131488718}
   totalText: {fileID: 1491414868}
   placeText: {fileID: 681124386}
-  background: {fileID: 0}
-  spriteBackground: {fileID: 0}
+  background: {fileID: 1237981137}
+  spriteBackground: {fileID: 21300000, guid: 51d13b6debf0f9e4e803a4b70887e2d1, type: 3}
 --- !u!1 &2102599782
 GameObject:
   m_ObjectHideFlags: 0
