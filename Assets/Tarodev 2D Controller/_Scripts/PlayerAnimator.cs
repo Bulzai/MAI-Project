@@ -96,8 +96,6 @@ namespace TarodevController
             if (newCtrl != null && _anim.runtimeAnimatorController != newCtrl)
                 _anim.runtimeAnimatorController = newCtrl;
 
-            Debug.Log($"[AnimatorVariant] hp: {_health.currentHealth}/{_health.maxHealth} ({hp01:F2}), " +
-                      $"onFire: {onFire}, set: {(newCtrl ? newCtrl.name : "NULL")}");
         }
 
         private void OnEnable()

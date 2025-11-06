@@ -102074,15 +102074,15 @@ MonoBehaviour:
   players: []
   playerCount: 0
   playerAvatars:
-  - {fileID: 1604492735, guid: 7f5d472440c19284c85facefb6004631, type: 3}
-  - {fileID: 21300000, guid: 9ec0ca269ec0b4f4fa12877c83d9dd88, type: 3}
-  - {fileID: 21300000, guid: 9ec0ca269ec0b4f4fa12877c83d9dd88, type: 3}
-  - {fileID: 21300000, guid: 9ec0ca269ec0b4f4fa12877c83d9dd88, type: 3}
+  - {fileID: 1307264305, guid: e739b0cd76ab6f54c86126e4d6a0fe99, type: 3}
+  - {fileID: -1624431343, guid: 6a0bc2eff8dc6574c953850f67b0ef1c, type: 3}
+  - {fileID: -1741405712, guid: 89f836e4936b84444ad0668dc5a31fd5, type: 3}
+  - {fileID: -452014380, guid: dc0c92e1a42871947a169f4ad1a38f82, type: 3}
   animationSets:
   - {fileID: 11400000, guid: b9f5677d1426c3c45bc26fb4813eeb40, type: 2}
+  - {fileID: 11400000, guid: 004a5856ddc94724c90af295bc7ec155, type: 2}
   - {fileID: 11400000, guid: b9f5677d1426c3c45bc26fb4813eeb40, type: 2}
-  - {fileID: 11400000, guid: b9f5677d1426c3c45bc26fb4813eeb40, type: 2}
-  - {fileID: 11400000, guid: b9f5677d1426c3c45bc26fb4813eeb40, type: 2}
+  - {fileID: 11400000, guid: e1b93b612bf023a45ac429b1c84f2299, type: 2}
   playerColors:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}

@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb083a97c83e5d74a86950fe377e3e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 70
+  maxHealth: 150
   burnTickInterval: 1
   burnDamagePerTick: 4
   reigniteDelay: 5
