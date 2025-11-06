@@ -1,3 +1,4 @@
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -27,6 +28,8 @@ public class HoverHighlight : MonoBehaviour
         originalScale = transform.localScale;
         originalColor = sr.color;
     }
+
+
 
     void Update()
     {

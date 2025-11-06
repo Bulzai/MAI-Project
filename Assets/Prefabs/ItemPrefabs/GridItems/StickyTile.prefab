@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41193822271e73d4685a748ebae9d15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAttachable: 0
+  isAttachable: 1
   ifAttachableAttachHere: {fileID: 0}
   placementOffset: {x: 1.5, y: 1.5, z: 0}
   forbiddenSignOffset: {x: 0, y: 0, z: 0}

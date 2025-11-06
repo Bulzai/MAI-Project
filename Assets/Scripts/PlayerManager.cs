@@ -217,10 +217,17 @@ public class PlayerManager : MonoBehaviour
                 characterSpriteRenderer.sprite = playerAvatars[idx];
 
             // Optional: tint per player slot
+<<<<<<< HEAD
             if (playerColors != null && idx < playerColors.Length)
                 cursorSpriteRenderer.color = playerColors[idx];
             else
                 cursorSpriteRenderer.color = Color.white;
+=======
+            /*if (playerColors != null && idx < playerColors.Length)
+                characterSpriteRenderer.color = playerColors[idx];
+            else
+                characterSpriteRenderer.color = Color.white;*/
+>>>>>>> e3ed15b377d68d3c76d62bce6a2367135fe4de01
         }
         else
         {
