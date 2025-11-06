@@ -110,7 +110,7 @@ MonoBehaviour:
   - {fileID: 5391782045131714913, guid: 20db5ada1c15a6842a1d375dee3623c9, type: 3}
   muzzle: {fileID: 2242705295382345368}
   direction: {fileID: 2242705295382345368}
-  fireInterval: 1
+  fireInterval: 2
   fireOnEnable: 1
   startDelay: 0
 --- !u!114 &2986226016238778272
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c558a693b64112049bedc3bcb9ead4c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activationDelay: 3
+  activationDelay: 0
   scriptsToToggle:
   - {fileID: 1930771480500770893}
 --- !u!1 &5279988495354092573

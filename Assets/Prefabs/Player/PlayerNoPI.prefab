@@ -63,7 +63,7 @@ Transform:
   m_GameObject: {fileID: 1544650614272011804}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.0060246, y: -0.26027, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -157,8 +157,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.05165422}
-  m_Size: {x: 0.9, y: 1.2363019}
+  m_Offset: {x: -0.008420527, y: 0.022182524}
+  m_Size: {x: 1.0094664, y: 1.6910082}
   m_Direction: 0
 --- !u!114 &2351750134312444653
 MonoBehaviour:
@@ -172,9 +172,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb083a97c83e5d74a86950fe377e3e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 150
+  maxHealth: 100
   burnTickInterval: 1
-  burnDamagePerTick: 4
+  burnDamagePerTick: 1
   reigniteDelay: 5
   currentHealth: 0
   isBurning: 0
@@ -182,7 +182,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 2969068313154050967}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   deathParticles: {fileID: 4753814910961615902}
-  knockbackMultiplier: 12
+  knockbackMultiplier: 20
   verticalBoost: 2.5
 --- !u!114 &1727573164315709504
 MonoBehaviour:
@@ -216,7 +216,7 @@ MonoBehaviour:
   slowSeconds: 2
   auraDuration: 7
   repelSeconds: 8
-  repelKickSpeed: 25
+  repelKickSpeed: 50
   repelAuraVisual: {fileID: 6525371900268718356}
   speedMultiplier: 1.5
   speedDuration: 3
@@ -29698,8 +29698,8 @@ Transform:
   m_GameObject: {fileID: 2969068313154050964}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 4.6566e-10, y: 0, z: 0}
+  m_LocalScale: {x: 1.4738, y: 1.4738, z: 1.4738}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2969068311962969430}
@@ -39788,8 +39788,8 @@ Transform:
   m_GameObject: {fileID: 8661631301022422077}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.034, y: 1.137, z: 0}
-  m_LocalScale: {x: 0.13317469, y: 0.13317469, z: 0.13317469}
+  m_LocalPosition: {x: -0.012, y: 1.37, z: 0}
+  m_LocalScale: {x: 0.18862757, y: 0.16142105, z: 0.16142105}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2969068311962969430}

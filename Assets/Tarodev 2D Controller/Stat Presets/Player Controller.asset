@@ -35,8 +35,8 @@ MonoBehaviour:
   JumpBuffer: 0.2
   WallCheckDistance: 0.12
   WallSlideSpeed: 4.3
-  WallJumpPower: 27
-  WallJumpHorizontalSpeed: 12
+  WallJumpPower: 32
+  WallJumpHorizontalSpeed: 13
   WallJumpCoyoteTime: 0.1
   WallStickTime: 0.06
   ApexThreshold: 4
