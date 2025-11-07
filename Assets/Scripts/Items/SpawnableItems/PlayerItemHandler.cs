@@ -12,6 +12,7 @@ public class PlayerItemHandler : MonoBehaviour
     [SerializeField, Range(0.1f, 1f)] private float slowPercent = 0.5f;
     [SerializeField] private float slowSeconds = 2f;
     [SerializeField] private float auraDuration = 10f;
+    [SerializeField] private GameObject slowAuraVisual;
 
     [Header("Repel Aura")]
     [SerializeField] private float repelSeconds = 5f;
@@ -29,6 +30,7 @@ public class PlayerItemHandler : MonoBehaviour
     [SerializeField] private int damagePerTick = 2;
     [SerializeField] private float tickInterval = 1f;     // seconds between ticks
     [SerializeField] private float damageAuraDuration = 6f; // total active time
+    [SerializeField] private GameObject damageAuraVisual;
 
     public void ApplyItem(PickUpItem.ItemType itemType)
     {
@@ -61,6 +63,8 @@ public class PlayerItemHandler : MonoBehaviour
     // ---------- Slow aura ----------
     private IEnumerator ApplySlowAura()
     {
+
+        slowAuraVisual.SetActive(true);
         float t = auraDuration;
         while (t > 0f)
         {
@@ -79,6 +83,8 @@ public class PlayerItemHandler : MonoBehaviour
             t -= Time.deltaTime;
             yield return null;
         }
+        slowAuraVisual.SetActive(false);
+
     }
 
     // ---------- Repel aura ----------
@@ -110,15 +116,18 @@ public class PlayerItemHandler : MonoBehaviour
     // ---------- Damage aura (simple periodic OverlapCircle) ----------
     private IEnumerator ApplyDamageAura()
     {
+
+        damageAuraVisual.SetActive(true);
         float remaining = damageAuraDuration;
-        var wait = new WaitForSeconds(tickInterval);
 
         while (remaining > 0f)
         {
             DoDamageTick();          // OverlapCircleAll -> apply damage to all players inside
             remaining -= tickInterval;
-            yield return wait;
+            yield return new WaitForSeconds(tickInterval);
         }
+        damageAuraVisual.SetActive(false);
+
     }
 
     private void DoDamageTick()
