@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GetDamage : MonoBehaviour
+public class DealDamage : MonoBehaviour
 {
 
     public int damgeAmount = 50;
+
+    public int knockbackForce = 0;
     private void OnTriggerEnter2D(Collider2D other)
     {
 
@@ -17,6 +19,12 @@ public class GetDamage : MonoBehaviour
             {
                 Debug.Log("Player hit." + damgeAmount + " damage took");
                 player.TakeDamage(damgeAmount, true);
+
+
+                Vector2 dir = (other.transform.position - transform.position);
+                if (dir.sqrMagnitude > 0.0001f) dir.Normalize();
+
+                player.Knockback(dir, knockbackForce);
             }
             else
             {

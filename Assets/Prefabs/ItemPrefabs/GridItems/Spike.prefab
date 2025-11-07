@@ -168,7 +168,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8592722864125002311}
   - component: {fileID: 6320150467517895385}
-  - component: {fileID: 7292510870035205015}
+  - component: {fileID: 4291940181556806363}
+  - component: {fileID: 6334170728734866771}
   - component: {fileID: 3848979400733802576}
   - component: {fileID: 9126652313449543802}
   - component: {fileID: 3426756731653214662}
@@ -215,7 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 180
   pivotPoint: {fileID: 8660515025556485242}
---- !u!61 &7292510870035205015
+--- !u!61 &4291940181556806363
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -247,7 +248,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.09253478, y: 0.23121905}
+  m_Offset: {x: -0.025265604, y: -0.48566407}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -258,8 +259,43 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.7480655, y: 6.1259704}
+  m_Size: {x: 1.1983073, y: 1.4790388}
   m_EdgeRadius: 0
+--- !u!58 &6334170728734866771
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711019012961524803}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.93}
+  serializedVersion: 2
+  m_Radius: 2.43
 --- !u!114 &3848979400733802576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,7 +356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22456bc0c369c824587a5e677cdbfd60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableCollider: {fileID: 7292510870035205015}
+  disableCollider: {fileID: 6334170728734866771}
   enableCollider: {fileID: 7432882348710643068}
 --- !u!114 &415043069406205061
 MonoBehaviour:
@@ -334,7 +370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22456bc0c369c824587a5e677cdbfd60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableCollider: {fileID: 0}
+  disableCollider: {fileID: 4291940181556806363}
   enableCollider: {fileID: 2723215095521140771}
 --- !u!212 &6868179486730549693
 SpriteRenderer:

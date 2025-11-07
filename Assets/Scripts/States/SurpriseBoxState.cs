@@ -58,38 +58,66 @@ public class SurpriseBoxState : MonoBehaviour
 
     public void SpawnObjects()
     {
-        // Copy list so we can remove used tiles
         var availableTiles = new List<GameObject>(spawnBoxes);
+        if (itemPool == null || itemPool.Count == 0 || availableTiles.Count == 0) return;
 
-        for (int i = 0; i < numberToSpawn; i++)
+        HashSet<int> usedIndices = new HashSet<int>();
+
+        for (int i = 0; i < numberToSpawn && availableTiles.Count > 0; i++)
         {
-            // pick item prefab
-            var prefab = itemPool[Random.Range(0, itemPool.Count)];
-            var rate = prefab.GetComponent<SelectableItem>().GetSpawnRate();
-
-            if (Random.Range(0f, 100f) > rate)
+            if (usedIndices.Count >= itemPool.Count)
             {
-                i--; // try again
+                Debug.LogWarning("All unique items used — cannot spawn more without duplicates.");
+                break;
+            }
+
+            int prefabIndex;
+            int attempts = 0;
+
+            // find an unused index
+            do
+            {
+                prefabIndex = UnityEngine.Random.Range(0, itemPool.Count);
+                attempts++;
+                if (attempts > 50)
+                {
+                    Debug.LogWarning("Could not find a valid unused item after 50 attempts.");
+                    return;
+                }
+            }
+            while (usedIndices.Contains(prefabIndex));
+
+            var prefab = itemPool[prefabIndex];
+            float rate = prefab.GetComponent<SelectableItem>().GetSpawnRate();
+
+            // roll spawn rate
+            if (UnityEngine.Random.Range(0f, 100f) > rate)
+            {
+                i--; // try again for this slot (do NOT mark used)
                 continue;
             }
 
-            // pick a random tile and remove it from the pool
-            int idx = Random.Range(0, availableTiles.Count);
+            // ✅ mark this item as used so it can't spawn again this wave
+            usedIndices.Add(prefabIndex);
+
+            // pick a unique tile
+            int idx = UnityEngine.Random.Range(0, availableTiles.Count);
             var tile = availableTiles[idx];
             availableTiles.RemoveAt(idx);
 
-            // choose a random point inside its mesh‐bounds
+            // position inside bounds (fallback if no MeshCollider)
             var col = tile.GetComponent<MeshCollider>();
-            var x = Random.Range(col.bounds.min.x + 1, col.bounds.max.x - 1);
-            var y = Random.Range(col.bounds.min.y + 1, col.bounds.max.y - 1);
-            var pos = new Vector2(x, y);
+            Vector2 pos = (col != null)
+                ? new Vector2(
+                    UnityEngine.Random.Range(col.bounds.min.x + 1f, col.bounds.max.x - 1f),
+                    UnityEngine.Random.Range(col.bounds.min.y + 1f, col.bounds.max.y - 1f))
+                : (Vector2)tile.transform.position;
 
-            // instantiate
             var go = Instantiate(prefab, pos, prefab.transform.rotation, itemBoxItemList);
             itemsInBox.Add(go);
-
         }
     }
+
     private void ActivateItemBox()
     {
         //itemBox.SetActive(true);

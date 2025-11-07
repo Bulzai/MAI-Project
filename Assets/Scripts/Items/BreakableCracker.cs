@@ -99,6 +99,8 @@ public class BreakableCracker : MonoBehaviour
 
     private IEnumerator PlayBreakAnimation()
     {
+        if (_selectable) _selectable.isAvailable = false;
+
         foreach (var frame in breakFrames)
         {
             spriteRenderer.sprite = frame;
@@ -108,7 +110,6 @@ public class BreakableCracker : MonoBehaviour
         _isBroken = true;
         _isBreaking = false;
         if (_collider) _collider.enabled = false;
-        //if (_selectable) _selectable.isAvailable = false;
     }
 
     private void ResetCracker()
