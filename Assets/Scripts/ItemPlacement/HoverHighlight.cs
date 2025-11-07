@@ -14,7 +14,7 @@ public class HoverHighlight : MonoBehaviour
     [SerializeField] private float brightenAmount = 0.4f; // how much closer to white
 
     private SpriteRenderer sr;
-    private Vector3 originalScale;
+    public Vector3 originalScale;
     private Color originalColor;
 
     private int hoverCount = 0;
@@ -87,12 +87,12 @@ public class HoverHighlight : MonoBehaviour
         if (hoverCount > 0) hoverCount--;
         if (hoverCount == 0) animating = true;
     }
-
-    void OnDisable()
+    // if not commented out than the scale is wrong
+    /*void OnDisable()
     {
         hoverCount = 0;
         transform.localScale = originalScale;
         if (sr) sr.color = originalColor;
         animating = false;
-    }
+    }*/
 }

@@ -161,6 +161,10 @@ public class CursorController : MonoBehaviour
 
         gridItem.gameObject.layer = LayerMask.NameToLayer("Ground/Wall");
 
+        //remove hover script because otherwise weird scaling happens
+        HoverHighlight hoverHighlight = gridItem.GetComponent<HoverHighlight>();
+        hoverHighlight.RemoveHover();
+        Destroy(hoverHighlight);
         PlaceItemState.Instance.NotifyPlayerPlaced(playerInput.playerIndex);
         gridItem = null;
     }
