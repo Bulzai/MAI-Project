@@ -63,6 +63,8 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnPlayerSelectionStateExited += DeactivateCharacterPrefab;
         GameEvents.OnPlayerSelectionStateExited += DisablePlayerJoining;
 
+
+        GameEvents.OnMainGameStateEntered += ResetEliminations;
         GameEvents.OnMainGameStateEntered += ActivateCharacterPrefab;
         GameEvents.OnMainGameStateExited += DeactivateCharacterPrefab;
 
@@ -92,6 +94,8 @@ public class PlayerManager : MonoBehaviour
     }
     private void HandlePlayerElimination(PlayerInput p)
     {
+        if (p == null) return;
+        if (_eliminationOrder.Contains(p)) return;
 
         // Record elimination
         _eliminationOrder.Add(p);
@@ -256,6 +260,8 @@ public class PlayerManager : MonoBehaviour
     {
         int idx = pi.playerIndex;
         playerCount = Mathf.Max(0, playerCount - 1);
+
+        players.Remove(pi);
 
         if (playerRoots.TryGetValue(idx, out var root))
         {
