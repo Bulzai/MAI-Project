@@ -32,6 +32,16 @@ public class PlayerItemHandler : MonoBehaviour
     [SerializeField] private float damageAuraDuration = 6f; // total active time
     [SerializeField] private GameObject damageAuraVisual;
 
+
+    private void OnEnable()
+    {
+        GameEvents.OnMainGameStateExited += ResetAuras;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnMainGameStateExited -= ResetAuras;
+    }
     public void ApplyItem(PickUpItem.ItemType itemType)
     {
         switch (itemType)
@@ -155,4 +165,10 @@ public class PlayerItemHandler : MonoBehaviour
         }
     }
 
+    void ResetAuras()
+    {
+        damageAuraVisual.SetActive(false);
+        slowAuraVisual.SetActive(false);
+        repelAuraVisual.SetActive(false);
+        repelActive = false;    }
 }

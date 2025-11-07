@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 180
-  pivotPoint: {fileID: 0}
+  pivotPoint: {fileID: 8660515025556485242}
 --- !u!61 &7292510870035205015
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -247,7 +247,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.028746367, y: 0.22096497}
+  m_Offset: {x: 0.09253478, y: 0.23121905}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -258,7 +258,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.3241026, y: 3.1377764}
+  m_Size: {x: 3.7480655, y: 6.1259704}
   m_EdgeRadius: 0
 --- !u!114 &3848979400733802576
 MonoBehaviour:
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalPrefab: {fileID: 4711019012961524803}
   isAvailable: 1
-  spawnRate: 100
+  spawnRate: 90
 --- !u!114 &9126652313449543802
 MonoBehaviour:
   m_ObjectHideFlags: 0

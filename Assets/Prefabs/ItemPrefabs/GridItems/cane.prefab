@@ -217,10 +217,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8592722864125002311}
+  - component: {fileID: 6320150467517895385}
   - component: {fileID: 3848979400733802576}
   - component: {fileID: 9126652313449543802}
-  - component: {fileID: 6320150467517895385}
   - component: {fileID: 426101349536849372}
+  - component: {fileID: 4264828439929574030}
+  - component: {fileID: 6707197246378523342}
   m_Layer: 6
   m_Name: cane
   m_TagString: Untagged
@@ -243,8 +245,23 @@ Transform:
   m_Children:
   - {fileID: 584169357966260486}
   - {fileID: 837322781960794334}
+  - {fileID: 182174527796665174}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6320150467517895385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711019012961524803}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f45f147587957249bbb70e89be9eb52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 180
+  pivotPoint: {fileID: 182174527796665174}
 --- !u!114 &3848979400733802576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,20 +295,6 @@ MonoBehaviour:
   forbiddenSignOffset: {x: 0, y: 0, z: 0}
   forbiddenSignScale: 10
   currentFacingDirection: 0
---- !u!114 &6320150467517895385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4711019012961524803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f45f147587957249bbb70e89be9eb52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: 180
-  pivotPoint: {fileID: 0}
 --- !u!61 &426101349536849372
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -324,7 +327,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -2.808566, y: -0.3952797}
+  m_Offset: {x: -2.5565877, y: -0.1266861}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -335,8 +338,68 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 8.087294, y: 4.037411}
+  m_Size: {x: 14.724534, y: 8.337343}
   m_EdgeRadius: 0
+--- !u!114 &4264828439929574030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711019012961524803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c558a693b64112049bedc3bcb9ead4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activationDelay: 2
+  scriptsToToggle:
+  - {fileID: 6320150467517895385}
+--- !u!114 &6707197246378523342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711019012961524803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22456bc0c369c824587a5e677cdbfd60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableCollider: {fileID: 426101349536849372}
+  enableCollider: {fileID: 8631398301970915946}
+--- !u!1 &5119804512999136978
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 182174527796665174}
+  m_Layer: 6
+  m_Name: PivotPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &182174527796665174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5119804512999136978}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.07, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8592722864125002311}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3604737776153564236
 PrefabInstance:
   m_ObjectHideFlags: 0

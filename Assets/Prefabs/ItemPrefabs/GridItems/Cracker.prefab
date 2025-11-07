@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalPrefab: {fileID: 4354401948063173012}
   isAvailable: 1
-  spawnRate: 95
+  spawnRate: 90
 --- !u!114 &7702772660634834249
 MonoBehaviour:
   m_ObjectHideFlags: 0
