@@ -4,34 +4,44 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class BreakableCracker : MonoBehaviour
 {
+    [Header("Sprites")]
+    [SerializeField] private SpriteRenderer spriteRenderer; // child sprite
+    [SerializeField] private Sprite originalSprite;         // healthy cookie
+    [SerializeField] private Sprite[] breakFrames;          // sliced animation frames (ordered)
+
     [Header("Timing")]
-    [SerializeField] private float breakDelay = 1f;     // wobble time before breaking
-    [SerializeField] private float respawnDelay = 1.5f; // normal respawn
-    [SerializeField] private float hoverRespawnDelay = 0.5f; // faster respawn for hover-trigger
+    [SerializeField] private float breakDelay = 1f;         // wobble time before breaking
+    [SerializeField] private float frameTime = 0.12f;       // each frame of breaking anim
+    [SerializeField] private float respawnDelay = 1.5f;     // respawn after break
+    [SerializeField] private float hoverRespawnDelay = 0.5f;// faster respawn for hover trigger
 
-    [Header("Optional Visuals")]
-    public AnimationClip crackedCookieAnimation;
-    Animator animator;
-
-    [SerializeField] private Sprite crackedSprite;
-    [SerializeField] private ParticleSystem breakVFX;
-    [SerializeField] private AudioClip breakSFX;
-    [SerializeField] private float sfxVolume = 1f;
-
-    private SpriteRenderer _renderer;
-    private Sprite _originalSprite;
     private Collider2D _collider;
-    private SelectableItem _selectable;  // ← to gate picking
+    private SelectableItem _selectable;
     private bool _isBreaking;
     private bool _isBroken;
 
     private void Awake()
     {
-        _renderer = GetComponent<SpriteRenderer>();
-        _originalSprite = _renderer ? _renderer.sprite : null;
         _collider = GetComponent<Collider2D>();
-        _selectable = GetComponent<SelectableItem>(); // optional
-        animator = GetComponent<Animator>();
+        _selectable = GetComponent<SelectableItem>();
+
+        if (!spriteRenderer)
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>(true);
+
+        if (!originalSprite && spriteRenderer)
+            originalSprite = spriteRenderer.sprite;
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.OnMainGameStateExited += ResetCracker;
+        GameEvents.OnPlaceItemStateEntered += ResetCracker;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnMainGameStateExited -= ResetCracker;
+        GameEvents.OnPlaceItemStateEntered -= ResetCracker;
     }
 
     public bool IsBrokenOrBreaking => _isBroken || _isBreaking;
@@ -41,12 +51,11 @@ public class BreakableCracker : MonoBehaviour
         if (IsBrokenOrBreaking) return;
         if (!collision.collider.CompareTag("Player")) return;
 
-        // Normal break path (uses normal respawn delay)
         StartCoroutine(BreakAfterDelay(respawnDelay));
     }
 
     /// <summary>
-    /// Called from hover logic. Starts break with faster reset.
+    /// Called externally (e.g. by a hover aura or trigger).
     /// </summary>
     public void BreakInstantly(bool fastReset = true)
     {
@@ -58,7 +67,7 @@ public class BreakableCracker : MonoBehaviour
     {
         _isBreaking = true;
 
-        // wobble during breakDelay
+        // Small wobble before breaking
         float elapsed = 0f;
         Vector3 startScale = transform.localScale;
         while (elapsed < breakDelay)
@@ -68,8 +77,8 @@ public class BreakableCracker : MonoBehaviour
             transform.localScale = startScale + new Vector3(shake, -shake, 0);
             yield return null;
         }
-
         transform.localScale = startScale;
+
         DoBreak();
 
         if (chosenRespawnDelay > 0f)
@@ -81,24 +90,25 @@ public class BreakableCracker : MonoBehaviour
 
     private void DoBreak()
     {
-        _isBroken = true;
-        _isBreaking = false;
 
-        if (_collider) _collider.enabled = false;
 
-        // not pickable while broken
-        if (_selectable) _selectable.isAvailable = false;
+        // Play breaking animation frames
+        if (spriteRenderer && breakFrames.Length > 0)
+            StartCoroutine(PlayBreakAnimation());
+    }
 
-        //if (_renderer && crackedSprite) _renderer.sprite = crackedSprite;
-        if (_renderer && crackedCookieAnimation) animator.Play(crackedCookieAnimation.name);
-
-        if (breakVFX)
+    private IEnumerator PlayBreakAnimation()
+    {
+        foreach (var frame in breakFrames)
         {
-            var vfx = Instantiate(breakVFX, transform.position, Quaternion.identity);
-            Destroy(vfx.gameObject, 2f);
+            spriteRenderer.sprite = frame;
+            yield return new WaitForSeconds(frameTime);
         }
 
-        if (breakSFX) AudioSource.PlayClipAtPoint(breakSFX, transform.position, sfxVolume);
+        _isBroken = true;
+        _isBreaking = false;
+        if (_collider) _collider.enabled = false;
+        //if (_selectable) _selectable.isAvailable = false;
     }
 
     private void ResetCracker()
@@ -107,10 +117,9 @@ public class BreakableCracker : MonoBehaviour
         _isBreaking = false;
 
         if (_collider) _collider.enabled = true;
-
-        // pickable again after reset
         if (_selectable) _selectable.isAvailable = true;
 
-        if (_renderer && _originalSprite) _renderer.sprite = _originalSprite;
+        if (spriteRenderer && originalSprite)
+            spriteRenderer.sprite = originalSprite;
     }
 }

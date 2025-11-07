@@ -16,8 +16,7 @@ public class SurpriseBoxState : MonoBehaviour
 
 
     [Header("Item Stuff")]
-    [SerializeField] private GameObject itemBox;
-    [SerializeField] private GameObject surpriseBoxObject;
+
     [SerializeField] private List<GameObject> spawnBoxes;
     [SerializeField] private List<GameObject> itemPool;
     [SerializeField] private int numberToSpawn;
@@ -56,17 +55,6 @@ public class SurpriseBoxState : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void SpawnObjects()
     {
@@ -104,14 +92,13 @@ public class SurpriseBoxState : MonoBehaviour
     }
     private void ActivateItemBox()
     {
-        itemBox.SetActive(true);
-
+        //itemBox.SetActive(true);
+        SurpriseBox.SetActive(true);
     }
 
     public void DeactivateItemBox()
     {
-        itemBox.SetActive(false);
-        surpriseBoxObject.SetActive(false);
+        SurpriseBox.SetActive(false);
         // Destroy all spawned items
         foreach (var go in itemsInBox)
             if (go != null)
@@ -162,22 +149,10 @@ public class SurpriseBoxState : MonoBehaviour
             // 2) swap to the Cursor map
             pi.SwitchCurrentActionMap("Cursor");
 
-            // 3) debug post‐switch
-          //Debug.Log($"[POST‐SWITCH] {pi.playerIndex} → map={pi.currentActionMap.name}");
-          //Debug.Log($"[POST‐SWITCH] {pi.playerIndex} → map={pi.currentActionMap.name}");
-          //foreach (var a in pi.currentActionMap)
-          //    Debug.Log($"    {a.name} enabled={a.enabled}");
+
         }
     }
 
 
 
-    // is called in playerselection, but should be called here?
-    private void InitializeSurprisebox()
-    {
-        GameWorld.SetActive(false);
-        SelectPlayer.SetActive(false);
-        SurpriseBox.SetActive(true);
-        PlayerSelectionButton.SetActive(false);
-    }
 }
