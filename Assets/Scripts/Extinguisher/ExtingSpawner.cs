@@ -73,6 +73,7 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnMainGameStateEntered += HidePreviewsAndUnblockTiles;
         GameEvents.OnMainGameStateEntered += BeginSpawning;
         GameEvents.OnMainGameStateExited += StopSpawning;
+        GameEvents.OnMainGameStateExited += HideActiveExtinguishers;
     }
 
 
@@ -84,6 +85,7 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnMainGameStateEntered -= HidePreviewsAndUnblockTiles;
         GameEvents.OnMainGameStateEntered -= BeginSpawning;
         GameEvents.OnMainGameStateExited -= StopSpawning;
+        GameEvents.OnMainGameStateExited -= HideActiveExtinguishers;
     }
 
     private void Awake()
@@ -115,6 +117,11 @@ public class ExtingSpawner : MonoBehaviour
     {
         if (_spawnRoutine != null) StopCoroutine(_spawnRoutine);
         _spawnRoutine = null;
+    }
+
+    private void HideActiveExtinguishers()
+    {
+        // works already
     }
 
 
