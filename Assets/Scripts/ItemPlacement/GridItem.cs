@@ -25,7 +25,7 @@ public class GridItem : MonoBehaviour
     [Header("Forbidden Sign Settings")]
     public Vector3 forbiddenSignOffset = Vector3.zero;  // local positional adjustment
     public float forbiddenSignScale = 1f;               // scale multiplier
-
+    private Transform forbidden;
     public bool Placed { get; private set; }
     //public BoundsInt area;
     // Start is called before the first frame update
@@ -43,6 +43,8 @@ public class GridItem : MonoBehaviour
 
     void Awake()
     {
+        forbidden = transform.Find("ForbiddenSign");
+
         //_originalSize = area.size;
         //adjustPosition = originalPositionHorizontal;
 
@@ -112,120 +114,6 @@ public class GridItem : MonoBehaviour
         UpdateOccupiedCells();
         return occupiedCells;
     }
-
-
-    /*
-    public bool CanBePlaced()
-    {
-        Vector3Int positionInt = GridPlacementSystem.Instance.gridLayout.LocalToCell(transform.position) - adjustPosition; // adjust to center the item correctly;
-        BoundsInt areaTemp = area;
-        areaTemp.position = positionInt;
-
-        if (GridPlacementSystem.Instance.CanTakeArea(areaTemp))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public void Place()
-    {
-        if (!requiresSupport)
-        {
-        Vector3Int positionInt = GridPlacementSystem.Instance.gridLayout.WorldToCell(transform.position) - adjustPosition; // adjust to center the item correctly;
-        BoundsInt areaTemp = area;
-        areaTemp.position = positionInt;
-        Placed = true;
-        GridPlacementSystem.Instance.TakeArea(areaTemp);
-        }
-    }*/
-    /*
-    public void RotateClockwise()
-    {
-        // Rotate visually
-        transform.Rotate(0f, 0f, -90f);
-
-        // Swap area dimensions (width <-> height)
-        area.size = new Vector3Int(area.size.y, area.size.x, area.size.z);
-
-        // Flip between horizontal / vertical
-        ItemIsHorizontal = !ItemIsHorizontal;
-        adjustPosition = ItemIsHorizontal ? originalPositionHorizontal : originalPositionVertical;
-
-        // Update facing direction (clockwise)
-        switch (currentFacingDirection)
-        {
-            case FacingDirection.Up:
-                currentFacingDirection = FacingDirection.Right;
-                break;
-            case FacingDirection.Right:
-                currentFacingDirection = FacingDirection.Down;
-                break;
-            case FacingDirection.Down:
-                currentFacingDirection = FacingDirection.Left;
-                break;
-            case FacingDirection.Left:
-                currentFacingDirection = FacingDirection.Up;
-                break;
-        }
-        UpdateOccupiedCells();
-
-        //UpdateRaycastLocationOffset();
-    }
-
-    public void RotateCounterclockwise()
-    {
-        // Rotate visually
-        transform.Rotate(0f, 0f, 90f);
-
-        // Swap area dimensions (width <-> height)
-        area.size = new Vector3Int(area.size.y, area.size.x, area.size.z);
-
-        // Flip between horizontal / vertical
-        ItemIsHorizontal = !ItemIsHorizontal;
-        adjustPosition = ItemIsHorizontal ? originalPositionHorizontal : originalPositionVertical;
-
-        // Update facing direction (counterclockwise)
-        switch (currentFacingDirection)
-        {
-            case FacingDirection.Up:
-                currentFacingDirection = FacingDirection.Left;
-                break;
-            case FacingDirection.Left:
-                currentFacingDirection = FacingDirection.Down;
-                break;
-            case FacingDirection.Down:
-                currentFacingDirection = FacingDirection.Right;
-                break;
-            case FacingDirection.Right:
-                currentFacingDirection = FacingDirection.Up;
-                break;
-        }
-        UpdateOccupiedCells();
-
-        //UpdateRaycastLocationOffset();
-    }
-    */
-    /*
-    private void UpdatePositionFromRotation()
-    {
-        // grab the Z angle, rounded to the nearest int, in 0..359
-        var rawZ = Mathf.RoundToInt(transform.eulerAngles.z) % 360;
-        if (rawZ < 0) rawZ += 360;
-
-        // if we're at 90° or 270° (i.e. “vertical”), swap W/H
-        if (rawZ == 90)
-            adjustPosition = originalPosition + new Vector3Int(_originalSize.x, 0, 0);
-        else if (rawZ == 270)
-            adjustPosition = new Vector3Int(5, -originalPosition.x, 0);
-        else if (rawZ == 180)
-            adjustPosition = new Vector3Int(0, _originalSize.y - originalPosition.y, 0);
-        else
-            adjustPosition = originalPosition;  
-    }
-    */
-
     public void RotateClockwise()
     {
         var grid = GridPlacementSystem.Instance.gridLayout;
@@ -285,7 +173,6 @@ public class GridItem : MonoBehaviour
             sr.color = canPlace ? Color.white : new Color(1f, 0.4f, 0.4f, 1f);
 
         // 2️⃣ Find the ForbiddenSign
-        var forbidden = transform.Find("ForbiddenSign");
         if (forbidden == null)
             return;
 

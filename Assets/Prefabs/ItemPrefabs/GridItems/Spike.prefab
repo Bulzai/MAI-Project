@@ -197,10 +197,10 @@ Transform:
   m_LocalScale: {x: 1.627643, y: 1.627643, z: 1.627643}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2137544268384672082}
   - {fileID: 5593501970627458785}
   - {fileID: 5782461732004508234}
   - {fileID: 8660515025556485242}
+  - {fileID: 2137544268384672082}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!114 &6320150467517895385
@@ -328,7 +328,7 @@ MonoBehaviour:
   ifAttachableAttachHere: {fileID: 0}
   placementOffset: {x: 0, y: 0, z: 0}
   forbiddenSignOffset: {x: 0, y: 0, z: 0}
-  forbiddenSignScale: 1
+  forbiddenSignScale: 15
   currentFacingDirection: 0
 --- !u!114 &3426756731653214662
 MonoBehaviour:

@@ -63,21 +63,8 @@ public class ExtingSpawner : MonoBehaviour
     // ===============================================================
     // UNITY LIFECYCLE
     // ===============================================================
-
-
-    private void OnEnable()
-    {
-        GameEvents.OnSurpriseBoxStateEntered += PrepareSpawnPositions;
-        GameEvents.OnPlaceItemStateEntered += ShowPreviews;
-        GameEvents.OnPlaceItemStateEntered += MarkExtinguisherTiles;
-        GameEvents.OnMainGameStateEntered += HidePreviewsAndUnblockTiles;
-        GameEvents.OnMainGameStateEntered += BeginSpawning;
-        GameEvents.OnMainGameStateExited += StopSpawning;
-        GameEvents.OnMainGameStateExited += HideActiveExtinguishers;
-    }
-
-
-    private void OnDisable()
+    
+    private void OnDestroy()
     {
         GameEvents.OnSurpriseBoxStateEntered -= PrepareSpawnPositions;
         GameEvents.OnPlaceItemStateEntered -= ShowPreviews;
@@ -85,11 +72,21 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnMainGameStateEntered -= HidePreviewsAndUnblockTiles;
         GameEvents.OnMainGameStateEntered -= BeginSpawning;
         GameEvents.OnMainGameStateExited -= StopSpawning;
-        GameEvents.OnMainGameStateExited -= HideActiveExtinguishers;
+        GameEvents.OnMainGameStateExited -= DisableExtinguisherContainer;
+        GameEvents.OnMainGameStateEntered -= EnableExtinguisherContainer;
     }
 
     private void Awake()
     {
+        GameEvents.OnSurpriseBoxStateEntered += PrepareSpawnPositions;
+        GameEvents.OnPlaceItemStateEntered += ShowPreviews;
+        GameEvents.OnPlaceItemStateEntered += MarkExtinguisherTiles;
+        GameEvents.OnMainGameStateEntered += HidePreviewsAndUnblockTiles;
+        GameEvents.OnMainGameStateEntered += BeginSpawning;
+        GameEvents.OnMainGameStateEntered += EnableExtinguisherContainer;
+        GameEvents.OnMainGameStateExited += StopSpawning;
+        GameEvents.OnMainGameStateExited += DisableExtinguisherContainer;
+        
         platformCells = new HashSet<Vector3Int>();
         foreach (var pos in platformMap.cellBounds.allPositionsWithin)
         {
@@ -117,11 +114,6 @@ public class ExtingSpawner : MonoBehaviour
     {
         if (_spawnRoutine != null) StopCoroutine(_spawnRoutine);
         _spawnRoutine = null;
-    }
-
-    private void HideActiveExtinguishers()
-    {
-        // works already
     }
 
 
@@ -333,6 +325,16 @@ public class ExtingSpawner : MonoBehaviour
 
             previewMarkers.Add(marker);
         }
+    }
+
+    private void DisableExtinguisherContainer()
+    {
+        extinguisherContainer.gameObject.SetActive(false);
+    }
+
+    private void EnableExtinguisherContainer()
+    {
+        extinguisherContainer.gameObject.SetActive(true);
     }
 
     private void MarkExtinguisherTiles()

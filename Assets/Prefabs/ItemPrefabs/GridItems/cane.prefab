@@ -246,9 +246,9 @@ Transform:
   m_LocalScale: {x: 0.37001356, y: 0.37001356, z: 0.37001356}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 584169357966260486}
   - {fileID: 837322781960794334}
   - {fileID: 182174527796665174}
+  - {fileID: 584169357966260486}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6320150467517895385
@@ -295,7 +295,7 @@ MonoBehaviour:
   isAttachable: 0
   ifAttachableAttachHere: {fileID: 0}
   placementOffset: {x: 1.5, y: 1.5, z: 0}
-  forbiddenSignOffset: {x: 0, y: 0, z: 0}
+  forbiddenSignOffset: {x: -1, y: 0, z: 0}
   forbiddenSignScale: 10
   currentFacingDirection: 0
 --- !u!61 &426101349536849372
@@ -473,12 +473,24 @@ PrefabInstance:
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 18.428974
+      objectReference: {fileID: 0}
+    - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 18.656483
+      objectReference: {fileID: 0}
+    - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 48.404842
+      objectReference: {fileID: 0}
+    - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.35
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0009819668
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalPosition.z
