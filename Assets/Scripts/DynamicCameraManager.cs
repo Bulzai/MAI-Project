@@ -132,8 +132,8 @@ public class DynamicCamera2DManager : MonoBehaviour
     private void SetCameraPlaceItemStatePosition()
     {
         dynamicEnabled = false;
-        DynamicCamera.orthographicSize = 21.94311f;
-        DynamicCamera.transform.position = new Vector3(0f, 6.789f, -30);
+        DynamicCamera.orthographicSize = 22f;
+        DynamicCamera.transform.position = new Vector3(0f, 5.93f, -30f);
     }
     private void EnableDynamicCamera2D()
     {
