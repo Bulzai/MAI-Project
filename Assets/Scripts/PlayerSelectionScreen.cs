@@ -20,7 +20,7 @@ public class PlayerSelectionScreen : MonoBehaviour
 
     public void StartGame()
     {
-
+        Debug.Log("player count: " + PlayerManager.Instance.playerCount);
         if (PlayerManager.Instance.playerCount > 0)
         {
             GameEvents.ChangeState(GameState.SurpriseBoxState);
