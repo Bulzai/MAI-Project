@@ -23,7 +23,8 @@ public class CursorController : MonoBehaviour
     private GameObject currentlyHoveredGO;
     private HoverHighlight currentlyHoveredHighlight;
     [Header("Movement Bounds")]
-    [SerializeField] private BoxCollider2D movementArea;
+    [SerializeField] private BoxCollider2D surpriseBoxStateBounds;
+    [SerializeField] private BoxCollider2D placeItemStateBounds;
 
     private void Awake()
     {
@@ -63,29 +64,48 @@ public class CursorController : MonoBehaviour
         }
     }
 
-    public void SetBounds(BoxCollider2D bounds)
+    public void SetBoundsSuprisoeBoxState(BoxCollider2D bounds)
     {
-        movementArea = bounds;
+        surpriseBoxStateBounds = bounds;
     }
 
+    public void SetBoundsPlaceItemState(BoxCollider2D bounds)
+    {
+        placeItemStateBounds = bounds;
+    }
     private void HandleMovement()
     {
         Vector2 movement = moveInput * maxMoveSpeed * Time.deltaTime;
         transform.position += (Vector3)movement;
 
-        if (movementArea)
+        if (surpriseBoxStateBounds && placeItemStateBounds)
             ClampToColliderBounds();
     }
 
     private void ClampToColliderBounds()
     {
-        Bounds b = movementArea.bounds;
-        Vector3 pos = transform.position;
+        if(GameEvents.CurrentState == GameState.PlaceItemState)
+        {
+            Bounds b = placeItemStateBounds.bounds;
+            Vector3 pos = transform.position;
 
-        pos.x = Mathf.Clamp(pos.x, b.min.x, b.max.x);
-        pos.y = Mathf.Clamp(pos.y, b.min.y, b.max.y);
+            pos.x = Mathf.Clamp(pos.x, b.min.x, b.max.x);
+            pos.y = Mathf.Clamp(pos.y, b.min.y, b.max.y);
 
-        transform.position = pos;
+            transform.position = pos;
+            return;
+        }
+
+        if (GameEvents.CurrentState == GameState.SurpriseBoxState)
+        {
+            Bounds b = surpriseBoxStateBounds.bounds;
+            Vector3 pos = transform.position;
+
+            pos.x = Mathf.Clamp(pos.x, b.min.x, b.max.x);
+            pos.y = Mathf.Clamp(pos.y, b.min.y, b.max.y);
+
+            transform.position = pos;
+        }
     }
 
 

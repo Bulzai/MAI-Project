@@ -9,21 +9,40 @@ public class DynamicCamera2DManager : MonoBehaviour
     public float padding = 0.1f; // Padding around objects in screen space (0-1)
     public Vector3 fallbackPosition = Vector3.zero; // Position to use when no valid targets
     public float fallbackSize = 10f; // Size to use when no valid targets
-
+    private bool dynamicEnabled = false;
+    
+    
     private Transform[] FocusObjects;
+    
+    
+    private void OnEnable()
+    {
+        GameEvents.OnPlayerSelectionStateEntered += SetCameraPlayerSelectionStatePosition;
+        GameEvents.OnSurpriseBoxStateEntered += SetCameraSurpriseBoxStatePosition;
+        GameEvents.OnPlaceItemStateEntered += SetCameraPlaceItemStatePosition;
+        GameEvents.OnMainGameStateEntered +=  EnableDynamicCamera2D;
+    }
 
+    private void OnDisable()
+    {
+        GameEvents.OnPlayerSelectionStateEntered -= SetCameraPlayerSelectionStatePosition;
+        GameEvents.OnSurpriseBoxStateEntered -= SetCameraSurpriseBoxStatePosition;
+        GameEvents.OnPlaceItemStateEntered -= SetCameraPlaceItemStatePosition;
+        GameEvents.OnMainGameStateEntered -=  EnableDynamicCamera2D;
+    }
+    
     void Start()
     {
         if (DynamicCamera == null)
             DynamicCamera = Camera.main; // Auto-assigns the main camera [note: because the D&D didn't work in the Inspector of this script]
+        DynamicCamera.orthographic = true;
+
     }
 
     void Update()
     {
+       if (!dynamicEnabled) return;
         UpdateFocusObjects();
-
-        // Ensure we're using orthographic projection for 2D
-        DynamicCamera.orthographic = true;
 
         // Filter out null transforms
         var validTransforms = System.Array.FindAll(FocusObjects, t => t != null);
@@ -93,5 +112,31 @@ public class DynamicCamera2DManager : MonoBehaviour
         // Get the Players dynamically and not manually into the Inspector
         GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
         FocusObjects = System.Array.ConvertAll(playerObjects, p => p.transform);
+    }
+
+
+    private void SetCameraPlayerSelectionStatePosition()
+    {
+        dynamicEnabled = false;
+        DynamicCamera.orthographicSize = 15;
+        DynamicCamera.transform.position = new Vector3(-4.2f, -8, -30);
+    }
+
+    private void SetCameraSurpriseBoxStatePosition()
+    {
+        dynamicEnabled = false;
+        DynamicCamera.orthographicSize = 25;
+        DynamicCamera.transform.position = new Vector3(0f, 0, -30);
+    }
+
+    private void SetCameraPlaceItemStatePosition()
+    {
+        dynamicEnabled = false;
+        DynamicCamera.orthographicSize = 21.94311f;
+        DynamicCamera.transform.position = new Vector3(0f, 6.789f, -30);
+    }
+    private void EnableDynamicCamera2D()
+    {
+        dynamicEnabled = true;
     }
 }

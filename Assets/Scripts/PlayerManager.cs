@@ -202,7 +202,10 @@ public class PlayerManager : MonoBehaviour
             cursorTf.transform.position = Vector3.one;
 
         cursorTf.GetComponent<CursorController>()
-            .SetBounds(GameObject.Find("CursorBounds").GetComponent<BoxCollider2D>());
+            .SetBoundsSuprisoeBoxState(GameObject.Find("CursorBoundsSurpriseBoxState").GetComponent<BoxCollider2D>());
+        
+        cursorTf.GetComponent<CursorController>()
+            .SetBoundsPlaceItemState(GameObject.Find("CursorBoundsPlaceItemState").GetComponent<BoxCollider2D>());
 
         // Hide cursor until placement phase
         cursorTf.gameObject.SetActive(false);
