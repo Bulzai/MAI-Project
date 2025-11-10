@@ -9,6 +9,8 @@ using TarodevController;
 
 public class PlayerManager : MonoBehaviour
 {
+
+
     public static PlayerManager Instance { get; private set; }
 
     public PlayerAnimator playerAnimator;
@@ -22,7 +24,7 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Avatars")]
     public Sprite[] playerAvatars = new Sprite[4];  // set per slot in Inspector
-    public CharacterAnimationSet[] animationSets = new CharacterAnimationSet[4];
+    public CharacterAnimationLibrary[] characterLibraries = new CharacterAnimationLibrary[4];
 
     [Header("Player Colors")]
     public Color[] playerColors = new Color[4];
@@ -78,10 +80,6 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnPlayerEliminated -= HandlePlayerElimination;
     }
 
-    public void SetCharacter(CharacterAnimationSet chosenSet)
-    {
-        if (playerAnimator != null) playerAnimator.animationSet = chosenSet;
-    }
 
     public void ResetEliminations()
     {
@@ -239,10 +237,12 @@ public class PlayerManager : MonoBehaviour
 
         // ------------ASSIGN CHARACTER ANIMATION SET---------------------
         var characterAnimator = characterTf.Find("Visual")?.GetComponent<PlayerAnimator>();
-        if (characterAnimator != null && idx < animationSets.Length)
+        if (characterAnimator != null)
         {
-            characterAnimator.animationSet = animationSets[idx];
+            characterAnimator.SetLibrary(characterLibraries[idx]);
+
         }
+
 
         // Setup input
         var pi = root.GetComponent<PlayerInput>();

@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc428e2ca9030b4a9e21ab85b3a082e, type: 3}
+  m_Name: PirateSet
+  m_EditorClassIdentifier: 
+  NormalFull:
+    Idle: {fileID: 7400000, guid: 7cc9b7db86b054449b2f8b013faf9c12, type: 2}
+    Run: {fileID: 7400000, guid: 510238079fc56b943b0bb4b2c5ab960d, type: 2}
+    Jump: {fileID: 7400000, guid: 0484ce873cd6ddd4b869507b7332982d, type: 2}
+    Land: {fileID: 7400000, guid: 7cc9b7db86b054449b2f8b013faf9c12, type: 2}
+    Wall: {fileID: 7400000, guid: 37254a2b5fa393243a1c23c74362faa1, type: 2}
+    Death: {fileID: 7400000, guid: fe3f879ffddeac549b48cfd01858c9bf, type: 2}
+  NormalHalf:
+    Idle: {fileID: 7400000, guid: 588f1b5c6cde3d14597a7e8c6a05c9b1, type: 2}
+    Run: {fileID: 7400000, guid: eb520f2ffd6919b45b11536f49a2a521, type: 2}
+    Jump: {fileID: 7400000, guid: 7573e4c603c134d48a331192eb445bf5, type: 2}
+    Land: {fileID: 7400000, guid: 588f1b5c6cde3d14597a7e8c6a05c9b1, type: 2}
+    Wall: {fileID: 7400000, guid: 930eefbe02dc49e458f21ce40a5b2134, type: 2}
+    Death: {fileID: 7400000, guid: fe3f879ffddeac549b48cfd01858c9bf, type: 2}
+  NormalLow:
+    Idle: {fileID: 7400000, guid: da95769efe0d2974db120f7927ccb401, type: 2}
+    Run: {fileID: 7400000, guid: 35cb7b6c74c53454d9d352ddb40efe9f, type: 2}
+    Jump: {fileID: 7400000, guid: a0970032e28548a469176232a2a23334, type: 2}
+    Land: {fileID: 7400000, guid: da95769efe0d2974db120f7927ccb401, type: 2}
+    Wall: {fileID: 7400000, guid: d8981f85d1bfd824dbef1468876bf413, type: 2}
+    Death: {fileID: 7400000, guid: fe3f879ffddeac549b48cfd01858c9bf, type: 2}
+  FireFull:
+    Idle: {fileID: 7400000, guid: 1485912f8b07949418fac7d3771fc873, type: 2}
+    Run: {fileID: 7400000, guid: 5beb26fe0095cf64cb2c48dc395b74fb, type: 2}
+    Jump: {fileID: 7400000, guid: 0a347380266627d4fa0b524c0df035b5, type: 2}
+    Land: {fileID: 7400000, guid: 1485912f8b07949418fac7d3771fc873, type: 2}
+    Wall: {fileID: 7400000, guid: dfb56da87c8188440ac7f35b51003ef5, type: 2}
+    Death: {fileID: 7400000, guid: fe3f879ffddeac549b48cfd01858c9bf, type: 2}
+  FireHalf:
+    Idle: {fileID: 7400000, guid: 2f5e7b86953cae54ab510c5a57380e84, type: 2}
+    Run: {fileID: 7400000, guid: f9c448eecb768b6409948afc5df27393, type: 2}
+    Jump: {fileID: 7400000, guid: 46f30992aa3a2e241bbc21da81893871, type: 2}
+    Land: {fileID: 7400000, guid: 2f5e7b86953cae54ab510c5a57380e84, type: 2}
+    Wall: {fileID: 7400000, guid: 25da439103839de419a94db7bc9a3ecd, type: 2}
+    Death: {fileID: 7400000, guid: fe3f879ffddeac549b48cfd01858c9bf, type: 2}
+  FireLow:
+    Idle: {fileID: 7400000, guid: c1743f0888a18b144be4593414f4d2a3, type: 2}
+    Run: {fileID: 7400000, guid: 08c2cc268a23772408b74f77909bd9c2, type: 2}
+    Jump: {fileID: 7400000, guid: 2080d15d1ec44a74187d88afd3bd117d, type: 2}
+    Land: {fileID: 7400000, guid: c1743f0888a18b144be4593414f4d2a3, type: 2}
+    Wall: {fileID: 7400000, guid: ff41ab56d2226cf43bb4b2ec61387c9f, type: 2}
+    Death: {fileID: 7400000, guid: fe3f879ffddeac549b48cfd01858c9bf, type: 2}

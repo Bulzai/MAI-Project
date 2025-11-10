@@ -1,30 +1,42 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace TarodevController
 {
-    /// <summary>
-    /// Drives the Animator with Speed, Jump, Grounded, and IsRunning.
-    /// Handles tilt, sprite flip, particles, and audio.
-    /// </summary>
+
     public class PlayerAnimator : MonoBehaviour
     {
 
-        [Header("Animation Set")]
-        public CharacterAnimationSet animationSet;
-        public Animator _anim;              // Animator on "Sprite"
+        [Header("Base placeholders (from Base.controller)")]
+        [SerializeField] private AnimationClip idleBase;
+        [SerializeField] private AnimationClip runBase;
+        [SerializeField] private AnimationClip jumpBase;
+        [SerializeField] private AnimationClip landBase;
+        [SerializeField] private AnimationClip wallBase;
+        [SerializeField] private AnimationClip deathBase;
+
+        [Header("Animation Setup")]
+        [Tooltip("The single shared base controller that defines all states (Idle, Run, Jump, Land, Wall, Death).")]
+        [SerializeField] private RuntimeAnimatorController baseController;
+
+        [Tooltip("Character-specific animation library with clips for all health/fire states.")]
+        [SerializeField] public CharacterAnimationLibrary library;
+
         [SerializeField] private PlayerHealthSystem _health;
-        private bool _onFire;
 
         [Header("References")]
-        [SerializeField] private SpriteRenderer _sprite;      // SpriteRenderer on "Sprite"
-        [SerializeField] private Rigidbody2D _rb;             // Player Rigidbody (auto-found if null)
+        [SerializeField] private Animator _anim;
+        [SerializeField] private SpriteRenderer _sprite;
+        [SerializeField] private Rigidbody2D _rb;
+        private IPlayerController _player;
+        private AudioSource _source;
 
-        [Header("Animation Settings")]
-        [Tooltip("Horizontal speed threshold to be considered running.")]
+        [Header("Locomotion Settings")]
+        [Tooltip("Speed threshold above which character is considered running.")]
         [SerializeField] private float runThreshold = 0.1f;
-        [Tooltip("Approximate maximum ground speed for blending Speed 0..1.")]
+        [Tooltip("Approximate max ground speed for normalization of Speed parameter.")]
         [SerializeField] private float maxGroundSpeedEstimate = 6f;
-        [Tooltip("Smoothing factor for Speed parameter.")]
+        [Tooltip("Interpolation smoothing for speed parameter.")]
         [SerializeField, Range(0f, 25f)] private float speedLerp = 12f;
 
         [Header("Tilt Settings")]
@@ -40,62 +52,34 @@ namespace TarodevController
         [Header("Audio Clips")]
         [SerializeField] private AudioClip[] _footsteps;
 
-        private AudioSource _source;
-        private IPlayerController _player;
         private bool _grounded;
         private bool _isRunning;
         private float _speedParam;
         private ParticleSystem.MinMaxGradient _currentGradient;
 
         // Animator parameter hashes
-        private static readonly int SpeedKey = Animator.StringToHash("Speed");      // float
-        private static readonly int JumpKey = Animator.StringToHash("Jump");       // trigger
-        private static readonly int GroundedKey = Animator.StringToHash("Grounded");   // bool
-        private static readonly int IsRunningKey = Animator.StringToHash("IsRunning");  // bool                                                                                   
+        private static readonly int SpeedKey = Animator.StringToHash("Speed");
+        private static readonly int JumpKey = Animator.StringToHash("Jump");
+        private static readonly int GroundedKey = Animator.StringToHash("Grounded");
+        private static readonly int IsRunningKey = Animator.StringToHash("IsRunning");
         private static readonly int OnWallKey = Animator.StringToHash("OnWall");
+        private static readonly int IsDeadKey = Animator.StringToHash("IsDead");
 
-        private float _lastFacingDir = 1f; // 1 = right, -1 = left
+        // Cache of generated AnimatorOverrideControllers
+        private readonly Dictionary<(bool onFire, HealthTier tier), AnimatorOverrideController> _aocCache
+            = new Dictionary<(bool, HealthTier), AnimatorOverrideController>();
+
+        private bool _lastOnFire;
+        private HealthTier _lastTier;
 
         private void Awake()
         {
+            if (_anim == null) _anim = GetComponentInChildren<Animator>(true);
             if (_rb == null) _rb = GetComponentInParent<Rigidbody2D>();
             _player = GetComponentInParent<IPlayerController>();
             _source = GetComponent<AudioSource>();
 
             _anim.updateMode = AnimatorUpdateMode.Normal;
-
-
-        }
-
-
-        private void HandleAnimatorVariant()
-        {
-            if (_health == null || animationSet == null || _anim == null) return;
-
-            // ✅ force float division
-            float hp01 = (_health.maxHealth > 0)
-                ? Mathf.Clamp01((float)_health.currentHealth / (float)_health.maxHealth)
-                : 1f;
-
-            bool onFire = _health.isBurning;
-
-            RuntimeAnimatorController newCtrl = null;
-            if (!onFire)
-            {
-                if (hp01 > 0.66f) newCtrl = animationSet.fullHealth;
-                else if (hp01 > 0.33f) newCtrl = animationSet.halfHealth;
-                else newCtrl = animationSet.lowHealth;
-            }
-            else
-            {
-                if (hp01 > 0.66f) newCtrl = animationSet.fullHealthFire;
-                else if (hp01 > 0.33f) newCtrl = animationSet.halfHealthFire;
-                else newCtrl = animationSet.lowHealthFire;
-            }
-
-            if (newCtrl != null && _anim.runtimeAnimatorController != newCtrl)
-                _anim.runtimeAnimatorController = newCtrl;
-
         }
 
         private void OnEnable()
@@ -118,37 +102,110 @@ namespace TarodevController
             if (_moveParticles != null) _moveParticles.Stop();
         }
 
+        private void Start()
+        {
+            ApplyAnimatorForCurrentState(force: true);
+        }
+
         private void Update()
         {
             if (_player == null || _rb == null) return;
 
-            HandleAnimatorVariant();
+            ApplyAnimatorForCurrentState();
             HandleSpriteFlip();
             HandleLocomotion();
-            //HandleTilt();
             DetectGroundColor();
         }
 
-        private void HandleSpriteFlip()
+        // --- Animator Variant Selection (Health + Fire) ---
+        public void ApplyAnimatorForCurrentState(bool force = false)
         {
-            // Prefer velocity for facing direction
-            if (_rb.velocity.x != 0f)
-                _sprite.flipX =  _rb.velocity.x < 0f;
+            if (_health == null || library == null || baseController == null || _anim == null) return;
+
+            float hp01 = (_health.maxHealth > 0)
+                ? Mathf.Clamp01((float)_health.currentHealth / (float)_health.maxHealth)
+                : 1f;
+
+            HealthTier tier = hp01 > 0.66f ? HealthTier.Full
+                             : hp01 > 0.33f ? HealthTier.Half
+                                            : HealthTier.Low;
+
+            bool onFire = _health.isBurning;
+
+            if (!force && onFire == _lastOnFire && tier == _lastTier) return;
+            _lastOnFire = onFire; _lastTier = tier;
+
+            MotionClips clips = SelectClips(library, onFire, tier);
+
+            var key = (onFire, tier);
+            if (!_aocCache.TryGetValue(key, out var aoc))
+            {
+                aoc = BuildOverride(baseController, clips);
+                _aocCache[key] = aoc;
+            }
+
+            if (_anim.runtimeAnimatorController != aoc)
+                _anim.runtimeAnimatorController = aoc;
         }
 
+        private static MotionClips SelectClips(CharacterAnimationLibrary lib, bool onFire, HealthTier tier)
+        {
+            if (!onFire)
+            {
+                switch (tier)
+                {
+                    case HealthTier.Full: return lib.NormalFull;
+                    case HealthTier.Half: return lib.NormalHalf;
+                    default: return lib.NormalLow;
+                }
+            }
+            else
+            {
+                switch (tier)
+                {
+                    case HealthTier.Full: return lib.FireFull;
+                    case HealthTier.Half: return lib.FireHalf;
+                    default: return lib.FireLow;
+                }
+            }
+        }
+
+        private AnimatorOverrideController BuildOverride(RuntimeAnimatorController baseCtrl, MotionClips clips)
+        {
+            var aoc = new AnimatorOverrideController(baseCtrl);
+            var overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+
+            void Add(AnimationClip baseClip, AnimationClip repl, string tag)
+            {
+                if (baseClip == null) { Debug.LogError($"[PA] Base placeholder missing: {tag}"); return; }
+                if (repl == null) { Debug.LogWarning($"[PA] Replacement NULL for: {tag}"); return; }
+                overrides.Add(new KeyValuePair<AnimationClip, AnimationClip>(baseClip, repl));
+            }
+
+            Add(idleBase, clips.Idle, "Idle");
+            Add(runBase, clips.Run, "Run");
+            Add(jumpBase, clips.Jump, "Jump");
+            Add(landBase, clips.Land, "Land");
+            Add(wallBase, clips.Wall, "Wall");
+            Add(deathBase, clips.Death, "Death");
+
+            aoc.ApplyOverrides(overrides);
+            Debug.Log($"[PA] ApplyOverrides: {overrides.Count} replacements applied");
+            return aoc;
+        }
+
+
+        // --- Locomotion / Flip / Tilt ---
         private void HandleLocomotion()
         {
-            // --- Speed parameter ---
             float hSpeed = Mathf.Abs(_rb.velocity.x);
             float targetSpeed01 = Mathf.Clamp01(hSpeed / Mathf.Max(maxGroundSpeedEstimate, 0.01f));
             _speedParam = Mathf.Lerp(_speedParam, targetSpeed01, 1f - Mathf.Exp(-speedLerp * Time.deltaTime));
             _anim.SetFloat(SpeedKey, _speedParam);
 
-            // --- IsRunning bool ---
             _isRunning = _grounded && hSpeed > runThreshold;
             _anim.SetBool(IsRunningKey, _isRunning);
 
-            // --- Move particles scale ---
             if (_moveParticles != null)
             {
                 _moveParticles.transform.localScale = Vector3.MoveTowards(
@@ -158,30 +215,25 @@ namespace TarodevController
             }
         }
 
-        private void HandleTilt()
+        private void HandleSpriteFlip()
         {
-            var desiredTilt = _grounded ? Quaternion.Euler(0, 0, _maxTilt * _player.FrameInput.x) : Quaternion.identity;
-            _anim.transform.up = Vector3.RotateTowards(
-                _anim.transform.up,
-                desiredTilt * Vector2.up,
-                _tiltSpeed * Time.deltaTime,
-                0f);
+            if (_rb.velocity.x != 0f)
+                _sprite.flipX = _rb.velocity.x < 0f;
         }
+
         private void OnWallChanged(bool onWall, int dir)
         {
             _anim.SetBool(OnWallKey, onWall);
-            // Optional: face into the wall
             if (onWall)
             {
-                // if your art faces left by default, adjust as needed
                 bool movingRight = dir > 0;
-                _sprite.flipX = /* faceRightByDefault ? !movingRight : movingRight */ movingRight;
+                _sprite.flipX = movingRight;
             }
         }
+
         private void OnJumped()
         {
             _anim.SetTrigger(JumpKey);
-
             if (_grounded)
             {
                 SetColor(_jumpParticles);
@@ -200,11 +252,9 @@ namespace TarodevController
                 DetectGroundColor();
                 SetColor(_landParticles);
 
-                // play land/footstep audio
                 if (_footsteps != null && _footsteps.Length > 0 && _source != null)
                     _source.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Length)]);
 
-                // restart particles
                 if (_moveParticles != null) _moveParticles.Play();
 
                 if (_landParticles != null)
@@ -219,6 +269,7 @@ namespace TarodevController
             }
         }
 
+        // --- Ground color particles ---
         private void DetectGroundColor()
         {
             var hit = Physics2D.Raycast(transform.position, Vector3.down, 2f);
@@ -234,6 +285,12 @@ namespace TarodevController
             if (ps == null) return;
             var main = ps.main;
             main.startColor = _currentGradient;
+        }
+
+        public void SetLibrary(CharacterAnimationLibrary lib, bool forceApply = true)
+        {
+            library = lib;
+            if (forceApply) ApplyAnimatorForCurrentState(force: true);
         }
     }
 }

@@ -349,7 +349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pulseSpeed: 6
   pulseAmount: 0.07
-  baseScale: {x: 1.277534, y: 1.277534, z: 1.277534}
+  baseScale: {x: 1, y: 1, z: 1}
 --- !u!1 &2969068311587289281
 GameObject:
   m_ObjectHideFlags: 0
@@ -10252,9 +10252,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb09df9db553ffc4ab6600e3070de9eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationSet: {fileID: 11400000, guid: b9f5677d1426c3c45bc26fb4813eeb40, type: 2}
-  _anim: {fileID: 2969068313154050966}
+  idleBase: {fileID: 7400000, guid: 8924395b501a54245983ace1b802a870, type: 2}
+  runBase: {fileID: 7400000, guid: 9e1324a5ba0caf949ac616674c51d521, type: 2}
+  jumpBase: {fileID: 7400000, guid: ba73b47469683044aa4a0d5422d94eda, type: 2}
+  landBase: {fileID: 7400000, guid: 8924395b501a54245983ace1b802a870, type: 2}
+  wallBase: {fileID: 7400000, guid: f23c6d4478085454b9dd4d2f016814d7, type: 2}
+  deathBase: {fileID: 7400000, guid: 4b631a9a9fdfd654aac1ff8ba26b8883, type: 2}
+  baseController: {fileID: 9100000, guid: c9260a2cffda0104b89edb826bcae510, type: 2}
+  library: {fileID: 0}
   _health: {fileID: 2351750134312444653}
+  _anim: {fileID: 2969068313154050966}
   _sprite: {fileID: 2969068313154050967}
   _rb: {fileID: 0}
   runThreshold: 0.1
@@ -29892,7 +29899,7 @@ Animator:
   m_GameObject: {fileID: 2969068313154050964}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 87d628f57bfefbd49b311ebc815324ca, type: 2}
+  m_Controller: {fileID: 9100000, guid: c9260a2cffda0104b89edb826bcae510, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -40093,4 +40100,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pulseSpeed: 6
   pulseAmount: 0.07
-  baseScale: {x: 1.277534, y: 1.277534, z: 1.277534}
+  baseScale: {x: 1, y: 1, z: 1}
