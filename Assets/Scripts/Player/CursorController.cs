@@ -16,7 +16,7 @@ public class CursorController : MonoBehaviour
     private GridItem gridItem;
     private Vector3Int lastCell = Vector3Int.one * int.MinValue;
     private GameObject gameWorld;
-
+    private Transform itemsParent;
     private PlayerInput playerInput;
 
     // Hover state
@@ -38,6 +38,16 @@ public class CursorController : MonoBehaviour
         foreach (var t in FindObjectsOfType<Transform>(true))
             if (t.name == "Game") gameWorld = t.gameObject;
 
+        for (int i = 0; i < gameWorld.transform.childCount; i++)
+        {
+            var child = gameWorld.transform.GetChild(i);
+            if (child.name == "ItemsParent")
+            {
+                Debug.Log("found ItemsParent");
+                itemsParent = child;
+                break;
+            }
+        }
         if (!gameWorld)
             Debug.LogError("Could not find a GameObject named 'Game' in the scene!");
     }
@@ -170,14 +180,12 @@ public class CursorController : MonoBehaviour
 
         if (gridItem.isAttachable && gridItem.ifAttachableAttachHere != null)
         {
-            Debug.Log("griditem iffattachable inside: " + gridItem.ifAttachableAttachHere);
-
-            gridItem.transform.SetParent(gridItem.ifAttachableAttachHere, true);
+            gridItem.transform.SetParent(itemsParent);
+            //gridItem.transform.SetParent(gridItem.ifAttachableAttachHere, true);
         }
         gridItem.Place();
-        Debug.Log("griditem iffattachable: " + gridItem.ifAttachableAttachHere);
 
-        if (!gridItem.isAttachable) gridItem.transform.SetParent(gameWorld.transform);
+        if (!gridItem.isAttachable) gridItem.transform.SetParent(itemsParent);
 
         gridItem.gameObject.layer = LayerMask.NameToLayer("Ground/Wall");
 

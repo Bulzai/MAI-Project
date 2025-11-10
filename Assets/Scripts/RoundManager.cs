@@ -47,6 +47,8 @@ public class RoundController : MonoBehaviour
             if(playerManagerFinal != null)
                 playerManagerFinal.ResetEliminations();
 
+
+            Debug.Log("Here in RoundController");
             // next round: go back to item‐picking
             GameEvents.ChangeState(GameState.SurpriseBoxState);
         }
@@ -55,6 +57,8 @@ public class RoundController : MonoBehaviour
             // all rounds done: show final results
             // we can reuse ScoreState or make a dedicated FinalScoreState
             GameEvents.ChangeState(GameState.FinalScoreState);
+
+            currentRound = 0; 
         }
     }
 }

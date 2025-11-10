@@ -67,6 +67,8 @@ public class GridPlacementSystem : MonoBehaviour
 
     private void Start()
     {
+        if (tileBases == null) tileBases = new Dictionary<TileType, TileBase>();
+
         string tilePath = "Tiles/";
         tileBases.Add(TileType.Empty, null);
         tileBases.Add(TileType.White, Resources.Load<TileBase>(tilePath + "TilesGrid_1"));

@@ -1,14 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject ItemSelectionPanel;
-    public GridPlacementSystem placementSystem;
-    [SerializeField] private GameObject grid;
+    //public GameObject ItemSelectionPanel;
+    //public GridPlacementSystem placementSystem;
 
-    public void ToggleItemSelectionPanel()
+    public GameObject returnToMainMenuButtonAfterFinalScreen;
+
+    public GameObject itemsParent;
+
+
+    public GameObject extinguisherParent;
+    // [SerializeField] private GameObject grid;
+
+
+    private void Start()
+    {
+
+        GameEvents.OnFinalScoreStateEntered += ActivateReturnToMainMenuButton;
+    }
+
+    void ActivateReturnToMainMenuButton()
+    {
+        returnToMainMenuButtonAfterFinalScreen.SetActive(true);
+    }
+    /*public void ToggleItemSelectionPanel()
     {
         ItemSelectionPanel.SetActive(!ItemSelectionPanel.activeSelf);
     }
@@ -16,17 +35,59 @@ public class UIManager : MonoBehaviour
     public void Toggle()
     {
         grid.SetActive(!grid.activeSelf);
-    }
+    }*/
 
     private void OnEnable()
     {
-        GameEvents.OnItemSelectionPanelOpened += ToggleItemSelectionPanel;
-        GameEvents.OnToggleGrid += Toggle;
+
+        GameEvents.OnFinalScoreStateEntered += ActivateReturnToMainMenuButton;
+        //GameEvents.OnItemSelectionPanelOpened += ToggleItemSelectionPanel;
+        // GameEvents.OnToggleGrid += Toggle;
     }
 
     private void OnDisable()
     {
-        GameEvents.OnItemSelectionPanelOpened -= ToggleItemSelectionPanel;
-        GameEvents.OnToggleGrid -= Toggle;
+
+        GameEvents.OnFinalScoreStateEntered -= ActivateReturnToMainMenuButton;
+
+        //GameEvents.OnItemSelectionPanelOpened -= ToggleItemSelectionPanel;
+        //GameEvents.OnToggleGrid -= Toggle;
     }
+
+
+
+    public void ResetGame()
+    {
+
+
+        StopAllCoroutines();
+        GameEvents.ChangeState(GameState.MenuState);
+        //delete all items
+
+
+
+        PlayerManager.Instance.HardResetGame();
+
+        foreach (var psm in FindObjectsOfType<PlayerScoreManager>())
+        {
+            psm.ClearCaches();
+        }
+
+        DeleteItems();
+    }
+
+
+    void DeleteItems()
+    {
+        foreach (Transform child in itemsParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in extinguisherParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+ 
 }
