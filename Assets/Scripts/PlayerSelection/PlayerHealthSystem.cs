@@ -91,7 +91,7 @@ public class PlayerHealthSystem : MonoBehaviour
     {
         currentHealth -= amount;
 
-        if (isItemDmg)
+        if (isItemDmg && amount > 0)
         {
             StartCoroutine(FlashRed());
         }

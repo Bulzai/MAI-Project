@@ -207,7 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5187926d2eee180419eecac142a4d13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damgeAmount: 15
+  damgeAmount: 0
   knockbackForce: 4
 --- !u!1 &4711019012961524803
 GameObject:
