@@ -329,6 +329,8 @@ public class ExtingSpawner : MonoBehaviour
 
     private void DisableExtinguisherContainer()
     {
+        
+        foreach (Transform child in extinguisherContainer) Destroy(child.gameObject);
         extinguisherContainer.gameObject.SetActive(false);
     }
 
