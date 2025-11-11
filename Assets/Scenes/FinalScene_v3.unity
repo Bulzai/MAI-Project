@@ -14341,7 +14341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cca50fa746007bc449dc806f2b885ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRounds: 4
+  maxRounds: 3
   scoreDisplayTime: 5
   playerManagerFinal: {fileID: 2041737856}
   playerScoreManager: {fileID: 770550883}
@@ -22236,8 +22236,8 @@ MonoBehaviour:
   extinguisherSpacing: 10
   extinguisherPrefab: {fileID: 267320657431022744, guid: e3fd6ad79fb05ab46a85c8d49a1674d7, type: 3}
   previewPrefab: {fileID: 267320657431022744, guid: 34135406c8aea4e43bd76c24b0149d34, type: 3}
-  CircleExtinguisherPrefab: {fileID: 267320657431022744, guid: 2a3ab5366cb09dd44968e57f911e5889, type: 3}
-  CirclePreviewPrefab: {fileID: 267320657431022744, guid: 80ca52bc88f37cd4a8f69258b487c880, type: 3}
+  CircleExtinguisherPrefab: {fileID: 267320657431022744, guid: e3fd6ad79fb05ab46a85c8d49a1674d7, type: 3}
+  CirclePreviewPrefab: {fileID: 267320657431022744, guid: 34135406c8aea4e43bd76c24b0149d34, type: 3}
   extinguisherContainer: {fileID: 930644200}
   previewContainer: {fileID: 1352598198}
   downHeight: 5
