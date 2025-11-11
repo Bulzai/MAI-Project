@@ -14341,7 +14341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cca50fa746007bc449dc806f2b885ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRounds: 4
+  maxRounds: 3
   scoreDisplayTime: 5
   playerManagerFinal: {fileID: 2041737856}
   playerScoreManager: {fileID: 770550883}
