@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+using TarodevController;
 
 public class PlayerHealthSystem : MonoBehaviour
 {
     
     private PlayerInput _playerInput;
-    
+    public PlayerAnimator animator;
     
     public int maxHealth = 100;
     public float burnTickInterval = 1f;
@@ -93,6 +94,9 @@ public class PlayerHealthSystem : MonoBehaviour
 
         if (isItemDmg && amount > 0)
         {
+            if (animator != null)
+                animator.PlayHitReaction();
+
             StartCoroutine(FlashRed());
         }
 

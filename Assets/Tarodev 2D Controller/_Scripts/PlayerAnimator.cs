@@ -14,6 +14,7 @@ namespace TarodevController
         [SerializeField] private AnimationClip landBase;
         [SerializeField] private AnimationClip wallBase;
         [SerializeField] private AnimationClip deathBase;
+        [SerializeField] private AnimationClip hitBase;
 
         [Header("Animation Setup")]
         [Tooltip("The single shared base controller that defines all states (Idle, Run, Jump, Land, Wall, Death).")]
@@ -64,6 +65,7 @@ namespace TarodevController
         private static readonly int IsRunningKey = Animator.StringToHash("IsRunning");
         private static readonly int OnWallKey = Animator.StringToHash("OnWall");
         private static readonly int IsDeadKey = Animator.StringToHash("IsDead");
+        private static readonly int HitKey = Animator.StringToHash("Hit");
 
         // Cache of generated AnimatorOverrideControllers
         private readonly Dictionary<(bool onFire, HealthTier tier), AnimatorOverrideController> _aocCache
@@ -188,6 +190,7 @@ namespace TarodevController
             Add(landBase, clips.Land, "Land");
             Add(wallBase, clips.Wall, "Wall");
             Add(deathBase, clips.Death, "Death");
+            Add(hitBase, clips.Hit, "Hit");
 
             aoc.ApplyOverrides(overrides);
             Debug.Log($"[PA] ApplyOverrides: {overrides.Count} replacements applied");
@@ -214,7 +217,11 @@ namespace TarodevController
                     2f * Time.deltaTime);
             }
         }
-
+        public void PlayHitReaction()
+        {
+            if (_anim == null) return;
+            _anim.SetTrigger(HitKey);
+        }
         private void HandleSpriteFlip()
         {
             if (_rb.velocity.x != 0f)

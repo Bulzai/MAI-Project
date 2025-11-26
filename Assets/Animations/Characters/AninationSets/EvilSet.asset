@@ -19,6 +19,7 @@ MonoBehaviour:
     Land: {fileID: 7400000, guid: 32776c61457e4d24a865df51810a62b5, type: 2}
     Wall: {fileID: 7400000, guid: 863848cf64742714b881e0c0701d9ba3, type: 2}
     Death: {fileID: 7400000, guid: b8c8360183827654eb4aa995facadf44, type: 2}
+    Hit: {fileID: 7400000, guid: 7ef65925a450037448a0a9dd431e3f2e, type: 2}
   NormalHalf:
     Idle: {fileID: 7400000, guid: dd70c25e7c229eb4b8f7702b48617718, type: 2}
     Run: {fileID: 7400000, guid: d8080749b28e1e642bb7c5ad39a6c946, type: 2}
@@ -26,6 +27,7 @@ MonoBehaviour:
     Land: {fileID: 7400000, guid: dd70c25e7c229eb4b8f7702b48617718, type: 2}
     Wall: {fileID: 7400000, guid: 938a9b2862b366947a69f6483bd79be8, type: 2}
     Death: {fileID: 7400000, guid: b8c8360183827654eb4aa995facadf44, type: 2}
+    Hit: {fileID: 7400000, guid: d2bb5691b647f6249816bb25667a4d12, type: 2}
   NormalLow:
     Idle: {fileID: 7400000, guid: 77b6afac5794c464295f5678d23d2466, type: 2}
     Run: {fileID: 7400000, guid: 7aec95e728a880b4e9f2d25c24dc8d3c, type: 2}
@@ -33,6 +35,7 @@ MonoBehaviour:
     Land: {fileID: 7400000, guid: 77b6afac5794c464295f5678d23d2466, type: 2}
     Wall: {fileID: 7400000, guid: 0a2b2aaf38ff5ec4a89453180dd309d1, type: 2}
     Death: {fileID: 7400000, guid: b8c8360183827654eb4aa995facadf44, type: 2}
+    Hit: {fileID: 7400000, guid: 777fdcb2e16896e42b7f386b55384e15, type: 2}
   FireFull:
     Idle: {fileID: 7400000, guid: 84ba4b25776749343a6bc53401ec717f, type: 2}
     Run: {fileID: 7400000, guid: 4378027cbabc62945bf3714d9a612784, type: 2}
@@ -40,6 +43,7 @@ MonoBehaviour:
     Land: {fileID: 7400000, guid: 84ba4b25776749343a6bc53401ec717f, type: 2}
     Wall: {fileID: 7400000, guid: a11738342f62828449edaba93c215aad, type: 2}
     Death: {fileID: 7400000, guid: b8c8360183827654eb4aa995facadf44, type: 2}
+    Hit: {fileID: 7400000, guid: 06efad50ffa1b824e959cfa7394d7920, type: 2}
   FireHalf:
     Idle: {fileID: 7400000, guid: f27fd6cd1fce9d144afe82f31347f935, type: 2}
     Run: {fileID: 7400000, guid: 9988b8caf3921a34f914d32e3e01c4d2, type: 2}
@@ -47,6 +51,7 @@ MonoBehaviour:
     Land: {fileID: 7400000, guid: f27fd6cd1fce9d144afe82f31347f935, type: 2}
     Wall: {fileID: 7400000, guid: 9b2f9d4ce30bea84eae0aa952b2effe9, type: 2}
     Death: {fileID: 7400000, guid: b8c8360183827654eb4aa995facadf44, type: 2}
+    Hit: {fileID: 7400000, guid: 826343f94440dd041ad5eee7997d7632, type: 2}
   FireLow:
     Idle: {fileID: 7400000, guid: b442353f39475b941a10d8b891471189, type: 2}
     Run: {fileID: 7400000, guid: 16b2b71889a566d43be2371ad93366bd, type: 2}
@@ -54,3 +59,4 @@ MonoBehaviour:
     Land: {fileID: 7400000, guid: b442353f39475b941a10d8b891471189, type: 2}
     Wall: {fileID: 7400000, guid: 604c8eb868e318e4fb0b5debc02cf079, type: 2}
     Death: {fileID: 7400000, guid: b8c8360183827654eb4aa995facadf44, type: 2}
+    Hit: {fileID: 7400000, guid: f7caa7eae085d0245bae15edc1458ade, type: 2}

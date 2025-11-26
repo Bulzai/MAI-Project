@@ -11,6 +11,7 @@ public struct MotionClips
     public AnimationClip Land;
     public AnimationClip Wall;
     public AnimationClip Death;
+    public AnimationClip Hit;
 }
 
 [CreateAssetMenu(menuName = "Characters/Character Animation Library")]
