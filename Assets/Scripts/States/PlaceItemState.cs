@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,8 @@ public class PlaceItemState : MonoBehaviour
     [SerializeField] private GameObject GameWorld;
     //[SerializeField] private GridPlacementSystem gridPlacementSystem;
 
+    [SerializeField] private TMP_Text countdownText;
+    [SerializeField] private TMP_Text milkText;
 
 
     private void Awake()
@@ -47,7 +50,29 @@ public class PlaceItemState : MonoBehaviour
         playerManager.pickedPrefabByPlayer.Clear();
         playerManager.playersThatPlaced.Clear();
         HideAllCursors();
+
+        StartCoroutine(CountdownBeforeMainGame());
+
+    }
+    private IEnumerator CountdownBeforeMainGame()
+    {
+        int countdown = 3;  
+
+        while (countdown > 0)
+        {
+            milkText.gameObject.SetActive(true);
+            countdownText.gameObject.SetActive(true);
+            countdownText.text = countdown.ToString();
+
+
+
+            yield return new WaitForSeconds(1f);
+            countdown--;
+        }
+
         GameEvents.ChangeState(GameState.MainGameState);
+        countdownText.gameObject.SetActive(false);
+        milkText.gameObject.SetActive(false);
 
     }
 

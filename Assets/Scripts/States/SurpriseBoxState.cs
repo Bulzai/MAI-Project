@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +22,7 @@ public class SurpriseBoxState : MonoBehaviour
     [SerializeField] private List<GameObject> itemPool;
     [SerializeField] private int numberToSpawn;
 
+    [SerializeField] private TMP_Text countdownText;
 
     private Transform itemBoxItemList;
 
@@ -153,8 +155,8 @@ public class SurpriseBoxState : MonoBehaviour
 
         if (playerManager.pickedPrefabByPlayer.Count == playerManager.playerCount)
         {
-            DeactivateItemBox();
-            GameEvents.ChangeState(GameState.PlaceItemState);
+            StartCoroutine(CountdownBeforeMainGame());
+
             //BeginPlacementPhaseAll();
         }
     }
@@ -181,6 +183,28 @@ public class SurpriseBoxState : MonoBehaviour
         }
     }
 
+    private IEnumerator CountdownBeforeMainGame()
+    {
+        int countdown = 3;  
+
+        while (countdown > 0)
+        {
+            countdownText.gameObject.SetActive(true);
+            countdownText.text = countdown.ToString();
+
+
+
+
+            yield return new WaitForSeconds(1f);
+            countdown--;
+        }
+
+       
+        countdownText.gameObject.SetActive(false);
+        DeactivateItemBox();
+        GameEvents.ChangeState(GameState.PlaceItemState);
+
+    }
 
 
 }
