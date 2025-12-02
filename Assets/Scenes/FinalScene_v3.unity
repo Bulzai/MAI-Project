@@ -201,6 +201,7 @@ MonoBehaviour:
   playerManager: {fileID: 2041737856}
   GameWorld: {fileID: 2136622800}
   countdownText: {fileID: 1476749236}
+  milkText: {fileID: 61459377}
 --- !u!1 &19490358
 GameObject:
   m_ObjectHideFlags: 0
