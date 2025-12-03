@@ -29,6 +29,10 @@ public class PlayerManager : MonoBehaviour
     [Header("Player Colors")]
     public Color[] playerColors = new Color[4];
 
+    [Header("PlayerJoin Names")]
+    public Transform[] namePositionsInJoinMenu;
+
+
     [Header("Spawn Positions")]
     public Transform[] spawnPositionsForMenu;
     public Transform[] spawnPositionsForItemPlacement;
@@ -187,7 +191,10 @@ public class PlayerManager : MonoBehaviour
 
         // Position at selection/menu spawns
         if (idx < spawnPositionsForMenu.Length)
+        {
             characterTf.transform.position = spawnPositionsForMenu[idx].position;
+            namePositionsInJoinMenu[idx].gameObject.SetActive(true);
+                }
         else
             characterTf.transform.position = Vector3.one;
 
