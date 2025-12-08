@@ -29,6 +29,8 @@ public class SurpriseBoxState : MonoBehaviour
     private List<GameObject> itemsInBox = new List<GameObject>();
 
 
+    public GameObject[] playerNamesToDeactive;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -47,6 +49,7 @@ public class SurpriseBoxState : MonoBehaviour
         GameEvents.OnSurpriseBoxStateEntered += ActivateItemBox;
         GameEvents.OnSurpriseBoxStateEntered += SpawnObjects;
         GameEvents.OnSurpriseBoxStateEntered += ShowAllCursors;
+        GameEvents.OnSurpriseBoxStateEntered += DeactivePlayerNames;
 
     }
 
@@ -56,7 +59,13 @@ public class SurpriseBoxState : MonoBehaviour
     }
 
 
-
+    private void DeactivePlayerNames()
+    {
+        foreach(var name in playerNamesToDeactive)
+        {
+            name.SetActive(false);
+        }
+    }
 
     public void SpawnObjects()
     {
