@@ -18,15 +18,17 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            TogglePause();
-        }
+        // ---- Only allow pausing in MainGame state ----
+        if (GameEvents.CurrentState != GameState.MainGameState)
+            return;
 
-        if (Input.GetKeyDown(KeyCode.JoystickButton3))
-        {
+        // Keyboard fallback
+        if (Input.GetKeyDown(KeyCode.P))
             TogglePause();
-        }
+
+        // Xbox Controller → Select Button (JoystickButton7)
+        if (Input.GetKeyDown(KeyCode.JoystickButton7))
+            TogglePause();
     }
 
     public void Resume()
