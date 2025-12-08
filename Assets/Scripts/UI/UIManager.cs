@@ -62,6 +62,7 @@ public class UIManager : MonoBehaviour
 
         StopAllCoroutines();
         GameEvents.ChangeState(GameState.MenuState);
+        Time.timeScale = 1f;
         //delete all items
 
 

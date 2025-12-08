@@ -13960,9 +13960,7 @@ MonoBehaviour:
   - {fileID: 5978482745451247659, guid: 620d66ef6926fcf48b95a005014f5440, type: 3}
   - {fileID: 4711019012961524803, guid: f5ddad4706b6f384e9ab59acc15c1d28, type: 3}
   - {fileID: 4354401948063173012, guid: da5ebb816c9b43444b02f99309050340, type: 3}
-  - {fileID: 4711019012961524803, guid: 3e59845139ab06746818853b83c40bf4, type: 3}
-  - {fileID: 3896460717008147644, guid: 843951d75f9b7214c8c2340f7843017d, type: 3}
-  numberToSpawn: 6
+  numberToSpawn: 5
   countdownText: {fileID: 1476749236}
 --- !u!1 &784634667
 GameObject:
