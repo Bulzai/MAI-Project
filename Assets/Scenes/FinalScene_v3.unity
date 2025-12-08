@@ -13970,6 +13970,7 @@ MonoBehaviour:
   - {fileID: 5978482745451247659, guid: 620d66ef6926fcf48b95a005014f5440, type: 3}
   - {fileID: 4711019012961524803, guid: f5ddad4706b6f384e9ab59acc15c1d28, type: 3}
   - {fileID: 4354401948063173012, guid: da5ebb816c9b43444b02f99309050340, type: 3}
+  - {fileID: 3896460717008147644, guid: 76a8d5c2c5bf1b844af6e83beaa047cc, type: 3}
   numberToSpawn: 5
   countdownText: {fileID: 1476749236}
   playerNamesToDeactive:

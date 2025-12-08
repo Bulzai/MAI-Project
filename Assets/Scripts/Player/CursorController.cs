@@ -225,6 +225,10 @@ public class CursorController : MonoBehaviour
         if (go.TryGetComponent(out Collider2D col))
             col.enabled = true;
 
+        if (go.GetComponent<Animator>())
+        {
+            go.GetComponent<Animator>().enabled = true;
+        }
         // Enable all scripts EXCEPT certain types
         foreach (var script in go.GetComponents<MonoBehaviour>())
         {
