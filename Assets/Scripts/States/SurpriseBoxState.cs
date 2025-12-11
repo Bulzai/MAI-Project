@@ -59,7 +59,7 @@ public class SurpriseBoxState : MonoBehaviour
     }
 
 
-    private void DeactivePlayerNames()
+    public void DeactivePlayerNames()
     {
         foreach(var name in playerNamesToDeactive)
         {

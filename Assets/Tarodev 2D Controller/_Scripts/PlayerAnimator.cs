@@ -193,7 +193,6 @@ namespace TarodevController
             Add(hitBase, clips.Hit, "Hit");
 
             aoc.ApplyOverrides(overrides);
-            Debug.Log($"[PA] ApplyOverrides: {overrides.Count} replacements applied");
             return aoc;
         }
 
