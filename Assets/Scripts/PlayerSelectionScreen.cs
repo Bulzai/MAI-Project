@@ -6,27 +6,19 @@ public class PlayerSelectionScreen : MonoBehaviour
 {
     public GameObject Background;
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        
+        GameEvents.OnSurpriseBoxStateEntered += HideBackground;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        GameEvents.OnSurpriseBoxStateEntered -= HideBackground;
     }
 
-    public void StartGame()
+    private void HideBackground()
     {
-        if (PlayerManager.Instance.playerCount > 0)
-        {
-            GameEvents.ChangeState(GameState.SurpriseBoxState);
+        if (Background != null)
             Background.SetActive(false);
-        }
     }
-
-
-
 }

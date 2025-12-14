@@ -261,6 +261,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 555d96d6-3968-4eae-bb0e-7d159fd68a8d
     m_ActionName: Cursor/SkipPlacement[/Keyboard/f,/XInputControllerWindows/buttonEast,/XInputControllerWindows1/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 60436556-87c9-4fa3-9144-5fc1d647c251
+    m_ActionName: Lobby/Join[/XInputControllerWindows/select,/Keyboard/j]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 01971e56-ec35-4732-9086-17fa39df5ae4
+    m_ActionName: Lobby/Ready[/XInputControllerWindows/buttonNorth,/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 199aad64-e05e-4711-8e66-0182a581edb7
+    m_ActionName: Lobby/Start[/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7d956a0f-0ed4-4037-a7be-3511c40819d7
+    m_ActionName: Lobby/Return[/XInputControllerWindows/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -278,6 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb083a97c83e5d74a86950fe377e3e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
   maxHealth: 100
   burnTickInterval: 1
   burnDamagePerTick: 1
@@ -10274,9 +10291,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb09df9db553ffc4ab6600e3070de9eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationSet: {fileID: 0}
-  _anim: {fileID: 2969068313154050966}
+  idleBase: {fileID: 0}
+  runBase: {fileID: 0}
+  jumpBase: {fileID: 0}
+  landBase: {fileID: 0}
+  wallBase: {fileID: 0}
+  deathBase: {fileID: 0}
+  hitBase: {fileID: 0}
+  baseController: {fileID: 0}
+  library: {fileID: 0}
   _health: {fileID: 0}
+  _anim: {fileID: 2969068313154050966}
   _sprite: {fileID: 2969068313154050967}
   _rb: {fileID: 0}
   runThreshold: 0.1

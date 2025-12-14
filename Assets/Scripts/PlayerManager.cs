@@ -9,8 +9,6 @@ using TarodevController;
 
 public class PlayerManager : MonoBehaviour
 {
-
-
     public static PlayerManager Instance { get; private set; }
 
     public PlayerAnimator playerAnimator;
@@ -40,7 +38,11 @@ public class PlayerManager : MonoBehaviour
 
     public Dictionary<int, GameObject> playerRoots = new Dictionary<int, GameObject>();
     public Dictionary<int, GameObject> pickedPrefabByPlayer = new Dictionary<int, GameObject>();
+    private Dictionary<InputDevice, int> deviceToPlayerMap = new Dictionary<InputDevice, int>();
     public HashSet<int> playersThatPlaced = new HashSet<int>();
+
+    [Header("Lobby Integration")]
+    [SerializeField] private GameLobbyManager lobbyManager;
 
     private PlayerInputManager playerInputManager;
 
@@ -55,10 +57,139 @@ public class PlayerManager : MonoBehaviour
         }
         Instance = this;
     }
-
+ 
     private void Start()
     {
         playerInputManager = GetComponent<PlayerInputManager>();
+    }
+
+    void Update()
+    {
+        if (GameEvents.CurrentState != GameState.PlayerSelectionState)
+            return;
+
+        // Method 1: Check for keyboard input and map to correct player
+        CheckKeyboardInputs();
+
+        // Method 2: Keep your existing controller code
+        CheckControllerInputs();
+    }
+
+    void CheckKeyboardInputs()
+    {
+        // Keyboard Player 0 (first keyboard player)
+        if (Input.GetKeyDown(KeyCode.R)) // R for Ready
+        {
+            Debug.Log("Keyboard R pressed (Ready)");
+
+            // Find which player is using keyboard
+            // Player 0 is usually controller, Player 1 is usually keyboard
+            if (players.Count > 1 && !IsDestroyed(players[1]))
+            {
+                OnPlayerReadyPressed(1); // Player 1 (keyboard)
+            }
+            else if (players.Count > 0)
+            {
+                OnPlayerReadyPressed(0); // Player 0 (if only player)
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return)) // Enter for Start
+        {
+            Debug.Log("Keyboard Enter pressed (Start)");
+            OnStartPressed();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) // Escape for Return
+        {
+            Debug.Log("Keyboard Escape pressed (Return)");
+            OnReturnPressed();
+        }
+    }
+
+    void CheckControllerInputs()
+    {
+        // DEBUG: Check ALL controller buttons to see what's working
+        if (Input.anyKeyDown)
+        {
+            for (int joy = 1; joy <= 4; joy++)
+            {
+                for (int btn = 0; btn < 10; btn++)
+                {
+                    try
+                    {
+                        string keyName = $"Joystick{joy}Button{btn}";
+                        KeyCode keyCode = (KeyCode)System.Enum.Parse(typeof(KeyCode), keyName);
+                        if (Input.GetKeyDown(keyCode))
+                        {
+                            Debug.Log($"🎮 Controller {joy}, Button {btn}: {keyName}");
+                        }
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        // Simple controller mapping - FIXED!
+        // Player 0 (first controller)
+        if (players.Count > 0 && !IsDestroyed(players[0]))
+        {
+            // TRY DIFFERENT BUTTON NUMBERS FOR Y
+            // Button 3 = Xbox Y, PlayStation △
+            // Button 4 = Some controllers use button 4 for Y
+
+            if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Joystick1Button4))
+            {
+                Debug.Log("🎯 Controller Player 0 Y pressed!");
+                OnPlayerReadyPressed(0);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Joystick1Button0)) // A button
+            {
+                Debug.Log("🎯 Controller Player 0 A pressed!");
+                OnStartPressed();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Joystick1Button1)) // B button
+            {
+                Debug.Log("🎯 Controller Player 0 B pressed!");
+                OnReturnPressed();
+            }
+        }
+
+        // Player 1 (second controller)
+        if (players.Count > 1 && !IsDestroyed(players[1]))
+        {
+            if (Input.GetKeyDown(KeyCode.Joystick2Button3) || Input.GetKeyDown(KeyCode.Joystick2Button4))
+            {
+                Debug.Log("🎯 Controller Player 1 Y pressed!");
+                OnPlayerReadyPressed(1);
+            }
+        }
+    }
+
+    private KeyCode GetButtonCode(int playerIndex, string button)
+    {
+        int joystickNum = playerIndex + 1;
+
+        // Try BOTH button 3 AND 4 for Y (different controllers)
+        switch (button)
+        {
+            case "Y":
+                // First try button 3, then button 4
+                if (Input.GetKeyDown((KeyCode)System.Enum.Parse(typeof(KeyCode), $"Joystick{joystickNum}Button3")))
+                    return (KeyCode)System.Enum.Parse(typeof(KeyCode), $"Joystick{joystickNum}Button3");
+                else
+                    return (KeyCode)System.Enum.Parse(typeof(KeyCode), $"Joystick{joystickNum}Button4");
+            case "A":
+                return (KeyCode)System.Enum.Parse(typeof(KeyCode), $"Joystick{joystickNum}Button0");
+            case "B":
+                return (KeyCode)System.Enum.Parse(typeof(KeyCode), $"Joystick{joystickNum}Button1");
+            case "Select":
+                return (KeyCode)System.Enum.Parse(typeof(KeyCode), $"Joystick{joystickNum}Button6");
+            default:
+                return KeyCode.None;
+        }
     }
 
     private void OnEnable()
@@ -72,6 +203,9 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnMainGameStateExited += DeactivateCharacterPrefab;
 
         GameEvents.OnPlayerEliminated += HandlePlayerElimination;
+
+        // LOBBY: Notify lobby about existing players when entering selection
+        GameEvents.OnPlayerSelectionStateEntered += NotifyLobbyPlayerJoined;
     }
 
     private void OnDisable()
@@ -82,8 +216,78 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnMainGameStateExited -= DeactivateCharacterPrefab;
         GameEvents.OnPlayerSelectionStateEntered -= DisablePlayerJoining;
         GameEvents.OnPlayerEliminated -= HandlePlayerElimination;
+
+        // LOBBY: Clean up lobby subscriptions
+        GameEvents.OnPlayerSelectionStateEntered -= NotifyLobbyPlayerJoined;
     }
 
+    // ============== LOBBY INTEGRATION METHODS ==============
+
+    private void NotifyLobbyPlayerJoined()
+    {
+        // Notify lobby about existing players when entering selection state
+        if (lobbyManager != null)
+        {
+            foreach (var player in players)
+            {
+                if (!IsDestroyed(player))
+                {
+                    lobbyManager.OnPlayerJoined(player.playerIndex);
+                }
+            }
+        }
+    }
+
+    // This is AUTOMATICALLY called by Input System when Ready action is triggered
+    public void OnReady(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("Input System called OnReady!");
+
+            // Find which player triggered this
+            foreach (var player in players)
+            {
+                if (!IsDestroyed(player))
+                {
+                    // Check if this player's device triggered the action
+                    if (context.control.device == player.devices[0])
+                    {
+                        OnPlayerReadyPressed(player.playerIndex);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void OnPlayerReadyPressed(int playerId)
+    {
+        Debug.Log($"PlayerManager: OnPlayerReady.Pressed({playerId}) called");
+
+        // Instead of TogglePlayerReady, use SetPlayerReady with true
+        lobbyManager.SetPlayerReady(playerId, true);
+    }
+
+    // Called when player presses A in lobby
+    public void OnStartPressed()
+    {
+        if (lobbyManager != null)
+        {
+            lobbyManager.TryStartGame();
+        }
+    }
+
+    // Called when player presses B in lobby
+    public void OnReturnPressed()
+    {
+        if (lobbyManager != null)
+        {
+            lobbyManager.ReturnToMenu();
+        }
+    }
+
+    // ============== EXISTING PLAYERMANAGER METHODS (with lobby integration) ==============
 
     public void ResetEliminations()
     {
@@ -194,7 +398,7 @@ public class PlayerManager : MonoBehaviour
         {
             characterTf.transform.position = spawnPositionsForMenu[idx].position;
             namePositionsInJoinMenu[idx].gameObject.SetActive(true);
-                }
+        }
         else
             characterTf.transform.position = Vector3.one;
 
@@ -247,9 +451,7 @@ public class PlayerManager : MonoBehaviour
         if (characterAnimator != null)
         {
             characterAnimator.SetLibrary(characterLibraries[idx]);
-
         }
-
 
         // Setup input
         var pi = root.GetComponent<PlayerInput>();
@@ -257,6 +459,30 @@ public class PlayerManager : MonoBehaviour
         {
             pi.SwitchCurrentActionMap("Player");
             pi.ActivateInput();
+        }
+
+        // LOBBY: Notify lobby manager about new player
+        if (lobbyManager != null && GameEvents.CurrentState == GameState.PlayerSelectionState)
+        {
+            lobbyManager.OnPlayerJoined(idx);
+        }
+
+        if (playerInput.devices.Count > 0)
+        {
+            deviceToPlayerMap[playerInput.devices[0]] = idx;
+            Debug.Log($"Player {idx} is using device: {playerInput.devices[0].name}");
+        }
+
+        // Initialize player slot UI to show "NOT READY!"
+        string slotName = $"player_{(idx == 0 ? "one" : idx == 1 ? "two" : idx == 2 ? "three" : "four")}";
+        GameObject slot = GameObject.Find(slotName);
+        if (slot != null)
+        {
+            PlayerListItemUI ui = slot.GetComponent<PlayerListItemUI>();
+            if (ui != null)
+            {
+                ui.SetReady(false); // Force "NOT READY!"
+            }
         }
     }
 
@@ -276,6 +502,12 @@ public class PlayerManager : MonoBehaviour
 
         pickedPrefabByPlayer.Remove(idx);
         playersThatPlaced.Remove(idx);
+
+        // LOBBY: Notify lobby manager about player leaving
+        if (lobbyManager != null)
+        {
+            lobbyManager.OnPlayerLeft(idx);
+        }
     }
 
     public void DeactivateCharacterPrefab()
@@ -380,7 +612,7 @@ public class PlayerManager : MonoBehaviour
 
     private IEnumerator HardResetRoutine()
     {
-        // Snapshot: we’ll mutate 'players' while removing
+        // Snapshot: we'll mutate 'players' while removing
         var snapshot = players.ToArray();
         foreach (var pi in snapshot)
         {
@@ -475,6 +707,12 @@ public class PlayerManager : MonoBehaviour
         playerRoots.Remove(idx);
         pickedPrefabByPlayer.Remove(idx);
         playersThatPlaced.Remove(idx);
+
+        // 5) LOBBY: Notify lobby manager
+        if (lobbyManager != null)
+        {
+            lobbyManager.OnPlayerLeft(idx);
+        }
     }
 
     /// <summary>
