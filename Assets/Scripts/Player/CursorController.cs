@@ -241,6 +241,8 @@ public class CursorController : MonoBehaviour
             script.enabled = true;
         }
 
+        var gif = go.transform.Find("Gif");
+        if (gif) gif.gameObject.SetActive(false);
 
         lastCell = Vector3Int.one * int.MinValue;
     }
@@ -405,7 +407,7 @@ public class CursorController : MonoBehaviour
     private void DisableGif()
     {
         Transform gif = currentlyHoveredGO.transform.Find("Gif");
-
+        Debug.Log("Disable gif");
         if (gif != null)
         {
             gif.gameObject.SetActive(false);
