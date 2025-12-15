@@ -299,7 +299,10 @@ public class CursorController : MonoBehaviour
 
         // Disable scripts on previous hovered object
         if (currentlyHoveredGO != null)
+        {
             TogglePlacementScripts(currentlyHoveredGO, false);
+            DisableGif();
+        }
 
         currentlyHoveredGO = next;
         currentlyHoveredHighlight = null;
@@ -314,15 +317,15 @@ public class CursorController : MonoBehaviour
 
             //  If it's a BreakableCracker, make it break
             // inside HandleHoverHighlight(), when next != null (new hover target)
-            var cracker = next.GetComponent<BreakableCracker>();
+            /*var cracker = next.GetComponent<BreakableCracker>();
             if (cracker != null)
             {
                 cracker.BreakInstantly(fastReset: true); // uses hoverRespawnDelay
-            }
+            }*/
 
-
-            // (optional) still enable other hover effects
-            TogglePlacementScripts(next, true); ;
+            EnableGif();
+            //still enable other hover effects
+            TogglePlacementScripts(next, true); 
         }
     }
 
@@ -330,13 +333,15 @@ public class CursorController : MonoBehaviour
     {
         if (currentlyHoveredHighlight != null)
         {
-            currentlyHoveredHighlight.RemoveHover();
+            currentlyHoveredHighlight.RemoveHover();         
             currentlyHoveredHighlight = null;
         }
 
         // Disable scripts again when you leave hover
         if (currentlyHoveredGO != null)
         {
+            DisableGif();
+
             TogglePlacementScripts(currentlyHoveredGO, false);
             currentlyHoveredGO = null;
         }
@@ -383,6 +388,34 @@ public class CursorController : MonoBehaviour
         }
     }
 
+    private void EnableGif()
+    {
+        Transform gif = currentlyHoveredGO.transform.Find("Gif");
+
+        if (gif != null)
+        {
+            gif.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Gif child not found", this);
+        }
+    }
+
+    private void DisableGif()
+    {
+        Transform gif = currentlyHoveredGO.transform.Find("Gif");
+
+        if (gif != null)
+        {
+            gif.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("Gif child not found", this);
+        }
+
+    }
     private void TogglePlacementScripts(GameObject target, bool enable)
     {
         if (!target) return;
@@ -390,8 +423,8 @@ public class CursorController : MonoBehaviour
         var launcher = target.GetComponent<ProjectileLauncher>();
         if (launcher) launcher.enabled = enable;
 
-        var spike = target.GetComponent<RotateSpike>();
-        if (spike) spike.enabled = enable;
+        //var spike = target.GetComponent<RotateSpike>();
+        //if (spike) spike.enabled = enable;
 
         // Optional: log to verify behavior
         // Debug.Log($"{target.name}: {(enable ? "ENABLED" : "DISABLED")} placement scripts");

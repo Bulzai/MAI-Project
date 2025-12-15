@@ -27,6 +27,7 @@ public class ShowInGameUI : MonoBehaviour
 
     private void Show()
     {
+
         if (tmpText != null)
             tmpText.enabled = true;
 
@@ -36,6 +37,8 @@ public class ShowInGameUI : MonoBehaviour
 
     private void Hide()
     {
+
+
         if (tmpText != null)
             tmpText.enabled = false;
 
