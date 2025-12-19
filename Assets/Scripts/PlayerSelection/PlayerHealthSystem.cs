@@ -146,7 +146,7 @@ public class PlayerHealthSystem : MonoBehaviour
     private void Die()
     {
         GameEvents.PlayerEliminated(_playerInput);
-
+        transform.gameObject.SetActive(false);
     }
 
     public void Knockback(Vector2 direction, float strength)
