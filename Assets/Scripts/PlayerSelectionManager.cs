@@ -10,6 +10,9 @@ public class PlayerSelectionManager : MonoBehaviour
     // For UI Manager and SurpriseBoxState
     public static event Action OnReturnToMainMenu;
 
+    
+    public static event Action OnNotAllPlayersReady;
+    public static event Action OnNobodyJoinedYet;
 
     private readonly Dictionary<PlayerInput, PlayerSelectionData> _playerSelection =
         new Dictionary<PlayerInput, PlayerSelectionData>();
@@ -96,12 +99,16 @@ public class PlayerSelectionManager : MonoBehaviour
     private void TryStartGame()
     {
         if (_playerSelection.Count == 0)
-            return; // nobody joined yet
+        {
+            OnNobodyJoinedYet?.Invoke();
+            return; 
+        }
 
         bool everyoneReady = _playerSelection.Values.All(p => p.IsReady);
 
         if (!everyoneReady)
         {
+            OnNotAllPlayersReady?.Invoke();
             Debug.Log("Not all players are ready yet.");
             return;
         }
