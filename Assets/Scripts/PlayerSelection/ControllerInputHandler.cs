@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class ControllerInputHandler : MonoBehaviour
 {
-    private PlayerInput playerInput;
+   /* private PlayerInput playerInput;
 
     void Start()
     {
@@ -48,5 +48,5 @@ public class ControllerInputHandler : MonoBehaviour
                 PlayerManager.Instance.OnReturnPressed();
             }
         }
-    }
+    }*/
 }

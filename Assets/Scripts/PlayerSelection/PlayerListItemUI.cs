@@ -3,7 +3,7 @@ using TMPro;
 
 public class PlayerListItemUI : MonoBehaviour
 {
-    [SerializeField] private TMP_Text readyStatusText;
+   /* [SerializeField] private TMP_Text readyStatusText;
 
     public void SetReady(bool isReady)
     {
@@ -16,5 +16,5 @@ public class PlayerListItemUI : MonoBehaviour
         {
             Debug.LogError("readyStatusText is null!");
         }
-    }
+    }*/
 }

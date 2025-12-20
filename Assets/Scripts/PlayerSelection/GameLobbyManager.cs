@@ -4,7 +4,7 @@ using TMPro;
 
 public class GameLobbyManager : MonoBehaviour
 {
-    [Header("UI References")]
+   /* [Header("UI References")]
     [SerializeField] private GameObject joinPrompt;
     [SerializeField] private GameObject readyPrompt;
     [SerializeField] private GameObject startPrompt;
@@ -178,30 +178,6 @@ public class GameLobbyManager : MonoBehaviour
             playerListPanel.SetActive(false);
     }
 
-    private void UpdatePlayerListItem(int playerId)
-    {
-        // CHANGE TO: Find existing slot instead
-        string slotName = GetPlayerSlotName(playerId);
-        GameObject playerSlot = GameObject.Find(slotName);
-
-        if (playerSlot != null)
-        {
-            PlayerListItemUI itemUI = playerSlot.GetComponent<PlayerListItemUI>();
-            if (itemUI != null)
-            {
-                itemUI.SetReady(playerReadyStates[playerId]);
-                Debug.Log($"Updated existing player slot: {slotName}");
-            }
-            else
-            {
-                Debug.LogError($"No PlayerListItemUI on {slotName}");
-            }
-        }
-        else
-        {
-            Debug.LogError($"Could not find player slot: {slotName}");
-        }
-    }
 
     private string GetPlayerSlotName(int playerId)
     {
@@ -257,5 +233,5 @@ public class GameLobbyManager : MonoBehaviour
     {
         currentState = LobbyState.WaitingForPlayers;
         ClearPlayerList();
-    }
+    }*/
 }

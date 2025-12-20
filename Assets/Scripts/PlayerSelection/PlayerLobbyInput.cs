@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerLobbyInput : MonoBehaviour
 {
-    private PlayerInput playerInput;
+    /*private PlayerInput playerInput;
 
     void Start()
     {
@@ -54,5 +54,5 @@ public class PlayerLobbyInput : MonoBehaviour
                 PlayerManager.Instance.OnReturnPressed();
             }
         }
-    }
+    }*/
 }

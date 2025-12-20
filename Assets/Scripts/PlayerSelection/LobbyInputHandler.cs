@@ -4,7 +4,7 @@ public class LobbyInputHandler : MonoBehaviour
 {
     void Update()
     {
-        // Only handle input in PlayerSelectionState
+        /*// Only handle input in PlayerSelectionState
         if (GameEvents.CurrentState != GameState.PlayerSelectionState)
             return;
 
@@ -70,6 +70,6 @@ public class LobbyInputHandler : MonoBehaviour
             case 2: return KeyCode.Joystick3Button1;
             case 3: return KeyCode.Joystick4Button1;
             default: return KeyCode.None;
-        }
+        }*/
     }
 }
