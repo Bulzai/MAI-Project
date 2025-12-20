@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,10 @@ using System.Linq;
 
 public class PlayerSelectionManager : MonoBehaviour
 {
-    
+    // For UI Manager and SurpriseBoxState
+    public static event Action OnReturnToMainMenu;
+
+
     private readonly Dictionary<PlayerInput, PlayerSelectionData> _playerSelection =
         new Dictionary<PlayerInput, PlayerSelectionData>();
 
@@ -14,6 +18,8 @@ public class PlayerSelectionManager : MonoBehaviour
     [SerializeField] private Color readyColor    = new Color();  // green-ish : 39EF07
     [SerializeField] private Color notReadyColor = new Color();  // red-ish : CF0000 using the A and B button colors
 
+    [SerializeField] private GameObject PlayerSelection;
+    [SerializeField] private GameObject MainMenu;
     
     
     void Awake()
@@ -23,6 +29,8 @@ public class PlayerSelectionManager : MonoBehaviour
         TarodevController.PlayerController.OnPlayerReady += HandlePlayerReady;
         TarodevController.PlayerController.OnTryStartGame += TryStartGame;
         GameEvents.OnPlayerSelectionStateExited += HandlePlayerSelectionStateExit;
+        TarodevController.PlayerController.OnReturnToMainMenu += HandleReturnToMainMenu;
+        UIController.OnCancelPressed += HandleReturnToMainMenu;
     }
 
     void OnDestroy()
@@ -31,6 +39,10 @@ public class PlayerSelectionManager : MonoBehaviour
         PlayerManager.OnPlayerLeftGlobal   -= HandlePlayerLeft;
         TarodevController.PlayerController.OnPlayerReady -= HandlePlayerReady;
         TarodevController.PlayerController.OnTryStartGame -= TryStartGame;
+        GameEvents.OnPlayerSelectionStateExited -= HandlePlayerSelectionStateExit;
+        TarodevController.PlayerController.OnReturnToMainMenu -= HandleReturnToMainMenu;
+        UIController.OnCancelPressed -= HandleReturnToMainMenu;
+
     }
 
     private void HandlePlayerJoined(PlayerInput playerInput, Transform characterTf)
@@ -106,9 +118,17 @@ public class PlayerSelectionManager : MonoBehaviour
                 data.ReadyText.text = string.Empty;
         }
 
-        _playerSelection.Clear();        _playerSelection.Clear();
+        _playerSelection.Clear();
     }
-    
+
+    private void HandleReturnToMainMenu()
+    {
+        if (GameEvents.CurrentState != GameState.PlayerSelectionState) return;
+        
+        OnReturnToMainMenu?.Invoke();
+        PlayerSelection.SetActive(false);
+        MainMenu.SetActive(true);
+    }
     
 }
 

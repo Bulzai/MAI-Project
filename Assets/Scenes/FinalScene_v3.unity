@@ -1204,7 +1204,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Collect milk to stop burning '
+  m_text: Collect milk to stop burning!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -21694,7 +21694,7 @@ MonoBehaviour:
   m_ActionsAsset: {fileID: -944628639613478452, guid: 52f0b44adab67f14fba0281dff964adc, type: 3}
   m_PointAction: {fileID: -3383313458734003916, guid: 52f0b44adab67f14fba0281dff964adc, type: 3}
   m_MoveAction: {fileID: -8071774188579587108, guid: 52f0b44adab67f14fba0281dff964adc, type: 3}
-  m_SubmitAction: {fileID: 6688044754521356237, guid: 52f0b44adab67f14fba0281dff964adc, type: 3}
+  m_SubmitAction: {fileID: 3482639399789170377, guid: 52f0b44adab67f14fba0281dff964adc, type: 3}
   m_CancelAction: {fileID: -7681494839281549141, guid: 52f0b44adab67f14fba0281dff964adc, type: 3}
   m_LeftClickAction: {fileID: 5208453663356158883, guid: 52f0b44adab67f14fba0281dff964adc, type: 3}
   m_MiddleClickAction: {fileID: -7137476501392021972, guid: 52f0b44adab67f14fba0281dff964adc, type: 3}
@@ -30855,6 +30855,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
+--- !u!1 &1677624864
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1677624866}
+  - component: {fileID: 1677624865}
+  m_Layer: 0
+  m_Name: UIController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1677624865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677624864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5eed9532e41fb41bfa01602cc683c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventSystem: {fileID: 1030864345}
+--- !u!4 &1677624866
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677624864}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1679334711
 GameObject:
   m_ObjectHideFlags: 0
@@ -121192,6 +121237,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   readyColor: {r: 0.22352941, g: 0.9372549, b: 0.02745098, a: 1}
   notReadyColor: {r: 0.8117647, g: 0, b: 0, a: 1}
+  PlayerSelection: {fileID: 1754208610}
+  MainMenu: {fileID: 1707829880}
 --- !u!4 &2072970265
 Transform:
   m_ObjectHideFlags: 0
@@ -127747,3 +127794,4 @@ SceneRoots:
   - {fileID: 314114183}
   - {fileID: 2108889510}
   - {fileID: 2072970265}
+  - {fileID: 1677624866}

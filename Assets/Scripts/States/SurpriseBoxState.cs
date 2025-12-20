@@ -40,6 +40,13 @@ public class SurpriseBoxState : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        PlayerSelectionManager.OnReturnToMainMenu += DeactivePlayerNames;
+    }
+
+    private void OnDestroy()
+    {
+        PlayerSelectionManager.OnReturnToMainMenu -= DeactivePlayerNames;
     }
 
     private void OnEnable()

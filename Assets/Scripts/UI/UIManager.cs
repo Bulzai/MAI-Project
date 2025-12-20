@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +17,15 @@ public class UIManager : MonoBehaviour
     public GameObject extinguisherParent;
     // [SerializeField] private GameObject grid;
 
+    private void Awake()
+    {
+        PlayerSelectionManager.OnReturnToMainMenu += ResetGame;
+    }
+
+    private void OnDestroy()
+    {
+        PlayerSelectionManager.OnReturnToMainMenu -= ResetGame;
+    }
 
     private void Start()
     {
