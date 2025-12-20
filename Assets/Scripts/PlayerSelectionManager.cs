@@ -100,7 +100,13 @@ public class PlayerSelectionManager : MonoBehaviour
 
     private void HandlePlayerSelectionStateExit()
     {
-        _playerSelection.Clear();
+        foreach (var data in _playerSelection.Values)
+        {
+            if (data.ReadyText != null)
+                data.ReadyText.text = string.Empty;
+        }
+
+        _playerSelection.Clear();        _playerSelection.Clear();
     }
     
     
