@@ -24,13 +24,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Choose Item",
-                    "type": "Value",
-                    "id": "24f23639-076a-45d1-8512-b9529a1cb5b0",
-                    "expectedControlType": "Vector2",
+                    "name": "Ready",
+                    "type": "Button",
+                    "id": "235814f3-b55e-4b02-8724-9f4be92737b6",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -124,23 +124,23 @@
                 },
                 {
                     "name": "",
-                    "id": "9543b68e-4146-48f2-98ec-0756f10281a6",
-                    "path": "<Mouse>/leftButton",
+                    "id": "1b0f917d-9c0a-4d18-9118-9b462d6516a7",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Choose Item",
+                    "action": "Ready",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "c4d52880-517e-4e8e-a091-fa295cc2b515",
-                    "path": "<Gamepad>/buttonEast",
+                    "id": "55f280a8-cb7f-4971-98ec-ebe57c49b424",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controller",
-                    "action": "Choose Item",
+                    "groups": "Gamepad;Controller",
+                    "action": "Ready",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -855,15 +855,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Ready",
-                    "type": "Button",
-                    "id": "7fd480bb-8c81-435d-8924-7ac823dc56fc",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1040,28 +1031,6 @@
                     "processors": "",
                     "groups": "Controller;Gamepad",
                     "action": "SkipPlacement",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e3d868e6-ac7d-40fa-878e-a8de74ccf0b2",
-                    "path": "<XInputController>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Ready",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "805f8439-26ad-402e-ba1e-38985c880d4d",
-                    "path": "<Keyboard>/k",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Ready",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

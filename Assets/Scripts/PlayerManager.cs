@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,9 +7,19 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using Unity.VisualScripting;
 using TarodevController;
+using Object = UnityEngine.Object;
 
 public class PlayerManager : MonoBehaviour
 {
+    
+    // Player selection events
+    public static event Action<PlayerInput, Transform> OnPlayerJoinedGlobal;
+    public static event Action<PlayerInput> OnPlayerLeftGlobal;
+    
+    
+    
+    
+    
     public static PlayerManager Instance { get; private set; }
 
     public PlayerAnimator playerAnimator;
@@ -176,6 +187,7 @@ public class PlayerManager : MonoBehaviour
         if (players.Contains(playerInput))
             return;
 
+
         playerCount++;
         players.Add(playerInput);
 
@@ -203,6 +215,9 @@ public class PlayerManager : MonoBehaviour
         else
             characterTf.transform.position = Vector3.one;
 
+        OnPlayerJoinedGlobal?.Invoke(playerInput, characterTf);
+
+        
         if (idx < spawnPositionsForItemPlacement.Length)
             cursorTf.transform.position = spawnPositionsForItemPlacement[idx].position;
         else
@@ -289,6 +304,8 @@ public class PlayerManager : MonoBehaviour
 
         pickedPrefabByPlayer.Remove(idx);
         playersThatPlaced.Remove(idx);
+        
+        OnPlayerLeftGlobal?.Invoke(pi);
 
 
     }

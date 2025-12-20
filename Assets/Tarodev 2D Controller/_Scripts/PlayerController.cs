@@ -7,6 +7,14 @@ namespace TarodevController
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
     public class PlayerController : MonoBehaviour, IPlayerController
     {
+        // PlayerSelectionState
+        public static event Action<PlayerInput> OnPlayerReady;
+        public static event Action OnTryStartGame;
+        private PlayerInput _playerInput;
+
+        
+        
+        
         [SerializeField] private ScriptableStats _stats;
         private Rigidbody2D _rb;
         private CapsuleCollider2D _col;
@@ -25,7 +33,7 @@ namespace TarodevController
 
         // ======== TWO-SPEED WALK ========
         [Header("Two-Speed Movement")]
-        [Tooltip("Unterhalb dieser Stick-Magnitude (|x|) Slow-Mode, darüber Normal.")]
+        [Tooltip("Unterhalb dieser Stick-Magnitude (|x|) Slow-Mode, darï¿½ber Normal.")]
         [SerializeField, Range(0f, 1f)] private float slowThreshold = 0.5f;  // 50%
         [Tooltip("MaxSpeed-Multiplikator im Slow-Mode.")]
         [SerializeField, Range(0.05f, 1f)] private float slowSpeedMultiplier = 0.4f;
@@ -82,6 +90,12 @@ namespace TarodevController
 
         private void Awake()
         {
+            // PlayerInput lives on PlayerRoot (parent of PlayerNoPI)
+            _playerInput = GetComponentInParent<PlayerInput>();
+            if (_playerInput == null)
+                Debug.LogError("PlayerController: No PlayerInput found in parents!", this);
+            
+            
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<CapsuleCollider2D>();
             _healthSystem = GetComponent<PlayerHealthSystem>();
@@ -111,6 +125,9 @@ namespace TarodevController
 
         public void OnJump(InputAction.CallbackContext context)
         {
+            if (GameEvents.CurrentState == GameState.PlayerSelectionState)
+                OnTryStartGame?.Invoke();
+            
             if (context.started)
             {
                 jumpPressed = true;
@@ -122,6 +139,12 @@ namespace TarodevController
             }
         }
 
+        public void OnReady(InputAction.CallbackContext context)
+        {
+            if (GameEvents.CurrentState == GameState.PlayerSelectionState)
+                OnPlayerReady?.Invoke(_playerInput);
+        }
+        
         private void GatherInput()
         {
             Vector2 adjustedInput = movementInput;
@@ -222,14 +245,14 @@ namespace TarodevController
                 GroundedChanged?.Invoke(false, 0);
             }
 
-            // ICE detection (nur wenn Boden berührt wird)
+            // ICE detection (nur wenn Boden berï¿½hrt wird)
             _onIce = false;
             _lastGroundCol = null;
             if (groundHit)
             {
                 _lastGroundCol = groundInfo.collider;
 
-                // Erkennung über Tag "Ice" ODER optional über eine Ice-Layer-ID
+                // Erkennung ï¿½ber Tag "Ice" ODER optional ï¿½ber eine Ice-Layer-ID
                 if (_lastGroundCol.CompareTag("Ice")) _onIce = true;
                 else if (iceLayer > 0 && _lastGroundCol.gameObject.layer == iceLayer) _onIce = true;
             }
@@ -444,7 +467,7 @@ namespace TarodevController
     {
         event Action<bool, float> GroundedChanged;
         event Action Jumped;
-        event Action<bool, int> WallStateChanged;  // <— add this
+        event Action<bool, int> WallStateChanged;  // <ï¿½ add this
         Vector2 FrameInput { get; }
     }
 

@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687617368965738212}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.53, y: 0.59, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7420930553256529651}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7822720049369538171
 GameObject:
@@ -55,6 +55,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7822720049369538171}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.4497144, y: -0.08633733, z: 0.49337608}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -63,7 +64,6 @@ Transform:
   - {fileID: 7420930553256529651}
   - {fileID: 1385210291290707679}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8835949169127794839
 MonoBehaviour:
@@ -122,10 +122,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9ef771b2-7848-48bf-ac2a-0d85d3680032
     m_ActionName: Player/Jump[/Keyboard/space,/XInputControllerWindows/buttonSouth,/DualSenseGamepadHID/buttonSouth]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 24f23639-076a-45d1-8512-b9529a1cb5b0
-    m_ActionName: Player/Choose Item[/Mouse/leftButton,/XInputControllerWindows/buttonEast,/DualSenseGamepadHID/buttonEast]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: f0fc6061-8426-4198-9da4-99068f2c63fa
@@ -258,6 +254,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 555d96d6-3968-4eae-bb0e-7d159fd68a8d
     m_ActionName: Cursor/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1385210291290707676}
+        m_TargetAssemblyTypeName: TarodevController.PlayerController, Assembly-CSharp
+        m_MethodName: OnReady
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 235814f3-b55e-4b02-8724-9f4be92737b6
+    m_ActionName: Player/Ready[/Keyboard/enter,/DualSenseGamepadHID/buttonNorth,/XInputControllerWindows/buttonNorth]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: Cursor
