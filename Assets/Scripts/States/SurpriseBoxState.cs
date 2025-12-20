@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -15,9 +16,7 @@ public class SurpriseBoxState : MonoBehaviour
     public GameObject GameWorld;
     public GameObject PlayerSelectionButton;
 
-
     [Header("Item Stuff")]
-
     [SerializeField] private List<GameObject> spawnBoxes;
     [SerializeField] private List<GameObject> itemPool;
     [SerializeField] private int numberToSpawn;
@@ -25,11 +24,12 @@ public class SurpriseBoxState : MonoBehaviour
     [SerializeField] private TMP_Text countdownText;
 
     private Transform itemBoxItemList;
-
     private List<GameObject> itemsInBox = new List<GameObject>();
 
-
     public GameObject[] playerNamesToDeactive;
+
+    // ✅ NEW: prevent multiple countdown coroutines
+    private Coroutine countdownRoutine;
 
     private void Awake()
     {
@@ -40,31 +40,80 @@ public class SurpriseBoxState : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
     }
-
 
     private void OnEnable()
     {
         GameEvents.OnSurpriseBoxStateEntered += ActivateItemBox;
         GameEvents.OnSurpriseBoxStateEntered += SpawnObjects;
-        GameEvents.OnSurpriseBoxStateEntered += ShowAllCursors;
+        //GameEvents.OnSurpriseBoxStateEntered += ShowAllCursors;
         GameEvents.OnSurpriseBoxStateEntered += DeactivePlayerNames;
 
+        GameEvents.OnSurpriseBoxStateEntered += StartEnterCountdown;
     }
 
     private void OnDisable()
     {
-        //GameEvents.OnSurpriseBoxStateEntered -= OnPickItemStateEntered;
+        GameEvents.OnSurpriseBoxStateEntered -= ActivateItemBox;
+        GameEvents.OnSurpriseBoxStateEntered -= SpawnObjects;
+        GameEvents.OnSurpriseBoxStateEntered -= ShowAllCursors;
+        GameEvents.OnSurpriseBoxStateEntered -= DeactivePlayerNames;
+        GameEvents.OnSurpriseBoxStateEntered -= StartEnterCountdown;
+
+        // optional safety
+        StopCountdownIfRunning();
     }
 
+    private void StopCountdownIfRunning()
+    {
+        if (countdownRoutine != null)
+        {
+            StopCoroutine(countdownRoutine);
+            countdownRoutine = null;
+        }
+        if (countdownText != null)
+            countdownText.gameObject.SetActive(false);
+    }
+
+    private void StartEnterCountdown()
+    {
+        StopCountdownIfRunning();
+
+        // Countdown beim Betreten -> danach Countdown-Objekt ausblenden
+        countdownRoutine = StartCoroutine(PlayCountdown(3, () =>
+        {
+            // Nach dem Enter-Countdown:
+            // - CountdownText wird in PlayCountdown deaktiviert
+            // - Hier kannst du optional Sachen triggern
+            // z.B. SurpriseBox offen lassen oder nochmal extra UI aktivieren.
+        }));
+    }
+
+    private IEnumerator PlayCountdown(int seconds, Action onFinished)
+    {
+        int countdown = seconds;
+
+        countdownText.gameObject.SetActive(true);
+
+        while (countdown > 0)
+        {
+            countdownText.text = countdown.ToString();
+            yield return new WaitForSeconds(1f);
+            countdown--;
+        }
+
+        countdownText.gameObject.SetActive(false);
+
+        ShowAllCursors();
+
+        countdownRoutine = null;
+        onFinished?.Invoke();
+    }
 
     public void DeactivePlayerNames()
     {
-        foreach(var name in playerNamesToDeactive)
-        {
+        foreach (var name in playerNamesToDeactive)
             name.SetActive(false);
-        }
     }
 
     public void SpawnObjects()
@@ -85,7 +134,6 @@ public class SurpriseBoxState : MonoBehaviour
             int prefabIndex;
             int attempts = 0;
 
-            // find an unused index
             do
             {
                 prefabIndex = UnityEngine.Random.Range(0, itemPool.Count);
@@ -101,22 +149,18 @@ public class SurpriseBoxState : MonoBehaviour
             var prefab = itemPool[prefabIndex];
             float rate = prefab.GetComponent<SelectableItem>().GetSpawnRate();
 
-            // roll spawn rate
             if (UnityEngine.Random.Range(0f, 100f) > rate)
             {
-                i--; // try again for this slot (do NOT mark used)
+                i--;
                 continue;
             }
 
-            // ✅ mark this item as used so it can't spawn again this wave
             usedIndices.Add(prefabIndex);
 
-            // pick a unique tile
             int idx = UnityEngine.Random.Range(0, availableTiles.Count);
             var tile = availableTiles[idx];
             availableTiles.RemoveAt(idx);
 
-            // position inside bounds (fallback if no MeshCollider)
             var col = tile.GetComponent<MeshCollider>();
             Vector2 pos = (col != null)
                 ? new Vector2(
@@ -131,42 +175,39 @@ public class SurpriseBoxState : MonoBehaviour
 
     private void ActivateItemBox()
     {
-        //itemBox.SetActive(true);
         SurpriseBox.SetActive(true);
     }
 
     public void DeactivateItemBox()
     {
         SurpriseBox.SetActive(false);
-        // Destroy all spawned items
+
         foreach (var go in itemsInBox)
             if (go != null)
                 Destroy(go);
 
         itemsInBox.Clear();
-
     }
 
-
-
-    // Called by CursorController when a player picks an item
     public void NotifyPlayerPicked(int idx, GameObject prefab)
     {
-
         if (!playerManager.pickedPrefabByPlayer.ContainsKey(idx))
         {
             playerManager.pickedPrefabByPlayer[idx] = prefab;
             var cursor = playerManager.playerRoots[idx].transform.Find("CursorNoPI").gameObject;
             cursor.SetActive(false);
-
         }
-
 
         if (playerManager.pickedPrefabByPlayer.Count == playerManager.playerCount)
         {
-            StartCoroutine(CountdownBeforeMainGame());
+            StopCountdownIfRunning();
 
-            //BeginPlacementPhaseAll();
+            // ✅ use same countdown system here too
+            countdownRoutine = StartCoroutine(PlayCountdown(3, () =>
+            {
+                DeactivateItemBox();
+                GameEvents.ChangeState(GameState.PlaceItemState);
+            }));
         }
     }
 
@@ -179,41 +220,10 @@ public class SurpriseBoxState : MonoBehaviour
             var pi = root.GetComponent<PlayerInput>();
             var cursor = root.transform.Find("CursorNoPI").gameObject;
 
-            // Reset cursor position using PlayerManager
             playerManager.ResetCursorPositionItemSelection(idx);
 
-            // 1) turn the cursor graphic on
             cursor.SetActive(true);
-
-            // 2) swap to the Cursor map
             pi.SwitchCurrentActionMap("Cursor");
-
-
         }
     }
-
-    private IEnumerator CountdownBeforeMainGame()
-    {
-        int countdown = 3;  
-
-        while (countdown > 0)
-        {
-            countdownText.gameObject.SetActive(true);
-            countdownText.text = countdown.ToString();
-
-
-
-
-            yield return new WaitForSeconds(1f);
-            countdown--;
-        }
-
-       
-        countdownText.gameObject.SetActive(false);
-        DeactivateItemBox();
-        GameEvents.ChangeState(GameState.PlaceItemState);
-
-    }
-
-
 }

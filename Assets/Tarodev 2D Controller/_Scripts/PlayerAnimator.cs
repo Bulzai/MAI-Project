@@ -258,8 +258,9 @@ namespace TarodevController
                 DetectGroundColor();
                 SetColor(_landParticles);
 
-                if (_footsteps != null && _footsteps.Length > 0 && _source != null)
-                    _source.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Length)]);
+                //sound
+                //if (_footsteps != null && _footsteps.Length > 0 && _source != null)
+                    //_source.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Length)]);
 
                 if (_moveParticles != null) _moveParticles.Play();
 
