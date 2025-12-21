@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,8 +16,8 @@ public class GridPlacementSystem : MonoBehaviour
     public GridLayout gridLayout;
     public Tilemap MainTilemap;
     public Tilemap TempTilemap;
-
-
+    public Tilemap OriginalTilemap;
+    
     public static Dictionary<TileType, TileBase> tileBases = new Dictionary<TileType, TileBase>();
 
     // track each Cursor/GridItem's last highlight area
@@ -24,7 +25,6 @@ public class GridPlacementSystem : MonoBehaviour
 
 
     #region Unity Methods
-
     private static TileBase[] GetTilesBlock(BoundsInt area, Tilemap tilemap)
     {
         TileBase[] array = new TileBase[area.size.x * area.size.y * area.size.z];
@@ -62,7 +62,13 @@ public class GridPlacementSystem : MonoBehaviour
         Instance = this;
         MainTilemap.gameObject.SetActive(false);
         TempTilemap.gameObject.SetActive(false);
+        GameEvents.OnPlayerSelectionStateExited += ResetMainTileMap;
 
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.OnPlayerSelectionStateExited -= ResetMainTileMap;
     }
 
     private void Start()
@@ -632,6 +638,11 @@ public class GridPlacementSystem : MonoBehaviour
 
         // Mark this cell as occupied (blue tile)
         MainTilemap.SetTile(cell, tileBases[TileType.Red]);
+    }
+    
+    private void ResetMainTileMap()
+    {
+        MainTilemap = OriginalTilemap;
     }
 
 
