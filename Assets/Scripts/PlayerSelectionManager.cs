@@ -34,6 +34,7 @@ public class PlayerSelectionManager : MonoBehaviour
         GameEvents.OnPlayerSelectionStateExited += HandlePlayerSelectionStateExit;
         TarodevController.PlayerController.OnReturnToMainMenu += HandleReturnToMainMenu;
         UIController.OnCancelPressed += HandleReturnToMainMenu;
+        UIController.OnSubmitPressed += TryStartGame;
     }
 
     void OnDestroy()
@@ -45,6 +46,7 @@ public class PlayerSelectionManager : MonoBehaviour
         GameEvents.OnPlayerSelectionStateExited -= HandlePlayerSelectionStateExit;
         TarodevController.PlayerController.OnReturnToMainMenu -= HandleReturnToMainMenu;
         UIController.OnCancelPressed -= HandleReturnToMainMenu;
+        UIController.OnSubmitPressed -= TryStartGame;
 
     }
 

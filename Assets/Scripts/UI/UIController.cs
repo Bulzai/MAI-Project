@@ -9,6 +9,7 @@ using UnityEngine.InputSystem.UI;
 public class UIController : MonoBehaviour
 {
     public static event Action OnCancelPressed;
+    public static event Action OnSubmitPressed;
 
     
     [SerializeField] private EventSystem eventSystem;
@@ -28,7 +29,8 @@ public class UIController : MonoBehaviour
         }
 
         // Subscribe to the cancel InputAction
-        _uiModule.cancel.action.performed += OnCancelPerformed;
+        _uiModule.cancel.action.performed += OnCancel;
+        _uiModule.submit.action.performed += OnSubmit;
         DontDestroyOnLoad(gameObject);
 
     }
@@ -36,14 +38,25 @@ public class UIController : MonoBehaviour
     private void OnDestroy()
     {
         if (_uiModule != null)
-            _uiModule.cancel.action.performed -= OnCancelPerformed;
+        {
+            _uiModule.cancel.action.performed -= OnCancel;
+            _uiModule.submit.action.performed -= OnSubmit;
+        }
     }
 
-    private void OnCancelPerformed(InputAction.CallbackContext ctx)
+    private void OnCancel(InputAction.CallbackContext ctx)
     {
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
             OnCancelPressed?.Invoke();
         
         Debug.Log("UI Cancel pressed");
+    }
+    
+    private void OnSubmit(InputAction.CallbackContext ctx)
+    {
+        if (GameEvents.CurrentState == GameState.PlayerSelectionState)
+            OnSubmitPressed?.Invoke();
+        Debug.Log("UI OnSubmit pressed");
+
     }
 }
