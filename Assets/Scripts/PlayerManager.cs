@@ -306,7 +306,8 @@ public class PlayerManager : MonoBehaviour
         playersThatPlaced.Remove(idx);
         
         OnPlayerLeftGlobal?.Invoke(pi);
-
+        Destroy(pi);
+        Debug.Log("player left");
 
     }
 
