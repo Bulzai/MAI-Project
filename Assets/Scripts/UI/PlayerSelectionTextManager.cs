@@ -10,64 +10,94 @@ public class PlayerSelectionTextManager : MonoBehaviour
 
     [SerializeField] private float showDuration = 4f;
 
-    private Coroutine _showRoutine;
+    private Coroutine _showRoutineNotAllPlayersReady;
+    private Coroutine _showRoutineNobodyJoinedYet;
 
     private void Awake()
     {
-        PlayerSelectionManager.OnNobodyJoinedYet += HandleNobodyJoinedYet;
+        PlayerSelectionManager.OnNobodyJoinedYet    += HandleNobodyJoinedYet;
         PlayerSelectionManager.OnNotAllPlayersReady += HandleNotAllPlayersReady;
-        GameEvents.OnPlayerSelectionStateExited += HandlePlayerSelectionStateExited;
+        GameEvents.OnPlayerSelectionStateExited     += HandlePlayerSelectionStateExited;
     }
-    
+
     private void OnDestroy()
     {
-        PlayerSelectionManager.OnNobodyJoinedYet  -= HandleNobodyJoinedYet;
+        PlayerSelectionManager.OnNobodyJoinedYet    -= HandleNobodyJoinedYet;
         PlayerSelectionManager.OnNotAllPlayersReady -= HandleNotAllPlayersReady;
-        GameEvents.OnPlayerSelectionStateExited -= HandlePlayerSelectionStateExited;
+        GameEvents.OnPlayerSelectionStateExited     -= HandlePlayerSelectionStateExited;
     }
 
     private void HandlePlayerSelectionStateExited()
     {
-        HideNow(NotAllPlayersReadyText);
-        HideNow(NobodyJoinedYetText);
+        HideNotAllPlayersReady();
+        HideNobodyJoinedYet();
     }
-    
+
     private void HandleNotAllPlayersReady()
     {
-        ShowForSeconds(NotAllPlayersReadyText);
+        ShowNotAllPlayersReady();
     }
-    
+
     private void HandleNobodyJoinedYet()
     {
-        ShowForSeconds(NobodyJoinedYetText);
-    }
-    
-    // Call this to show for a few seconds
-    public void ShowForSeconds(TextMeshProUGUI textToShow)
-    {
-        if (_showRoutine != null)
-            StopCoroutine(_showRoutine);
-
-        textToShow.enabled = true;
-        _showRoutine = StartCoroutine(HideAfterDelay(textToShow));
+        ShowNobodyJoinedYet();
     }
 
-    // Call this to hide immediately
-    public void HideNow(TextMeshProUGUI textToHide)
+    // ----- NotAllPlayersReady -----
+
+    private void ShowNotAllPlayersReady()
     {
-        if (_showRoutine != null)
+        if (_showRoutineNotAllPlayersReady != null)
+            StopCoroutine(_showRoutineNotAllPlayersReady);
+
+        NotAllPlayersReadyText.enabled = true;
+        _showRoutineNotAllPlayersReady =
+            StartCoroutine(HideAfterDelay(NotAllPlayersReadyText,
+                                          r => _showRoutineNotAllPlayersReady = r));
+    }
+
+    private void HideNotAllPlayersReady()
+    {
+        if (_showRoutineNotAllPlayersReady != null)
         {
-            StopCoroutine(_showRoutine);
-            _showRoutine = null;
+            StopCoroutine(_showRoutineNotAllPlayersReady);
+            _showRoutineNotAllPlayersReady = null;
         }
 
-        textToHide.enabled = false;
+        NotAllPlayersReadyText.enabled = false;
     }
 
-    private IEnumerator HideAfterDelay(TextMeshProUGUI textToHide)
+    // ----- NobodyJoinedYet -----
+
+    private void ShowNobodyJoinedYet()
+    {
+        if (_showRoutineNobodyJoinedYet != null)
+            StopCoroutine(_showRoutineNobodyJoinedYet);
+
+        NobodyJoinedYetText.enabled = true;
+        _showRoutineNobodyJoinedYet =
+            StartCoroutine(HideAfterDelay(NobodyJoinedYetText,
+                                          r => _showRoutineNobodyJoinedYet = r));
+    }
+
+    private void HideNobodyJoinedYet()
+    {
+        if (_showRoutineNobodyJoinedYet != null)
+        {
+            StopCoroutine(_showRoutineNobodyJoinedYet);
+            _showRoutineNobodyJoinedYet = null;
+        }
+
+        NobodyJoinedYetText.enabled = false;
+    }
+
+    // ----- Shared coroutine -----
+
+    private IEnumerator HideAfterDelay(TextMeshProUGUI textToHide,
+                                       System.Action<Coroutine> clearRoutineField)
     {
         yield return new WaitForSeconds(showDuration);
         textToHide.enabled = false;
-        _showRoutine = null;
+        clearRoutineField(null); // sets the corresponding field back to null
     }
 }

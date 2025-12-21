@@ -116,7 +116,8 @@ public class PlayerSelectionManager : MonoBehaviour
         }
 
         Debug.Log("All players ready, starting game!");
-        GameEvents.ChangeState(GameState.SurpriseBoxState);
+        // otherwise the event gets called once from TarovDevController and once from UIController
+        if (GameEvents.CurrentState == GameState.PlayerSelectionState) GameEvents.ChangeState(GameState.SurpriseBoxState);
     }
 
     private void HandlePlayerSelectionStateExit()

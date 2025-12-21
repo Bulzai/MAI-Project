@@ -126,11 +126,11 @@ namespace TarodevController
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (GameEvents.CurrentState == GameState.PlayerSelectionState)
-                OnTryStartGame?.Invoke();
             
             if (context.started)
             {
+                if (GameEvents.CurrentState == GameState.PlayerSelectionState)
+                    OnTryStartGame?.Invoke();
                 jumpPressed = true;
                 jumpHeld = true;
             }
