@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 7914299603772816358}
   m_Layer: 6
   m_Name: Candle
-  m_TagString: Untagged
+  m_TagString: Candle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -144,8 +144,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4888976920427612984}
-  - {fileID: 6838890539448730249}
   - {fileID: 2242705295382345368}
+  - {fileID: 6838890539448730249}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1171235549917489825
@@ -333,9 +333,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 748071933
+  m_SortingLayer: 1
+  m_SortingOrder: 1
   m_Sprite: {fileID: -1596328029, guid: 8d827788971aaca428a372b85b7f15ba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

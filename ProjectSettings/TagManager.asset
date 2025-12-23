@@ -9,6 +9,7 @@ TagManager:
   - Sticky
   - MovingObject
   - Ice
+  - Candle
   layers:
   - Default
   - TransparentFX

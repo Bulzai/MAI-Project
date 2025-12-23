@@ -35,8 +35,14 @@ public class ProjectileLauncher : MonoBehaviour
 
     void FireOne()
     {
-        Vector2 dir = direction.right.normalized;        // <- aim defined by child’s +X
+        Vector2 dir = direction.right.normalized;        // <- aim defined by childï¿½s +X
 
+        // If this launcher is mirrored on X, flip the vertical component back
+        if (transform.localScale.x < 0f)
+        {
+            dir.y = -dir.y;     // keep horizontal sign, invert vertical
+        }
+        
         int randomBullet = Random.Range(0, projectilePrefab.Length);
         var go = Instantiate(projectilePrefab[randomBullet], muzzle.position, Quaternion.identity);
 

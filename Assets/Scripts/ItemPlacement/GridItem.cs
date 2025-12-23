@@ -116,6 +116,13 @@ public class GridItem : MonoBehaviour
     }
     public void RotateClockwise()
     {
+        Debug.Log("RotateClockwise called on " + gameObject.tag);
+        if (gameObject.tag == "Candle")
+        {
+            FlipHorizontal();
+            return;
+        }
+
         var grid = GridPlacementSystem.Instance.gridLayout;
 
         // anchor on the same cell center the cursor is using
@@ -143,6 +150,12 @@ public class GridItem : MonoBehaviour
 
     public void RotateCounterclockwise()
     {
+        if (gameObject.tag == "Candle")
+        {
+            FlipHorizontal();
+            return;
+        }
+
         var grid = GridPlacementSystem.Instance.gridLayout;
 
         Vector3Int currentCell = grid.WorldToCell(transform.position);
@@ -214,10 +227,14 @@ public class GridItem : MonoBehaviour
                 worldScale.z / transform.lossyScale.z
             );
         }
-
-
     }
-
+    
+    public void FlipHorizontal()
+    {
+        var s = transform.localScale;
+        s.x*= -1f;           // mirror on X axis
+        transform.localScale = s;
+    }
 
 
     public enum FacingDirection

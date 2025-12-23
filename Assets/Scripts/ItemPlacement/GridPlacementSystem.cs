@@ -642,10 +642,19 @@ public class GridPlacementSystem : MonoBehaviour
     
     private void ResetMainTileMap()
     {
-        MainTilemap = OriginalTilemap;
+        CopyTilemap(OriginalTilemap, MainTilemap);
     }
 
+    private void CopyTilemap(Tilemap source, Tilemap target)
+    {
+        // Clear target first
+        target.ClearAllTiles();
 
+        // Use the bounds/int position range of the source tilemap
+        BoundsInt bounds = source.cellBounds;
+        TileBase[] tiles = source.GetTilesBlock(bounds);
+        target.SetTilesBlock(bounds, tiles);
+    }
 }
 
 

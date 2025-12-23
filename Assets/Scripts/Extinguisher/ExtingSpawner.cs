@@ -74,6 +74,7 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnMainGameStateExited -= StopSpawning;
         GameEvents.OnMainGameStateExited -= DisableExtinguisherContainer;
         GameEvents.OnMainGameStateEntered -= EnableExtinguisherContainer;
+        GameEvents.OnFinalScoreStateEntered -= ResetExtinguisherSpawns;
     }
 
     private void Awake()
@@ -86,6 +87,7 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnMainGameStateEntered += EnableExtinguisherContainer;
         GameEvents.OnMainGameStateExited += StopSpawning;
         GameEvents.OnMainGameStateExited += DisableExtinguisherContainer;
+        GameEvents.OnFinalScoreStateEntered += ResetExtinguisherSpawns;
         
         platformCells = new HashSet<Vector3Int>();
         foreach (var pos in platformMap.cellBounds.allPositionsWithin)
@@ -510,4 +512,9 @@ public class ExtingSpawner : MonoBehaviour
         return false;
     }
 
+    
+    public void ResetExtinguisherSpawns()
+    {
+        spawnPositionsPrepared = false;
+    }
 }
