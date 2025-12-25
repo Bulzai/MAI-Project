@@ -49,14 +49,12 @@ public class UIController : MonoBehaviour
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
             OnCancelPressed?.Invoke();
         
-        Debug.Log("UI Cancel pressed");
     }
     
     private void OnSubmit(InputAction.CallbackContext ctx)
     {
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
             OnSubmitPressed?.Invoke();
-        Debug.Log("UI OnSubmit pressed");
 
     }
 }

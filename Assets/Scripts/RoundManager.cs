@@ -1,21 +1,25 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class RoundController : MonoBehaviour
 {
     [Header("Round Settings")]
     [SerializeField] private int maxRounds = 3;
     [SerializeField] private float scoreDisplayTime = 5f;
-    public PlayerManager playerManagerFinal;
-    [SerializeField] PlayerScoreManager playerScoreManager;
 
+    public PlayerManager playerManagerFinal;
+    private PlayerScoreManager playerScoreManager;
 
     private int currentRound = 0;
+    private Coroutine _advanceRoutine;
+
+    private void Awake()
+    {
+        playerScoreManager = GetComponent<PlayerScoreManager>();
+    }
 
     private void OnEnable()
     {
-        // Whenever we finish a round…
         GameEvents.OnScoreStateEntered += HandleScoreState;
     }
 
@@ -27,38 +31,51 @@ public class RoundController : MonoBehaviour
     private void HandleScoreState()
     {
         currentRound++;
-        StartCoroutine(AdvanceAfterDelay());
+
+        bool isLastRound = currentRound >= maxRounds;
+
+
+        // IMPORTANT: If it's the last round, do NOT auto-advance anywhere.
+        if (isLastRound)
+        {
+            playerScoreManager.SetMenuButtonActiveOrDeactive(true);
+            return;
+        }
+
+        if (_advanceRoutine != null)
+            StopCoroutine(_advanceRoutine);
+
+        _advanceRoutine = StartCoroutine(AdvanceAfterDelay());
     }
 
     private IEnumerator AdvanceAfterDelay()
     {
-        // 1) Let the scoreboard stay up for a bit
         yield return new WaitForSeconds(scoreDisplayTime);
 
-        // 2) Hide the scoreboard UI
-        var scoreMgr = FindObjectOfType<PlayerScoreManager>();
-        if (scoreMgr != null)
-            scoreMgr.scoreboardUI.SetActive(false);
-        playerScoreManager.scoreboardUI.SetActive(false);
+        // Hide scoreboard UI
+        if (playerScoreManager != null && playerScoreManager.scoreboardUI != null)
+            playerScoreManager.scoreboardUI.SetActive(false);
 
-        // 3) Decide where to go next
         if (currentRound < maxRounds)
         {
-            if(playerManagerFinal != null)
+            if (playerManagerFinal != null)
                 playerManagerFinal.ResetEliminations();
 
-
-            Debug.Log("Here in RoundController");
-            // next round: go back to item‐picking
             GameEvents.ChangeState(GameState.SurpriseBoxState);
         }
-        else
-        {
-            // all rounds done: show final results
-            // we can reuse ScoreState or make a dedicated FinalScoreState
-            GameEvents.ChangeState(GameState.FinalScoreState);
+    }
 
-            currentRound = 0; 
+    // Call this when starting a new run / back to main menu, etc.
+    public void ResetRounds()
+    {
+        currentRound = 0;
+        if (_advanceRoutine != null)
+        {
+            StopCoroutine(_advanceRoutine);
+            _advanceRoutine = null;
         }
+
+        if (playerScoreManager != null)
+            playerScoreManager.SetMenuButtonActiveOrDeactive(false);
     }
 }

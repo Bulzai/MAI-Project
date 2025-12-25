@@ -3,36 +3,37 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class ExtinguisherPulsingEffect : MonoBehaviour
 {
-    private float baseScale = 1.15f;
-    private float pulseAmplitude = 0.6f;
-    private float pulseSpeed = 2f;
-    private float lerpSpeed = 8f;
+    [SerializeField] private float pulseSpeed = 2f;
+    [SerializeField] private float lerpSpeed = 8f;
+    [SerializeField] private float maxScaleMultiplier = 1.2f;
 
     private Vector3 originalScale;
-    private Color originalColor;
+    private float phaseOffset;
 
-    float phaseOffset;   // different per instance
-
-    void Awake()
+    private void Awake()
     {
         originalScale = transform.localScale;
-
-        // random start time/phase
         phaseOffset = Random.Range(0f, Mathf.PI * 2f);
     }
 
-    void Update()
+    private void Update()
     {
         float dt = Time.deltaTime;
 
-        // 0..1..0 pulse
-        float t = (Mathf.Sin(Time.time * pulseSpeed + phaseOffset) + 1f) * 0.5f; // 0..1
+        // Sin wave mapped from [-1,1] ? [0,1]
+        float t = (Mathf.Sin(Time.time * pulseSpeed + phaseOffset) + 1f) * 0.5f;
 
-        // scale factor: always >= 1
-        float targetScaleFactor = baseScale + t * pulseAmplitude; // min = baseScale, max = baseScale + pulseAmplitude
+        // Interpolate ONLY between original and max scale
+        Vector3 targetScale = Vector3.Lerp(
+            originalScale,
+            originalScale * maxScaleMultiplier,
+            t
+        );
 
-        Vector3 targetScale = originalScale * targetScaleFactor;
-
-        transform.localScale = Vector3.Lerp(transform.localScale, targetScale, lerpSpeed * dt);
+        transform.localScale = Vector3.Lerp(
+            transform.localScale,
+            targetScale,
+            lerpSpeed * dt
+        );
     }
 }

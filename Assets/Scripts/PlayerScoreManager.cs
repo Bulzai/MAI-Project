@@ -12,38 +12,36 @@ public class PlayerScoreManager : MonoBehaviour
     public GameObject scoreboardUI;
     [SerializeField] private Transform rowsContainer; // has Row_1..Row_4 (each with ScoreboardRowUI)
 
-    // Cache UI row slots found under rowsContainer
+    [Header("Last Round UI")]
+    [SerializeField] private GameObject menuButton; // <-- assign in inspector
+                                                   
+
     private List<ScoreboardRowUI> _rowSlots = new();
 
-    // >>> CHANGED: Key everything by playerIndex (int) to avoid destroyed PlayerInput refs
     private Dictionary<int, int> _totalScores = new();                // playerIndex -> total score
     private Dictionary<int, ScoreboardRowUI> _rows = new();           // playerIndex -> row
 
     [SerializeField] private Sprite fallbackAvatar;
-
     private readonly int[] _roundPoints = new[] { 100, 75, 50, 25 };
 
     private static bool IsDestroyed(Object o) => o == null;
 
     private void OnEnable()
     {
-        GameEvents.OnScoreStateEntered += ShowScores;
-        GameEvents.OnFinalScoreStateEntered += ShowFinalScores;
+        GameEvents.OnScoreStateEntered += ShowScores;     // Only one scoreboard entry point now
+        // GameEvents.OnFinalScoreStateEntered -= removed
     }
 
     private void OnDisable()
     {
         GameEvents.OnScoreStateEntered -= ShowScores;
-        GameEvents.OnFinalScoreStateEntered -= ShowFinalScores;
     }
 
-    /// <summary>Call this from your ResetGame flow to nuke stale mappings.</summary>
     public void ClearCaches()
     {
         StopAllCoroutines();
         _totalScores.Clear();
         _rows.Clear();
-        // Don't clear _rowSlots; it's just the prefab references under the container
         if (scoreboardUI) scoreboardUI.SetActive(false);
     }
 
@@ -60,20 +58,13 @@ public class PlayerScoreManager : MonoBehaviour
             Debug.LogError("No ScoreboardRowUI children found under RowsContainer.");
     }
 
-    /// <summary>Current valid players (skip destroyed) in index order.</summary>
     private List<PlayerInput> GetLivePlayers()
     {
         if (playerManager == null) return new List<PlayerInput>();
-        // prune destroyed refs if any linger
         playerManager.PruneDestroyedPlayers();
         return playerManager.players.Where(p => !IsDestroyed(p)).OrderBy(p => p.playerIndex).ToList();
     }
 
-    /// <summary>
-    /// Enable only first N rows (N = live player count 2..4) and map them to players by index.
-    /// Populates _rows (playerIndex -> row), and ensures _totalScores has an entry per mapped player.
-    /// Also calls row.SetStatic(...) once with the live PlayerInput and avatar.
-    /// </summary>
     private void EnsureRowsMapped()
     {
         CacheRowSlots();
@@ -81,15 +72,13 @@ public class PlayerScoreManager : MonoBehaviour
         var livePlayers = GetLivePlayers();
         int playerCount = Mathf.Clamp(livePlayers.Count, 0, _rowSlots.Count);
 
-        // Hide all rows first
         foreach (var r in _rowSlots) r.gameObject.SetActive(false);
-
         _rows.Clear();
 
         for (int i = 0; i < playerCount; i++)
         {
             var p = livePlayers[i];
-            var idx = p.playerIndex;
+            int idx = p.playerIndex;
             var row = _rowSlots[i];
 
             row.gameObject.SetActive(true);
@@ -97,25 +86,17 @@ public class PlayerScoreManager : MonoBehaviour
             if (!_totalScores.ContainsKey(idx))
                 _totalScores[idx] = 0;
 
-            // Assign avatar once (live player ref is OK here)
-            var avatar = GetAvatarSprite(idx);
-            row.SetStatic(p, avatar);
-
+            row.SetStatic(p, GetAvatarSprite(idx));
             _rows[idx] = row;
         }
     }
 
-    /// <summary>Refresh just the avatars on already mapped rows (by index).</summary>
     private void RefreshAllAvatars()
     {
         foreach (var kv in _rows)
-        {
-            int idx = kv.Key;
-            kv.Value.SetAvatar(GetAvatarSprite(idx));
-        }
+            kv.Value.SetAvatar(GetAvatarSprite(kv.Key));
     }
 
-    /// <summary>Get avatar by playerIndex from PlayerManager arrays (stable across destroys).</summary>
     private Sprite GetAvatarSprite(int playerIndex)
     {
         if (playerManager != null &&
@@ -129,47 +110,66 @@ public class PlayerScoreManager : MonoBehaviour
         return fallbackAvatar;
     }
 
-    // -------------------- SCORE FLOWS --------------------
+    // -------------------- SCORE FLOW  --------------------
 
+    // Keep signature for event hook.
     private void ShowScores()
+    {
+        // Default: not last round. RoundController will call SetIsLastRound(true) before entering ScoreState on last round.
+        InternalShowScores(isLastRound: false);
+    }
+
+    // Call this from RoundController BEFORE you change into ScoreState (for last round).
+    public void SetMenuButtonActiveOrDeactive(bool isLastRound)
+    {
+        menuButton.SetActive(isLastRound);
+    }
+
+    // If you prefer, you can call this directly from RoundController instead of relying on the event.
+    public void ShowScoresManual(bool isLastRound)
+    {
+        InternalShowScores(isLastRound);
+    }
+
+    private void InternalShowScores(bool isLastRound)
     {
         if (playerManager == null || scoreboardUI == null)
             return;
 
-        EnsureRowsMapped();     // builds _rows by index for current roster
-        RefreshAllAvatars();    // uses index-based avatars
-        ReorderRowsByCurrentRanking();
 
-        var shownIndices = _rows.Keys.ToList(); // only rows that are visible
+        EnsureRowsMapped();
+        RefreshAllAvatars();
 
-        // Snapshot old totals only for shown players (by index)
+        var shownIndices = _rows.Keys.ToList();
+
+        // Snapshot old totals
         var oldTotals = new Dictionary<int, int>();
         foreach (var idx in shownIndices)
             oldTotals[idx] = _totalScores.GetValueOrDefault(idx, 0);
 
-        // Award placement points according to current round ranking (winner first)
-        var rankingPis = playerManager.GetRoundRanking(); // List<PlayerInput> winner..last
+        // 1) Award round placement points ONCE (based on this round ranking)
+        var rankingPis = playerManager.GetRoundRanking(); // winner..last for THIS round
         int place = 0;
+
         for (int i = 0; i < rankingPis.Count && place < shownIndices.Count; i++)
         {
             var pi = rankingPis[i];
             if (IsDestroyed(pi)) continue;
+
             int idx = pi.playerIndex;
-            if (!_rows.ContainsKey(idx)) continue; // only shown players
+            if (!_rows.ContainsKey(idx)) continue;
 
             int pts = place < _roundPoints.Length ? _roundPoints[place] : 0;
             _totalScores[idx] = oldTotals.GetValueOrDefault(idx, 0) + pts;
             place++;
         }
 
-        // Normalize only across shown players
+        // 2) NOW order UI by TOTAL points descending (not by this-round placement)
+        ApplyOrderByTotalAndSetPlaces();
+
         int maxTotal = Mathf.Max(
             1,
-            _totalScores
-                .Where(k => _rows.ContainsKey(k.Key))
-                .Select(k => k.Value)
-                .DefaultIfEmpty(0)
-                .Max()
+            _totalScores.Where(k => _rows.ContainsKey(k.Key)).Select(k => k.Value).DefaultIfEmpty(0).Max()
         );
 
         StopAllCoroutines();
@@ -178,15 +178,32 @@ public class PlayerScoreManager : MonoBehaviour
         scoreboardUI.SetActive(true);
     }
 
+    private void ApplyOrderByTotalAndSetPlaces()
+    {
+        // Sort only shown players by final total descending (tie-break by playerIndex to keep stable)
+        var sorted = _totalScores
+            .Where(k => _rows.ContainsKey(k.Key))
+            .OrderByDescending(k => k.Value)
+            .ThenBy(k => k.Key)
+            .Select(k => k.Key)
+            .ToList();
+
+        for (int i = 0; i < sorted.Count; i++)
+        {
+            int idx = sorted[i];
+            var row = _rows[idx];
+
+            row.transform.SetSiblingIndex(i);
+            row.SetPlace(i + 1); // 1,2,3,...
+        }
+    }
+
     private IEnumerator AnimateAllRows(Dictionary<int, int> oldTotals, int maxTotal)
     {
-        // stagger only visible rows, in the current UI order
-        float stagger = 0.07f;
-
-        // order by current layout order (sibling index)
+        // Stagger only visible rows, in current UI order
         var ordered = _rows
             .OrderBy(kv => kv.Value.transform.GetSiblingIndex())
-            .Select(kv => kv.Key) // idx
+            .Select(kv => kv.Key)
             .ToList();
 
         foreach (var idx in ordered)
@@ -198,77 +215,6 @@ public class PlayerScoreManager : MonoBehaviour
 
             StartCoroutine(row.AnimateScores(before, after - before, after, maxTotal, 1.15f));
             yield return new WaitForSeconds(0.07f);
-        }
-    }
-
-    private void ShowFinalScores()
-    {
-        if (playerManager == null || scoreboardUI == null)
-            return;
-
-        EnsureRowsMapped();
-        RefreshAllAvatars();
-        ReorderRowsByCurrentRanking();
-
-        // Sort only shown players by final total descending
-        var sortedByScore = _totalScores
-            .Where(k => _rows.ContainsKey(k.Key))
-            .OrderByDescending(k => k.Value)
-            .Select(k => k.Key) // idx
-            .ToList();
-
-        for (int i = 0; i < sortedByScore.Count; i++)
-        {
-            int idx = sortedByScore[i];
-            _rows[idx].transform.SetSiblingIndex(i);
-        }
-
-        int maxTotal = Mathf.Max(
-            1,
-            _totalScores
-                .Where(k => _rows.ContainsKey(k.Key))
-                .Select(k => k.Value)
-                .DefaultIfEmpty(0)
-                .Max()
-        );
-
-        StopAllCoroutines();
-        StartCoroutine(FinalSnap(maxTotal));
-
-        scoreboardUI.SetActive(true);
-    }
-
-    private IEnumerator FinalSnap(int maxTotal)
-    {
-        foreach (var kv in _rows)
-        {
-            int idx = kv.Key;
-            int total = _totalScores.GetValueOrDefault(idx, 0);
-            StartCoroutine(kv.Value.AnimateScores(total, 0, total, maxTotal, 0.35f));
-        }
-        yield return null;
-    }
-
-    // -------------------- UI ORDERING --------------------
-
-    private void ReorderRowsByCurrentRanking()
-    {
-        if (playerManager == null) return;
-
-        var ranking = playerManager.GetRoundRanking(); // List<PlayerInput> winner first
-
-        int uiIndex = 0;
-        foreach (var pi in ranking)
-        {
-            if (IsDestroyed(pi)) continue;
-            int idx = pi.playerIndex;
-
-            if (_rows.TryGetValue(idx, out var row))
-            {
-                row.transform.SetSiblingIndex(uiIndex);
-                row.SetPlace(uiIndex + 1); // 1., 2., 3., ..
-                uiIndex++;
-            }
         }
     }
 }
