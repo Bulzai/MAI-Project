@@ -366,6 +366,7 @@ namespace TarodevController
         #region Horizontal
         private void HandleDirection()
         {
+            
             bool pressingIntoWall = _onWall && Mathf.Sign(_frameInput.Move.x) == _wallDir && _wallStickCounter > 0f;
             if (pressingIntoWall)
             {

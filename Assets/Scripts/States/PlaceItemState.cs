@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class PlaceItemState : MonoBehaviour
 {
     public static PlaceItemState Instance { get; private set; }
+    private Coroutine countdownCoroutine;
 
     [SerializeField] private PlayerManager playerManager;
     [SerializeField] private GameObject GameWorld;
@@ -50,8 +51,9 @@ public class PlaceItemState : MonoBehaviour
         playerManager.pickedPrefabByPlayer.Clear();
         playerManager.playersThatPlaced.Clear();
         HideAllCursors();
-
-        StartCoroutine(CountdownBeforeMainGame());
+        
+        if (countdownCoroutine != null) return;     
+            countdownCoroutine = StartCoroutine(CountdownBeforeMainGame());
 
     }
     private IEnumerator CountdownBeforeMainGame()
@@ -73,6 +75,7 @@ public class PlaceItemState : MonoBehaviour
         GameEvents.ChangeState(GameState.MainGameState);
         countdownText.gameObject.SetActive(false);
         milkText.gameObject.SetActive(false);
+        countdownCoroutine = null;               
 
     }
 
