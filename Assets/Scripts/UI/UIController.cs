@@ -10,7 +10,7 @@ public class UIController : MonoBehaviour
 {
     public static event Action OnCancelPressed;
     public static event Action OnSubmitPressed;
-
+    public static event Action OnEnableInputUIController;
     
     [SerializeField] private EventSystem eventSystem;
 
@@ -32,6 +32,7 @@ public class UIController : MonoBehaviour
         _uiModule.cancel.action.performed += OnCancel;
         _uiModule.submit.action.performed += OnSubmit;
         DontDestroyOnLoad(gameObject);
+        GameEvents.OnFinalScoreStateEntered += OnEnableInputUIController;
 
     }
 
@@ -42,13 +43,15 @@ public class UIController : MonoBehaviour
             _uiModule.cancel.action.performed -= OnCancel;
             _uiModule.submit.action.performed -= OnSubmit;
         }
+        GameEvents.OnFinalScoreStateEntered -= OnEnableInputUIController;
+
     }
 
     private void OnCancel(InputAction.CallbackContext ctx)
     {
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
             OnCancelPressed?.Invoke();
-        
+        Debug.Log("OnCancelPressed UIController");
     }
     
     private void OnSubmit(InputAction.CallbackContext ctx)

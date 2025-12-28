@@ -162,6 +162,8 @@ namespace TarodevController
         {
             if (GameEvents.CurrentState == GameState.PlayerSelectionState)
                 OnReturnToMainMenu?.Invoke();
+            Debug.Log("OnCancelPressed tarodev");
+
         }
         
         private void GatherInput()

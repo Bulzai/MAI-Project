@@ -664,8 +664,19 @@
                 },
                 {
                     "name": "",
+                    "id": "c92b6647-7b8b-4bd8-99d2-bb6195cc4777",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "42ef3f31-1b69-419a-8d68-f161cb1a1768",
-                    "path": "*/{Cancel}",
+                    "path": "<Keyboard>/backspace",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR;Controller",
