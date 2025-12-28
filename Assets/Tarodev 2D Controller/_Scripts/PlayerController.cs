@@ -122,6 +122,7 @@ namespace TarodevController
         public void OnMove(InputAction.CallbackContext context)
         {
             movementInput = context.ReadValue<Vector2>();
+            Debug.Log( "OnMove: " + movementInput);
         }
 
         public void OnJump(InputAction.CallbackContext context)
@@ -130,7 +131,10 @@ namespace TarodevController
             if (context.started)
             {
                 if (GameEvents.CurrentState == GameState.PlayerSelectionState)
+                {
                     OnTryStartGame?.Invoke();
+                    return;
+                }
                 jumpPressed = true;
                 jumpHeld = true;
             }
