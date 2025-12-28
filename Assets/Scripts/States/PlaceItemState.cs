@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,7 +18,9 @@ public class PlaceItemState : MonoBehaviour
     [SerializeField] private TMP_Text countdownText;
     [SerializeField] private TMP_Text milkText;
 
-
+    public static Action CountDownStarted;
+    public static Action CountDownFinished;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -58,6 +62,7 @@ public class PlaceItemState : MonoBehaviour
     }
     private IEnumerator CountdownBeforeMainGame()
     {
+        CountDownStarted?.Invoke();
         int countdown = 3;  
 
         while (countdown > 0)
@@ -73,6 +78,7 @@ public class PlaceItemState : MonoBehaviour
         }
 
         GameEvents.ChangeState(GameState.MainGameState);
+        CountDownFinished?.Invoke();
         countdownText.gameObject.SetActive(false);
         milkText.gameObject.SetActive(false);
         countdownCoroutine = null;               

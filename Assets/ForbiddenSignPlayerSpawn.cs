@@ -9,14 +9,14 @@ public class ForbiddenSignPlayerSpawn : MonoBehaviour
     private void Start()
     {
         GameEvents.OnPlaceItemStateEntered += ShowSign;
-        GameEvents.OnMainGameStateEntered += HideSign;
+        PlaceItemState.CountDownStarted += HideSign;
         ShowSign();
     }
 
     private void OnDestroy()
     {
         GameEvents.OnPlaceItemStateEntered -= ShowSign;
-        GameEvents.OnMainGameStateEntered -= HideSign;
+        PlaceItemState.CountDownStarted -= HideSign;
     }
 
     private void ShowSign()

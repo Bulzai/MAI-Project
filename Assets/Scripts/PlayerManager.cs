@@ -79,7 +79,7 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnPlayerSelectionStateExited += DisablePlayerJoining;
 
         GameEvents.OnMainGameStateEntered += ResetEliminations;
-        GameEvents.OnMainGameStateEntered += ActivateCharacterPrefab;
+        PlaceItemState.CountDownStarted += ActivateCharacterPrefab;
         GameEvents.OnMainGameStateExited += DeactivateCharacterPrefab;
 
         GameEvents.OnPlayerEliminated += HandlePlayerElimination;
@@ -90,7 +90,7 @@ public class PlayerManager : MonoBehaviour
     {
         GameEvents.OnPlayerSelectionStateEntered -= EnablePlayerJoining;
         GameEvents.OnPlayerSelectionStateExited -= DeactivateCharacterPrefab;
-        GameEvents.OnMainGameStateEntered -= ActivateCharacterPrefab;
+        PlaceItemState.CountDownStarted -= ActivateCharacterPrefab;
         GameEvents.OnMainGameStateExited -= DeactivateCharacterPrefab;
         GameEvents.OnPlayerSelectionStateEntered -= DisablePlayerJoining;
         GameEvents.OnPlayerEliminated -= HandlePlayerElimination;

@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,7 +13,7 @@ namespace TarodevController
         public static event Action OnReturnToMainMenu;
         public static event Action OnTryStartGame;
         private PlayerInput _playerInput;
-
+        private bool lockedControls = true;
         
         
         
@@ -111,6 +112,14 @@ namespace TarodevController
                 groundLayers = _stats != null ? _stats.SolidLayers : Physics2D.AllLayers;
             }
             if (grounderDistance <= 0f) grounderDistance = 0.05f;
+            PlaceItemState.CountDownFinished += EnableControls;
+            GameEvents.OnMainGameStateExited += DisableControls;
+        }
+        
+        private void OnDestroy()
+        {
+            PlaceItemState.CountDownFinished -= EnableControls;
+            GameEvents.OnMainGameStateExited -= DisableControls;
         }
 
         private void Update()
@@ -194,6 +203,7 @@ namespace TarodevController
         {
             CheckCollisions();
 
+            if (lockedControls) return;
             HandleJump();
             HandleDirection();
             HandleGravity();
@@ -459,6 +469,17 @@ namespace TarodevController
         #endregion
 
         private void ApplyMovement() => _rb.velocity = _frameVelocity;
+
+        private void EnableControls()
+        {
+            lockedControls = false;
+        }
+
+        private void DisableControls()
+        {
+            lockedControls = true;
+        }
+
 
 #if UNITY_EDITOR
         private void OnValidate()
