@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -16,13 +17,22 @@ public class MenuButtonSelector: MonoBehaviour
         // Auto-assign the Selectable on this GameObject if not set
         if (elementToSelect == null)
             elementToSelect = GetComponent<Selectable>();
+        //ScoreboardRowUI.OnSoreboardAnimationFinished += JumpToElement;
     }
-
+    
     private void OnEnable()
     {
         // When this object becomes active, jump to its own selectable
         if (eventSystem == null || elementToSelect == null) return;
 
+        StartCoroutine(EnableMenuButtonAfterDelay());
+
+        
+    }
+
+    private IEnumerator EnableMenuButtonAfterDelay()
+    {
+        yield return new WaitForSeconds(4);
         eventSystem.SetSelectedGameObject(null);
         eventSystem.SetSelectedGameObject(elementToSelect.gameObject);
     }

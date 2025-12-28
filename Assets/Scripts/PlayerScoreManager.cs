@@ -122,6 +122,7 @@ public class PlayerScoreManager : MonoBehaviour
     // Call this from RoundController BEFORE you change into ScoreState (for last round).
     public void SetMenuButtonActiveOrDeactive(bool isLastRound)
     {
+        
         menuButton.SetActive(isLastRound);
     }
 

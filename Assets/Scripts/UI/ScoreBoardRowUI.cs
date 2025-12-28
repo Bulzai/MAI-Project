@@ -6,6 +6,10 @@ using System.Collections;
 
 public class ScoreboardRowUI : MonoBehaviour
 {
+    
+    
+    // event for menu button
+
     [SerializeField] private Image avatar;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private Image barFill;      // Image Type = Filled (Horizontal)
