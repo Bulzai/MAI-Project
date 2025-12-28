@@ -69,7 +69,7 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnSurpriseBoxStateEntered -= PrepareSpawnPositions;
         GameEvents.OnPlaceItemStateEntered -= ShowPreviews;
         GameEvents.OnPlaceItemStateEntered -= MarkExtinguisherTiles;
-        GameEvents.OnMainGameStateEntered -= HidePreviewsAndUnblockTiles;
+        PlaceItemState.CountDownStarted -= HidePreviewsAndUnblockTiles;
         GameEvents.OnMainGameStateEntered -= BeginSpawning;
         GameEvents.OnMainGameStateExited -= StopSpawning;
         GameEvents.OnMainGameStateExited -= DisableExtinguisherContainer;
@@ -82,7 +82,7 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnSurpriseBoxStateEntered += PrepareSpawnPositions;
         GameEvents.OnPlaceItemStateEntered += ShowPreviews;
         GameEvents.OnPlaceItemStateEntered += MarkExtinguisherTiles;
-        GameEvents.OnMainGameStateEntered += HidePreviewsAndUnblockTiles;
+        PlaceItemState.CountDownStarted += HidePreviewsAndUnblockTiles;
         GameEvents.OnMainGameStateEntered += BeginSpawning;
         GameEvents.OnMainGameStateEntered += EnableExtinguisherContainer;
         GameEvents.OnMainGameStateExited += StopSpawning;

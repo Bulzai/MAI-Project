@@ -131,7 +131,6 @@ namespace TarodevController
         public void OnMove(InputAction.CallbackContext context)
         {
             movementInput = context.ReadValue<Vector2>();
-            Debug.Log( "OnMove: " + movementInput);
         }
 
         public void OnJump(InputAction.CallbackContext context)
