@@ -17,20 +17,13 @@ public class UIController : MonoBehaviour
 
     private void Awake()
     {
-        if (eventSystem == null)
-            eventSystem = EventSystem.current;
-
-        _uiModule = eventSystem.GetComponent<InputSystemUIInputModule>();
-        if (_uiModule == null)
-        {
-            Debug.LogError("No InputSystemUIInputModule on EventSystem", eventSystem);
-            return;
-        }
+        GetEventSystem();
 
         // Subscribe to the cancel InputAction
         _uiModule.cancel.action.performed += OnCancel;
         _uiModule.submit.action.performed += OnSubmit;
         DontDestroyOnLoad(gameObject);
+        //GameEvents.OnMenuStateEntered += GetEventSystem;
 
     }
 
@@ -41,6 +34,7 @@ public class UIController : MonoBehaviour
             _uiModule.cancel.action.performed -= OnCancel;
             _uiModule.submit.action.performed -= OnSubmit;
         }
+        //GameEvents.OnMenuStateEntered -= GetEventSystem;
 
     }
 
@@ -55,6 +49,19 @@ public class UIController : MonoBehaviour
     {
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
             OnSubmitPressed?.Invoke();
+        Debug.Log("OnSubmitPRessed UIController");
 
+    }
+    
+    private void GetEventSystem()
+    {
+        Debug.Log("getting event system");
+        eventSystem = EventSystem.current;
+
+        _uiModule = eventSystem.GetComponent<InputSystemUIInputModule>();
+        if (_uiModule == null)
+        {
+            Debug.LogError("No InputSystemUIInputModule on EventSystem", eventSystem);
+        }
     }
 }

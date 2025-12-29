@@ -135,7 +135,6 @@ namespace TarodevController
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            
             if (context.started)
             {
                 if (GameEvents.CurrentState == GameState.PlayerSelectionState)
@@ -143,6 +142,8 @@ namespace TarodevController
                     OnTryStartGame?.Invoke();
                     return;
                 }
+                if (lockedControls) return;
+
                 jumpPressed = true;
                 jumpHeld = true;
             }
@@ -480,6 +481,7 @@ namespace TarodevController
         {
             lockedControls = true;
         }
+       
 
 
 #if UNITY_EDITOR
