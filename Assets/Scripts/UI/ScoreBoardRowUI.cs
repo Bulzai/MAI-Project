@@ -53,6 +53,7 @@ public class ScoreboardRowUI : MonoBehaviour
         }
         if (barFill) barFill.fillAmount = end;
         if (totalText) totalText.text = newTotal.ToString();
+        
     }
 
     public void SetAvatar(Sprite s) 

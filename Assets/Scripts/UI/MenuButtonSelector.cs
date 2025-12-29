@@ -24,15 +24,6 @@ public class MenuButtonSelector: MonoBehaviour
     {
         // When this object becomes active, jump to its own selectable
         if (eventSystem == null || elementToSelect == null) return;
-
-        StartCoroutine(EnableMenuButtonAfterDelay());
-
-        
-    }
-
-    private IEnumerator EnableMenuButtonAfterDelay()
-    {
-        yield return new WaitForSeconds(4);
         eventSystem.SetSelectedGameObject(null);
         eventSystem.SetSelectedGameObject(elementToSelect.gameObject);
     }

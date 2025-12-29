@@ -38,7 +38,7 @@ public class RoundController : MonoBehaviour
         // IMPORTANT: If it's the last round, do NOT auto-advance anywhere.
         if (isLastRound)
         {
-            playerScoreManager.SetMenuButtonActiveOrDeactive(true);
+            StartCoroutine(EnableMenuButtonAfterDelay());
             return;
         }
 
@@ -46,6 +46,13 @@ public class RoundController : MonoBehaviour
             StopCoroutine(_advanceRoutine);
 
         _advanceRoutine = StartCoroutine(AdvanceAfterDelay());
+    }
+    
+    private IEnumerator EnableMenuButtonAfterDelay()
+    {
+        yield return new WaitForSeconds(3f);
+        playerScoreManager.SetMenuButtonActiveOrDeactive(true);
+        PlayerManager.Instance.HardResetFinalScore();
     }
 
     private IEnumerator AdvanceAfterDelay()

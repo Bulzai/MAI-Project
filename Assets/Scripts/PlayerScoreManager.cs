@@ -137,7 +137,7 @@ public class PlayerScoreManager : MonoBehaviour
         if (playerManager == null || scoreboardUI == null)
             return;
 
-
+  
         EnsureRowsMapped();
         RefreshAllAvatars();
 

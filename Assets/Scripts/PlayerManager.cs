@@ -74,6 +74,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnEnable()
     {
+        //GameEvents.OnMenuStateEntered += SetInputToActiveAndUI;
         GameEvents.OnPlayerSelectionStateEntered += EnablePlayerJoining;
         GameEvents.OnPlayerSelectionStateExited += DeactivateCharacterPrefab;
         GameEvents.OnPlayerSelectionStateExited += DisablePlayerJoining;
@@ -94,6 +95,7 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnMainGameStateExited -= DeactivateCharacterPrefab;
         GameEvents.OnPlayerSelectionStateEntered -= DisablePlayerJoining;
         GameEvents.OnPlayerEliminated -= HandlePlayerElimination;
+        //GameEvents.OnMenuStateEntered -= SetInputToActiveAndUI;
 
     }
 
@@ -537,5 +539,11 @@ public class PlayerManager : MonoBehaviour
 
         // Also ensure elimination order has no dead refs
         _eliminationOrder = _eliminationOrder.Where(pi => !IsDestroyed(pi)).ToList();
+    }
+    
+    public void HardResetFinalScore()
+    {
+        StartCoroutine(HardResetRoutine());
+
     }
 }
