@@ -471,12 +471,12 @@ namespace TarodevController
 
         private void ApplyMovement() => _rb.velocity = _frameVelocity;
 
-        private void EnableControls()
+        public void EnableControls()
         {
             lockedControls = false;
         }
 
-        private void DisableControls()
+        public void DisableControls()
         {
             lockedControls = true;
         }
