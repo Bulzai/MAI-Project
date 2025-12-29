@@ -1,36 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TarodevController;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
     public static bool gameIsPaused = false;
     public GameObject pauseMenuUi;
-
-    // Start is called before the first frame update
-    void Start()
+   
+    private void Awake()
     {
-
+        PausePlayerRoot.OnPauseEvent += OnPauseEvent;
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    private void OnDestroy()
     {
-        // ---- Only allow pausing in MainGame state ----
-        if (GameEvents.CurrentState != GameState.MainGameState)
-            return;
-
-        // Keyboard fallback
-        if (Input.GetKeyDown(KeyCode.P))
-            TogglePause();
-
-        // Xbox Controller → Select Button (JoystickButton7)
-        if (Input.GetKeyDown(KeyCode.JoystickButton7))
-            TogglePause();
+        PausePlayerRoot.OnPauseEvent -= OnPauseEvent;
     }
-
+    
     public void Resume()
     {
         pauseMenuUi.SetActive(false);
@@ -60,4 +48,13 @@ public class PauseMenu : MonoBehaviour
         else
             Pause();
     }
+
+
+    public void OnPauseEvent()
+    {
+        if (GameEvents.CurrentState != GameState.MainGameState)
+            return;
+        TogglePause();
+    }
+
 }

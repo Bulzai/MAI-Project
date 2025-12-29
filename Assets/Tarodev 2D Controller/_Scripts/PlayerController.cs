@@ -15,8 +15,6 @@ namespace TarodevController
         private PlayerInput _playerInput;
         private bool lockedControls = true;
         
-        
-        
         [SerializeField] private ScriptableStats _stats;
         private Rigidbody2D _rb;
         private CapsuleCollider2D _col;
@@ -127,6 +125,7 @@ namespace TarodevController
             _time += Time.deltaTime;
             GatherInput();
         }
+        
 
         public void OnMove(InputAction.CallbackContext context)
         {
