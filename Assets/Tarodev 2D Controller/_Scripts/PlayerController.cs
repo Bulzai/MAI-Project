@@ -204,11 +204,11 @@ namespace TarodevController
         private void FixedUpdate()
         {
             CheckCollisions();
-
             if (lockedControls) return;
             HandleJump();
             HandleDirection();
             HandleGravity();
+
 
             // external forces
             _frameVelocity += _externalImpulse;

@@ -63,9 +63,8 @@ namespace TarodevController
         private static readonly int IsRunningKey = Animator.StringToHash("IsRunning");
         private static readonly int OnWallKey = Animator.StringToHash("OnWall");
         private static readonly int HitKey = Animator.StringToHash("Hit");
+        private static readonly int DeadBoolKey = Animator.StringToHash("Dead");
 
-        // OPTIONAL: only use if you add a Trigger param named "Death" in the base controller
-        private static readonly int DeathTriggerKey = Animator.StringToHash("Death");
 
         // Cache of generated AnimatorOverrideControllers
         private readonly Dictionary<(bool onFire, HealthTier tier), AnimatorOverrideController> _aocCache
@@ -231,14 +230,24 @@ namespace TarodevController
 
             _dead = true;
 
+            // IMPORTANT: don’t keep locomotion/hit fighting you
+            _anim.ResetTrigger(HitKey);
+            _anim.ResetTrigger(JumpKey);
+
             ApplyAnimatorForCurrentState(force: true);
 
-            _anim.ResetTrigger(DeathTriggerKey);
-            _anim.SetTrigger(DeathTriggerKey);
+            _anim.SetBool(DeadBoolKey, true);
+
 
             if (_moveParticles != null) _moveParticles.Stop();
         }
 
+
+        public void ResetDeath()
+        {
+            _anim.SetBool(DeadBoolKey, false);
+
+        }
         public void PlayHitReaction()
         {
             if (_anim == null) return;
