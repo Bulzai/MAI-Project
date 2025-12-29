@@ -203,11 +203,11 @@ namespace TarodevController
         private void FixedUpdate()
         {
             CheckCollisions();
-
             if (lockedControls) return;
             HandleJump();
             HandleDirection();
             HandleGravity();
+
 
             // external forces
             _frameVelocity += _externalImpulse;
@@ -471,12 +471,12 @@ namespace TarodevController
 
         private void ApplyMovement() => _rb.velocity = _frameVelocity;
 
-        private void EnableControls()
+        public void EnableControls()
         {
             lockedControls = false;
         }
 
-        private void DisableControls()
+        public void DisableControls()
         {
             lockedControls = true;
         }

@@ -3,10 +3,8 @@ using UnityEngine;
 
 namespace TarodevController
 {
-
     public class PlayerAnimator : MonoBehaviour
     {
-
         [Header("Base placeholders (from Base.controller)")]
         [SerializeField] private AnimationClip idleBase;
         [SerializeField] private AnimationClip runBase;
@@ -64,8 +62,9 @@ namespace TarodevController
         private static readonly int GroundedKey = Animator.StringToHash("Grounded");
         private static readonly int IsRunningKey = Animator.StringToHash("IsRunning");
         private static readonly int OnWallKey = Animator.StringToHash("OnWall");
-        private static readonly int IsDeadKey = Animator.StringToHash("IsDead");
         private static readonly int HitKey = Animator.StringToHash("Hit");
+        private static readonly int DeadBoolKey = Animator.StringToHash("Dead");
+
 
         // Cache of generated AnimatorOverrideControllers
         private readonly Dictionary<(bool onFire, HealthTier tier), AnimatorOverrideController> _aocCache
@@ -73,6 +72,8 @@ namespace TarodevController
 
         private bool _lastOnFire;
         private HealthTier _lastTier;
+
+        public bool _dead;
 
         private void Awake()
         {
@@ -86,20 +87,42 @@ namespace TarodevController
 
         private void OnEnable()
         {
-            if (_player == null) return;
-            _player.Jumped += OnJumped;
-            _player.GroundedChanged += OnGroundedChanged;
-            _player.WallStateChanged += OnWallChanged;
+            if (_player != null)
+            {
+                _player.Jumped += OnJumped;
+                _player.GroundedChanged += OnGroundedChanged;
+                _player.WallStateChanged += OnWallChanged;
+            }
+
+            // New: hook health -> death (only if your health system provides events)
+            // If your PlayerHealthSystem has different names, adjust accordingly.
+            if (_health != null)
+            {
+                // Example patterns (uncomment the one that matches your health system):
+                // _health.Died += OnDied;
+                // _health.OnDied += OnDied;
+                // _health.Death += OnDied;
+            }
 
             if (_moveParticles != null) _moveParticles.Play();
         }
 
         private void OnDisable()
         {
-            if (_player == null) return;
-            _player.Jumped -= OnJumped;
-            _player.GroundedChanged -= OnGroundedChanged;
-            _player.WallStateChanged -= OnWallChanged;
+            if (_player != null)
+            {
+                _player.Jumped -= OnJumped;
+                _player.GroundedChanged -= OnGroundedChanged;
+                _player.WallStateChanged -= OnWallChanged;
+            }
+
+            if (_health != null)
+            {
+                // Example patterns (uncomment the one that matches your health system):
+                // _health.Died -= OnDied;
+                // _health.OnDied -= OnDied;
+                // _health.Death -= OnDied;
+            }
 
             if (_moveParticles != null) _moveParticles.Stop();
         }
@@ -112,6 +135,9 @@ namespace TarodevController
         private void Update()
         {
             if (_player == null || _rb == null) return;
+
+            // New: once dead, don't keep driving locomotion params
+            if (_dead) return;
 
             ApplyAnimatorForCurrentState();
             HandleSpriteFlip();
@@ -197,6 +223,38 @@ namespace TarodevController
         }
 
 
+
+        public void PlayDeath()
+        {
+            if (_anim == null || _dead) return;
+
+            _dead = true;
+
+            // IMPORTANT: don’t keep locomotion/hit fighting you
+            _anim.ResetTrigger(HitKey);
+            _anim.ResetTrigger(JumpKey);
+
+            ApplyAnimatorForCurrentState(force: true);
+
+            _anim.SetBool(DeadBoolKey, true);
+
+
+            if (_moveParticles != null) _moveParticles.Stop();
+        }
+
+
+        public void ResetDeath()
+        {
+            _anim.SetBool(DeadBoolKey, false);
+
+        }
+        public void PlayHitReaction()
+        {
+            if (_anim == null) return;
+            if (_dead) return;
+            _anim.SetTrigger(HitKey);
+        }
+
         // --- Locomotion / Flip / Tilt ---
         private void HandleLocomotion()
         {
@@ -216,11 +274,7 @@ namespace TarodevController
                     2f * Time.deltaTime);
             }
         }
-        public void PlayHitReaction()
-        {
-            if (_anim == null) return;
-            _anim.SetTrigger(HitKey);
-        }
+
         private void HandleSpriteFlip()
         {
             if (_rb.velocity.x != 0f)
@@ -239,6 +293,7 @@ namespace TarodevController
 
         private void OnJumped()
         {
+            if (_dead) return;
             _anim.SetTrigger(JumpKey);
             if (_grounded)
             {
@@ -250,6 +305,8 @@ namespace TarodevController
 
         private void OnGroundedChanged(bool grounded, float impact)
         {
+            if (_dead) return;
+
             _grounded = grounded;
             _anim.SetBool(GroundedKey, grounded);
 
@@ -257,10 +314,6 @@ namespace TarodevController
             {
                 DetectGroundColor();
                 SetColor(_landParticles);
-
-                //sound
-                //if (_footsteps != null && _footsteps.Length > 0 && _source != null)
-                    //_source.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Length)]);
 
                 if (_moveParticles != null) _moveParticles.Play();
 

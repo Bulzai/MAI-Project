@@ -25,7 +25,7 @@ public class PlayerHealthSystem : MonoBehaviour
 
     public ParticleSystem deathParticles;
 
-
+    PlayerController playerController;
     private Coroutine burnCoroutine;
     private Coroutine reigniteCoroutine;
     private Coroutine confusedCoroutine;
@@ -44,9 +44,18 @@ public class PlayerHealthSystem : MonoBehaviour
 
         originalColor = spriteRenderer.color;
 
+
+        playerController = GetComponent<TarodevController.PlayerController>();
         //Invoke("SetOnFire", 3f);
     }
-
+    private void OnEnable()
+    {
+        PlaceItemState.CountDownFinished += RespawnPlayer;
+    }
+    private void OnDisable()
+    {
+        PlaceItemState.CountDownFinished -= RespawnPlayer;
+    }
     public void SetOnFire()
     {
         if (!isBurning)
@@ -90,6 +99,7 @@ public class PlayerHealthSystem : MonoBehaviour
 
     public void TakeDamage(int amount, bool isItemDmg)
     {
+
         currentHealth -= amount;
 
         if (isItemDmg && amount > 0)
@@ -102,7 +112,9 @@ public class PlayerHealthSystem : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            animator.PlayDeath();
             Die();
+            
         }
     }
     private IEnumerator FlashRed()
@@ -118,7 +130,16 @@ public class PlayerHealthSystem : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         spriteRenderer.color = originalColor;
     }
+    void RespawnPlayer()
+    {
+        playerController.EnableControls();
+        DisableOrEnableFireSprite(true);
+        //DisableOrEnableCollider(true);
+        animator._dead = false;
+        animator.ResetDeath();
+        transform.gameObject.SetActive(true);
 
+    }
     public void ApplyConfusion(float duration)
     {
         if(confusedCoroutine != null)
@@ -146,9 +167,25 @@ public class PlayerHealthSystem : MonoBehaviour
     private void Die()
     {
         GameEvents.PlayerEliminated(_playerInput);
-        transform.gameObject.SetActive(false);
+        playerController.DisableControls();
+        DisableOrEnableFireSprite(false);
+        //DisableOrEnableCollider(false);
+        //transform.gameObject.SetActive(false);
+        Invoke("DisableCharacter", 2f);
     }
 
+    void DisableCharacter()
+    {
+        transform.gameObject.SetActive(false);
+    }
+    private void DisableOrEnableCollider(bool enabled)
+    {
+        transform.GetComponent<CapsuleCollider2D>().enabled = enabled;
+    }
+    private void DisableOrEnableFireSprite(bool enabled)
+    {
+        transform.GetChild(0).GetChild(0).gameObject.SetActive(enabled);
+    }
     public void Knockback(Vector2 direction, float strength)
     {
         // Normalize for safety
