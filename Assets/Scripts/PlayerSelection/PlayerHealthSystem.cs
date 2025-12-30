@@ -130,6 +130,12 @@ public class PlayerHealthSystem : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         spriteRenderer.color = originalColor;
     }
+
+    public void ResetDeathFlags()
+    {
+        animator._dead = false;
+        animator.ResetDeath();
+    }
     void RespawnPlayer()
     {
         playerController.EnableControls();
@@ -171,7 +177,7 @@ public class PlayerHealthSystem : MonoBehaviour
         DisableOrEnableFireSprite(false);
         //DisableOrEnableCollider(false);
         //transform.gameObject.SetActive(false);
-        Invoke("DisableCharacter", 2f);
+        Invoke("DisableCharacter", 1f);
     }
 
     void DisableCharacter()

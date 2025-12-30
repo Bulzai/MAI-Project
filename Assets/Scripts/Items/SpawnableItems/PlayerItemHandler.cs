@@ -21,27 +21,42 @@ public class PlayerItemHandler : MonoBehaviour
     private bool repelActive;
 
     [Header("Speed Aura (SELF ONLY)")]
-    [SerializeField] private float speedMultiplier = 1.5f; // >1 speeds up
-    [SerializeField] private float speedDuration = 4f;     // seconds
+    [SerializeField] private float speedMultiplier = 1.5f;
+    [SerializeField] private float speedDuration = 4f;
 
-    // ---------- Damage Aura ----------
     [Header("Damage Aura")]
     [SerializeField] private float damageAuraRadius = 2.6f;
     [SerializeField] private int damagePerTick = 2;
-    [SerializeField] private float tickInterval = 1f;     // seconds between ticks
-    [SerializeField] private float damageAuraDuration = 6f; // total active time
+    [SerializeField] private float tickInterval = 1f;
+    [SerializeField] private float damageAuraDuration = 6f;
     [SerializeField] private GameObject damageAuraVisual;
 
+    // ---------------- BLINK TUNING ----------------
+    [Header("Aura Blink (End Warning)")]
+    [Tooltip("Start blinking when remaining time <= this.")]
+    [SerializeField] private float blinkStartSeconds = 2.0f;
 
-    private void OnEnable()
-    {
-        GameEvents.OnMainGameStateExited += ResetAuras;
-    }
+    [Tooltip("Slowest blink interval at the beginning of the warning window.")]
+    [SerializeField] private float blinkMaxInterval = 0.35f;
 
-    private void OnDisable()
-    {
-        GameEvents.OnMainGameStateExited -= ResetAuras;
-    }
+    [Tooltip("Fastest blink interval right before ending.")]
+    [SerializeField] private float blinkMinInterval = 0.05f;
+
+    [Tooltip("Controls how aggressively blink accelerates near the end (0->1).")]
+    [SerializeField]
+    private AnimationCurve blinkCurve =
+        new AnimationCurve(
+            new Keyframe(0f, 0f),
+            new Keyframe(0.7f, 0.1f),
+            new Keyframe(1f, 1f)
+        );
+
+    // optional: keep handles so reset can stop them
+    private Coroutine _slowBlinkCo, _repelBlinkCo, _damageBlinkCo;
+
+    private void OnEnable() => GameEvents.OnMainGameStateExited += ResetAuras;
+    private void OnDisable() => GameEvents.OnMainGameStateExited -= ResetAuras;
+
     public void ApplyItem(PickUpItem.ItemType itemType)
     {
         switch (itemType)
@@ -55,17 +70,12 @@ public class PlayerItemHandler : MonoBehaviour
                 break;
 
             case PickUpItem.ItemType.Speed:
-                // Self-only: apply to THIS player only
                 var selfBuff = GetComponent<SlowDebuff>();
                 if (selfBuff) selfBuff.ApplySpeedModifier(speedMultiplier, speedDuration);
                 break;
 
-            case PickUpItem.ItemType.Damage: // <--- add to your enum
+            case PickUpItem.ItemType.Damage:
                 StartCoroutine(ApplyDamageAura());
-                break;
-
-            default:
-                Debug.LogWarning("Unknown item type: " + itemType);
                 break;
         }
     }
@@ -73,8 +83,19 @@ public class PlayerItemHandler : MonoBehaviour
     // ---------- Slow aura ----------
     private IEnumerator ApplySlowAura()
     {
-
         slowAuraVisual.SetActive(true);
+
+        // start blink coroutine (it will wait until the last blinkStartSeconds)
+        StopBlink(ref _slowBlinkCo);
+        _slowBlinkCo = StartCoroutine(BlinkVisual(
+            slowAuraVisual,
+            totalDuration: auraDuration,
+            blinkStartAtSeconds: blinkStartSeconds,
+            minInterval: blinkMinInterval,
+            maxInterval: blinkMaxInterval,
+            curve: blinkCurve
+        ));
+
         float t = auraDuration;
         while (t > 0f)
         {
@@ -90,11 +111,13 @@ public class PlayerItemHandler : MonoBehaviour
                 var slow = otherRb.GetComponent<SlowDebuff>();
                 if (slow) slow.ApplySpeedModifier(slowPercent, slowSeconds);
             }
+
             t -= Time.deltaTime;
             yield return null;
         }
-        slowAuraVisual.SetActive(false);
 
+        StopBlink(ref _slowBlinkCo);
+        slowAuraVisual.SetActive(false);
     }
 
     // ---------- Repel aura ----------
@@ -102,12 +125,22 @@ public class PlayerItemHandler : MonoBehaviour
     {
         repelAuraVisual.SetActive(true);
 
+        StopBlink(ref _repelBlinkCo);
+        _repelBlinkCo = StartCoroutine(BlinkVisual(
+            repelAuraVisual,
+            totalDuration: repelSeconds,
+            blinkStartAtSeconds: blinkStartSeconds,
+            minInterval: blinkMinInterval,
+            maxInterval: blinkMaxInterval,
+            curve: blinkCurve
+        ));
+
         repelActive = true;
         yield return new WaitForSeconds(repelSeconds);
         repelActive = false;
 
+        StopBlink(ref _repelBlinkCo);
         repelAuraVisual.SetActive(false);
-
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -120,33 +153,41 @@ public class PlayerItemHandler : MonoBehaviour
         if (!otherCtrl) return;
 
         Vector2 dir = (otherCtrl.transform.position - transform.position).normalized;
-        otherCtrl.AddImpulse(dir * repelKickSpeed); // instant Δv via your controller hook
+        otherCtrl.AddImpulse(dir * repelKickSpeed);
     }
 
-    // ---------- Damage aura (simple periodic OverlapCircle) ----------
+    // ---------- Damage aura ----------
     private IEnumerator ApplyDamageAura()
     {
-
         damageAuraVisual.SetActive(true);
-        float remaining = damageAuraDuration;
 
+        StopBlink(ref _damageBlinkCo);
+        _damageBlinkCo = StartCoroutine(BlinkVisual(
+            damageAuraVisual,
+            totalDuration: damageAuraDuration,
+            blinkStartAtSeconds: blinkStartSeconds,
+            minInterval: blinkMinInterval,
+            maxInterval: blinkMaxInterval,
+            curve: blinkCurve
+        ));
+
+        float remaining = damageAuraDuration;
         while (remaining > 0f)
         {
-            DoDamageTick();          // OverlapCircleAll -> apply damage to all players inside
+            DoDamageTick();
             remaining -= tickInterval;
             yield return new WaitForSeconds(tickInterval);
         }
-        damageAuraVisual.SetActive(false);
 
+        StopBlink(ref _damageBlinkCo);
+        damageAuraVisual.SetActive(false);
     }
 
     private void DoDamageTick()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, damageAuraRadius);
-        Debug.Log("Damage Aura Tick, hits: " + hits.Length);
-        // Deduplicate by player root (handles multi-collider rigs)
-        HashSet<Transform> uniquePlayers = new HashSet<Transform>();
 
+        HashSet<Transform> uniquePlayers = new HashSet<Transform>();
         for (int i = 0; i < hits.Length; i++)
         {
             var col = hits[i];
@@ -157,18 +198,87 @@ public class PlayerItemHandler : MonoBehaviour
             if (!uniquePlayers.Add(root)) continue;
 
             var health = root.GetComponent<PlayerHealthSystem>();
-            if (health != null)
+            if (health != null) health.TakeDamage(damagePerTick, true);
+        }
+    }
+
+    // ---------------- BLINK CORE ----------------
+    private IEnumerator BlinkVisual(
+        GameObject visual,
+        float totalDuration,
+        float blinkStartAtSeconds,
+        float minInterval,
+        float maxInterval,
+        AnimationCurve curve
+    )
+    {
+        if (!visual) yield break;
+
+        // If duration is short, clamp start window so it still blinks.
+        blinkStartAtSeconds = Mathf.Clamp(blinkStartAtSeconds, 0f, totalDuration);
+        float timeToWait = totalDuration - blinkStartAtSeconds;
+
+        // Wait until we're inside the warning window
+        float wait = timeToWait;
+        while (wait > 0f)
+        {
+            wait -= Time.deltaTime;
+            yield return null;
+        }
+
+        // Now blink from remaining=blinkStartAtSeconds down to 0
+        float remaining = blinkStartAtSeconds;
+
+        // Ensure it starts visible
+        visual.SetActive(true);
+
+        while (remaining > 0f)
+        {
+            // progress: 0 at start of warning, 1 at end
+            float p = 1f - (remaining / blinkStartAtSeconds);
+            float shaped = Mathf.Clamp01(curve != null ? curve.Evaluate(p) : p);
+
+            // shaped=0 -> maxInterval, shaped=1 -> minInterval
+            float interval = Mathf.Lerp(maxInterval, minInterval, shaped);
+
+            // toggle
+            visual.SetActive(!visual.activeSelf);
+
+            // wait interval while reducing remaining
+            float dt = interval;
+            while (dt > 0f)
             {
-                // Adjust signature if your health method differs
-                health.TakeDamage(damagePerTick, true);
+                float step = Time.deltaTime;
+                dt -= step;
+                remaining -= step;
+                if (remaining <= 0f) break;
+                yield return null;
             }
+        }
+
+        // End state: keep on (so the final "off" doesn't look like it vanished early)
+        visual.SetActive(true);
+    }
+
+    private void StopBlink(ref Coroutine co)
+    {
+        if (co != null)
+        {
+            StopCoroutine(co);
+            co = null;
         }
     }
 
     void ResetAuras()
     {
-        damageAuraVisual.SetActive(false);
-        slowAuraVisual.SetActive(false);
-        repelAuraVisual.SetActive(false);
-        repelActive = false;    }
+        StopBlink(ref _slowBlinkCo);
+        StopBlink(ref _repelBlinkCo);
+        StopBlink(ref _damageBlinkCo);
+
+        if (damageAuraVisual) damageAuraVisual.SetActive(false);
+        if (slowAuraVisual) slowAuraVisual.SetActive(false);
+        if (repelAuraVisual) repelAuraVisual.SetActive(false);
+
+        repelActive = false;
+    }
 }

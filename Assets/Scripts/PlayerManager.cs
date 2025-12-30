@@ -342,18 +342,12 @@ public class PlayerManager : MonoBehaviour
             if (characterTf == null) continue;
 
             var characterGO = characterTf.gameObject;
-            characterGO.SetActive(true);
-
-            var pi = root.GetComponent<PlayerInput>();
-            if (pi != null)
-            {
-                pi.ActivateInput();
-                pi.SwitchCurrentActionMap("Player");
-            }
 
             var health = characterGO.GetComponent<PlayerHealthSystem>();
             if (health != null)
             {
+                health.ResetDeathFlags();
+
                 if (health.spriteRenderer != null)
                     health.spriteRenderer.color = health.originalColor;
 
@@ -363,6 +357,17 @@ public class PlayerManager : MonoBehaviour
                 // keeping your call to preserve behavior.
                 health.SetOnFire();
             }
+
+            characterGO.SetActive(true);
+
+            var pi = root.GetComponent<PlayerInput>();
+            if (pi != null)
+            {
+                pi.ActivateInput();
+                pi.SwitchCurrentActionMap("Player");
+            }
+
+           
 
             if (idx < spawnPositionsForGame.Length)
             {

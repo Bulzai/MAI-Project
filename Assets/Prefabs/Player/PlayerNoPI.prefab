@@ -218,7 +218,7 @@ MonoBehaviour:
   auraRadius: 2.5
   slowPercent: 0.5
   slowSeconds: 2
-  auraDuration: 7
+  auraDuration: 8
   slowAuraVisual: {fileID: 8889188675165220845}
   repelSeconds: 8
   repelKickSpeed: 50
@@ -228,8 +228,35 @@ MonoBehaviour:
   damageAuraRadius: 2.6
   damagePerTick: 5
   tickInterval: 0.5
-  damageAuraDuration: 6
+  damageAuraDuration: 8
   damageAuraVisual: {fileID: 2711021023157660095}
+  blinkStartSeconds: 3
+  blinkMaxInterval: 0.35
+  blinkMinInterval: 0.05
+  blinkCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2711021023157660095
 GameObject:
   m_ObjectHideFlags: 0
@@ -10280,6 +10307,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5d94063f45167b04ab62585e436da58c, type: 3}
   - {fileID: 8300000, guid: b5803c17557c59c40bf3a6d69cb46cb3, type: 3}
   - {fileID: 8300000, guid: 1876767bf7cbf284394dc3817af9593c, type: 3}
+  _dead: 0
 --- !u!1 &2969068312368229159
 GameObject:
   m_ObjectHideFlags: 0

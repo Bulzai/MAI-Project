@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: -6899142587295489252}
   - component: {fileID: 415043069406205061}
   - component: {fileID: 6868179486730549693}
+  - component: {fileID: 7833557627982394127}
   m_Layer: 6
   m_Name: Spike
   m_TagString: Untagged
@@ -323,7 +324,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 180
-  pivotPoint: {fileID: 8660515025556485242}
 --- !u!61 &4291940181556806363
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -532,6 +532,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7833557627982394127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711019012961524803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31603d0e88c64c442a0771a5db4a979b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6798446061416838796
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,6 +553,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8660515025556485242}
+  - component: {fileID: 7819701670976237157}
   m_Layer: 6
   m_Name: PivotPoint
   m_TagString: Untagged
@@ -563,6 +576,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8592722864125002311}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7819701670976237157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6798446061416838796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5b9d356e56a98049a705db3fb5a3dce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2862017947651683352
 PrefabInstance:
   m_ObjectHideFlags: 0
