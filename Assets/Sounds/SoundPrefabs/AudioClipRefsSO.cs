@@ -18,17 +18,9 @@ public class AudioClipRefsSO : ScriptableObject
     public GameObject backButtonSubmitSFX;
     public GameObject fullScreeneOnSFX;
     public GameObject fullScreenOffSFX;
-    public GameObject[] musicUpSFX;
-    public GameObject[] musicDownSFX;
-    public GameObject[] sfxUpSFX;
-    public GameObject[] sfxDownSFX;
+    public GameObject[] SoundUpSFX;
+    public GameObject[] SoundDownSFX;
 
-    
-    [Header("Countdown and Start SFX")]
-    public GameObject countdown3SFX;
-    public GameObject countdown2SFX;
-    public GameObject countdown1SFX;
-    public GameObject startSFX;
     
     [Header("Character SFX")]
     public GameObject[] jumpSFX;
@@ -88,4 +80,16 @@ public class AudioClipRefsSO : ScriptableObject
     
     [Header("Final Score SFX")]
     public GameObject pointsIncreaseSFX;
+    
+    [Header("Main Game SFX")]
+    public GameObject bigFlameStartSFX;
+    public GameObject bigFlameEndSFX;
+    public GameObject countdownSurpriseBoxSFX;
+    public GameObject countDownGameStartSFX;
+
+    [Header("Pause Game SFX")]
+    public GameObject pauseMenuOpenSFX;
+    public GameObject pauseMenuCloseSFX;
+    public GameObject[] buttonSelectSFX;
+    
 }

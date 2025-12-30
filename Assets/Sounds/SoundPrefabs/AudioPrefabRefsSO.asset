@@ -12,8 +12,73 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628c1b595a4e93245b6a2577200119a6, type: 3}
   m_Name: AudioPrefabRefsSO
   m_EditorClassIdentifier: 
+  playButtonSelectSFX: {fileID: 5773656466734081815, guid: c00e54bccb75d6f49a7cf5d0a27ddf93, type: 3}
+  playButtonSubmitSFX: {fileID: 5773656466734081815, guid: 319de26fa89328a45a0339b131c5875f, type: 3}
+  exitButtonSelectSFX: {fileID: 5773656466734081815, guid: 6a1af3f2fa7c37643a61ff15c3550464, type: 3}
+  exitButtonSubmitSFX: {fileID: 5773656466734081815, guid: f2de031b09018e54699f83098b136fd0, type: 3}
+  settingsButtonSelectSFX: {fileID: 5773656466734081815, guid: 2d420b47250df824299630eb588e9dd2, type: 3}
+  settingsButtonSubmitSFX: {fileID: 5773656466734081815, guid: d6e56ebaf13354f43a9f305af04ca37a, type: 3}
+  backButtonSelectSFX: {fileID: 5773656466734081815, guid: 09cac59c395c9e349a0c12ff4306db37, type: 3}
+  backButtonSubmitSFX: {fileID: 5773656466734081815, guid: 972f831b08563e740a1c9ce7c40bd024, type: 3}
+  fullScreeneOnSFX: {fileID: 5773656466734081815, guid: d7befc9704be30b47b339af876dad272, type: 3}
+  fullScreenOffSFX: {fileID: 5773656466734081815, guid: d7befc9704be30b47b339af876dad272, type: 3}
+  SoundUpSFX:
+  - {fileID: 5773656466734081815, guid: bd30880ef4dbfa44d93d69168c3ec016, type: 3}
+  - {fileID: 5773656466734081815, guid: 3a3f8057c509eaa42a94f5f40e879bf5, type: 3}
+  - {fileID: 5773656466734081815, guid: 37420a94e8121d74b974a1888eb164fe, type: 3}
+  - {fileID: 5773656466734081815, guid: 7d832458cc36a864098f1805c2c4a2f4, type: 3}
+  - {fileID: 5773656466734081815, guid: 8b194af86fac45240bada501f0e0325b, type: 3}
+  SoundDownSFX:
+  - {fileID: 5773656466734081815, guid: 83a92c47b352c724d864b107cf5e0c0d, type: 3}
+  - {fileID: 5773656466734081815, guid: 3cca160b4d2e2f041835c38c205ed974, type: 3}
+  - {fileID: 5773656466734081815, guid: cf460961cf53db64bab4a61ab924d8b4, type: 3}
+  - {fileID: 5773656466734081815, guid: b4be3491c48530440945443b1652f2b2, type: 3}
   jumpSFX:
   - {fileID: 5773656466734081815, guid: 6a1af3f2fa7c37643a61ff15c3550464, type: 3}
   runningSFX: []
   hurtSFX: []
   deathSFX: []
+  joinSFX: []
+  readySFX: []
+  characterWinSFX: []
+  cookieSelectSFX: {fileID: 0}
+  cookieSubmitSFX: {fileID: 0}
+  woodBlockSelectSFX: {fileID: 0}
+  woodBlockSubmitSFX: {fileID: 0}
+  bratApfelSelectSFX: {fileID: 0}
+  bratApfelSubmitSFX: {fileID: 0}
+  bratApfelHitSFX: {fileID: 0}
+  chocolateSelectSFX: {fileID: 0}
+  chocolateSubmitSFX: {fileID: 0}
+  chocolateHitSFX: {fileID: 0}
+  canonSelectSFX: {fileID: 0}
+  canonSubmitSFX: {fileID: 0}
+  canonShootSFX: {fileID: 0}
+  candleSelectSFX: {fileID: 0}
+  candleSubmitSFX: {fileID: 0}
+  candleBurningSFX: {fileID: 0}
+  candleWaxDropSFX: {fileID: 0}
+  iceSelectSFX: {fileID: 0}
+  iceSubmitSFX: {fileID: 0}
+  forbiddenSignSFX: {fileID: 0}
+  auraSpawnSFX: {fileID: 0}
+  auraFlyingSFX: {fileID: 0}
+  poisonAuraCollectSFX: {fileID: 0}
+  speedAuraCollectSFX: {fileID: 0}
+  bumpAuraCollectSFX: {fileID: 0}
+  slowAuraCollectSFX: {fileID: 0}
+  poisonAuraActiveSFX: {fileID: 0}
+  speedAuraActiveSFX: {fileID: 0}
+  bumpAuraActiveSFX: {fileID: 0}
+  slowAuraActiveSFX: {fileID: 0}
+  pointsIncreaseSFX: {fileID: 0}
+  bigFlameStartSFX: {fileID: 5773656466734081815, guid: 8bcdab55816bf8e4ca70b8c5efc7de3e, type: 3}
+  bigFlameEndSFX: {fileID: 5773656466734081815, guid: eb9a6e3434aed15419f2037b24dc1167, type: 3}
+  countdownSurpriseBoxSFX: {fileID: 0}
+  countDownGameStartSFX: {fileID: 5773656466734081815, guid: 39cc8f85d36667248a532d33d66d5041, type: 3}
+  pauseMenuOpenSFX: {fileID: 5773656466734081815, guid: 6b54931400d230843ab6958d66f8b280, type: 3}
+  pauseMenuCloseSFX: {fileID: 5773656466734081815, guid: be1ad5bd166cd184e85bbaf258359357, type: 3}
+  buttonSelectSFX:
+  - {fileID: 5773656466734081815, guid: 3e0a231aff66c394da4549784bee8b7e, type: 3}
+  - {fileID: 5773656466734081815, guid: dcf2abf09b93c054f95d79de8a595ff1, type: 3}
+  - {fileID: 5773656466734081815, guid: 09cac59c395c9e349a0c12ff4306db37, type: 3}

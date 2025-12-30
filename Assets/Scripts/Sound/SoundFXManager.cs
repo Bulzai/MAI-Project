@@ -34,7 +34,7 @@ public class SoundFXManager : MonoBehaviour
     }
     
     
-    public void PlaySoundFXClip(GameObject audioPrefab, Transform spawnTransform, float volume)
+    public void PlaySoundFXClip(GameObject audioPrefab, Transform spawnTransform, float volume = 1)
     {
         GameObject go = Instantiate(audioPrefab, spawnTransform.position, Quaternion.identity);
         AudioSource audioSource = go.GetComponent<AudioSource>();
@@ -58,11 +58,11 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayPlayButtonSelectSFX()
     {
-        PlayRandomSoundFXClip(_audioClipRefsSo.jumpSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.playButtonSelectSFX, Camera.main.transform);
     }
     
     public void PlayPlayButtonSubmitSFX()
     {
-        PlayRandomSoundFXClip(_audioClipRefsSo.jumpSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.playButtonSubmitSFX, Camera.main.transform);
     }
 }
