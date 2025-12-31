@@ -9,6 +9,7 @@ public class PausePlayerRoot : MonoBehaviour
     
     public void OnPause(InputAction.CallbackContext context)
     {
+        if (!context.performed) return;              // only once per press
         Debug.Log("OnPause");
         if (GameEvents.CurrentState != GameState.MainGameState)
             return;

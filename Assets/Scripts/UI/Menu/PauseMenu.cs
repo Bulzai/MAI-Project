@@ -1,4 +1,5 @@
-﻿using TarodevController;
+﻿using System;
+using TarodevController;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -9,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     public static bool gameIsPaused = false;
     public GameObject pauseMenuUi;
    
+    public static event Action OnPauseSFXEvent;
+    public static event Action OnResumeSFXEvent;
     private void Awake()
     {
         PausePlayerRoot.OnPauseEvent += OnPauseEvent;
@@ -44,14 +47,22 @@ public class PauseMenu : MonoBehaviour
     private void TogglePause()
     {
         if (gameIsPaused)
+        {
             Resume();
-        else
+            OnResumeSFXEvent?.Invoke();
+            Debug.Log("paused");
+        } else
+        {
             Pause();
+            OnPauseSFXEvent?.Invoke();
+            Debug.Log("resumed");
+        }
     }
 
 
     public void OnPauseEvent()
     {
+        
         if (GameEvents.CurrentState != GameState.MainGameState)
             return;
         TogglePause();

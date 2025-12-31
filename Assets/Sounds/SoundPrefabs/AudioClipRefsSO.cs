@@ -24,6 +24,7 @@ public class AudioClipRefsSO : ScriptableObject
     
     [Header("Character SFX")]
     public GameObject[] jumpSFX;
+    public GameObject[] landSFX;
     public GameObject[] runningSFX;
     public GameObject[] hurtSFX;
     public GameObject[] deathSFX;

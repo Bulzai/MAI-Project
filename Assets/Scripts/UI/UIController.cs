@@ -5,13 +5,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
     public static event Action OnCancelPressed;
     public static event Action OnSubmitPressed;
     
+    public static event Action OnOptionMenuBackButtonPressed;
+
     [SerializeField] private EventSystem eventSystem;
+    [SerializeField] private Button optionMenuBackButton;
 
     private InputSystemUIInputModule _uiModule;
 
@@ -42,6 +46,11 @@ public class UIController : MonoBehaviour
     {
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
             OnCancelPressed?.Invoke();
+        if (GameEvents.CurrentState == GameState.MenuState)
+        {
+            optionMenuBackButton.onClick.Invoke();
+            OnOptionMenuBackButtonPressed?.Invoke();
+        }
         Debug.Log("OnCancelPressed UIController");
     }
     

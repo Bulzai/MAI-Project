@@ -23,7 +23,17 @@ public class SoundFXManager : MonoBehaviour
         // MAIN MENU EVENTS
         PlayButtonEvents.OnPlayButtonSelected += PlayPlayButtonSelectSFX;
         PlayButtonEvents.OnPlayButtonSubmitted += PlayPlayButtonSubmitSFX;
-
+        QuitButtonEvents.OnQuitButtonSelected += PlayQuitButtonSelectSFX;
+        QuitButtonEvents.OnQuitButtonSubmitted += PlayQuitButtonSubmitSFX;
+        SettingsButtonEvents.OnSettingsButtonSelected += PlaySettingsButtonSelectSFX;
+        SettingsButtonEvents.OnSettingsButtonSubmitted += PlaySettingsButtonSubmitSFX;
+        OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSelected += PlayOptionsMenuReturnButtonSelectSFX;
+        OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSubmitted += PlayOptionsMenuReturnButtonSubmitSFX;
+        OptionMenuSliderEvents.OnSliderSlideRight += PlayVolumeUpSFX;
+        OptionMenuSliderEvents.OnSliderSlideLeft += PlayVolumeDownSFX;
+        UIController.OnOptionMenuBackButtonPressed += PlayOptionsMenuReturnButtonSubmitSFX;
+        PauseMenu.OnPauseSFXEvent += PlayPauseMenuOpenSFX;
+        PauseMenu.OnResumeSFXEvent += PlayPauseMenuCloseSFX;
     }
 
     private void OnDestroy()
@@ -31,6 +41,17 @@ public class SoundFXManager : MonoBehaviour
         // MAIN MENU EVENTS
         PlayButtonEvents.OnPlayButtonSelected -= PlayPlayButtonSelectSFX;
         PlayButtonEvents.OnPlayButtonSubmitted -= PlayPlayButtonSubmitSFX;
+        QuitButtonEvents.OnQuitButtonSelected -= PlayQuitButtonSelectSFX;
+        QuitButtonEvents.OnQuitButtonSubmitted -= PlayQuitButtonSubmitSFX;
+        SettingsButtonEvents.OnSettingsButtonSelected -= PlaySettingsButtonSelectSFX;
+        SettingsButtonEvents.OnSettingsButtonSubmitted -= PlaySettingsButtonSubmitSFX;
+        OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSelected -= PlayOptionsMenuReturnButtonSelectSFX;
+        OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSubmitted -= PlayOptionsMenuReturnButtonSubmitSFX;
+        OptionMenuSliderEvents.OnSliderSlideRight -= PlayVolumeUpSFX;
+        OptionMenuSliderEvents.OnSliderSlideLeft -= PlayVolumeDownSFX;
+        UIController.OnOptionMenuBackButtonPressed -= PlayOptionsMenuReturnButtonSubmitSFX;
+        PauseMenu.OnPauseSFXEvent -= PlayPauseMenuOpenSFX;
+        PauseMenu.OnResumeSFXEvent -= PlayPauseMenuCloseSFX;
     }
     
     
@@ -65,4 +86,65 @@ public class SoundFXManager : MonoBehaviour
     {
         PlaySoundFXClip(_audioClipRefsSo.playButtonSubmitSFX, Camera.main.transform);
     }
+    
+    public void PlayQuitButtonSelectSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.exitButtonSelectSFX, Camera.main.transform);
+    }
+    
+    public void PlayQuitButtonSubmitSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.exitButtonSubmitSFX, Camera.main.transform);
+    }
+    
+    public void PlaySettingsButtonSelectSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.settingsButtonSelectSFX, Camera.main.transform);
+    }
+    
+    public void PlaySettingsButtonSubmitSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.settingsButtonSubmitSFX, Camera.main.transform);
+    }
+    
+    public void PlayOptionsMenuReturnButtonSelectSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.backButtonSelectSFX, Camera.main.transform);
+    }
+    
+    public void PlayOptionsMenuReturnButtonSubmitSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.backButtonSubmitSFX, Camera.main.transform);
+    }
+    
+    public void PlayFullScreenOnSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.fullScreeneOnSFX, Camera.main.transform);
+    }
+    
+    public void PlayFullScreenOffSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.fullScreenOffSFX, Camera.main.transform);
+    }
+    
+    public void PlayVolumeUpSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.SoundUpSFX, Camera.main.transform);
+    }
+    
+    public void PlayVolumeDownSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.SoundDownSFX, Camera.main.transform);
+    }
+
+    public void PlayPauseMenuOpenSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.pauseMenuOpenSFX, Camera.main.transform);
+    }
+    
+    public void PlayPauseMenuCloseSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.pauseMenuCloseSFX, Camera.main.transform);
+    }
+
 }

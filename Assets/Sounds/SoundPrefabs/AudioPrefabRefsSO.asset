@@ -18,8 +18,8 @@ MonoBehaviour:
   exitButtonSubmitSFX: {fileID: 5773656466734081815, guid: f2de031b09018e54699f83098b136fd0, type: 3}
   settingsButtonSelectSFX: {fileID: 5773656466734081815, guid: 2d420b47250df824299630eb588e9dd2, type: 3}
   settingsButtonSubmitSFX: {fileID: 5773656466734081815, guid: d6e56ebaf13354f43a9f305af04ca37a, type: 3}
-  backButtonSelectSFX: {fileID: 5773656466734081815, guid: 09cac59c395c9e349a0c12ff4306db37, type: 3}
-  backButtonSubmitSFX: {fileID: 5773656466734081815, guid: 972f831b08563e740a1c9ce7c40bd024, type: 3}
+  backButtonSelectSFX: {fileID: 5773656466734081815, guid: ad706406679b2d74783d0230075e718c, type: 3}
+  backButtonSubmitSFX: {fileID: 5773656466734081815, guid: 88ca27ea8f85f5f48ac4fc961694252c, type: 3}
   fullScreeneOnSFX: {fileID: 5773656466734081815, guid: d7befc9704be30b47b339af876dad272, type: 3}
   fullScreenOffSFX: {fileID: 5773656466734081815, guid: d7befc9704be30b47b339af876dad272, type: 3}
   SoundUpSFX:
@@ -33,8 +33,8 @@ MonoBehaviour:
   - {fileID: 5773656466734081815, guid: 3cca160b4d2e2f041835c38c205ed974, type: 3}
   - {fileID: 5773656466734081815, guid: cf460961cf53db64bab4a61ab924d8b4, type: 3}
   - {fileID: 5773656466734081815, guid: b4be3491c48530440945443b1652f2b2, type: 3}
-  jumpSFX:
-  - {fileID: 5773656466734081815, guid: 6a1af3f2fa7c37643a61ff15c3550464, type: 3}
+  jumpSFX: []
+  landSFX: []
   runningSFX: []
   hurtSFX: []
   deathSFX: []
