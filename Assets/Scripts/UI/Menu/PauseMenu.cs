@@ -50,12 +50,10 @@ public class PauseMenu : MonoBehaviour
         {
             Resume();
             OnResumeSFXEvent?.Invoke();
-            Debug.Log("paused");
         } else
         {
             Pause();
             OnPauseSFXEvent?.Invoke();
-            Debug.Log("resumed");
         }
     }
 

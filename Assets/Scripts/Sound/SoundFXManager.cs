@@ -9,7 +9,8 @@ public class SoundFXManager : MonoBehaviour
 
     private AudioSource soundFXObject;
     public static SoundFXManager Instance;
-    
+    private AudioSource _quitSelectSource;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -25,6 +26,7 @@ public class SoundFXManager : MonoBehaviour
         PlayButtonEvents.OnPlayButtonSubmitted += PlayPlayButtonSubmitSFX;
         QuitButtonEvents.OnQuitButtonSelected += PlayQuitButtonSelectSFX;
         QuitButtonEvents.OnQuitButtonSubmitted += PlayQuitButtonSubmitSFX;
+        QuitButtonEvents.OnQuitButtonDeselected += StopQuitButtonSelectSFX;
         SettingsButtonEvents.OnSettingsButtonSelected += PlaySettingsButtonSelectSFX;
         SettingsButtonEvents.OnSettingsButtonSubmitted += PlaySettingsButtonSubmitSFX;
         OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSelected += PlayOptionsMenuReturnButtonSelectSFX;
@@ -43,6 +45,7 @@ public class SoundFXManager : MonoBehaviour
         PlayButtonEvents.OnPlayButtonSubmitted -= PlayPlayButtonSubmitSFX;
         QuitButtonEvents.OnQuitButtonSelected -= PlayQuitButtonSelectSFX;
         QuitButtonEvents.OnQuitButtonSubmitted -= PlayQuitButtonSubmitSFX;
+        QuitButtonEvents.OnQuitButtonDeselected -= StopQuitButtonSelectSFX;
         SettingsButtonEvents.OnSettingsButtonSelected -= PlaySettingsButtonSelectSFX;
         SettingsButtonEvents.OnSettingsButtonSubmitted -= PlaySettingsButtonSubmitSFX;
         OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSelected -= PlayOptionsMenuReturnButtonSelectSFX;
@@ -87,16 +90,41 @@ public class SoundFXManager : MonoBehaviour
         PlaySoundFXClip(_audioClipRefsSo.playButtonSubmitSFX, Camera.main.transform);
     }
     
+    private AudioSource PlayAndReturnSoundFXClip(GameObject audioPrefab, Transform spawnTransform, float volume = 1)
+    {
+        GameObject go = Instantiate(audioPrefab, spawnTransform.position, Quaternion.identity);
+        AudioSource audioSource = go.GetComponent<AudioSource>();
+        audioSource.volume = volume;
+        audioSource.Play();
+        float clipLength = audioSource.clip.length;
+        Destroy(go, clipLength);
+        return audioSource;
+    }
+
+    
     public void PlayQuitButtonSelectSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.exitButtonSelectSFX, Camera.main.transform);
+        _quitSelectSource = PlayAndReturnSoundFXClip(
+            _audioClipRefsSo.exitButtonSelectSFX,
+            Camera.main.transform
+        );
     }
-    
+
     public void PlayQuitButtonSubmitSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.exitButtonSubmitSFX, Camera.main.transform);
+        PlaySoundFXClip(
+            _audioClipRefsSo.exitButtonSubmitSFX,
+            Camera.main.transform
+        );
     }
-    
+
+    public void StopQuitButtonSelectSFX()
+    {
+        if (_quitSelectSource != null && _quitSelectSource.isPlaying)
+        {
+            _quitSelectSource.Stop();
+        }
+    }
     public void PlaySettingsButtonSelectSFX()
     {
         PlaySoundFXClip(_audioClipRefsSo.settingsButtonSelectSFX, Camera.main.transform);
