@@ -51,7 +51,7 @@ public class SoundFXManager : MonoBehaviour
         
         // Surpriseboxstate Events
         GameEvents.OnSurpriseBoxStateEntered += PlayCountdownSFX;
-        SurpriseBoxState.OnSupriseBoxStateCounterStarted += PlayCountdownSFX;
+        SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
         
         // PLACEITEM STATE EVENTS
         PlaceItemState.CountDownStarted += PlayCountdownSFX;
@@ -87,7 +87,7 @@ public class SoundFXManager : MonoBehaviour
         
         // Surpriseboxstate Events
         GameEvents.OnSurpriseBoxStateEntered -= PlayCountdownSFX;
-        SurpriseBoxState.OnSupriseBoxStateCounterStarted -= PlayCountdownSFX;
+        SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
         
         
         // PLACEITEM STATE EVENTS

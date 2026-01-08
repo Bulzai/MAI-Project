@@ -60,11 +60,10 @@ public class PlaceItemState : MonoBehaviour
             countdownCoroutine = StartCoroutine(CountdownBeforeMainGame());
 
     }
-    private IEnumerator CountdownBeforeMainGame()
+    private IEnumerator CountdownBeforeMainGame( int countdown = 2, float timing = 0.6f)
     {
         CountDownStarted?.Invoke();
-        int countdown = 3;  
-
+        
         while (countdown > 0)
         {
             milkText.gameObject.SetActive(true);
@@ -73,7 +72,7 @@ public class PlaceItemState : MonoBehaviour
 
 
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(timing);
             countdown--;
         }
 

@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class SurpriseBoxState : MonoBehaviour
 {
     public static SurpriseBoxState Instance { get; private set; }
-    public static event Action OnSupriseBoxStateCounterStarted;
+    public static event Action OnSurpriseBoxStateCounterStarted;
     
     [SerializeField] private PlayerManager playerManager;
 
@@ -88,7 +88,7 @@ public class SurpriseBoxState : MonoBehaviour
         StopCountdownIfRunning();
 
         // Countdown beim Betreten -> danach Countdown-Objekt ausblenden
-        countdownRoutine = StartCoroutine(PlayCountdown(3, () =>
+        countdownRoutine = StartCoroutine(PlayCountdown( () =>
         {
             // Nach dem Enter-Countdown:
             // - CountdownText wird in PlayCountdown deaktiviert
@@ -97,16 +97,16 @@ public class SurpriseBoxState : MonoBehaviour
         }));
     }
 
-    private IEnumerator PlayCountdown(int seconds, Action onFinished)
+    public IEnumerator PlayCountdown( Action onFinished, int seconds = 2, float timing = 0.6f)
     {
-        int countdown = seconds;
+        float countdown = seconds;
 
         countdownText.gameObject.SetActive(true);
 
         while (countdown > 0)
         {
             countdownText.text = countdown.ToString();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(timing);
             countdown--;
         }
 
@@ -211,8 +211,8 @@ public class SurpriseBoxState : MonoBehaviour
             StopCountdownIfRunning();
 
             // ✅ use same countdown system here too
-            OnSupriseBoxStateCounterStarted?.Invoke();
-            countdownRoutine = StartCoroutine(PlayCountdown(3, () =>
+            OnSurpriseBoxStateCounterStarted?.Invoke();
+            countdownRoutine = StartCoroutine(PlayCountdown(() =>
             {
                 DeactivateItemBox();
                 GameEvents.ChangeState(GameState.PlaceItemState);
