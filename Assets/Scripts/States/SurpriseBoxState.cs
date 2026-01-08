@@ -8,7 +8,8 @@ using UnityEngine.InputSystem;
 public class SurpriseBoxState : MonoBehaviour
 {
     public static SurpriseBoxState Instance { get; private set; }
-
+    public static event Action OnSupriseBoxStateCounterStarted;
+    
     [SerializeField] private PlayerManager playerManager;
 
     public GameObject SurpriseBox;
@@ -210,6 +211,7 @@ public class SurpriseBoxState : MonoBehaviour
             StopCountdownIfRunning();
 
             // ✅ use same countdown system here too
+            OnSupriseBoxStateCounterStarted?.Invoke();
             countdownRoutine = StartCoroutine(PlayCountdown(3, () =>
             {
                 DeactivateItemBox();

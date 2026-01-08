@@ -10,6 +10,7 @@ public class SoundFXManager : MonoBehaviour
     private AudioSource soundFXObject;
     public static SoundFXManager Instance;
     private AudioSource _quitSelectSource;
+    private AudioSource _bigFLameSource;
 
     private void Awake()
     {
@@ -29,13 +30,37 @@ public class SoundFXManager : MonoBehaviour
         QuitButtonEvents.OnQuitButtonDeselected += StopQuitButtonSelectSFX;
         SettingsButtonEvents.OnSettingsButtonSelected += PlaySettingsButtonSelectSFX;
         SettingsButtonEvents.OnSettingsButtonSubmitted += PlaySettingsButtonSubmitSFX;
+        
+        
+        
+        // SETTINGS MENU EVENTS
         OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSelected += PlayOptionsMenuReturnButtonSelectSFX;
         OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSubmitted += PlayOptionsMenuReturnButtonSubmitSFX;
         OptionMenuSliderEvents.OnSliderSlideRight += PlayVolumeUpSFX;
         OptionMenuSliderEvents.OnSliderSlideLeft += PlayVolumeDownSFX;
         UIController.OnOptionMenuBackButtonPressed += PlayOptionsMenuReturnButtonSubmitSFX;
+        
+        
+        
+        // PAUSE MENU EVENTS
         PauseMenu.OnPauseSFXEvent += PlayPauseMenuOpenSFX;
         PauseMenu.OnResumeSFXEvent += PlayPauseMenuCloseSFX;
+        PauseMenuMenuButtonEvents.OnPauseMenuMenuButtonSelected+= PlayPauseMenuButtonSelectSFX;
+        PauseMenuQuitButtonEvents.OnPauseMenuQuitButtonSelected += PlayPauseMenuButtonSelectSFX;
+        PauseMenuResumeButtonEvents.OnPauseMenuResumeButtonSelected += PlayPauseMenuButtonSelectSFX;
+        
+        // Surpriseboxstate Events
+        GameEvents.OnSurpriseBoxStateEntered += PlayCountdownSFX;
+        SurpriseBoxState.OnSupriseBoxStateCounterStarted += PlayCountdownSFX;
+        
+        // PLACEITEM STATE EVENTS
+        PlaceItemState.CountDownStarted += PlayCountdownSFX;
+        PlaceItemState.CountDownStarted += PlayMainGameBigFlameStartSFX;
+
+        // Main Game Events
+        GameEvents.OnMainGameStateExited += PlayMainGameBigFlameEndSFX;
+
+        // ScoreState Events
     }
 
     private void OnDestroy()
@@ -48,13 +73,30 @@ public class SoundFXManager : MonoBehaviour
         QuitButtonEvents.OnQuitButtonDeselected -= StopQuitButtonSelectSFX;
         SettingsButtonEvents.OnSettingsButtonSelected -= PlaySettingsButtonSelectSFX;
         SettingsButtonEvents.OnSettingsButtonSubmitted -= PlaySettingsButtonSubmitSFX;
+        
+        // SETTINGS MENU EVENTS
         OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSelected -= PlayOptionsMenuReturnButtonSelectSFX;
         OptionMenuReturnButtonEvents.OnOptionsMenuReturnButtonSubmitted -= PlayOptionsMenuReturnButtonSubmitSFX;
         OptionMenuSliderEvents.OnSliderSlideRight -= PlayVolumeUpSFX;
         OptionMenuSliderEvents.OnSliderSlideLeft -= PlayVolumeDownSFX;
         UIController.OnOptionMenuBackButtonPressed -= PlayOptionsMenuReturnButtonSubmitSFX;
+        
+        // PAUSE MENU EVENTS
         PauseMenu.OnPauseSFXEvent -= PlayPauseMenuOpenSFX;
         PauseMenu.OnResumeSFXEvent -= PlayPauseMenuCloseSFX;
+        
+        // Surpriseboxstate Events
+        GameEvents.OnSurpriseBoxStateEntered -= PlayCountdownSFX;
+        SurpriseBoxState.OnSupriseBoxStateCounterStarted -= PlayCountdownSFX;
+        
+        
+        // PLACEITEM STATE EVENTS
+        PlaceItemState.CountDownStarted -= PlayCountdownSFX;
+        PlaceItemState.CountDownStarted -= PlayMainGameBigFlameStartSFX;
+
+        
+        // Main Game Events
+        GameEvents.OnMainGameStateExited -= PlayMainGameBigFlameEndSFX;
     }
     
     
@@ -174,5 +216,30 @@ public class SoundFXManager : MonoBehaviour
     {
         PlaySoundFXClip(_audioClipRefsSo.pauseMenuCloseSFX, Camera.main.transform);
     }
+    
+    public void PlayCountdownSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.countDownGameStartSFX, Camera.main.transform);
+    }
+    
+    public void PlayMainGameBigFlameStartSFX()
+    {
+        _bigFLameSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.bigFlameStartSFX, Camera.main.transform);
+        
+    }
 
+    public void PlayMainGameBigFlameEndSFX()
+    {
+        if (_quitSelectSource != null && _quitSelectSource.isPlaying)
+        {
+            _quitSelectSource.Stop();
+        }
+        PlaySoundFXClip(_audioClipRefsSo.bigFlameEndSFX, Camera.main.transform);
+    }
+
+    public void PlayPauseMenuButtonSelectSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.buttonSelectSFX, Camera.main.transform);
+    }
+    
 }
