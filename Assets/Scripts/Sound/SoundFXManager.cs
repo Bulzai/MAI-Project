@@ -224,15 +224,15 @@ public class SoundFXManager : MonoBehaviour
     
     public void PlayMainGameBigFlameStartSFX()
     {
-        _bigFLameSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.bigFlameStartSFX, Camera.main.transform);
+        _bigFLameSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.bigFlameStartSFX, Camera.main.transform, 0.1f);
         
     }
 
     public void PlayMainGameBigFlameEndSFX()
     {
-        if (_quitSelectSource != null && _quitSelectSource.isPlaying)
+        if (_bigFLameSource != null && _bigFLameSource.isPlaying)
         {
-            _quitSelectSource.Stop();
+            _bigFLameSource.Stop();
         }
         PlaySoundFXClip(_audioClipRefsSo.bigFlameEndSFX, Camera.main.transform);
     }
