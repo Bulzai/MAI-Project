@@ -51,12 +51,11 @@ public class AudioClipRefsSO : ScriptableObject
     
     public GameObject canonSelectSFX;
     public GameObject canonSubmitSFX;
-    public GameObject canonShootSFX;
+    public GameObject[] canonShootSFX;
     
     public GameObject candleSelectSFX;
     public GameObject candleSubmitSFX;
-    public GameObject candleBurningSFX;
-    public GameObject candleWaxDropSFX;
+    public GameObject candleIgniteSFX;
 
     public GameObject iceSelectSFX;
     public GameObject iceSubmitSFX;
