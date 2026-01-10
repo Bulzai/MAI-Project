@@ -9,8 +9,9 @@ public class PlayerSelectionManager : MonoBehaviour
 {
     // For UI Manager and SurpriseBoxState
     public static event Action OnReturnToMainMenu;
+    public static event Action OnStartGameSFX;
+    public static event Action OnPlayerReadySFX;
 
-    
     public static event Action OnNotAllPlayersReady;
     public static event Action OnNobodyJoinedYet;
 
@@ -89,10 +90,15 @@ public class PlayerSelectionManager : MonoBehaviour
 
         data.IsReady = !data.IsReady;
 
+        if (data.IsReady)
+        {
+            OnPlayerReadySFX?.Invoke();
+        }
         if (data.ReadyText != null)
         {
             data.ReadyText.text = data.IsReady ? "Ready" : "Not Ready";
-            data.ReadyText.color = data.IsReady ? readyColor : notReadyColor;  
+            data.ReadyText.color = data.IsReady ? readyColor : notReadyColor;
+
         }
         _playerSelection[playerInput] = data;
 
@@ -111,12 +117,11 @@ public class PlayerSelectionManager : MonoBehaviour
         if (!everyoneReady)
         {
             OnNotAllPlayersReady?.Invoke();
-            Debug.Log("Not all players are ready yet.");
             return;
         }
 
-        Debug.Log("All players ready, starting game!");
         // otherwise the event gets called once from TarovDevController and once from UIController
+        OnStartGameSFX?.Invoke();
         if (GameEvents.CurrentState == GameState.PlayerSelectionState) GameEvents.ChangeState(GameState.SurpriseBoxState);
     }
 

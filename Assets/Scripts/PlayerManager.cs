@@ -15,7 +15,8 @@ public class PlayerManager : MonoBehaviour
     // Player selection events
     public static event Action<PlayerInput, Transform> OnPlayerJoinedGlobal;
     public static event Action<PlayerInput> OnPlayerLeftGlobal;
-    
+
+    public static event Action OnPlayerJoinedSFX;
     
     
     
@@ -218,7 +219,7 @@ public class PlayerManager : MonoBehaviour
             characterTf.transform.position = Vector3.one;
 
         OnPlayerJoinedGlobal?.Invoke(playerInput, characterTf);
-
+        OnPlayerJoinedSFX?.Invoke();
         
         if (idx < spawnPositionsForItemPlacement.Length)
             cursorTf.transform.position = spawnPositionsForItemPlacement[idx].position;

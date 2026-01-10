@@ -1,12 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using Object = UnityEngine.Object;
 
 public class PlayerScoreManager : MonoBehaviour
 {
+    
+    public static event Action OnPointsIncrease;
+    public static event Action OnPointsIncreaseEnd;
+
     [Header("References")]
     public PlayerManager playerManager;
     public GameObject scoreboardUI;
@@ -214,6 +220,8 @@ public class PlayerScoreManager : MonoBehaviour
             .Select(kv => kv.Key)
             .ToList();
 
+        OnPointsIncrease?.Invoke();
+
         foreach (var idx in ordered)
         {
             if (!_rows.TryGetValue(idx, out var row)) continue;
@@ -224,6 +232,8 @@ public class PlayerScoreManager : MonoBehaviour
             StartCoroutine(row.AnimateScores(before, after - before, after, maxTotal, 1.15f));
             yield return new WaitForSeconds(0.07f);
         }
+        yield return new WaitForSeconds(1.15f);
+        OnPointsIncreaseEnd?.Invoke();
     }
 
 }

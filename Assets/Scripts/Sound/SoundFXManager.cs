@@ -13,6 +13,7 @@ public class SoundFXManager : MonoBehaviour
     private AudioSource _quitSelectSource;
     private AudioSource _bigFLameSource;
     private AudioSource _auraSpawnSource;
+    private AudioSource _pointsIncreaseSource;
     
     private void Awake()
     {
@@ -51,6 +52,13 @@ public class SoundFXManager : MonoBehaviour
         PauseMenuQuitButtonEvents.OnPauseMenuQuitButtonSelected += PlayPauseMenuButtonSelectSFX;
         PauseMenuResumeButtonEvents.OnPauseMenuResumeButtonSelected += PlayPauseMenuButtonSelectSFX;
         
+        // PlayerSelect Events
+        PlayerManager.OnPlayerJoinedSFX += PlayPlayerJoinedSFX;
+        PlayerSelectionManager.OnNotAllPlayersReady += PlayForbiddenSignSFX;
+        PlayerSelectionManager.OnNobodyJoinedYet += PlayForbiddenSignSFX;
+        PlayerSelectionManager.OnStartGameSFX += PlayGameStartSFX;
+        PlayerSelectionManager.OnPlayerReadySFX += PlayPlayerReadySFX;
+        
         // Surpriseboxstate Events
         GameEvents.OnSurpriseBoxStateEntered += PlayCountdownSFX;
         SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
@@ -63,6 +71,8 @@ public class SoundFXManager : MonoBehaviour
         GameEvents.OnMainGameStateExited += PlayMainGameBigFlameEndSFX;
 
         // ScoreState Events
+        PlayerScoreManager.OnPointsIncrease += PlayPointsIncreaseSFX;
+        PlayerScoreManager.OnPointsIncreaseEnd += StopPointsIncreaseSFX;
         
         // CHARACTER EVENTS
         PlayerHealthSystem.OnPlayerTakeDamage += PlayPlayerTakeDamageSFX;
@@ -75,7 +85,7 @@ public class SoundFXManager : MonoBehaviour
         PlayerItemHandler.OnAuraPickedUp += PlayAuraPickUpSFX;
         PlayerItemHandler.OnAuraExpires += PlayAuraExpireSFX;
         SpawnItem.OnAuraSpawns += PlayAuraSpawnSFX;
-        GameEvents.OnScoreStateEntered += StopAuraSpawnSFX;
+        GameEvents.OnMainGameStateExited += StopAuraSpawnSFX;
 
     }
 
@@ -101,6 +111,13 @@ public class SoundFXManager : MonoBehaviour
         PauseMenu.OnPauseSFXEvent -= PlayPauseMenuOpenSFX;
         PauseMenu.OnResumeSFXEvent -= PlayPauseMenuCloseSFX;
         
+        // PlayerSelect Events
+        PlayerManager.OnPlayerJoinedSFX -= PlayPlayerJoinedSFX;
+        PlayerSelectionManager.OnNotAllPlayersReady -= PlayForbiddenSignSFX;
+        PlayerSelectionManager.OnNobodyJoinedYet -= PlayForbiddenSignSFX;
+        PlayerSelectionManager.OnStartGameSFX -= PlayGameStartSFX;
+        PlayerSelectionManager.OnPlayerReadySFX -= PlayPlayerReadySFX;
+
         // Surpriseboxstate Events
         GameEvents.OnSurpriseBoxStateEntered -= PlayCountdownSFX;
         SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
@@ -114,7 +131,10 @@ public class SoundFXManager : MonoBehaviour
         // Main Game Events
         GameEvents.OnMainGameStateExited -= PlayMainGameBigFlameEndSFX;
         
-                
+        // ScoreState Events
+        PlayerScoreManager.OnPointsIncrease -= PlayPointsIncreaseSFX;
+        PlayerScoreManager.OnPointsIncreaseEnd -= StopPointsIncreaseSFX;        
+        
         // CHARACTER EVENTS
         PlayerHealthSystem.OnPlayerTakeDamage -= PlayPlayerTakeDamageSFX;
         PlayerHealthSystem.OnPlayerDeath -= PlayPlayerDeathSFX;
@@ -301,7 +321,7 @@ public class SoundFXManager : MonoBehaviour
     
     public void PlayAuraSpawnSFX()
     {
-        _auraSpawnSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.auraSpawnSFX, Camera.main.transform);
+        _auraSpawnSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.auraSpawnSFX, Camera.main.transform, 0.7f);
     }
     
     public void StopAuraSpawnSFX()
@@ -327,5 +347,38 @@ public class SoundFXManager : MonoBehaviour
         PlayRandomSoundFXClip(_audioClipRefsSo.landSFX, Camera.main.transform);
     }
     
+    public void PlayPlayerJoinedSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.joinSFX, Camera.main.transform);
+    }
     
+    public void PlayForbiddenSignSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.forbiddenSignSFX, Camera.main.transform);
+    }
+    
+    public void PlayGameStartSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.startGameSFX, Camera.main.transform);
+        PlayRandomSoundFXClip(_audioClipRefsSo.startGameSFX, Camera.main.transform);
+        PlayRandomSoundFXClip(_audioClipRefsSo.startGameSFX, Camera.main.transform);
+    }
+    
+    public void PlayPlayerReadySFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.readySFX, Camera.main.transform);
+    }
+    
+    public void PlayPointsIncreaseSFX()
+    {
+        _pointsIncreaseSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.pointsIncreaseSFX, Camera.main.transform);
+    }
+    
+    public void StopPointsIncreaseSFX()
+    {
+        if (_pointsIncreaseSource != null && _pointsIncreaseSource.isPlaying)
+        {
+            _pointsIncreaseSource.Stop();
+        }
+    }
 }

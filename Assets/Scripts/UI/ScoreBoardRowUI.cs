@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,6 @@ using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ScoreboardRowUI : MonoBehaviour
 {
-    
     
     // event for menu button
 

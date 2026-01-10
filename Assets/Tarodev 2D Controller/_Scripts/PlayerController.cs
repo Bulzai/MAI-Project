@@ -10,6 +10,7 @@ namespace TarodevController
     {
         // PlayerSelectionState
         public static event Action<PlayerInput> OnPlayerReady;
+
         public static event Action OnReturnToMainMenu;
         public static event Action OnTryStartGame;
         private PlayerInput _playerInput;
@@ -161,14 +162,16 @@ namespace TarodevController
         public void OnReady(InputAction.CallbackContext context)
         {
             if (GameEvents.CurrentState == GameState.PlayerSelectionState)
-                OnPlayerReady?.Invoke(_playerInput);
+            {
+                if (context.started)
+                    OnPlayerReady?.Invoke(_playerInput); 
+            }
         }
         
         public void OnReturn(InputAction.CallbackContext context)
         {
             if (GameEvents.CurrentState == GameState.PlayerSelectionState)
                 OnReturnToMainMenu?.Invoke();
-            Debug.Log("OnCancelPressed tarodev");
 
         }
         

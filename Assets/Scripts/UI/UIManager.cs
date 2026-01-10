@@ -70,6 +70,7 @@ public class UIManager : MonoBehaviour
     {
 
 
+        AudioListener.pause = false;
         StopAllCoroutines();
         GameEvents.ChangeState(GameState.MenuState);
         Time.timeScale = 1f;

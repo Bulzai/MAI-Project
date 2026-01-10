@@ -27,6 +27,8 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUi.SetActive(false);
         Time.timeScale = 1f;
         gameIsPaused = false;
+        AudioListener.pause = false;  
+
     }
 
     public void Pause()
@@ -35,6 +37,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUi.SetActive(true);
         Time.timeScale = 0f;
         gameIsPaused = true;
+        AudioListener.pause = true;   // pauses all AudioSources
 
         // Find first selectable UI element inside the pause menu to navigate with the controller
         Selectable firstSelectable = pauseMenuUi.GetComponentInChildren<Selectable>();
