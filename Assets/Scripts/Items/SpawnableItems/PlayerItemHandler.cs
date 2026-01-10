@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TarodevController;
@@ -6,6 +7,9 @@ using TarodevController;
 [DefaultExecutionOrder(100)]
 public class PlayerItemHandler : MonoBehaviour
 {
+    public static event Action OnAuraExpires;
+    public static event Action OnAuraPickedUp;
+    
     [Header("Slow Aura")]
     [SerializeField] private string playerTag = "Player";
     [SerializeField] private float auraRadius = 2.5f;
@@ -59,6 +63,7 @@ public class PlayerItemHandler : MonoBehaviour
 
     public void ApplyItem(PickUpItem.ItemType itemType)
     {
+        OnAuraPickedUp?.Invoke();
         switch (itemType)
         {
             case PickUpItem.ItemType.Slow:
@@ -256,6 +261,7 @@ public class PlayerItemHandler : MonoBehaviour
             }
         }
 
+        OnAuraExpires?.Invoke();
         // End state: keep on (so the final "off" doesn't look like it vanished early)
         visual.SetActive(true);
     }

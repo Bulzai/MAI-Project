@@ -30,20 +30,21 @@ public class AudioClipRefsSO : ScriptableObject
     public GameObject[] deathSFX;
     public GameObject[] joinSFX;
     public GameObject[] readySFX;
-    public GameObject[] characterWinSFX;
+    public GameObject[] startGameSFX;
     
         
         
     [Header("Item SFX")]
     public GameObject cookieSelectSFX;
     public GameObject cookieSubmitSFX;
+    public GameObject cookieBreakSFX;
     
     public GameObject woodBlockSelectSFX;
     public GameObject woodBlockSubmitSFX;
     
     public GameObject bratApfelSelectSFX;
     public GameObject bratApfelSubmitSFX;
-    public GameObject bratApfelHitSFX;
+    public GameObject[] bratApfelHitSFX;
     
     public GameObject chocolateSelectSFX;
     public GameObject chocolateSubmitSFX;
@@ -61,11 +62,18 @@ public class AudioClipRefsSO : ScriptableObject
     public GameObject iceSubmitSFX;
     
     public GameObject forbiddenSignSFX;
-    
+
+    public GameObject[] impactSFX;
     
     [Header("Aura SFX")]
+    public GameObject auraExpiresSFX;
+    public GameObject auraHitSFX;
+    public GameObject auraCollectSFX;
+    
+    
+    
+    
     public GameObject auraSpawnSFX;
-    public GameObject auraFlyingSFX;
     
     public GameObject poisonAuraCollectSFX;
     public GameObject speedAuraCollectSFX;

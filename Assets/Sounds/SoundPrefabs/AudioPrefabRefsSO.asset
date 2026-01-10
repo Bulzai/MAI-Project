@@ -33,36 +33,127 @@ MonoBehaviour:
   - {fileID: 5773656466734081815, guid: 3cca160b4d2e2f041835c38c205ed974, type: 3}
   - {fileID: 5773656466734081815, guid: cf460961cf53db64bab4a61ab924d8b4, type: 3}
   - {fileID: 5773656466734081815, guid: b4be3491c48530440945443b1652f2b2, type: 3}
-  jumpSFX: []
-  landSFX: []
-  runningSFX: []
-  hurtSFX: []
-  deathSFX: []
-  joinSFX: []
-  readySFX: []
-  characterWinSFX: []
-  cookieSelectSFX: {fileID: 0}
-  cookieSubmitSFX: {fileID: 0}
-  woodBlockSelectSFX: {fileID: 0}
-  woodBlockSubmitSFX: {fileID: 0}
-  bratApfelSelectSFX: {fileID: 0}
-  bratApfelSubmitSFX: {fileID: 0}
-  bratApfelHitSFX: {fileID: 0}
-  chocolateSelectSFX: {fileID: 0}
-  chocolateSubmitSFX: {fileID: 0}
-  chocolateHitSFX: {fileID: 0}
-  canonSelectSFX: {fileID: 0}
-  canonSubmitSFX: {fileID: 0}
-  canonShootSFX: {fileID: 0}
-  candleSelectSFX: {fileID: 0}
-  candleSubmitSFX: {fileID: 0}
-  candleBurningSFX: {fileID: 0}
-  candleWaxDropSFX: {fileID: 0}
+  jumpSFX:
+  - {fileID: 5773656466734081815, guid: da2e8460cd22e564cb34f5a38bfccc08, type: 3}
+  - {fileID: 5773656466734081815, guid: d4e07eb763c22e14996796ea01d36b93, type: 3}
+  - {fileID: 5773656466734081815, guid: 84483818c62b9c74692f0eaac4d47c6b, type: 3}
+  - {fileID: 5773656466734081815, guid: 4d938e54dbf9cbf4aa004089debf7a48, type: 3}
+  - {fileID: 5773656466734081815, guid: 6e2131bfbcc9f7a4c8e0151f6aeb3aec, type: 3}
+  - {fileID: 5773656466734081815, guid: d80eb3379af2c1244bb8b3fcec0a64eb, type: 3}
+  - {fileID: 5773656466734081815, guid: 924ca7cb0c2519041ac5a07e83a5818c, type: 3}
+  landSFX:
+  - {fileID: 5773656466734081815, guid: 6cd0ca1a418374c4a94b832fc0eb66d0, type: 3}
+  - {fileID: 5773656466734081815, guid: 5e0a264a14cb120458522297d017db1d, type: 3}
+  - {fileID: 5773656466734081815, guid: b0f1df5e7600943419cd99336b7d9189, type: 3}
+  - {fileID: 5773656466734081815, guid: 1f820cced554d9b42aa74c2006e2a75e, type: 3}
+  - {fileID: 5773656466734081815, guid: c6b5de5d6a879dd499e4e32811e10413, type: 3}
+  - {fileID: 5773656466734081815, guid: c1067a3b66aa83c46964f4512fff98aa, type: 3}
+  runningSFX:
+  - {fileID: 5773656466734081815, guid: 706063e3e60ec914e967bb2936d702d3, type: 3}
+  - {fileID: 5773656466734081815, guid: 1de287b003914b44e8694a0c4594af2b, type: 3}
+  - {fileID: 5773656466734081815, guid: 5137b49ee702a5244a18300ab5f55a12, type: 3}
+  - {fileID: 5773656466734081815, guid: ddb7f12d64af91e4698f870f81e87fff, type: 3}
+  - {fileID: 5773656466734081815, guid: 257cc2097b45a9c4f97809548fecf12c, type: 3}
+  - {fileID: 5773656466734081815, guid: 1bcd815f509621f4fa492b11ef9a1f13, type: 3}
+  - {fileID: 5773656466734081815, guid: 7f1bc0c7dae52884fa30ee6047b798fd, type: 3}
+  hurtSFX:
+  - {fileID: 5773656466734081815, guid: af3e204c97db5a441852243614fa6acd, type: 3}
+  - {fileID: 5773656466734081815, guid: 7a1c67d40dda1694da08a27a2a48266a, type: 3}
+  - {fileID: 5773656466734081815, guid: 5d22f07b0789d0042a51a4bf53cf01a5, type: 3}
+  - {fileID: 5773656466734081815, guid: 689f5b59be98c914cba4852545a9ea9a, type: 3}
+  - {fileID: 5773656466734081815, guid: b6e265caf90e4314a8d4e9862561a9de, type: 3}
+  - {fileID: 5773656466734081815, guid: 087ba2620cb603041a22d16f0061404d, type: 3}
+  - {fileID: 5773656466734081815, guid: 23d7ad45eee15d744afb836b037662cb, type: 3}
+  - {fileID: 5773656466734081815, guid: 92029a0424ef75e4187fb3ef8b8dba2a, type: 3}
+  - {fileID: 5773656466734081815, guid: 704039deabd0e6546bf203ad2374deb6, type: 3}
+  - {fileID: 5773656466734081815, guid: 609fc11acda5b3e4d8af3dc533cb35d3, type: 3}
+  - {fileID: 5773656466734081815, guid: b9652b7248c8b624fa2b39b9bc1a6996, type: 3}
+  - {fileID: 5773656466734081815, guid: cdf1cce83051e9240836213d47d1401e, type: 3}
+  - {fileID: 5773656466734081815, guid: fa2d5157a907df445910adaf68abe61a, type: 3}
+  - {fileID: 5773656466734081815, guid: 5b579e0af65fa1c42b4ea16b1ef94a59, type: 3}
+  - {fileID: 5773656466734081815, guid: b848e672c3495ca4a8b36aabd9b7c1e9, type: 3}
+  - {fileID: 5773656466734081815, guid: 85f1bd1f2990b3246a7bf39611561090, type: 3}
+  - {fileID: 5773656466734081815, guid: 8683a69129a52304589d794d17c28b44, type: 3}
+  - {fileID: 5773656466734081815, guid: dbd8c78e9028b0d4db9f32f097c77af0, type: 3}
+  - {fileID: 5773656466734081815, guid: db0b4ebf8b865424fb1582252ce2fa2e, type: 3}
+  - {fileID: 5773656466734081815, guid: b660931212d7a594e923bc3ea5215914, type: 3}
+  deathSFX:
+  - {fileID: 5773656466734081815, guid: 564f3aab009a88c459c5ee2688bac7f6, type: 3}
+  - {fileID: 5773656466734081815, guid: c4420cc7fb871024db1f63722b77fec0, type: 3}
+  - {fileID: 5773656466734081815, guid: 77d9dc2577227c9469eca52ed9f85689, type: 3}
+  - {fileID: 5773656466734081815, guid: 3dda4fec6a040f64a8b372d4564224df, type: 3}
+  - {fileID: 5773656466734081815, guid: ef705dd123f27a749a2476a48e6768d7, type: 3}
+  - {fileID: 5773656466734081815, guid: a6dbd3105cc98594d96fc13b5b7eab37, type: 3}
+  joinSFX:
+  - {fileID: 5773656466734081815, guid: 60ec4761fb85eee41a8d63c98223f773, type: 3}
+  - {fileID: 5773656466734081815, guid: 5cbfdd71d18336e42a04be5e13748d0c, type: 3}
+  - {fileID: 5773656466734081815, guid: 2c704e8f8605a024ebd86e16c12c3a62, type: 3}
+  - {fileID: 5773656466734081815, guid: 4a3a06076d0773745b8fabea0cf433ef, type: 3}
+  - {fileID: 5773656466734081815, guid: 35cf9e0c95044e148b58604c1a89e583, type: 3}
+  - {fileID: 5773656466734081815, guid: 3e25f908ccac0b04696796b21323c39b, type: 3}
+  - {fileID: 5773656466734081815, guid: 467325ebff261c4439e72c8a6ccc9c9c, type: 3}
+  - {fileID: 5773656466734081815, guid: 0cb0ee55e1d71ec4480af55695f3de4c, type: 3}
+  - {fileID: 5773656466734081815, guid: dfcfd01b694607441afbbd0306de63cd, type: 3}
+  - {fileID: 5773656466734081815, guid: 9eb79623f2207f0419f24360bc4967ca, type: 3}
+  - {fileID: 5773656466734081815, guid: 24537f15072d091428a85766e4775ff4, type: 3}
+  - {fileID: 5773656466734081815, guid: 226ddc95c08ea104d831ece20991c46e, type: 3}
+  - {fileID: 5773656466734081815, guid: d1d95aa87a40c764cbe046fd38918b0d, type: 3}
+  - {fileID: 5773656466734081815, guid: 48a8f5569f27a7743a1375a400dadee0, type: 3}
+  - {fileID: 5773656466734081815, guid: 71b166b63259e0249942799307d98cf9, type: 3}
+  - {fileID: 5773656466734081815, guid: 7368df5637a7ddf468653e2eb362c115, type: 3}
+  - {fileID: 5773656466734081815, guid: 33e2d45f776dc4841aba8ae1449adb25, type: 3}
+  readySFX:
+  - {fileID: 5773656466734081815, guid: e9dc2cb83ce504e47b8994adbe84095b, type: 3}
+  - {fileID: 5773656466734081815, guid: a58c6167e598be143baef58427158a37, type: 3}
+  - {fileID: 5773656466734081815, guid: 4c54b7d35ebd8f54f86fedc9c2c563a2, type: 3}
+  - {fileID: 5773656466734081815, guid: e247dcc655d491e4f8970aa47066ed63, type: 3}
+  - {fileID: 5773656466734081815, guid: a624fc67a6abd50479f38a8e0c692329, type: 3}
+  - {fileID: 5773656466734081815, guid: a9167c6d74639ff409e8d1124dd582b1, type: 3}
+  - {fileID: 5773656466734081815, guid: dd7df924610ae4245b958b8e84159d9d, type: 3}
+  - {fileID: 5773656466734081815, guid: 79852efdfa2d6d0459183b3a22c38ed0, type: 3}
+  startGameSFX:
+  - {fileID: 5773656466734081815, guid: 82a9f0c6ad2c88344bcc2b97441a385f, type: 3}
+  - {fileID: 5773656466734081815, guid: 145330234c8bbc74f958714363f9c3d6, type: 3}
+  - {fileID: 5773656466734081815, guid: 06db87d2fa7962c4080b2a1657e4ea73, type: 3}
+  - {fileID: 5773656466734081815, guid: 50fbcf6333ed4e34f9ac861de2309e66, type: 3}
+  - {fileID: 5773656466734081815, guid: 5fc4daa971c17184c82442f893c75bd7, type: 3}
+  - {fileID: 5773656466734081815, guid: 416c4639afe84e747826da4d35fa485b, type: 3}
+  cookieSelectSFX: {fileID: 5773656466734081815, guid: 5cf695c67adb4d840baef779ac84c7c8, type: 3}
+  cookieSubmitSFX: {fileID: 5773656466734081815, guid: 3b2aa49c50f75044b86199c727cbcff6, type: 3}
+  cookieBreakSFX: {fileID: 5773656466734081815, guid: c48ac10e661a79141bb167bd9ce67eb5, type: 3}
+  woodBlockSelectSFX: {fileID: 5773656466734081815, guid: efe37ef4357328646b2fa667e38bff80, type: 3}
+  woodBlockSubmitSFX: {fileID: 5773656466734081815, guid: 1da381ac37a797d49ac10fdafdaa11fa, type: 3}
+  bratApfelSelectSFX: {fileID: 5773656466734081815, guid: 0fdaf474c385a6247801200cd59e9a19, type: 3}
+  bratApfelSubmitSFX: {fileID: 5773656466734081815, guid: 0fdaf474c385a6247801200cd59e9a19, type: 3}
+  bratApfelHitSFX: []
+  chocolateSelectSFX: {fileID: 5773656466734081815, guid: ac898821990c2cf4697c773c4c19d4af, type: 3}
+  chocolateSubmitSFX: {fileID: 5773656466734081815, guid: ac898821990c2cf4697c773c4c19d4af, type: 3}
+  chocolateHitSFX: {fileID: 5773656466734081815, guid: ac898821990c2cf4697c773c4c19d4af, type: 3}
+  canonSelectSFX: {fileID: 5773656466734081815, guid: 2dc1c9e4c18643d4e98df8c6d82feec5, type: 3}
+  canonSubmitSFX: {fileID: 5773656466734081815, guid: 2dc1c9e4c18643d4e98df8c6d82feec5, type: 3}
+  canonShootSFX:
+  - {fileID: 5773656466734081815, guid: 4fc109c1b0903f046930930dee2fc56b, type: 3}
+  - {fileID: 5773656466734081815, guid: fca9a277ec2362642912876b525a8d53, type: 3}
+  candleSelectSFX: {fileID: 5773656466734081815, guid: 33ca915e346f2524f9380a87de0a9f2c, type: 3}
+  candleSubmitSFX: {fileID: 5773656466734081815, guid: 5d54e0e6c78028c4796bff925546e233, type: 3}
+  candleIgniteSFX: {fileID: 5773656466734081815, guid: 33ca915e346f2524f9380a87de0a9f2c, type: 3}
   iceSelectSFX: {fileID: 0}
   iceSubmitSFX: {fileID: 0}
-  forbiddenSignSFX: {fileID: 0}
-  auraSpawnSFX: {fileID: 0}
-  auraFlyingSFX: {fileID: 0}
+  forbiddenSignSFX: {fileID: 5773656466734081815, guid: 461d2b955e90f1243811acbe3e4cf3fb, type: 3}
+  impactSFX:
+  - {fileID: 5773656466734081815, guid: f1b9ed6c1af9d4e45a69a6d0bbb7cbce, type: 3}
+  - {fileID: 5773656466734081815, guid: 27ed54269b0e85648a0fbf67577dbcce, type: 3}
+  - {fileID: 5773656466734081815, guid: 2864aa76c23c2164abd88810b3b83bd5, type: 3}
+  - {fileID: 5773656466734081815, guid: 4bbef99f514b0754d88ac6641e0fd107, type: 3}
+  - {fileID: 5773656466734081815, guid: 488758a38beb7f644b44d47e59b65621, type: 3}
+  - {fileID: 5773656466734081815, guid: 0fdaf474c385a6247801200cd59e9a19, type: 3}
+  - {fileID: 5773656466734081815, guid: 9c51ddcccd148044397dbb9cdcf85346, type: 3}
+  - {fileID: 5773656466734081815, guid: c918e7e8576d2a94a964c9513c80ed06, type: 3}
+  - {fileID: 5773656466734081815, guid: b6f17155361e1c747abd606bf8a8b766, type: 3}
+  auraExpiresSFX: {fileID: 5773656466734081815, guid: 897bf66365607e74185bab7e7d6e76ef, type: 3}
+  auraHitSFX: {fileID: 5773656466734081815, guid: 378ecfbd429559a45bcbc370e4e101ca, type: 3}
+  auraCollectSFX: {fileID: 5773656466734081815, guid: 7ea5bf4c077585a42a6489c875d91e6a, type: 3}
+  auraSpawnSFX: {fileID: 5773656466734081815, guid: 6e5f13c4ad8ea9d47823cbd8c8fb21a2, type: 3}
   poisonAuraCollectSFX: {fileID: 0}
   speedAuraCollectSFX: {fileID: 0}
   bumpAuraCollectSFX: {fileID: 0}
@@ -71,7 +162,7 @@ MonoBehaviour:
   speedAuraActiveSFX: {fileID: 0}
   bumpAuraActiveSFX: {fileID: 0}
   slowAuraActiveSFX: {fileID: 0}
-  pointsIncreaseSFX: {fileID: 0}
+  pointsIncreaseSFX: {fileID: 5773656466734081815, guid: 832c1313e412eaf45b6ca6ea70ce6713, type: 3}
   bigFlameStartSFX: {fileID: 5773656466734081815, guid: 8bcdab55816bf8e4ca70b8c5efc7de3e, type: 3}
   bigFlameEndSFX: {fileID: 5773656466734081815, guid: eb9a6e3434aed15419f2037b24dc1167, type: 3}
   countdownSurpriseBoxSFX: {fileID: 0}

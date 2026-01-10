@@ -9,6 +9,9 @@ using System; // for Action if needed
 /// </summary>
 public class SpawnItem : MonoBehaviour
 {
+    
+    public static event Action OnAuraSpawns;
+    
     [Header("Item Prefabs")]
     public GameObject[] itemPrefabs;
 
@@ -103,6 +106,7 @@ public class SpawnItem : MonoBehaviour
         Vector3 targetPos = landingSpots[spotIndex].position;
 
         currentItem = Instantiate(itemPrefabs[prefabIndex], startPos, Quaternion.identity);
+        OnAuraSpawns?.Invoke();
         StartCoroutine(GuidedCurvedFall(currentItem, targetPos));
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TarodevController;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ public class SoundFXManager : MonoBehaviour
     public static SoundFXManager Instance;
     private AudioSource _quitSelectSource;
     private AudioSource _bigFLameSource;
-
+    private AudioSource _auraSpawnSource;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -61,6 +63,20 @@ public class SoundFXManager : MonoBehaviour
         GameEvents.OnMainGameStateExited += PlayMainGameBigFlameEndSFX;
 
         // ScoreState Events
+        
+        // CHARACTER EVENTS
+        PlayerHealthSystem.OnPlayerTakeDamage += PlayPlayerTakeDamageSFX;
+        PlayerHealthSystem.OnPlayerDeath += PlayPlayerDeathSFX;
+        PlayerController.OnPlayerJumped += PlayJumpSFX;
+        PlayerController.OnPlayerLanded += PlayLandSFX;
+        PlayerController.OnPlayerRunning += PlayFootstepSFX;
+        
+        // Aura Events
+        PlayerItemHandler.OnAuraPickedUp += PlayAuraPickUpSFX;
+        PlayerItemHandler.OnAuraExpires += PlayAuraExpireSFX;
+        SpawnItem.OnAuraSpawns += PlayAuraSpawnSFX;
+        GameEvents.OnScoreStateEntered += StopAuraSpawnSFX;
+
     }
 
     private void OnDestroy()
@@ -97,6 +113,22 @@ public class SoundFXManager : MonoBehaviour
         
         // Main Game Events
         GameEvents.OnMainGameStateExited -= PlayMainGameBigFlameEndSFX;
+        
+                
+        // CHARACTER EVENTS
+        PlayerHealthSystem.OnPlayerTakeDamage -= PlayPlayerTakeDamageSFX;
+        PlayerHealthSystem.OnPlayerDeath -= PlayPlayerDeathSFX;
+        PlayerController.OnPlayerJumped -= PlayJumpSFX;
+        PlayerController.OnPlayerLanded -= PlayLandSFX;
+        PlayerController.OnPlayerRunning -= PlayFootstepSFX;
+        
+        
+        
+        // Aura Events
+        PlayerItemHandler.OnAuraPickedUp -= PlayAuraPickUpSFX;
+        PlayerItemHandler.OnAuraExpires -= PlayAuraExpireSFX;
+        SpawnItem.OnAuraSpawns -= PlayAuraSpawnSFX;
+        GameEvents.OnScoreStateEntered -= StopAuraSpawnSFX;
     }
     
     
@@ -241,5 +273,59 @@ public class SoundFXManager : MonoBehaviour
     {
         PlayRandomSoundFXClip(_audioClipRefsSo.buttonSelectSFX, Camera.main.transform);
     }
+    
+    public void PlayPlayerTakeDamageSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.impactSFX, Camera.main.transform);
+        PlayRandomSoundFXClip(_audioClipRefsSo.hurtSFX, Camera.main.transform);
+    }
+    
+    public void PlayPlayerDeathSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.deathSFX, Camera.main.transform);
+    }
+    
+    public void PlayAuraPickUpSFX()
+    {
+        if (_auraSpawnSource != null && _auraSpawnSource.isPlaying)
+        {
+            _auraSpawnSource.Stop();
+        }
+        PlaySoundFXClip(_audioClipRefsSo.auraCollectSFX, Camera.main.transform);
+    }
+    
+    public void PlayAuraExpireSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.auraExpiresSFX, Camera.main.transform);
+    }
+    
+    public void PlayAuraSpawnSFX()
+    {
+        _auraSpawnSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.auraSpawnSFX, Camera.main.transform);
+    }
+    
+    public void StopAuraSpawnSFX()
+    {
+        if (_auraSpawnSource != null && _auraSpawnSource.isPlaying)
+        {
+            _auraSpawnSource.Stop();
+        }
+    }
+    
+    public void PlayFootstepSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.runningSFX, Camera.main.transform);
+    }
+
+    public void PlayJumpSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.jumpSFX, Camera.main.transform);
+    }
+    
+    public void PlayLandSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.landSFX, Camera.main.transform);
+    }
+    
     
 }

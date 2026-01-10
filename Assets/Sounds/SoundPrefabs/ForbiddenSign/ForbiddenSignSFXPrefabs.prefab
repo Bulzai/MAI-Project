@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9025594426705444978}
   - component: {fileID: 7771107701760962043}
   m_Layer: 0
-  m_Name: JumpingSfxPrefab 2
+  m_Name: ForbiddenSignSFXPrefabs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 3694636867828151391, guid: 2c8e9c6c53c9bb9449022442698213ba, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 496fb047f2c1bb64f9ec251af47bd2e2, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 47633a3aafb111e4ba1b669721ea25fa, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1

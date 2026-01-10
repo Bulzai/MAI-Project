@@ -15,6 +15,11 @@ namespace TarodevController
         private PlayerInput _playerInput;
         private bool lockedControls = true;
         
+        // SFX
+        public static event Action OnPlayerJumped;
+        public static event Action OnPlayerLanded;
+        public static event Action OnPlayerRunning;
+        
         [SerializeField] private ScriptableStats _stats;
         private Rigidbody2D _rb;
         private CapsuleCollider2D _col;
@@ -142,9 +147,10 @@ namespace TarodevController
                     return;
                 }
                 if (lockedControls) return;
-
+        
                 jumpPressed = true;
                 jumpHeld = true;
+                OnPlayerJumped?.Invoke();
             }
             else if (context.canceled)
             {

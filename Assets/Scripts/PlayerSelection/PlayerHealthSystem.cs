@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
@@ -5,6 +6,8 @@ using TarodevController;
 
 public class PlayerHealthSystem : MonoBehaviour
 {
+    public static event Action OnPlayerTakeDamage;
+    public static event Action OnPlayerDeath;
     
     private PlayerInput _playerInput;
     public PlayerAnimator animator;
@@ -104,6 +107,7 @@ public class PlayerHealthSystem : MonoBehaviour
 
         if (isItemDmg && amount > 0)
         {
+            OnPlayerTakeDamage?.Invoke();
             if (animator != null)
                 animator.PlayHitReaction();
 
@@ -112,6 +116,7 @@ public class PlayerHealthSystem : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            OnPlayerDeath?.Invoke();
             animator.PlayDeath();
             Die();
             
