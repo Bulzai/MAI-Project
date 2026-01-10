@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ using UnityEngine;
 public class GridItem : MonoBehaviour
 {
 
+    public static event Action OnRotateItem;
     [Header("Attachment Settings")]
     public bool isAttachable = false;               // true for icy/sticky surfaces
     public Transform ifAttachableAttachHere = null;
@@ -120,6 +122,7 @@ public class GridItem : MonoBehaviour
         if (gameObject.tag == "Candle")
         {
             FlipHorizontal();
+            OnRotateItem?.Invoke();
             return;
         }
 
@@ -144,7 +147,7 @@ public class GridItem : MonoBehaviour
             case FacingDirection.Down: currentFacingDirection = FacingDirection.Left; break;
             case FacingDirection.Left: currentFacingDirection = FacingDirection.Up; break;
         }
-
+        OnRotateItem?.Invoke();
         UpdateOccupiedCells();
     }
 
@@ -152,6 +155,7 @@ public class GridItem : MonoBehaviour
     {
         if (gameObject.tag == "Candle")
         {
+            OnRotateItem?.Invoke();
             FlipHorizontal();
             return;
         }
@@ -173,6 +177,7 @@ public class GridItem : MonoBehaviour
             case FacingDirection.Down: currentFacingDirection = FacingDirection.Right; break;
             case FacingDirection.Right: currentFacingDirection = FacingDirection.Up; break;
         }
+        OnRotateItem?.Invoke();
 
         UpdateOccupiedCells();
     }

@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CursorController : MonoBehaviour
 {
+    public static event Action OnCantPlaceItem;
+    public static event Action OnEnableCursor;
+    
     [Header("Movement Settings")]
     [SerializeField] private float maxMoveSpeed = 25f;   // Units per second
     [SerializeField] private float stickDeadzone = 0.2f; // Ignore tiny stick inputs
@@ -72,6 +76,11 @@ public class CursorController : MonoBehaviour
                 ClearHoverIfAny();
                 break;
         }
+    }
+    
+    private void OnEnable()
+    {
+        OnEnableCursor?.Invoke();
     }
 
     public void SetBoundsSuprisoeBoxState(BoxCollider2D bounds)
@@ -172,12 +181,23 @@ public class CursorController : MonoBehaviour
 
     private void TryPlaceObject()
     {
-        if (gridItem == null || gridItem.Placed) return;
+        if (gridItem == null || gridItem.Placed)
+        {
+            OnCantPlaceItem?.Invoke();
+            return;
+        }
 
-        if (!gridItem.CanBePlaced() && gridItem.isAttachable == false) return;
-
-        if (!gridItem.SupportedItemCanBePlaced && gridItem.isAttachable == true) return;
-
+        if (!gridItem.CanBePlaced() && gridItem.isAttachable == false)       
+        {
+            OnCantPlaceItem?.Invoke();
+            return;
+        }
+        if (!gridItem.SupportedItemCanBePlaced && gridItem.isAttachable == true)
+        {
+            OnCantPlaceItem?.Invoke();
+            return;
+        }
+        
         if (gridItem.isAttachable && gridItem.ifAttachableAttachHere != null)
         {
             gridItem.transform.SetParent(itemsParent);

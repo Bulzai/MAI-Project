@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,8 @@ using UnityEngine.Audio;
 public class SettingsMenu : MonoBehaviour
 {
     public AudioMixer audioMixer;
+    public static event Action OnFullscreenEnabled;
+    public static event Action OnFullscreenDisabled;
 
     // Start is called before the first frame update
     void Start()
@@ -27,5 +30,10 @@ public class SettingsMenu : MonoBehaviour
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+        if (isFullscreen)
+            OnFullscreenEnabled?.Invoke();
+        if (!isFullscreen)
+            OnFullscreenDisabled?.Invoke();
+            
     }
 }

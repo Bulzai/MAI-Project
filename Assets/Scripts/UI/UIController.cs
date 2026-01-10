@@ -51,20 +51,17 @@ public class UIController : MonoBehaviour
             optionMenuBackButton.onClick.Invoke();
             OnOptionMenuBackButtonPressed?.Invoke();
         }
-        Debug.Log("OnCancelPressed UIController");
     }
     
     private void OnSubmit(InputAction.CallbackContext ctx)
     {
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
             OnSubmitPressed?.Invoke();
-        Debug.Log("OnSubmitPRessed UIController");
 
     }
     
     private void GetEventSystem()
     {
-        Debug.Log("getting event system");
         eventSystem = EventSystem.current;
 
         _uiModule = eventSystem.GetComponent<InputSystemUIInputModule>();

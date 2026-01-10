@@ -42,7 +42,8 @@ public class SoundFXManager : MonoBehaviour
         OptionMenuSliderEvents.OnSliderSlideRight += PlayVolumeUpSFX;
         OptionMenuSliderEvents.OnSliderSlideLeft += PlayVolumeDownSFX;
         UIController.OnOptionMenuBackButtonPressed += PlayOptionsMenuReturnButtonSubmitSFX;
-        
+        SettingsMenu.OnFullscreenEnabled += PlayFullScreenOnSFX;
+        SettingsMenu.OnFullscreenDisabled += PlayFullScreenOffSFX;
         
         
         // PAUSE MENU EVENTS
@@ -62,10 +63,13 @@ public class SoundFXManager : MonoBehaviour
         // Surpriseboxstate Events
         GameEvents.OnSurpriseBoxStateEntered += PlayCountdownSFX;
         SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
+        CursorController.OnEnableCursor += PlayEnableCursorSFX;
         
         // PLACEITEM STATE EVENTS
         PlaceItemState.CountDownStarted += PlayCountdownSFX;
         PlaceItemState.CountDownStarted += PlayMainGameBigFlameStartSFX;
+        CursorController.OnCantPlaceItem += PlayForbiddenSignSFX;
+        GridItem.OnRotateItem += PlayRotateItemSFX;
 
         // Main Game Events
         GameEvents.OnMainGameStateExited += PlayMainGameBigFlameEndSFX;
@@ -106,6 +110,8 @@ public class SoundFXManager : MonoBehaviour
         OptionMenuSliderEvents.OnSliderSlideRight -= PlayVolumeUpSFX;
         OptionMenuSliderEvents.OnSliderSlideLeft -= PlayVolumeDownSFX;
         UIController.OnOptionMenuBackButtonPressed -= PlayOptionsMenuReturnButtonSubmitSFX;
+        SettingsMenu.OnFullscreenEnabled -= PlayFullScreenOnSFX;
+        SettingsMenu.OnFullscreenDisabled -= PlayFullScreenOffSFX;
         
         // PAUSE MENU EVENTS
         PauseMenu.OnPauseSFXEvent -= PlayPauseMenuOpenSFX;
@@ -121,12 +127,14 @@ public class SoundFXManager : MonoBehaviour
         // Surpriseboxstate Events
         GameEvents.OnSurpriseBoxStateEntered -= PlayCountdownSFX;
         SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
-        
+        CursorController.OnEnableCursor -= PlayEnableCursorSFX;
+
         
         // PLACEITEM STATE EVENTS
         PlaceItemState.CountDownStarted -= PlayCountdownSFX;
         PlaceItemState.CountDownStarted -= PlayMainGameBigFlameStartSFX;
-
+        CursorController.OnCantPlaceItem -= PlayForbiddenSignSFX;
+        GridItem.OnRotateItem -= PlayRotateItemSFX;
         
         // Main Game Events
         GameEvents.OnMainGameStateExited -= PlayMainGameBigFlameEndSFX;
@@ -174,16 +182,18 @@ public class SoundFXManager : MonoBehaviour
         Destroy(go, clipLength);
     }
 
-    public void PlayPlayButtonSelectSFX()
+    public void PlayRandomPauseMenuUiSoundFXClip(GameObject[] audioPrefabs, Transform spawnTransform, float volume = 1)
     {
-        PlaySoundFXClip(_audioClipRefsSo.playButtonSelectSFX, Camera.main.transform);
+        int randomIndex = Random.Range(0, audioPrefabs.Length);
+        GameObject prefab = audioPrefabs[randomIndex];
+        var go = Instantiate(prefab, spawnTransform.position, Quaternion.identity);
+        var audioSource = go.GetComponent<AudioSource>();
+        audioSource.volume = volume;
+        audioSource.ignoreListenerPause = true;
+        audioSource.Play();
+        float clipLength = audioSource.clip.length;
+        Destroy(go, clipLength);
     }
-    
-    public void PlayPlayButtonSubmitSFX()
-    {
-        PlaySoundFXClip(_audioClipRefsSo.playButtonSubmitSFX, Camera.main.transform);
-    }
-    
     private AudioSource PlayAndReturnSoundFXClip(GameObject audioPrefab, Transform spawnTransform, float volume = 1)
     {
         GameObject go = Instantiate(audioPrefab, spawnTransform.position, Quaternion.identity);
@@ -194,6 +204,17 @@ public class SoundFXManager : MonoBehaviour
         Destroy(go, clipLength);
         return audioSource;
     }
+    
+    public void PlayPlayButtonSelectSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.playButtonSelectSFX, Camera.main.transform);
+    }
+    
+    public void PlayPlayButtonSubmitSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.playButtonSubmitSFX, Camera.main.transform);
+    }
+    
 
     
     public void PlayQuitButtonSelectSFX()
@@ -217,6 +238,8 @@ public class SoundFXManager : MonoBehaviour
         if (_quitSelectSource != null && _quitSelectSource.isPlaying)
         {
             _quitSelectSource.Stop();
+            Destroy(_quitSelectSource.gameObject);
+            _quitSelectSource = null;
         }
     }
     public void PlaySettingsButtonSelectSFX()
@@ -276,6 +299,7 @@ public class SoundFXManager : MonoBehaviour
     
     public void PlayMainGameBigFlameStartSFX()
     {
+        
         _bigFLameSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.bigFlameStartSFX, Camera.main.transform, 0.1f);
         
     }
@@ -285,13 +309,15 @@ public class SoundFXManager : MonoBehaviour
         if (_bigFLameSource != null && _bigFLameSource.isPlaying)
         {
             _bigFLameSource.Stop();
+            Destroy(_bigFLameSource.gameObject);
+            _bigFLameSource = null;
         }
         PlaySoundFXClip(_audioClipRefsSo.bigFlameEndSFX, Camera.main.transform);
     }
 
     public void PlayPauseMenuButtonSelectSFX()
     {
-        PlayRandomSoundFXClip(_audioClipRefsSo.buttonSelectSFX, Camera.main.transform);
+        PlayRandomPauseMenuUiSoundFXClip(_audioClipRefsSo.buttonSelectSFX, Camera.main.transform);
     }
     
     public void PlayPlayerTakeDamageSFX()
@@ -310,6 +336,8 @@ public class SoundFXManager : MonoBehaviour
         if (_auraSpawnSource != null && _auraSpawnSource.isPlaying)
         {
             _auraSpawnSource.Stop();
+            Destroy(_auraSpawnSource.gameObject);
+            _auraSpawnSource = null;
         }
         PlaySoundFXClip(_audioClipRefsSo.auraCollectSFX, Camera.main.transform);
     }
@@ -379,6 +407,19 @@ public class SoundFXManager : MonoBehaviour
         if (_pointsIncreaseSource != null && _pointsIncreaseSource.isPlaying)
         {
             _pointsIncreaseSource.Stop();
+            Destroy(_pointsIncreaseSource.gameObject);
+            _pointsIncreaseSource = null;
         }
     }
+    
+    public void PlayRotateItemSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.jumpSFX, Camera.main.transform);
+    }
+    
+    public void PlayEnableCursorSFX()
+    {
+        PlayRandomSoundFXClip(_audioClipRefsSo.jumpSFX, Camera.main.transform);
+    }
+    
 }
