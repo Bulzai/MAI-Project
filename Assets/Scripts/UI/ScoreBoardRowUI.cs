@@ -1,8 +1,9 @@
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using UnityEngine.InputSystem;
 using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ScoreboardRowUI : MonoBehaviour
 {
@@ -18,8 +19,13 @@ public class ScoreboardRowUI : MonoBehaviour
     [SerializeField] private TMP_Text placeText;   // <-- NEW
     [SerializeField] private Image background;
     [SerializeField] private Sprite spriteBackground;
+    [SerializeField] private GameObject crown;
+
 
     private static float EaseOutCubic(float t) => 1 - Mathf.Pow(1 - t, 3);
+
+
+
     public void SetPlace(int place)
     {
         if (placeText) placeText.text = place.ToString() + ".";
@@ -59,6 +65,13 @@ public class ScoreboardRowUI : MonoBehaviour
     public void SetAvatar(Sprite s) 
     { 
         if (avatar) avatar.sprite = s; 
+    }
+
+
+    public void SetCrownActive(bool active)
+    {
+        if (crown != null)
+            crown.SetActive(active);
     }
 
 }

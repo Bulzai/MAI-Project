@@ -12,6 +12,7 @@ public class PlayerScoreManager : MonoBehaviour
     public GameObject scoreboardUI;
     [SerializeField] private Transform rowsContainer; // has Row_1..Row_4 (each with ScoreboardRowUI)
 
+
     [Header("Last Round UI")]
     [SerializeField] private GameObject menuButton; // <-- assign in inspector
                                                    
@@ -23,6 +24,9 @@ public class PlayerScoreManager : MonoBehaviour
 
     [SerializeField] private Sprite fallbackAvatar;
     private readonly int[] _roundPoints = new[] { 100, 75, 50, 25 };
+
+
+
 
     private static bool IsDestroyed(Object o) => o == null;
 
@@ -122,7 +126,7 @@ public class PlayerScoreManager : MonoBehaviour
     // Call this from RoundController BEFORE you change into ScoreState (for last round).
     public void SetMenuButtonActiveOrDeactive(bool isLastRound)
     {
-        
+
         menuButton.SetActive(isLastRound);
     }
 
@@ -130,6 +134,7 @@ public class PlayerScoreManager : MonoBehaviour
     public void ShowScoresManual(bool isLastRound)
     {
         InternalShowScores(isLastRound);
+
     }
 
     private void InternalShowScores(bool isLastRound)
@@ -181,7 +186,6 @@ public class PlayerScoreManager : MonoBehaviour
 
     private void ApplyOrderByTotalAndSetPlaces()
     {
-        // Sort only shown players by final total descending (tie-break by playerIndex to keep stable)
         var sorted = _totalScores
             .Where(k => _rows.ContainsKey(k.Key))
             .OrderByDescending(k => k.Value)
@@ -195,7 +199,10 @@ public class PlayerScoreManager : MonoBehaviour
             var row = _rows[idx];
 
             row.transform.SetSiblingIndex(i);
-            row.SetPlace(i + 1); // 1,2,3,...
+            row.SetPlace(i + 1);
+
+            row.SetCrownActive( i == 0);
+
         }
     }
 
@@ -218,4 +225,5 @@ public class PlayerScoreManager : MonoBehaviour
             yield return new WaitForSeconds(0.07f);
         }
     }
+
 }
