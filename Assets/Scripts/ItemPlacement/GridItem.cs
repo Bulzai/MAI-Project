@@ -225,14 +225,14 @@ public class GridItem : MonoBehaviour
             // --- Keep the sign completely independent of parent's transform ---
             forbidden.SetPositionAndRotation(adjustedCenter, Quaternion.identity);
 
-            // --- Apply world scale that ignores parent scale entirely ---
+           /* // --- Apply world scale that ignores parent scale entirely ---
             Vector3 worldScale = Vector3.one * forbiddenSignScale;
             forbidden.localScale = Vector3.one; // neutralize local skew first
             forbidden.localScale = new Vector3(
                 worldScale.x / transform.lossyScale.x,
                 worldScale.y / transform.lossyScale.y,
                 worldScale.z / transform.lossyScale.z
-            );
+            );*/
         }
     }
     

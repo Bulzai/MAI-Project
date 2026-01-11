@@ -362,14 +362,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ForbiddenSign
       objectReference: {fileID: 0}
-    - target: {fileID: 3496660430082569730, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
-      propertyPath: m_RootOrder
-      value: -2
-      objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.35
