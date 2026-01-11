@@ -571,26 +571,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ForbiddenSign
       objectReference: {fileID: 0}
-    - target: {fileID: 3496660430082569730, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
-      propertyPath: m_RootOrder
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 18.428974
-      objectReference: {fileID: 0}
-    - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 18.656483
-      objectReference: {fileID: 0}
-    - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 48.404842
-      objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -7,6 +7,7 @@ public class RoundController : MonoBehaviour
     [SerializeField] private int maxRounds = 3;
     [SerializeField] private float scoreDisplayTime = 5f;
 
+    public GameObject EndScoreText;
     public PlayerManager playerManagerFinal;
     private PlayerScoreManager playerScoreManager;
 
@@ -38,6 +39,7 @@ public class RoundController : MonoBehaviour
         // IMPORTANT: If it's the last round, do NOT auto-advance anywhere.
         if (isLastRound)
         {
+            EndScoreText.SetActive(true);
             StartCoroutine(EnableMenuButtonAfterDelay());
             return;
         }

@@ -136,12 +136,6 @@ public class PlayerScoreManager : MonoBehaviour
         menuButton.SetActive(isLastRound);
     }
 
-    // If you prefer, you can call this directly from RoundController instead of relying on the event.
-    public void ShowScoresManual(bool isLastRound)
-    {
-        InternalShowScores(isLastRound);
-
-    }
 
     private void InternalShowScores(bool isLastRound)
     {
