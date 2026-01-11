@@ -9,6 +9,11 @@ public class PlayerItemHandler : MonoBehaviour
 {
     public static event Action OnAuraExpires;
     public static event Action OnAuraPickedUp;
+    public static event Action OnRepelAuraActivated;
+    public static event Action OnRepelAuraDeactivated;
+    public static event Action OnOtherPlayerSlowed;
+    public static event Action OnSpeedAuraActivated;
+    public static event Action OnDamageAuraActivated;
     
     [Header("Slow Aura")]
     [SerializeField] private string playerTag = "Player";
@@ -76,7 +81,11 @@ public class PlayerItemHandler : MonoBehaviour
 
             case PickUpItem.ItemType.Speed:
                 var selfBuff = GetComponent<SlowDebuff>();
-                if (selfBuff) selfBuff.ApplySpeedModifier(speedMultiplier, speedDuration);
+                if (selfBuff)
+                {
+                    selfBuff.ApplySpeedModifier(speedMultiplier, speedDuration);
+                    OnSpeedAuraActivated?.Invoke();
+                }
                 break;
 
             case PickUpItem.ItemType.Damage:
@@ -89,6 +98,7 @@ public class PlayerItemHandler : MonoBehaviour
     private IEnumerator ApplySlowAura()
     {
         slowAuraVisual.SetActive(true);
+        OnOtherPlayerSlowed?.Invoke();
 
         // start blink coroutine (it will wait until the last blinkStartSeconds)
         StopBlink(ref _slowBlinkCo);
@@ -115,6 +125,7 @@ public class PlayerItemHandler : MonoBehaviour
 
                 var slow = otherRb.GetComponent<SlowDebuff>();
                 if (slow) slow.ApplySpeedModifier(slowPercent, slowSeconds);
+                OnOtherPlayerSlowed?.Invoke();
             }
 
             t -= Time.deltaTime;
@@ -129,7 +140,7 @@ public class PlayerItemHandler : MonoBehaviour
     private IEnumerator EnableRepelAura()
     {
         repelAuraVisual.SetActive(true);
-
+        OnRepelAuraActivated?.Invoke();
         StopBlink(ref _repelBlinkCo);
         _repelBlinkCo = StartCoroutine(BlinkVisual(
             repelAuraVisual,
@@ -146,6 +157,7 @@ public class PlayerItemHandler : MonoBehaviour
 
         StopBlink(ref _repelBlinkCo);
         repelAuraVisual.SetActive(false);
+        OnRepelAuraDeactivated?.Invoke();
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -164,6 +176,7 @@ public class PlayerItemHandler : MonoBehaviour
     // ---------- Damage aura ----------
     private IEnumerator ApplyDamageAura()
     {
+        OnDamageAuraActivated?.Invoke();
         damageAuraVisual.SetActive(true);
 
         StopBlink(ref _damageBlinkCo);

@@ -13,8 +13,9 @@ using UnityEngine;
 
 public class GridItem : MonoBehaviour
 {
-
     public static event Action OnRotateItem;
+    public static event Action<GameObject> OnGridItemPlaced;
+
     [Header("Attachment Settings")]
     public bool isAttachable = false;               // true for icy/sticky surfaces
     public Transform ifAttachableAttachHere = null;
@@ -108,6 +109,7 @@ public class GridItem : MonoBehaviour
         }
 
         Placed = true;
+        OnGridItemPlaced?.Invoke(gameObject);
     }
 
 

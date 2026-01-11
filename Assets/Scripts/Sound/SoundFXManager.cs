@@ -70,9 +70,16 @@ public class SoundFXManager : MonoBehaviour
         PlaceItemState.CountDownStarted += PlayMainGameBigFlameStartSFX;
         CursorController.OnCantPlaceItem += PlayForbiddenSignSFX;
         GridItem.OnRotateItem += PlayRotateItemSFX;
+        GridItem.OnGridItemPlaced;
 
         // Main Game Events
         GameEvents.OnMainGameStateExited += PlayMainGameBigFlameEndSFX;
+        PlayerItemHandler.OnRepelAuraActivated;
+        PlayerItemHandler.OnDamageAuraActivated;
+        PlayerItemHandler.OnOtherPlayerSlowed;
+        PlayerItemHandler.OnRepelAuraDeactivated;
+        PlayerItemHandler.OnSpeedAuraActivated;
+        PlayerHealthSystem.OnMilkCollected;
 
         // ScoreState Events
         PlayerScoreManager.OnPointsIncrease += PlayPointsIncreaseSFX;
