@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class SurpriseBoxState : MonoBehaviour
 {
@@ -29,7 +30,9 @@ public class SurpriseBoxState : MonoBehaviour
 
     public GameObject[] playerNamesToDeactive;
 
-    // ✅ NEW: prevent multiple countdown coroutines
+    [SerializeField] private Animator transitionAnimator;
+    [SerializeField] private string playAnimTrigger = "Play";
+
     private Coroutine countdownRoutine;
 
     private void Awake()
@@ -210,16 +213,31 @@ public class SurpriseBoxState : MonoBehaviour
         {
             StopCountdownIfRunning();
 
-            // ✅ use same countdown system here too
             OnSurpriseBoxStateCounterStarted?.Invoke();
             countdownRoutine = StartCoroutine(PlayCountdown(() =>
             {
-                DeactivateItemBox();
-                GameEvents.ChangeState(GameState.PlaceItemState);
+                StartCoroutine(ExecuteTransitionThenChangeState());
             }));
         }
     }
+    private IEnumerator ExecuteTransitionThenChangeState()
+    {
+        // 1. Das Parent-Objekt finden und aktivieren
+        transitionAnimator.gameObject.GetComponent<Image>().enabled = true;
 
+        // 2. Animation Trigger setzen
+        transitionAnimator.SetTrigger("Play");
+
+        yield return new WaitForSeconds(1f);
+
+        // 6. Die Spiellogik ausführen
+        DeactivateItemBox();
+        GameEvents.ChangeState(GameState.PlaceItemState);
+
+        yield return new WaitForSeconds(0.5f);
+        transitionAnimator.gameObject.GetComponent<Image>().enabled = false;
+
+    }
     public void ShowAllCursors()
     {
         foreach (var kvp in playerManager.playerRoots)
