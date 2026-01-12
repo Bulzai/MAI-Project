@@ -631,7 +631,7 @@ public class SoundFXManager : MonoBehaviour
     {
         var src = PlayAndReturnSoundFXClip(
             _audioClipRefsSo.repelAuraSFX,
-            Camera.main.transform, 0.6f);
+            Camera.main.transform, 0.3f);
 
         if (src != null)
         {
@@ -671,12 +671,12 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayDamageAuraActivatedSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.poisonAuraCollectSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.poisonAuraCollectSFX, Camera.main.transform, 0.5f);
     }
 
     public void PlayOtherPLayerSlowedSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.slowAuraHitSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.slowAuraHitSFX, Camera.main.transform, 0.4f);
     }
 
     public void PlaySpeedAuraActivatedSFX()
