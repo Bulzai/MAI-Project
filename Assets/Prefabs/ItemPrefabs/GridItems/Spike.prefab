@@ -284,7 +284,6 @@ GameObject:
   - component: {fileID: 415043069406205061}
   - component: {fileID: 6868179486730549693}
   - component: {fileID: 7833557627982394127}
-  - component: {fileID: 430650263855604990}
   m_Layer: 6
   m_Name: Spike
   m_TagString: Untagged
@@ -546,41 +545,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31603d0e88c64c442a0771a5db4a979b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!58 &430650263855604990
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4711019012961524803}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.93}
-  serializedVersion: 2
-  m_Radius: 2.43
 --- !u!1 &6798446061416838796
 GameObject:
   m_ObjectHideFlags: 0

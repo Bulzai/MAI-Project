@@ -476,7 +476,7 @@ public class SoundFXManager : MonoBehaviour
         Debug.Log("raw name: " + rawName);
         switch (rawName)
         {
-            case "Cookie":
+            case "Cracker":
                 PlayCookieSelectSFX();
                 break;
 
@@ -531,7 +531,7 @@ public class SoundFXManager : MonoBehaviour
         Debug.Log("raw name: " + rawName);
         switch (rawName)
         {
-            case "Cookie":
+            case "Cracker":
                 PlayCookieSubmitSFX();
                 break;
             

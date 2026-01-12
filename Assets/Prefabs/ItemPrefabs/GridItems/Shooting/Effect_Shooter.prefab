@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4663102656764865577}
   - component: {fileID: 3213436626078989502}
   - component: {fileID: 4248510132923599480}
+  - component: {fileID: 5500808189184018248}
   m_Layer: 6
   m_Name: Effect_Shooter
   m_TagString: Untagged
@@ -221,6 +222,51 @@ MonoBehaviour:
   activationDelay: 0
   scriptsToToggle:
   - {fileID: 1930771480500770893}
+--- !u!61 &5500808189184018248
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3896460717008147644}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.13889885, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 4, y: 4}
+    newSize: {x: 1, y: 2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.446054, y: 3.4085598}
+  m_EdgeRadius: 0
 --- !u!1 &5279988495354092573
 GameObject:
   m_ObjectHideFlags: 0
