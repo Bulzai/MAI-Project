@@ -82,11 +82,13 @@ public class SoundFXManager : MonoBehaviour
         ExtinguisherPickUp.OnMilkCollected += PlayMilkCollectedSFX;
         PlayerHealthSystem.OnPlayerKnockedBack += PlayPlayerKnockedBackSFX;
         BreakableCracker.OnCrackerBroken += PlayCookieBreakSFX;
+        GameEvents.OnMainGameStateExited += PlayTransitionSFX;
 
         // ScoreState Events
         PlayerScoreManager.OnPointsIncrease += PlayPointsIncreaseSFX;
         PlayerScoreManager.OnPointsIncreaseEnd += StopPointsIncreaseSFX;
-
+        PlayerScoreManager.OnScoreStateExitTransition += PlayTransitionSFX;
+        
         // CHARACTER EVENTS
         PlayerHealthSystem.OnPlayerTakeDamage += PlayPlayerTakeDamageSFX;
         PlayerHealthSystem.OnPlayerDeath += PlayPlayerDeathSFX;
@@ -162,11 +164,12 @@ public class SoundFXManager : MonoBehaviour
         ExtinguisherPickUp.OnMilkCollected -= PlayMilkCollectedSFX;
         PlayerHealthSystem.OnPlayerKnockedBack -= PlayPlayerKnockedBackSFX;
         BreakableCracker.OnCrackerBroken -= PlayCookieBreakSFX;
-
+        GameEvents.OnMainGameStateExited -= PlayTransitionSFX;
         
         // ScoreState Events
         PlayerScoreManager.OnPointsIncrease -= PlayPointsIncreaseSFX;
         PlayerScoreManager.OnPointsIncreaseEnd -= StopPointsIncreaseSFX;
+        PlayerScoreManager.OnScoreStateExitTransition -= PlayTransitionSFX;
 
         // CHARACTER EVENTS
         PlayerHealthSystem.OnPlayerTakeDamage -= PlayPlayerTakeDamageSFX;
@@ -463,7 +466,7 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayTransitionSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.bigFlameTransitionSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.bigFlameTransitionSFX, Camera.main.transform, 0.5f);
     }
 
 

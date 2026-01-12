@@ -13,7 +13,8 @@ public class PlayerScoreManager : MonoBehaviour
     
     public static event Action OnPointsIncrease;
     public static event Action OnPointsIncreaseEnd;
-
+    public static event Action OnScoreStateExitTransition;
+    
     [Header("References")]
     public PlayerManager playerManager;
     public GameObject scoreboardUI;
@@ -33,8 +34,7 @@ public class PlayerScoreManager : MonoBehaviour
 
     [SerializeField] private Sprite fallbackAvatar;
     private readonly int[] _roundPoints = new[] { 100, 75, 50, 25 };
-
-
+    
 
 
     private static bool IsDestroyed(Object o) => o == null;
@@ -156,7 +156,6 @@ public class PlayerScoreManager : MonoBehaviour
         Image transitionImage = transitionAnimator.GetComponent<Image>();
         transitionImage.enabled = true;
         transitionAnimator.SetTrigger("Play");
-
         // 2. Warten, bis der Bildschirm verdeckt ist (deine 1.1 Sekunden)
         yield return new WaitForSeconds(0.8f);
 

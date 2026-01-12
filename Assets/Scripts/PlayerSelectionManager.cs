@@ -18,6 +18,7 @@ public class PlayerSelectionManager : MonoBehaviour
 
     [SerializeField] private Animator transitionAnimator;
 
+    bool _isTransitionRunning = false;
     private readonly Dictionary<PlayerInput, PlayerSelectionData> _playerSelection =
         new Dictionary<PlayerInput, PlayerSelectionData>();
 
@@ -124,14 +125,16 @@ public class PlayerSelectionManager : MonoBehaviour
         }
 
         // 1. SFX SOFORT abspielen
-        OnStartGameSFX?.Invoke();
 
         // 2. Die Transition-Sequenz starten
+        if (_isTransitionRunning) return;
         StartCoroutine(TransitionToSurpriseBox());
+        OnStartGameSFX?.Invoke();
     }
 
     private IEnumerator TransitionToSurpriseBox()
     {
+        _isTransitionRunning = true;
         // Vorbereitung: Image enablen & Animation starten
         // (Ich nehme an, transitionAnimator ist in dieser Klasse bekannt)
         Image transitionImage = transitionAnimator.GetComponent<Image>();
@@ -149,7 +152,7 @@ public class PlayerSelectionManager : MonoBehaviour
 
         // 5. Kurz warten, damit der neue State geladen/initialisiert ist
         yield return new WaitForSeconds(0.45f);
-
+        _isTransitionRunning = false;
         // 6. Transition wieder unsichtbar machen
         transitionImage.enabled = false;
     }
