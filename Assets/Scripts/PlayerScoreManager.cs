@@ -6,6 +6,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
+using UnityEngine.UI;
 
 public class PlayerScoreManager : MonoBehaviour
 {
@@ -21,7 +22,9 @@ public class PlayerScoreManager : MonoBehaviour
 
     [Header("Last Round UI")]
     [SerializeField] private GameObject menuButton; // <-- assign in inspector
-                                                   
+
+    [Header("Transition")]
+    [SerializeField] private Animator transitionAnimator;
 
     private List<ScoreboardRowUI> _rowSlots = new();
 
@@ -142,26 +145,37 @@ public class PlayerScoreManager : MonoBehaviour
         if (playerManager == null || scoreboardUI == null)
             return;
 
-  
+        // Wir starten die gesamte Sequenz als Coroutine
+        StopAllCoroutines();
+        StartCoroutine(ScoreboardSequenceCoroutine());
+    }
+
+    private IEnumerator ScoreboardSequenceCoroutine()
+    {
+        // 1. Transition vorbereiten & starten
+        Image transitionImage = transitionAnimator.GetComponent<Image>();
+        transitionImage.enabled = true;
+        transitionAnimator.SetTrigger("Play");
+
+        // 2. Warten, bis der Bildschirm verdeckt ist (deine 1.1 Sekunden)
+        yield return new WaitForSeconds(0.8f);
+
+        // 3. UI im Hintergrund vorbereiten (während die Transition noch alles verdeckt)
         EnsureRowsMapped();
         RefreshAllAvatars();
 
         var shownIndices = _rows.Keys.ToList();
-
-        // Snapshot old totals
         var oldTotals = new Dictionary<int, int>();
         foreach (var idx in shownIndices)
             oldTotals[idx] = _totalScores.GetValueOrDefault(idx, 0);
 
-        // 1) Award round placement points ONCE (based on this round ranking)
-        var rankingPis = playerManager.GetRoundRanking(); // winner..last for THIS round
+        // Punkte berechnen
+        var rankingPis = playerManager.GetRoundRanking();
         int place = 0;
-
         for (int i = 0; i < rankingPis.Count && place < shownIndices.Count; i++)
         {
             var pi = rankingPis[i];
             if (IsDestroyed(pi)) continue;
-
             int idx = pi.playerIndex;
             if (!_rows.ContainsKey(idx)) continue;
 
@@ -170,7 +184,6 @@ public class PlayerScoreManager : MonoBehaviour
             place++;
         }
 
-        // 2) NOW order UI by TOTAL points descending (not by this-round placement)
         ApplyOrderByTotalAndSetPlaces();
 
         int maxTotal = Mathf.Max(
@@ -178,10 +191,18 @@ public class PlayerScoreManager : MonoBehaviour
             _totalScores.Where(k => _rows.ContainsKey(k.Key)).Select(k => k.Value).DefaultIfEmpty(0).Max()
         );
 
-        StopAllCoroutines();
-        StartCoroutine(AnimateAllRows(oldTotals, maxTotal));
-
+        // 4. Scoreboard jetzt sichtbar machen
         scoreboardUI.SetActive(true);
+
+        yield return new WaitForSeconds(0.5f);
+        yield return StartCoroutine(AnimateAllRows(oldTotals, maxTotal));
+
+        yield return new WaitForSeconds(0.2f);
+
+        // 6. Transition-Image deaktivieren (damit man das Scoreboard sieht)
+        transitionImage.enabled = false;
+
+        // 7. Die Balken-Animation der Reihen starten
     }
 
     private void ApplyOrderByTotalAndSetPlaces()

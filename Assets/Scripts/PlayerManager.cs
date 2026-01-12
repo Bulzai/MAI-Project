@@ -34,10 +34,9 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Avatars")]
     public Sprite[] playerAvatars = new Sprite[4];  // set per slot in Inspector
+    public Sprite[] playerCursors = new Sprite[4];
     public CharacterAnimationLibrary[] characterLibraries = new CharacterAnimationLibrary[4];
 
-    [Header("Player Colors")]
-    public Color[] playerColors = new Color[4];
 
     [Header("PlayerJoin Names")]
     public Transform[] namePositionsInJoinMenu;
@@ -241,7 +240,7 @@ public class PlayerManager : MonoBehaviour
         // Cache root
         playerRoots[idx] = root;
 
-        // ----- Assign AVATAR + COLOR -----
+        // ----- Assign AVATAR + Cursor -----
         var characterSpriteRenderer = characterTf.Find("Visual/Sprite")?.GetComponent<SpriteRenderer>();
         var cursorSpriteRenderer = cursorTf.GetComponent<SpriteRenderer>();
 
@@ -250,15 +249,17 @@ public class PlayerManager : MonoBehaviour
             if (playerAvatars != null && idx < playerAvatars.Length && playerAvatars[idx] != null)
                 characterSpriteRenderer.sprite = playerAvatars[idx];
         }
-        else
-        {
-            Debug.LogWarning($"SpriteRenderer not found for Player {idx} at Visual/Sprite");
-        }
 
+        // Cursor Farbe UND Sprite setzen
         if (cursorSpriteRenderer != null)
         {
-            if (playerColors != null && idx < playerColors.Length)
-                cursorSpriteRenderer.color = playerColors[idx];
+
+
+            // 2. Einzigartiges Cursor-Sprite setzen (NEU)
+            if (playerCursors != null && idx < playerCursors.Length && playerCursors[idx] != null)
+            {
+                cursorSpriteRenderer.sprite = playerCursors[idx];
+            }
         }
         else
         {
