@@ -12,7 +12,7 @@ public class PlayerSelectionManager : MonoBehaviour
     public static event Action OnReturnToMainMenu;
     public static event Action OnStartGameSFX;
     public static event Action OnPlayerReadySFX;
-
+    public static event Action OnSurpriseBoxStateTransitionStarted;
     public static event Action OnNotAllPlayersReady;
     public static event Action OnNobodyJoinedYet;
 
@@ -137,11 +137,11 @@ public class PlayerSelectionManager : MonoBehaviour
         Image transitionImage = transitionAnimator.GetComponent<Image>();
         transitionImage.enabled = true;
         transitionAnimator.SetTrigger("Play");
-
+        OnSurpriseBoxStateTransitionStarted?.Invoke();
         // 3. Warten, bis die Transition den Bildschirm verdeckt (deine 1.1s)
         yield return new WaitForSeconds(1.1f);
 
-        // 4. State-Wechsel genau JETZT ausführen
+        // 4. State-Wechsel genau JETZT ausfï¿½hren
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
         {
             GameEvents.ChangeState(GameState.SurpriseBoxState);

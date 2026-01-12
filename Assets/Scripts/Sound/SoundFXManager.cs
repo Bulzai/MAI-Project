@@ -61,7 +61,7 @@ public class SoundFXManager : MonoBehaviour
         PlayerSelectionManager.OnNobodyJoinedYet += PlayForbiddenSignSFX;
         PlayerSelectionManager.OnStartGameSFX += PlayGameStartSFX;
         PlayerSelectionManager.OnPlayerReadySFX += PlayPlayerReadySFX;
-
+        PlayerSelectionManager.OnSurpriseBoxStateTransitionStarted += PlayTransitionSFX;
         // Surpriseboxstate Events
         GameEvents.OnSurpriseBoxStateEntered += PlayCountdownSFX;
         SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
@@ -141,6 +141,7 @@ public class SoundFXManager : MonoBehaviour
         PlayerSelectionManager.OnNobodyJoinedYet -= PlayForbiddenSignSFX;
         PlayerSelectionManager.OnStartGameSFX -= PlayGameStartSFX;
         PlayerSelectionManager.OnPlayerReadySFX -= PlayPlayerReadySFX;
+        PlayerSelectionManager.OnSurpriseBoxStateTransitionStarted -= PlayTransitionSFX;
 
         // Surpriseboxstate Events
         GameEvents.OnSurpriseBoxStateEntered -= PlayCountdownSFX;
