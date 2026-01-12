@@ -15,7 +15,9 @@ public class GridItem : MonoBehaviour
 {
     public static event Action OnRotateItem;
     public static event Action<GameObject> OnGridItemPlaced;
+    public static event Action<GameObject> OnPlayerSelecedtItem;
 
+    
     [Header("Attachment Settings")]
     public bool isAttachable = false;               // true for icy/sticky surfaces
     public Transform ifAttachableAttachHere = null;
@@ -110,6 +112,7 @@ public class GridItem : MonoBehaviour
 
         Placed = true;
         OnGridItemPlaced?.Invoke(gameObject);
+        Debug.Log("invoking ongritemplaced with go " + gameObject);
     }
 
 
@@ -252,6 +255,15 @@ public class GridItem : MonoBehaviour
         Right
     }
 
-
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (GameEvents.CurrentState == GameState.SurpriseBoxState)
+                OnPlayerSelecedtItem?.Invoke(gameObject);
+            
+        }
+        Debug.Log("cursor entered on item" + gameObject.tag);
+    }
 
 }

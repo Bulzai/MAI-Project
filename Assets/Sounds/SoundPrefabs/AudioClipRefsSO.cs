@@ -31,10 +31,12 @@ public class AudioClipRefsSO : ScriptableObject
     public GameObject[] joinSFX;
     public GameObject[] readySFX;
     public GameObject[] startGameSFX;
-    
-        
-        
-    [Header("Item SFX")]
+
+
+
+    [Header("Item SFX")] 
+    public GameObject caneSubmitAndSelectSFX;
+    public GameObject[] knockBackSFX;
     public GameObject cookieSelectSFX;
     public GameObject cookieSubmitSFX;
     public GameObject cookieBreakSFX;
@@ -64,26 +66,20 @@ public class AudioClipRefsSO : ScriptableObject
     public GameObject forbiddenSignSFX;
 
     public GameObject[] impactSFX;
+    public GameObject milkSpawnSFX;
+    public GameObject milkCollectSFX;
     
     [Header("Aura SFX")]
     public GameObject auraExpiresSFX;
     public GameObject auraHitSFX;
     public GameObject auraCollectSFX;
-    
-    
-    
-    
-    public GameObject auraSpawnSFX;
-    
+
     public GameObject poisonAuraCollectSFX;
     public GameObject speedAuraCollectSFX;
-    public GameObject bumpAuraCollectSFX;
-    public GameObject slowAuraCollectSFX;
+    public GameObject slowAuraHitSFX;
+    public GameObject repelAuraSFX;
     
-    public GameObject poisonAuraActiveSFX;
-    public GameObject speedAuraActiveSFX;
-    public GameObject bumpAuraActiveSFX;
-    public GameObject slowAuraActiveSFX;
+    public GameObject auraSpawnSFX;
     
     
     [Header("Final Score SFX")]
@@ -99,5 +95,8 @@ public class AudioClipRefsSO : ScriptableObject
     public GameObject pauseMenuOpenSFX;
     public GameObject pauseMenuCloseSFX;
     public GameObject[] buttonSelectSFX;
-    
+ 
+    [Header("Transition SFX")]
+    public GameObject bigFlameTransitionSFX;
+
 }

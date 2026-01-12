@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class BreakableCracker : MonoBehaviour
 {
+    public static event Action OnCrackerBroken;
     [Header("Sprites")]
     [SerializeField] private SpriteRenderer spriteRenderer; // child sprite
     [SerializeField] private Sprite originalSprite;         // healthy cookie
@@ -91,7 +93,7 @@ public class BreakableCracker : MonoBehaviour
     private void DoBreak()
     {
 
-
+        OnCrackerBroken?.Invoke();
         // Play breaking animation frames
         if (spriteRenderer && breakFrames.Length > 0)
             StartCoroutine(PlayBreakAnimation());

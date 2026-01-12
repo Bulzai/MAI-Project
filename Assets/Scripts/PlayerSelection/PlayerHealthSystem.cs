@@ -8,7 +8,7 @@ public class PlayerHealthSystem : MonoBehaviour
 {
     public static event Action OnPlayerTakeDamage;
     public static event Action OnPlayerDeath;
-    public static event Action OnMilkCollected;
+    public static event Action OnPlayerKnockedBack;
     
     private PlayerInput _playerInput;
     public PlayerAnimator animator;
@@ -87,7 +87,6 @@ public class PlayerHealthSystem : MonoBehaviour
                 fireSprite.gameObject.SetActive(false);
 
             Debug.Log(" Fire extinguished!");
-            OnMilkCollected?.Invoke();
             Invoke("SetOnFire", 5f);
         }
     }
@@ -213,6 +212,7 @@ public class PlayerHealthSystem : MonoBehaviour
         if (Mathf.Abs(direction.y) < 0.25f) impulse.y += verticalBoost;
 
         pc.AddImpulse(impulse);
+        OnPlayerKnockedBack?.Invoke();
     }
 
 }

@@ -10,6 +10,8 @@ public class SurpriseBoxState : MonoBehaviour
 {
     public static SurpriseBoxState Instance { get; private set; }
     public static event Action OnSurpriseBoxStateCounterStarted;
+    public static event Action<GameObject> OnPlayerPickedItem;
+    public static event Action OnFireTransitionAnimationStarted;
     
     [SerializeField] private PlayerManager playerManager;
 
@@ -205,6 +207,7 @@ public class SurpriseBoxState : MonoBehaviour
         if (!playerManager.pickedPrefabByPlayer.ContainsKey(idx))
         {
             playerManager.pickedPrefabByPlayer[idx] = prefab;
+            OnPlayerPickedItem?.Invoke(prefab);
             var cursor = playerManager.playerRoots[idx].transform.Find("CursorNoPI").gameObject;
             cursor.SetActive(false);
         }
@@ -222,6 +225,7 @@ public class SurpriseBoxState : MonoBehaviour
     }
     private IEnumerator ExecuteTransitionThenChangeState()
     {
+        OnFireTransitionAnimationStarted?.Invoke();
         // 1. Das Parent-Objekt finden und aktivieren
         transitionAnimator.gameObject.GetComponent<Image>().enabled = true;
 

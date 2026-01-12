@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 public class ExtinguisherPickUp : MonoBehaviour
 {
     private ExtingSpawner spawner;
-
+    public static event Action OnMilkCollected;
     public void Init(ExtingSpawner spawnerRef)
     {
         spawner = spawnerRef;
@@ -15,6 +16,8 @@ public class ExtinguisherPickUp : MonoBehaviour
         if (health == null) return;
 
         health.Extinguish();
+        OnMilkCollected?.Invoke();
+
         Destroy(gameObject);
 
         // tell the loop: spawn the next one immediately

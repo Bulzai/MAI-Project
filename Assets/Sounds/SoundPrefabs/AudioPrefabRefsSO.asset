@@ -117,6 +117,15 @@ MonoBehaviour:
   - {fileID: 5773656466734081815, guid: 50fbcf6333ed4e34f9ac861de2309e66, type: 3}
   - {fileID: 5773656466734081815, guid: 5fc4daa971c17184c82442f893c75bd7, type: 3}
   - {fileID: 5773656466734081815, guid: 416c4639afe84e747826da4d35fa485b, type: 3}
+  caneSubmitAndSelectSFX: {fileID: 5773656466734081815, guid: 3368afb3158e19242ab7931b08989f30, type: 3}
+  knockBackSFX:
+  - {fileID: 5773656466734081815, guid: 8dc92638041038543a6e5d1c378e16b5, type: 3}
+  - {fileID: 5773656466734081815, guid: 224c496065487264e8c6a412f222806b, type: 3}
+  - {fileID: 5773656466734081815, guid: 3c91763abc1a4d14c8da5972ad4eb308, type: 3}
+  - {fileID: 5773656466734081815, guid: 165f57e76eb17804382a7fa01a14923c, type: 3}
+  - {fileID: 5773656466734081815, guid: 1f2dc917f186035409e0b173a83cba49, type: 3}
+  - {fileID: 5773656466734081815, guid: 57a7d819db4e62a42bf4c815dd1cb071, type: 3}
+  - {fileID: 5773656466734081815, guid: bc4733a64f8d45b479d85c799d60b636, type: 3}
   cookieSelectSFX: {fileID: 5773656466734081815, guid: 5cf695c67adb4d840baef779ac84c7c8, type: 3}
   cookieSubmitSFX: {fileID: 5773656466734081815, guid: 3b2aa49c50f75044b86199c727cbcff6, type: 3}
   cookieBreakSFX: {fileID: 5773656466734081815, guid: c48ac10e661a79141bb167bd9ce67eb5, type: 3}
@@ -149,18 +158,16 @@ MonoBehaviour:
   - {fileID: 5773656466734081815, guid: 9c51ddcccd148044397dbb9cdcf85346, type: 3}
   - {fileID: 5773656466734081815, guid: c918e7e8576d2a94a964c9513c80ed06, type: 3}
   - {fileID: 5773656466734081815, guid: b6f17155361e1c747abd606bf8a8b766, type: 3}
+  milkSpawnSFX: {fileID: 5773656466734081815, guid: efbda72b7c842ad48b98bf1610973612, type: 3}
+  milkCollectSFX: {fileID: 5773656466734081815, guid: 64c340e215a312c4786328b98917c87b, type: 3}
   auraExpiresSFX: {fileID: 5773656466734081815, guid: 897bf66365607e74185bab7e7d6e76ef, type: 3}
   auraHitSFX: {fileID: 5773656466734081815, guid: 378ecfbd429559a45bcbc370e4e101ca, type: 3}
   auraCollectSFX: {fileID: 5773656466734081815, guid: 7ea5bf4c077585a42a6489c875d91e6a, type: 3}
+  poisonAuraCollectSFX: {fileID: 5773656466734081815, guid: 15abeaf954ee3fa47985184857ffc0b7, type: 3}
+  speedAuraCollectSFX: {fileID: 5773656466734081815, guid: 9ba57d8974428e74e800885f20ea5844, type: 3}
+  slowAuraHitSFX: {fileID: 5773656466734081815, guid: dd9254ab7c016a04b8fcf0700a73d879, type: 3}
+  repelAuraSFX: {fileID: 5773656466734081815, guid: 8cc6a33adac451f4a8fb153230290eae, type: 3}
   auraSpawnSFX: {fileID: 5773656466734081815, guid: 6e5f13c4ad8ea9d47823cbd8c8fb21a2, type: 3}
-  poisonAuraCollectSFX: {fileID: 0}
-  speedAuraCollectSFX: {fileID: 0}
-  bumpAuraCollectSFX: {fileID: 0}
-  slowAuraCollectSFX: {fileID: 0}
-  poisonAuraActiveSFX: {fileID: 0}
-  speedAuraActiveSFX: {fileID: 0}
-  bumpAuraActiveSFX: {fileID: 0}
-  slowAuraActiveSFX: {fileID: 0}
   pointsIncreaseSFX: {fileID: 5773656466734081815, guid: 832c1313e412eaf45b6ca6ea70ce6713, type: 3}
   bigFlameStartSFX: {fileID: 5773656466734081815, guid: 8bcdab55816bf8e4ca70b8c5efc7de3e, type: 3}
   bigFlameEndSFX: {fileID: 5773656466734081815, guid: eb9a6e3434aed15419f2037b24dc1167, type: 3}
@@ -172,3 +179,4 @@ MonoBehaviour:
   - {fileID: 5773656466734081815, guid: 3e0a231aff66c394da4549784bee8b7e, type: 3}
   - {fileID: 5773656466734081815, guid: dcf2abf09b93c054f95d79de8a595ff1, type: 3}
   - {fileID: 5773656466734081815, guid: 09cac59c395c9e349a0c12ff4306db37, type: 3}
+  bigFlameTransitionSFX: {fileID: 5773656466734081815, guid: 5770f53729f2a8548b215399b45c6825, type: 3}

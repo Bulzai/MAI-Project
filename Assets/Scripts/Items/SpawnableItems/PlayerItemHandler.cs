@@ -64,7 +64,23 @@ public class PlayerItemHandler : MonoBehaviour
     private Coroutine _slowBlinkCo, _repelBlinkCo, _damageBlinkCo;
 
     private void OnEnable() => GameEvents.OnMainGameStateExited += ResetAuras;
-    private void OnDisable() => GameEvents.OnMainGameStateExited -= ResetAuras;
+
+    private void OnDisable()
+    {
+        if (!repelActive) return;         
+
+        repelActive = false;
+        OnRepelAuraDeactivated?.Invoke();
+        GameEvents.OnMainGameStateExited -= ResetAuras;
+
+    }
+    private void OnDestroy()
+    {
+        if (!repelActive) return;          
+
+        repelActive = false;
+        OnRepelAuraDeactivated?.Invoke();
+    }
 
     public void ApplyItem(PickUpItem.ItemType itemType)
     {
