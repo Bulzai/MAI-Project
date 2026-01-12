@@ -213,11 +213,14 @@ public class SurpriseBoxState : MonoBehaviour
         {
             StopCountdownIfRunning();
 
-            OnSurpriseBoxStateCounterStarted?.Invoke();
-            countdownRoutine = StartCoroutine(PlayCountdown(() =>
+            //OnSurpriseBoxStateCounterStarted?.Invoke();
+            /*countdownRoutine = StartCoroutine(PlayCountdown(() =>
             {
                 StartCoroutine(ExecuteTransitionThenChangeState());
-            }));
+            }));*/
+
+            StartCoroutine(ExecuteTransitionThenChangeState());
+
         }
     }
     private IEnumerator ExecuteTransitionThenChangeState()

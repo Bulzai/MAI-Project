@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
+using UnityEngine.UI;
 
 public class PlayerSelectionManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlayerSelectionManager : MonoBehaviour
 
     public static event Action OnNotAllPlayersReady;
     public static event Action OnNobodyJoinedYet;
+
+    [SerializeField] private Animator transitionAnimator;
 
     private readonly Dictionary<PlayerInput, PlayerSelectionData> _playerSelection =
         new Dictionary<PlayerInput, PlayerSelectionData>();
@@ -109,7 +112,7 @@ public class PlayerSelectionManager : MonoBehaviour
         if (_playerSelection.Count == 0)
         {
             OnNobodyJoinedYet?.Invoke();
-            return; 
+            return;
         }
 
         bool everyoneReady = _playerSelection.Values.All(p => p.IsReady);
@@ -120,9 +123,35 @@ public class PlayerSelectionManager : MonoBehaviour
             return;
         }
 
-        // otherwise the event gets called once from TarovDevController and once from UIController
+        // 1. SFX SOFORT abspielen
         OnStartGameSFX?.Invoke();
-        if (GameEvents.CurrentState == GameState.PlayerSelectionState) GameEvents.ChangeState(GameState.SurpriseBoxState);
+
+        // 2. Die Transition-Sequenz starten
+        StartCoroutine(TransitionToSurpriseBox());
+    }
+
+    private IEnumerator TransitionToSurpriseBox()
+    {
+        // Vorbereitung: Image enablen & Animation starten
+        // (Ich nehme an, transitionAnimator ist in dieser Klasse bekannt)
+        Image transitionImage = transitionAnimator.GetComponent<Image>();
+        transitionImage.enabled = true;
+        transitionAnimator.SetTrigger("Play");
+
+        // 3. Warten, bis die Transition den Bildschirm verdeckt (deine 1.1s)
+        yield return new WaitForSeconds(1.1f);
+
+        // 4. State-Wechsel genau JETZT ausführen
+        if (GameEvents.CurrentState == GameState.PlayerSelectionState)
+        {
+            GameEvents.ChangeState(GameState.SurpriseBoxState);
+        }
+
+        // 5. Kurz warten, damit der neue State geladen/initialisiert ist
+        yield return new WaitForSeconds(0.45f);
+
+        // 6. Transition wieder unsichtbar machen
+        transitionImage.enabled = false;
     }
 
     private void HandlePlayerSelectionStateExit()

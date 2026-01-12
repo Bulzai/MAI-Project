@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI; // Wichtig für das Image-Component
 
 public class RoundController : MonoBehaviour
 {
     [Header("Round Settings")]
     [SerializeField] private int maxRounds = 3;
     [SerializeField] private float scoreDisplayTime = 5f;
+
+    [Header("Transition")]
+    [SerializeField] private Animator transitionAnimator; // Hier den Animator zuweisen
 
     public GameObject EndScoreText;
     public PlayerManager playerManagerFinal;
@@ -32,11 +36,9 @@ public class RoundController : MonoBehaviour
     private void HandleScoreState()
     {
         currentRound++;
-
         bool isLastRound = currentRound >= maxRounds;
+        EndScoreText.SetActive(false);
 
-
-        // IMPORTANT: If it's the last round, do NOT auto-advance anywhere.
         if (isLastRound)
         {
             EndScoreText.SetActive(true);
@@ -49,7 +51,45 @@ public class RoundController : MonoBehaviour
 
         _advanceRoutine = StartCoroutine(AdvanceAfterDelay());
     }
-    
+
+    private IEnumerator AdvanceAfterDelay()
+    {
+        // 1. Warte die normale Anzeigezeit des Scoreboards ab
+        yield return new WaitForSeconds(scoreDisplayTime);
+
+        // --- START DER TRANSITION ---
+        Image transitionImage = transitionAnimator.GetComponent<Image>();
+
+        // 2. Transition-Image aktivieren und Animation starten
+        transitionImage.enabled = true;
+        transitionAnimator.SetTrigger("Play");
+        // 3. Warten, bis der Bildschirm verdeckt ist (deine 1.1 Sekunden)
+        yield return new WaitForSeconds(1.1f);
+
+        // --- LOGIK IM HINTERGRUND (Bildschirm ist verdeckt) ---
+
+        // 4. Scoreboard UI ausblenden
+        if (playerScoreManager != null && playerScoreManager.scoreboardUI != null)
+            playerScoreManager.scoreboardUI.SetActive(false);
+
+        // 5. Spiel-Logik für die nächste Runde vorbereiten
+        if (currentRound < maxRounds)
+        {
+            if (playerManagerFinal != null)
+                playerManagerFinal.ResetEliminations();
+
+            // State wechseln
+            GameEvents.ChangeState(GameState.SurpriseBoxState);
+        }
+
+        // 6. Ein winziger Moment warten, damit der neue State geladen ist
+        yield return new WaitForSeconds(0.45f);
+
+        // 7. Transition-Image wieder deaktivieren
+        transitionImage.enabled = false;
+        // --- ENDE DER TRANSITION ---
+    }
+
     private IEnumerator EnableMenuButtonAfterDelay()
     {
         yield return new WaitForSeconds(3f);
@@ -57,24 +97,6 @@ public class RoundController : MonoBehaviour
         PlayerManager.Instance.HardResetFinalScore();
     }
 
-    private IEnumerator AdvanceAfterDelay()
-    {
-        yield return new WaitForSeconds(scoreDisplayTime);
-
-        // Hide scoreboard UI
-        if (playerScoreManager != null && playerScoreManager.scoreboardUI != null)
-            playerScoreManager.scoreboardUI.SetActive(false);
-
-        if (currentRound < maxRounds)
-        {
-            if (playerManagerFinal != null)
-                playerManagerFinal.ResetEliminations();
-
-            GameEvents.ChangeState(GameState.SurpriseBoxState);
-        }
-    }
-
-    // Call this when starting a new run / back to main menu, etc.
     public void ResetRounds()
     {
         currentRound = 0;
