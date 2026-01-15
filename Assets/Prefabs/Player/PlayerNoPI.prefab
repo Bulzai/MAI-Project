@@ -218,17 +218,17 @@ MonoBehaviour:
   auraRadius: 2.5
   slowPercent: 0.5
   slowSeconds: 2
-  auraDuration: 8
+  auraDuration: 14
   slowAuraVisual: {fileID: 8889188675165220845}
-  repelSeconds: 8
+  repelSeconds: 14
   repelKickSpeed: 50
   repelAuraVisual: {fileID: 6525371900268718356}
   speedMultiplier: 1.5
-  speedDuration: 6
+  speedDuration: 7
   damageAuraRadius: 2.6
   damagePerTick: 5
   tickInterval: 0.5
-  damageAuraDuration: 8
+  damageAuraDuration: 14
   damageAuraVisual: {fileID: 2711021023157660095}
   blinkStartSeconds: 3
   blinkMaxInterval: 0.35

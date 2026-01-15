@@ -27,16 +27,16 @@ MonoBehaviour:
   AirDeceleration: 30
   GroundingForce: -1.5
   GrounderDistance: 0.05
-  JumpPower: 31.2
+  JumpPower: 35
   MaxFallSpeed: 32.6
   FallAcceleration: 101.6
   JumpEndEarlyGravityModifier: 3
   CoyoteTime: 0.15
   JumpBuffer: 0.2
   WallCheckDistance: 0.12
-  WallSlideSpeed: 4.3
-  WallJumpPower: 32
-  WallJumpHorizontalSpeed: 13
+  WallSlideSpeed: 7.3
+  WallJumpPower: 35
+  WallJumpHorizontalSpeed: 14
   WallJumpCoyoteTime: 0.1
   WallStickTime: 0.06
   ApexThreshold: 4

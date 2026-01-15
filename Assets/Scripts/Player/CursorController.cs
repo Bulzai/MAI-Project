@@ -322,7 +322,7 @@ public class CursorController : MonoBehaviour
         // Disable scripts on previous hovered object
         if (currentlyHoveredGO != null)
         {
-            TogglePlacementScripts(currentlyHoveredGO, false);
+            //TogglePlacementScripts(currentlyHoveredGO, false);
             DisableGif();
         }
 
@@ -347,7 +347,7 @@ public class CursorController : MonoBehaviour
 
             EnableGif();
             //still enable other hover effects
-            TogglePlacementScripts(next, true); 
+            //TogglePlacementScripts(next, true); 
         }
     }
 
@@ -364,7 +364,7 @@ public class CursorController : MonoBehaviour
         {
             DisableGif();
 
-            TogglePlacementScripts(currentlyHoveredGO, false);
+            //TogglePlacementScripts(currentlyHoveredGO, false);
             currentlyHoveredGO = null;
         }
     }
