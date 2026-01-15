@@ -139,9 +139,7 @@ MonoBehaviour:
   chocolateHitSFX: {fileID: 5773656466734081815, guid: ac898821990c2cf4697c773c4c19d4af, type: 3}
   canonSelectSFX: {fileID: 5773656466734081815, guid: 2dc1c9e4c18643d4e98df8c6d82feec5, type: 3}
   canonSubmitSFX: {fileID: 5773656466734081815, guid: 2dc1c9e4c18643d4e98df8c6d82feec5, type: 3}
-  canonShootSFX:
-  - {fileID: 5773656466734081815, guid: 4fc109c1b0903f046930930dee2fc56b, type: 3}
-  - {fileID: 5773656466734081815, guid: fca9a277ec2362642912876b525a8d53, type: 3}
+  canonShootSFX: {fileID: 5773656466734081815, guid: 4fc109c1b0903f046930930dee2fc56b, type: 3}
   candleSelectSFX: {fileID: 5773656466734081815, guid: 33ca915e346f2524f9380a87de0a9f2c, type: 3}
   candleSubmitSFX: {fileID: 5773656466734081815, guid: 5d54e0e6c78028c4796bff925546e233, type: 3}
   candleIgniteSFX: {fileID: 5773656466734081815, guid: 33ca915e346f2524f9380a87de0a9f2c, type: 3}

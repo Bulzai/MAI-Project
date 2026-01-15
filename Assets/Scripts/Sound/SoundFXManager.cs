@@ -15,6 +15,7 @@ public class SoundFXManager : MonoBehaviour
     private AudioSource _bigFLameSource;
     private AudioSource _auraSpawnSource;
     private AudioSource _pointsIncreaseSource;
+    private AudioSource _bratApfelSource;
     private readonly List<AudioSource> _repelAuraActivatedSources = new List<AudioSource>();
     private void Awake()
         {
@@ -83,11 +84,13 @@ public class SoundFXManager : MonoBehaviour
         PlayerHealthSystem.OnPlayerKnockedBack += PlayPlayerKnockedBackSFX;
         BreakableCracker.OnCrackerBroken += PlayCookieBreakSFX;
         GameEvents.OnMainGameStateExited += PlayTransitionSFX;
+        ProjectileLauncher.OnFireCanon += PlayCanonFireSFX;
 
         // ScoreState Events
         PlayerScoreManager.OnPointsIncrease += PlayPointsIncreaseSFX;
         PlayerScoreManager.OnPointsIncreaseEnd += StopPointsIncreaseSFX;
         PlayerScoreManager.OnScoreStateExitTransition += PlayTransitionSFX;
+        RoundController.OnScoreboardTransitionStarted += PlayTransitionSFX;
         
         // CHARACTER EVENTS
         PlayerHealthSystem.OnPlayerTakeDamage += PlayPlayerTakeDamageSFX;
@@ -165,11 +168,13 @@ public class SoundFXManager : MonoBehaviour
         PlayerHealthSystem.OnPlayerKnockedBack -= PlayPlayerKnockedBackSFX;
         BreakableCracker.OnCrackerBroken -= PlayCookieBreakSFX;
         GameEvents.OnMainGameStateExited -= PlayTransitionSFX;
-        
+        ProjectileLauncher.OnFireCanon -= PlayCanonFireSFX;
+
         // ScoreState Events
         PlayerScoreManager.OnPointsIncrease -= PlayPointsIncreaseSFX;
         PlayerScoreManager.OnPointsIncreaseEnd -= StopPointsIncreaseSFX;
         PlayerScoreManager.OnScoreStateExitTransition -= PlayTransitionSFX;
+        RoundController.OnScoreboardTransitionStarted -= PlayTransitionSFX;
 
         // CHARACTER EVENTS
         PlayerHealthSystem.OnPlayerTakeDamage -= PlayPlayerTakeDamageSFX;
@@ -391,7 +396,7 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayAuraSpawnSFX()
     {
-        _auraSpawnSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.auraSpawnSFX, Camera.main.transform, 0.1f);
+        _auraSpawnSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.auraSpawnSFX, Camera.main.transform, 0.2f);
     }
 
     public void StopAuraSpawnSFX()
@@ -409,7 +414,7 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayJumpSFX()
     {
-        PlayRandomSoundFXClip(_audioClipRefsSo.jumpSFX, Camera.main.transform);
+        PlayRandomSoundFXClip(_audioClipRefsSo.jumpSFX, Camera.main.transform, 0.6f);
     }
 
     public void PlayLandSFX()
@@ -522,7 +527,7 @@ public class SoundFXManager : MonoBehaviour
     
     public void PlayCandleSelectSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.candleSelectSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.candleSelectSFX, Camera.main.transform, 0.6f);
     }
     public void PlayLogSelectSFX()
     {
@@ -580,7 +585,10 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayBratApfelSubmitSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.bratApfelSubmitSFX, Camera.main.transform);
+        if (_bratApfelSource != null && _bratApfelSource.isPlaying)
+            return;
+        if( _bratApfelSource != null) Destroy(_bratApfelSource.gameObject);
+        _bratApfelSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.bratApfelSubmitSFX, Camera.main.transform, 0.7f);
     }
 
     public void PlayChocolateSubmitSFX()
@@ -590,12 +598,12 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayCanonSubmitSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.canonSubmitSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.canonSubmitSFX, Camera.main.transform, 0.6f);
     }
 
     public void PlayCandleSubmitSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.candleSubmitSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.candleSubmitSFX, Camera.main.transform, 0.6f);
     }
 
     public void PlayLogSubmitSFX()
@@ -610,7 +618,7 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayCaneSubmitAndSelectSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.caneSubmitAndSelectSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.caneSubmitAndSelectSFX, Camera.main.transform, 0.8f);
     }
 
     public void PlayPlayerKnockedBackSFX()
@@ -634,7 +642,7 @@ public class SoundFXManager : MonoBehaviour
     {
         var src = PlayAndReturnSoundFXClip(
             _audioClipRefsSo.repelAuraSFX,
-            Camera.main.transform, 0.3f);
+            Camera.main.transform, 0.5f);
 
         if (src != null)
         {
@@ -674,12 +682,12 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayDamageAuraActivatedSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.poisonAuraCollectSFX, Camera.main.transform, 0.5f);
+        PlaySoundFXClip(_audioClipRefsSo.poisonAuraCollectSFX, Camera.main.transform, 0.7f);
     }
 
     public void PlayOtherPLayerSlowedSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.slowAuraHitSFX, Camera.main.transform, 0.4f);
+        PlaySoundFXClip(_audioClipRefsSo.slowAuraHitSFX, Camera.main.transform, 0.7f);
     }
 
     public void PlaySpeedAuraActivatedSFX()
@@ -690,5 +698,10 @@ public class SoundFXManager : MonoBehaviour
     public void PlayCookieBreakSFX()
     {
         PlaySoundFXClip(_audioClipRefsSo.cookieBreakSFX, Camera.main.transform);
+    }
+
+    public void PlayCanonFireSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.canonShootSFX, Camera.main.transform, 0.5f);
     }
 }

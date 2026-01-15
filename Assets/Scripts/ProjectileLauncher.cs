@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ProjectileLauncher : MonoBehaviour
 {
+    public static event System.Action OnFireCanon;
     [Header("Refs")]
     public GameObject[] projectilePrefab;       // prefab with ProjectileSimple2D on root
     public Transform muzzle;                  // where to spawn
@@ -46,6 +47,7 @@ public class ProjectileLauncher : MonoBehaviour
         int randomBullet = Random.Range(0, projectilePrefab.Length);
         var go = Instantiate(projectilePrefab[randomBullet], muzzle.position, Quaternion.identity);
 
+        
         // Optional: ignore self-collision if both have colliders
         var myCol = GetComponent<Collider2D>();
         var projCol = go.GetComponent<Collider2D>();
@@ -57,6 +59,13 @@ public class ProjectileLauncher : MonoBehaviour
 
         go.transform.right = dir; // for sprite orientation
         proj.Launch(dir);
+        
+        var rawName = name.Replace("(Clone)", "");
+        
+        if(rawName == "Effect_Shooter")
+        {
+            OnFireCanon?.Invoke();
+        }
     }
 
     void OnDrawGizmosSelected()

@@ -4,6 +4,7 @@ using UnityEngine.UI; // Wichtig für das Image-Component
 
 public class RoundController : MonoBehaviour
 {
+    public static event System.Action OnScoreboardTransitionStarted;
     [Header("Round Settings")]
     [SerializeField] private int maxRounds = 3;
     [SerializeField] private float scoreDisplayTime = 5f;
@@ -63,6 +64,8 @@ public class RoundController : MonoBehaviour
         // 2. Transition-Image aktivieren und Animation starten
         transitionImage.enabled = true;
         transitionAnimator.SetTrigger("Play");
+        OnScoreboardTransitionStarted?.Invoke();
+        
         // 3. Warten, bis der Bildschirm verdeckt ist (deine 1.1 Sekunden)
         yield return new WaitForSeconds(1.1f);
 
@@ -92,7 +95,7 @@ public class RoundController : MonoBehaviour
 
     private IEnumerator EnableMenuButtonAfterDelay()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(6f);
         playerScoreManager.SetMenuButtonActiveOrDeactive(true);
         PlayerManager.Instance.HardResetFinalScore();
     }
