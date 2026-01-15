@@ -38,6 +38,13 @@ public class PlayerHealthSystem : MonoBehaviour
     [SerializeField] private float knockbackMultiplier = 12f; // tweak feel
     [SerializeField] private float verticalBoost = 2.5f;      // extra lift when grounded 
 
+
+    [Header("Confusion Visuals")]
+    [SerializeField] private GameObject confusionLogo; // Drag your UI icon/Sprite here
+    [SerializeField] private Color confusionColor = new Color(1f, 0.4f, 0.8f); // Pinkish
+    private Coroutine _confusionEffectCo;
+
+
     private GameObject fireSprite;
     private void Start()
     {
@@ -54,11 +61,14 @@ public class PlayerHealthSystem : MonoBehaviour
     }
     private void OnEnable()
     {
+        GameEvents.OnMainGameStateExited += ResetConfusion;
         PlaceItemState.CountDownFinished += RespawnPlayer;
     }
     private void OnDisable()
     {
         PlaceItemState.CountDownFinished -= RespawnPlayer;
+        GameEvents.OnMainGameStateExited -= ResetConfusion;
+
     }
     public void SetOnFire()
     {
@@ -153,23 +163,44 @@ public class PlayerHealthSystem : MonoBehaviour
     }
     public void ApplyConfusion(float duration)
     {
-        if(confusedCoroutine != null)
+        // If already confused, stop the old routine to refresh the duration
+        if (_confusionEffectCo != null)
         {
-            StopCoroutine(confusedCoroutine);
+            StopCoroutine(_confusionEffectCo);
         }
 
-        confusedCoroutine = StartCoroutine(ConfusionRoutine(duration));
+        _confusionEffectCo = StartCoroutine(ConfusionVisualRoutine(duration));
     }
 
-    private IEnumerator ConfusionRoutine(float duration)
+    private IEnumerator ConfusionVisualRoutine(float duration)
     {
-        isConfused = true;
-        Debug.Log("Reversed controls");
-        yield return new WaitForSeconds(duration);
-        isConfused = false;
-        Debug.Log("Confusion done");
-    }
+        isConfused = true; // Steuerung invertieren START
 
+        if (confusionLogo) confusionLogo.SetActive(true);
+        float elapsed = 0f;
+        float blinkInterval = 0.2f;
+
+        while (elapsed < duration)
+        {
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = (spriteRenderer.color == Color.white) ? confusionColor : Color.white;
+            }
+            elapsed += blinkInterval;
+            yield return new WaitForSeconds(blinkInterval);
+        }
+
+        ResetConfusion();
+    }
+    private void ResetConfusion()
+    {
+
+        if (spriteRenderer != null) spriteRenderer.color = Color.white;
+        if (confusionLogo) confusionLogo.SetActive(false);
+
+        isConfused = false; // Steuerung invertieren ENDE
+        _confusionEffectCo = null;
+    }
     public bool IsConfused()
     {
         return isConfused;

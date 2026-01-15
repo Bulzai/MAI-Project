@@ -14,9 +14,9 @@ public class PlayerItemHandler : MonoBehaviour
     public static event Action OnOtherPlayerSlowed;
     public static event Action OnSpeedAuraActivated;
     public static event Action OnDamageAuraActivated;
+    public static event Action OnConfusionAuraActivated;
 
-
-    private Coroutine _activeSlowCo, _activeRepelCo, _activeDamageCo;
+    private Coroutine _activeSlowCo, _activeRepelCo, _activeDamageCo, _activeConfusionCo, _confusionBlinkCo;
 
     [Header("Slow Aura")]
     [SerializeField] private string playerTag = "Player";
@@ -43,6 +43,12 @@ public class PlayerItemHandler : MonoBehaviour
     [SerializeField] private float damageAuraDuration = 6f;
     [SerializeField] private GameObject damageAuraVisual;
 
+    [Header("Confusion Aura")]
+    [SerializeField] private float confusionAuraRadius = 2.5f;
+    [SerializeField] private float confusionDuration = 3f; // Wie lange das OPFER verwirrt ist
+    [SerializeField] private float confusionAuraDuration = 8f; // Wie lange die AURA aktiv bleibt
+    [SerializeField] private GameObject confusionAuraVisual;
+    [SerializeField] private ParticleSystem confusionEffect; // Das Teilchen-System aus deinem Snippet
     // ---------------- BLINK TUNING ----------------
     [Header("Aura Blink (End Warning)")]
     [Tooltip("Start blinking when remaining time <= this.")]
@@ -114,6 +120,10 @@ public class PlayerItemHandler : MonoBehaviour
             case PickUpItem.ItemType.Damage:
                 if (_activeDamageCo != null) StopCoroutine(_activeDamageCo);
                 _activeDamageCo = StartCoroutine(ApplyDamageAura());
+                break;
+            case PickUpItem.ItemType.Confusion:
+                if (_activeConfusionCo != null) StopCoroutine(_activeConfusionCo);
+                _activeConfusionCo = StartCoroutine(ApplyConfusionAura());
                 break;
         }
     }
@@ -224,7 +234,52 @@ public class PlayerItemHandler : MonoBehaviour
         StopBlink(ref _damageBlinkCo);
         damageAuraVisual.SetActive(false);
     }
+    private IEnumerator ApplyConfusionAura()
+    {
+        OnConfusionAuraActivated?.Invoke();
+        confusionAuraVisual.SetActive(true);
 
+        // Blink-Warnung starten
+        StopBlink(ref _confusionBlinkCo);
+        _confusionBlinkCo = StartCoroutine(BlinkVisual(
+            confusionAuraVisual,
+            totalDuration: confusionAuraDuration,
+            blinkStartAtSeconds: blinkStartSeconds,
+            minInterval: blinkMinInterval,
+            maxInterval: blinkMaxInterval,
+            curve: blinkCurve
+        ));
+
+        float remaining = confusionAuraDuration;
+        while (remaining > 0f)
+        {
+            // Suche nach Spielern im Radius
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, confusionAuraRadius);
+            foreach (var hit in hits)
+            {
+                if (hit.gameObject == gameObject) continue;
+                if (!hit.CompareTag(playerTag)) continue;
+
+                // HealthSystem suchen (wie in deinem Snippet)
+                var healthSystem = hit.GetComponent<PlayerHealthSystem>();
+                if (healthSystem != null)
+                {
+                    // Effekt nur abspielen, wenn der Spieler nicht schon verwirrt ist (optional)
+                    // oder einfach bei jedem Tick triggern:
+                    if (confusionEffect != null && !confusionEffect.isPlaying)
+                        confusionEffect.Play();
+
+                    healthSystem.ApplyConfusion(confusionDuration);
+                }
+            }
+
+            remaining -= Time.deltaTime;
+            yield return null; // Prüft jeden Frame
+        }
+
+        StopBlink(ref _confusionBlinkCo);
+        confusionAuraVisual.SetActive(false);
+    }
     private void DoDamageTick()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, damageAuraRadius);
@@ -317,18 +372,22 @@ public class PlayerItemHandler : MonoBehaviour
         if (_activeSlowCo != null) StopCoroutine(_activeSlowCo);
         if (_activeRepelCo != null) StopCoroutine(_activeRepelCo);
         if (_activeDamageCo != null) StopCoroutine(_activeDamageCo);
+        if (_activeConfusionCo != null) StopCoroutine(_activeConfusionCo);
 
         _activeSlowCo = null;
         _activeRepelCo = null;
         _activeDamageCo = null;
+        _activeConfusionCo = null;
 
         StopBlink(ref _slowBlinkCo);
         StopBlink(ref _repelBlinkCo);
         StopBlink(ref _damageBlinkCo);
+        StopBlink(ref _confusionBlinkCo);
 
         if (damageAuraVisual) damageAuraVisual.SetActive(false);
         if (slowAuraVisual) slowAuraVisual.SetActive(false);
         if (repelAuraVisual) repelAuraVisual.SetActive(false);
+        if (confusionAuraVisual) confusionAuraVisual.SetActive(false);
 
         repelActive = false;
     }
