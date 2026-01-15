@@ -14,7 +14,10 @@ public class PlayerItemHandler : MonoBehaviour
     public static event Action OnOtherPlayerSlowed;
     public static event Action OnSpeedAuraActivated;
     public static event Action OnDamageAuraActivated;
-    
+
+
+    private Coroutine _activeSlowCo, _activeRepelCo, _activeDamageCo;
+
     [Header("Slow Aura")]
     [SerializeField] private string playerTag = "Player";
     [SerializeField] private float auraRadius = 2.5f;
@@ -88,24 +91,29 @@ public class PlayerItemHandler : MonoBehaviour
         switch (itemType)
         {
             case PickUpItem.ItemType.Slow:
-                StartCoroutine(ApplySlowAura());
+                // Stoppe die alte, falls sie läuft
+                if (_activeSlowCo != null) StopCoroutine(_activeSlowCo);
+                _activeSlowCo = StartCoroutine(ApplySlowAura());
                 break;
 
             case PickUpItem.ItemType.Repel:
-                StartCoroutine(EnableRepelAura());
+                if (_activeRepelCo != null) StopCoroutine(_activeRepelCo);
+                _activeRepelCo = StartCoroutine(EnableRepelAura());
                 break;
 
             case PickUpItem.ItemType.Speed:
                 var selfBuff = GetComponent<SlowDebuff>();
                 if (selfBuff)
                 {
+                    // SlowDebuff sollte idealerweise intern das Refreshing handhaben
                     selfBuff.ApplySpeedModifier(speedMultiplier, speedDuration);
                     OnSpeedAuraActivated?.Invoke();
                 }
                 break;
 
             case PickUpItem.ItemType.Damage:
-                StartCoroutine(ApplyDamageAura());
+                if (_activeDamageCo != null) StopCoroutine(_activeDamageCo);
+                _activeDamageCo = StartCoroutine(ApplyDamageAura());
                 break;
         }
     }
@@ -306,6 +314,14 @@ public class PlayerItemHandler : MonoBehaviour
 
     void ResetAuras()
     {
+        if (_activeSlowCo != null) StopCoroutine(_activeSlowCo);
+        if (_activeRepelCo != null) StopCoroutine(_activeRepelCo);
+        if (_activeDamageCo != null) StopCoroutine(_activeDamageCo);
+
+        _activeSlowCo = null;
+        _activeRepelCo = null;
+        _activeDamageCo = null;
+
         StopBlink(ref _slowBlinkCo);
         StopBlink(ref _repelBlinkCo);
         StopBlink(ref _damageBlinkCo);
