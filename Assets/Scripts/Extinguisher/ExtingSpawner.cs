@@ -87,7 +87,7 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnMainGameStateEntered += EnableExtinguisherContainer;
         GameEvents.OnMainGameStateExited += StopSpawning;
         GameEvents.OnMainGameStateExited += DisableExtinguisherContainer;
-        GameEvents.OnFinalScoreStateEntered += ResetExtinguisherSpawns;
+        GameEvents.OnMenuStateEntered += ResetExtinguisherSpawns;
         
         platformCells = new HashSet<Vector3Int>();
         foreach (var pos in platformMap.cellBounds.allPositionsWithin)
