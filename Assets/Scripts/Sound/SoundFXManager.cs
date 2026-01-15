@@ -16,6 +16,7 @@ public class SoundFXManager : MonoBehaviour
     private AudioSource _auraSpawnSource;
     private AudioSource _pointsIncreaseSource;
     private AudioSource _bratApfelSource;
+    private AudioSource _canonShootSource;
     private readonly List<AudioSource> _repelAuraActivatedSources = new List<AudioSource>();
     private void Awake()
         {
@@ -702,6 +703,9 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayCanonFireSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.canonShootSFX, Camera.main.transform, 0.5f);
+        if (_canonShootSource != null && _canonShootSource.isPlaying)
+            return;
+        if( _canonShootSource != null) Destroy(_canonShootSource.gameObject);
+        _canonShootSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.canonShootSFX, Camera.main.transform, 0.5f);
     }
 }

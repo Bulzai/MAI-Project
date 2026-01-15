@@ -125,8 +125,8 @@ public class DynamicCamera2DManager : MonoBehaviour
     private void SetCameraSurpriseBoxStatePosition()
     {
         dynamicEnabled = false;
-        DynamicCamera.orthographicSize = 25;
-        DynamicCamera.transform.position = new Vector3(0f, 0, -30);
+        DynamicCamera.orthographicSize = 13;
+        DynamicCamera.transform.position = new Vector3(0f, 1.86f, -30);
     }
 
     private void SetCameraPlaceItemStatePosition()
@@ -134,6 +134,11 @@ public class DynamicCamera2DManager : MonoBehaviour
         dynamicEnabled = false;
         DynamicCamera.orthographicSize = 22f;
         DynamicCamera.transform.position = new Vector3(0f, 5.93f, -30f);
+    }
+
+    private void SetCameraMainGameState()
+    {
+        
     }
     private void EnableDynamicCamera2D()
     {

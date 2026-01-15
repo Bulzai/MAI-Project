@@ -175,12 +175,18 @@ public class SurpriseBoxState : MonoBehaviour
             availableTiles.RemoveAt(idx);
 
             var col = tile.GetComponent<MeshCollider>();
-            Vector2 pos = (col != null)
-                ? new Vector2(
-                    UnityEngine.Random.Range(col.bounds.min.x + 1f, col.bounds.max.x - 1f),
-                    UnityEngine.Random.Range(col.bounds.min.y + 1f, col.bounds.max.y - 1f))
-                : (Vector2)tile.transform.position;
+            Vector2 pos;
 
+            if (col != null)
+            {
+                // Use the center of the collider's bounds
+                Vector3 center = col.bounds.center;   // world space
+                pos = new Vector2(center.x, center.y);
+            }
+            else
+            {
+                pos = tile.transform.position;
+            }
             var go = Instantiate(prefab, pos, prefab.transform.rotation, itemBoxItemList);
             itemsInBox.Add(go);
         }
