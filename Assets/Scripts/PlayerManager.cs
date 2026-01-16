@@ -344,8 +344,11 @@ public class PlayerManager : MonoBehaviour
             if (characterTf == null) continue;
 
             var characterGO = characterTf.gameObject;
+            characterGO.SetActive(true);
 
             var health = characterGO.GetComponent<PlayerHealthSystem>();
+
+
             if (health != null)
             {
                 health.ResetDeathFlags();
@@ -360,7 +363,6 @@ public class PlayerManager : MonoBehaviour
                 health.SetOnFire();
             }
 
-            characterGO.SetActive(true);
 
             var pi = root.GetComponent<PlayerInput>();
             if (pi != null)

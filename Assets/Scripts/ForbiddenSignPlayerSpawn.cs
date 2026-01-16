@@ -21,7 +21,6 @@ public class ForbiddenSignPlayerSpawn : MonoBehaviour
 
     private void ShowSign()
     {
-        Debug.Log("ShowSign");
         spriteRenderer.enabled = true;
     }
 

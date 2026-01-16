@@ -62,18 +62,22 @@ public class PlayerHealthSystem : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnMainGameStateExited += ResetConfusion;
+        GameEvents.OnMainGameStateEntered += ResetConfusion;
         PlaceItemState.CountDownFinished += RespawnPlayer;
     }
     private void OnDisable()
     {
         PlaceItemState.CountDownFinished -= RespawnPlayer;
         GameEvents.OnMainGameStateExited -= ResetConfusion;
+        GameEvents.OnMainGameStateEntered -= ResetConfusion;
+
 
     }
     public void SetOnFire()
     {
         if (!isBurning)
         {
+
             isBurning = true;
             if(gameObject.activeSelf)
                 burnCoroutine = StartCoroutine(BurnOverTime());
@@ -96,8 +100,7 @@ public class PlayerHealthSystem : MonoBehaviour
             if (fireSprite != null)
                 fireSprite.gameObject.SetActive(false);
 
-            Debug.Log(" Fire extinguished!");
-            Invoke("SetOnFire", 5f);
+            Invoke("SetOnFire", reigniteDelay);
         }
     }
 

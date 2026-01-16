@@ -263,7 +263,6 @@ public class GridItem : MonoBehaviour
                 OnPlayerSelecedtItem?.Invoke(gameObject);
             
         }
-        Debug.Log("cursor entered on item" + gameObject.tag);
     }
 
 }

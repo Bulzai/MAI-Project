@@ -34,7 +34,7 @@ MonoBehaviour:
   CoyoteTime: 0.15
   JumpBuffer: 0.2
   WallCheckDistance: 0.12
-  WallSlideSpeed: 7.3
+  WallSlideSpeed: 10
   WallJumpPower: 35
   WallJumpHorizontalSpeed: 14
   WallJumpCoyoteTime: 0.1

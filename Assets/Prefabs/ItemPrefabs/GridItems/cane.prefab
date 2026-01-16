@@ -314,7 +314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damgeAmount: 0
-  knockbackForce: 4
+  knockbackForce: 3
 --- !u!1 &4711019012961524803
 GameObject:
   m_ObjectHideFlags: 0

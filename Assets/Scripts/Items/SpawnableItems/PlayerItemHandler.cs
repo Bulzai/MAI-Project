@@ -27,6 +27,7 @@ public class PlayerItemHandler : MonoBehaviour
     [SerializeField] private GameObject slowAuraVisual;
 
     [Header("Repel Aura")]
+    [SerializeField] private float repelRadius = 2.5f;
     [SerializeField] private float repelSeconds = 5f;
     [SerializeField] private float repelKickSpeed = 14f;
     [SerializeField] private GameObject repelAuraVisual;
@@ -185,16 +186,32 @@ public class PlayerItemHandler : MonoBehaviour
             curve: blinkCurve
         ));
 
-        repelActive = true;
-        yield return new WaitForSeconds(repelSeconds);
-        repelActive = false;
+        float t = repelSeconds;
+        while (t > 0f)
+        {
+            // Suche alle im Radius
+            var hits = Physics2D.OverlapCircleAll(transform.position, repelRadius);
+            foreach (var h in hits)
+            {
+                if (!h || h.gameObject == gameObject) continue;
+                if (!h.CompareTag(playerTag)) continue;
 
-        StopBlink(ref _repelBlinkCo);
+                var otherCtrl = h.GetComponentInParent<PlayerController>();
+                if (otherCtrl)
+                {
+                    Vector2 dir = (otherCtrl.transform.position - transform.position).normalized;
+                    otherCtrl.AddImpulse(dir * repelKickSpeed);
+                }
+            }
+            t -= Time.deltaTime;
+            yield return null;
+        }
+
         repelAuraVisual.SetActive(false);
         OnRepelAuraDeactivated?.Invoke();
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+    /*private void OnCollisionEnter2D(Collision2D col)
     {
         if (!repelActive) return;
         if (!col.collider || !col.collider.CompareTag(playerTag)) return;
@@ -205,7 +222,7 @@ public class PlayerItemHandler : MonoBehaviour
 
         Vector2 dir = (otherCtrl.transform.position - transform.position).normalized;
         otherCtrl.AddImpulse(dir * repelKickSpeed);
-    }
+    }*/
 
     // ---------- Damage aura ----------
     private IEnumerator ApplyDamageAura()

@@ -37,6 +37,11 @@ public class SpawnItem : MonoBehaviour
     private Coroutine autoRespawnRoutine;
     private bool isActive;
 
+
+    [Header("Item Expiration")]
+    [SerializeField] private float itemLifespan = 10f; // Wie lange liegt es insgesamt?
+    [SerializeField] private float blinkDuration = 3f;  // Wie lange soll es am Ende blinken?
+    [SerializeField] private float blinkInterval = 0.2f; // Geschwindigkeit des Blinkens
     private void OnEnable()
     {
         // Subscribe to your custom events
@@ -124,9 +129,7 @@ public class SpawnItem : MonoBehaviour
             float dt = Time.deltaTime;
             time += dt;
 
-            // Vertical movement
             pos.y = Mathf.Max(endY, pos.y - fallSpeed * dt);
-
             float p = Mathf.Clamp01((startY - pos.y) / totalDrop);
             float baseX = Mathf.Lerp(startX, targetPos.x, p);
             float damping = Mathf.Lerp(1f, 0f, p * wiggleDamping);
@@ -138,8 +141,12 @@ public class SpawnItem : MonoBehaviour
             yield return null;
         }
 
-        if (item != null) item.transform.position = targetPos;
-        StartCoroutine(WaitForRemoval(item));
+        if (item != null)
+        {
+            item.transform.position = targetPos;
+            // HIER STARTET JETZT DIE ABLAUF-LOGIK
+            StartCoroutine(ItemExpirationTimer(item));
+        }
     }
 
     private IEnumerator WaitForRemoval(GameObject item)
@@ -164,5 +171,28 @@ public class SpawnItem : MonoBehaviour
         }
         autoRespawnRoutine = null;
     }
+    private IEnumerator ItemExpirationTimer(GameObject item)
+    {
+        // 1. Warten, bis die Blink-Phase beginnt
+        float waitBeforeBlink = itemLifespan - blinkDuration;
+        yield return new WaitForSeconds(Mathf.Max(0, waitBeforeBlink));
 
+        // 2. Blink-Phase
+        float elapsed = 0f;
+        while (elapsed < blinkDuration && item != null)
+        {
+            // Sichtbarkeit umschalten (funktioniert über die Active-State des GameObjects)
+            item.SetActive(!item.activeSelf);
+
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval;
+        }
+
+        // 3. Item zerstören, falls es nicht schon aufgesammelt wurde
+        if (item != null)
+        {
+            Destroy(item);
+            currentItem = null; // Wichtig: Damit der AutoRespawnLoop weiß, dass er neu spawnen darf
+        }
+    }
 }

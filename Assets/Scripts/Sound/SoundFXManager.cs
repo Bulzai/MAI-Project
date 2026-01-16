@@ -481,9 +481,7 @@ public class SoundFXManager : MonoBehaviour
 
     private void PlayPlayerSelecedtItemSFX(GameObject item)
     {
-        Debug.Log("Item selected: " + item.name);
         var rawName = item.name.Replace("(Clone)", "");
-        Debug.Log("raw name: " + rawName);
         switch (rawName)
         {
             case "Cracker":
