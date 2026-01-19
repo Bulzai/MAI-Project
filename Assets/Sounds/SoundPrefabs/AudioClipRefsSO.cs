@@ -78,7 +78,7 @@ public class AudioClipRefsSO : ScriptableObject
     public GameObject speedAuraCollectSFX;
     public GameObject slowAuraHitSFX;
     public GameObject repelAuraSFX;
-    
+    public GameObject confusionAuraSFX;
     public GameObject auraSpawnSFX;
     
     

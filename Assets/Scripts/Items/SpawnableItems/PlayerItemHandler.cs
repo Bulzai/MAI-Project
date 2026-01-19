@@ -14,7 +14,7 @@ public class PlayerItemHandler : MonoBehaviour
     public static event Action OnOtherPlayerSlowed;
     public static event Action OnSpeedAuraActivated;
     public static event Action OnDamageAuraActivated;
-    public static event Action OnConfusionAuraActivated;
+    public static event Action OnConfusionAuraHit;
 
     private Coroutine _activeSlowCo, _activeRepelCo, _activeDamageCo, _activeConfusionCo, _confusionBlinkCo;
 
@@ -253,7 +253,6 @@ public class PlayerItemHandler : MonoBehaviour
     }
     private IEnumerator ApplyConfusionAura()
     {
-        OnConfusionAuraActivated?.Invoke();
         confusionAuraVisual.SetActive(true);
 
         // Blink-Warnung starten
@@ -287,6 +286,7 @@ public class PlayerItemHandler : MonoBehaviour
                         confusionEffect.Play();
 
                     healthSystem.ApplyConfusion(confusionDuration);
+                    OnConfusionAuraHit?.Invoke();
                 }
             }
 
