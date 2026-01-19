@@ -104,6 +104,7 @@ public class SlowDebuff : MonoBehaviour
 
     private void DeactivateIceLogo()
     {
-        freezeLogo.gameObject.SetActive(false); 
+        if (freezeLogo != null)
+            freezeLogo.gameObject.SetActive(false); 
     }
 }

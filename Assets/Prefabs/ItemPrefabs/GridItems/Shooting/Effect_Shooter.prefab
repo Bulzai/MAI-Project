@@ -115,6 +115,8 @@ MonoBehaviour:
   muzzle: {fileID: 2242705295382345368}
   direction: {fileID: 2242705295382345368}
   fireInterval: 2
+  burstPause: 0
+  shotsPerBurst: 30
   fireOnEnable: 1
   startDelay: 0
 --- !u!114 &2986226016238778272

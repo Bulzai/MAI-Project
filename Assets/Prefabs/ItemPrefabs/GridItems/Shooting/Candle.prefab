@@ -251,7 +251,9 @@ MonoBehaviour:
   - {fileID: 1976432613068415581, guid: 9c7876b72dabc834fb2923354bc99ba8, type: 3}
   muzzle: {fileID: 2242705295382345368}
   direction: {fileID: 2242705295382345368}
-  fireInterval: 0.65
+  fireInterval: 0.5
+  burstPause: 2.6
+  shotsPerBurst: 5
   fireOnEnable: 1
   startDelay: 0
 --- !u!114 &2986226016238778272
@@ -287,6 +289,7 @@ MonoBehaviour:
   forbiddenSignOffset: {x: 0, y: 0, z: 0}
   forbiddenSignScale: 10
   currentFacingDirection: 0
+  isBomb: 0
 --- !u!61 &4663102656764865577
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -358,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c558a693b64112049bedc3bcb9ead4c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activationDelay: 2
+  activationDelay: 0
   scriptsToToggle:
   - {fileID: 1171235549917489825}
 --- !u!95 &1157042523928235862
