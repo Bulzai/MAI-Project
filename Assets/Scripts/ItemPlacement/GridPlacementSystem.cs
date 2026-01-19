@@ -107,6 +107,11 @@ public class GridPlacementSystem : MonoBehaviour
 
     public void FollowItem(GridItem gridItem)
     {
+        if(gridItem.GetIsBomb())
+        {
+            return;
+        }
+        
         if (_lastAreas.TryGetValue(gridItem, out var oldArea))
         {
             ClearArea(oldArea);
@@ -629,7 +634,7 @@ public class GridPlacementSystem : MonoBehaviour
         TileBase tile = MainTilemap.GetTile(cell);
         return (tile == tileBases[TileType.White]);
     }
-
+    
 
     public void TakeCell(Vector3Int cell)
     {
@@ -638,6 +643,15 @@ public class GridPlacementSystem : MonoBehaviour
 
         // Mark this cell as occupied (blue tile)
         MainTilemap.SetTile(cell, tileBases[TileType.Red]);
+    }
+    
+    public void ClearCell(Vector3Int cell)
+    {
+        //if (!MainTilemap.gameObject.activeSelf)
+        //    MainTilemap.gameObject.SetActive(true);
+
+        // Mark this cell as occupied (blue tile)
+        MainTilemap.SetTile(cell, tileBases[TileType.White]);
     }
     
     private void ResetMainTileMap()

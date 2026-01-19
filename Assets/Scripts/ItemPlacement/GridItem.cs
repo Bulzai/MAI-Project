@@ -46,6 +46,7 @@ public class GridItem : MonoBehaviour
     private List<Vector3Int> occupiedCells = new List<Vector3Int>();
 
 
+    [SerializeField] private bool isBomb = false;
     void Awake()
     {
         forbidden = transform.Find("ForbiddenSign");
@@ -56,6 +57,10 @@ public class GridItem : MonoBehaviour
 
     }
 
+    public bool GetIsBomb()
+    {
+        return isBomb;
+    }
     private void UpdateOccupiedCells()
     {
         occupiedCells.Clear();
@@ -90,6 +95,9 @@ public class GridItem : MonoBehaviour
     }
     public bool CanBePlaced()
     {
+        if (isBomb)
+            return true;
+        
         UpdateOccupiedCells();
 
         foreach (var cell in occupiedCells)
@@ -103,6 +111,46 @@ public class GridItem : MonoBehaviour
 
     public void Place()
     {
+
+        if (isBomb)
+        {
+            Collider2D col = GetComponentInChildren<Collider2D>();
+            if (col == null) return;
+            Debug.Log("Collider found for bomb placement overlap check.");
+    
+            // All layers - filter by tags in loop
+            LayerMask allLayers = -1;
+
+            Collider2D[] overlapping = Physics2D.OverlapAreaAll(
+                col.bounds.min,
+                col.bounds.max,
+                allLayers
+            );
+
+            HashSet<string> bombTargets = new HashSet<string> { "GridItem", "Ice", "Sticky", "Candle" };
+
+            foreach (Collider2D hit in overlapping)
+            {
+                // Ignore self-collisions
+                if (hit.gameObject == gameObject) continue;
+
+                // Check if tag matches any target
+                if (bombTargets.Contains(hit.gameObject.tag))
+                {
+                    GridItem otherItem = hit.GetComponent<GridItem>();
+                    Debug.Log("clearing item due to bomb placement: " + hit.gameObject.name);
+                    if (otherItem?.Placed == true)
+                    {
+                        Debug.Log("clearing area and then destroying " + otherItem.gameObject.name + " due to bomb placement");
+                        otherItem.ClearItemFromBomb();
+                    }
+                }
+            }
+            Destroy(gameObject);
+            return;
+        }
+        
+
         UpdateOccupiedCells();
 
         foreach (var cell in occupiedCells)
@@ -113,6 +161,18 @@ public class GridItem : MonoBehaviour
         Placed = true;
         OnGridItemPlaced?.Invoke(gameObject);
         Debug.Log("invoking ongritemplaced with go " + gameObject);
+    }
+
+    public void ClearItemFromBomb()
+    {
+        UpdateOccupiedCells();
+        Debug.Log("clearing item");
+        foreach (var cell in occupiedCells)
+        {
+            GridPlacementSystem.Instance.ClearCell(cell);
+            Debug.Log("clearing cell " + cell);
+        }
+        Destroy(gameObject);
     }
 
 

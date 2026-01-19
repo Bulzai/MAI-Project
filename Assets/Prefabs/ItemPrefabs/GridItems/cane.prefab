@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 8947364497474401286}
   m_Layer: 6
   m_Name: cane
-  m_TagString: Untagged
+  m_TagString: GridItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -405,6 +405,7 @@ MonoBehaviour:
   forbiddenSignOffset: {x: -1, y: 0, z: 0}
   forbiddenSignScale: 10
   currentFacingDirection: 0
+  isBomb: 0
 --- !u!61 &426101349536849372
 BoxCollider2D:
   m_ObjectHideFlags: 0

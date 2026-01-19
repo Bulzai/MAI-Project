@@ -10,6 +10,7 @@ TagManager:
   - MovingObject
   - Ice
   - Candle
+  - GridItem
   layers:
   - Default
   - TransparentFX

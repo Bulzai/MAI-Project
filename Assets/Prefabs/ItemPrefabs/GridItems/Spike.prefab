@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damgeAmount: 15
-  knockbackForce: 1.5
+  knockbackForce: 1
 --- !u!1 &3113171560267336708
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,7 +286,7 @@ GameObject:
   - component: {fileID: 7833557627982394127}
   m_Layer: 6
   m_Name: Spike
-  m_TagString: Untagged
+  m_TagString: GridItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -434,10 +434,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAttachable: 0
   ifAttachableAttachHere: {fileID: 0}
-  placementOffset: {x: 0, y: 0, z: 0}
+  placementOffset: {x: 2, y: 2, z: 0}
   forbiddenSignOffset: {x: 0, y: 0, z: 0}
   forbiddenSignScale: 15
   currentFacingDirection: 0
+  isBomb: 0
 --- !u!114 &3426756731653214662
 MonoBehaviour:
   m_ObjectHideFlags: 0
