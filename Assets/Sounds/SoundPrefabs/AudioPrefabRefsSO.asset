@@ -165,6 +165,7 @@ MonoBehaviour:
   speedAuraCollectSFX: {fileID: 5773656466734081815, guid: 9ba57d8974428e74e800885f20ea5844, type: 3}
   slowAuraHitSFX: {fileID: 5773656466734081815, guid: dd9254ab7c016a04b8fcf0700a73d879, type: 3}
   repelAuraSFX: {fileID: 5773656466734081815, guid: 8cc6a33adac451f4a8fb153230290eae, type: 3}
+  confusionAuraSFX: {fileID: 5773656466734081815, guid: 42466639a4326e040996d4f978db1342, type: 3}
   auraSpawnSFX: {fileID: 5773656466734081815, guid: 6e5f13c4ad8ea9d47823cbd8c8fb21a2, type: 3}
   pointsIncreaseSFX: {fileID: 5773656466734081815, guid: 832c1313e412eaf45b6ca6ea70ce6713, type: 3}
   bigFlameStartSFX: {fileID: 5773656466734081815, guid: 8bcdab55816bf8e4ca70b8c5efc7de3e, type: 3}

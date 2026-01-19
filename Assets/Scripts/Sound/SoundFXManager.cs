@@ -17,6 +17,8 @@ public class SoundFXManager : MonoBehaviour
     private AudioSource _pointsIncreaseSource;
     private AudioSource _bratApfelSource;
     private AudioSource _canonShootSource;
+    private AudioSource _confusionAuraSource;
+    private AudioSource _slowAuraHitSource;
     private readonly List<AudioSource> _repelAuraActivatedSources = new List<AudioSource>();
     private void Awake()
         {
@@ -86,6 +88,7 @@ public class SoundFXManager : MonoBehaviour
         BreakableCracker.OnCrackerBroken += PlayCookieBreakSFX;
         GameEvents.OnMainGameStateExited += PlayTransitionSFX;
         ProjectileLauncher.OnFireCanon += PlayCanonFireSFX;
+        PlayerItemHandler.OnConfusionAuraHit += PlayConfusionAuraSFX;
 
         // ScoreState Events
         PlayerScoreManager.OnPointsIncrease += PlayPointsIncreaseSFX;
@@ -170,6 +173,7 @@ public class SoundFXManager : MonoBehaviour
         BreakableCracker.OnCrackerBroken -= PlayCookieBreakSFX;
         GameEvents.OnMainGameStateExited -= PlayTransitionSFX;
         ProjectileLauncher.OnFireCanon -= PlayCanonFireSFX;
+        PlayerItemHandler.OnConfusionAuraHit -= PlayConfusionAuraSFX;
 
         // ScoreState Events
         PlayerScoreManager.OnPointsIncrease -= PlayPointsIncreaseSFX;
@@ -686,7 +690,10 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayOtherPLayerSlowedSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.slowAuraHitSFX, Camera.main.transform, 0.7f);
+        if (_slowAuraHitSource != null && _slowAuraHitSource.isPlaying)
+            return;
+        if( _slowAuraHitSource != null) Destroy(_slowAuraHitSource.gameObject);
+        _slowAuraHitSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.slowAuraHitSFX, Camera.main.transform, 0.7f);
     }
 
     public void PlaySpeedAuraActivatedSFX()
@@ -704,6 +711,14 @@ public class SoundFXManager : MonoBehaviour
         if (_canonShootSource != null && _canonShootSource.isPlaying)
             return;
         if( _canonShootSource != null) Destroy(_canonShootSource.gameObject);
-        _canonShootSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.canonShootSFX, Camera.main.transform, 0.5f);
+        _canonShootSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.canonShootSFX, Camera.main.transform, 0.3f);
+    }
+
+    public void PlayConfusionAuraSFX()
+    {
+        if (_confusionAuraSource != null && _confusionAuraSource.isPlaying)
+            return;
+        if (_confusionAuraSource != null) Destroy(_confusionAuraSource.gameObject);
+        _confusionAuraSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.confusionAuraSFX, Camera.main.transform, 0.7f);
     }
 }
