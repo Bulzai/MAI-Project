@@ -28,8 +28,16 @@ public class PlayerSelectionManager : MonoBehaviour
 
     [SerializeField] private GameObject PlayerSelection;
     [SerializeField] private GameObject MainMenu;
-    
-    
+
+
+    [Header("UI Elements (Order: P1, P2, P3, P4)")]
+    [Tooltip("Zieh hier die 'Press A' Objekte rein")]
+    [SerializeField] private GameObject[] joinButtonsInstructions;
+    [SerializeField] private GameObject[] PressTextInstructions;
+
+    [Tooltip("Zieh hier die 'Press Y' Objekte rein")]
+    [SerializeField] private GameObject[] readyInstructions;
+
     void Awake()
     {
         PlayerManager.OnPlayerJoinedGlobal += HandlePlayerJoined;
@@ -40,8 +48,22 @@ public class PlayerSelectionManager : MonoBehaviour
         TarodevController.PlayerController.OnReturnToMainMenu += HandleReturnToMainMenu;
         UIController.OnCancelPressed += HandleReturnToMainMenu;
         UIController.OnSubmitPressed += TryStartGame;
-    }
 
+
+        ResetUI();
+    }
+    private void ResetUI()
+    {
+        // Sicherstellen, dass am Anfang alles richtig steht
+        if (joinButtonsInstructions != null)
+            foreach (var obj in joinButtonsInstructions) if (obj) obj.SetActive(true);
+
+        if (PressTextInstructions != null)
+            foreach (var obj in PressTextInstructions) if (obj) obj.SetActive(true);
+
+        if (readyInstructions != null)
+            foreach (var obj in readyInstructions) if (obj) obj.SetActive(false);
+    }
     void OnDestroy()
     {
         PlayerManager.OnPlayerJoinedGlobal -= HandlePlayerJoined;
@@ -66,27 +88,49 @@ public class PlayerSelectionManager : MonoBehaviour
             CharacterTransform = characterTf,
             ReadyText = readyTMP
         };
-        
+
         _playerSelection[playerInput] = data;
-        
-        data.ReadyText.text = "Not Ready";
+
+        data.ReadyText.text = " ";
         data.ReadyText.color = notReadyColor;
-        
-        Debug.Log(
-            $"Player joined: input={playerInput.playerIndex}, " +
-            $"isReady={data.IsReady}, " +
-            $"characterTf={data.CharacterTransform.name}, " +
-            $"readyText=\"{data.ReadyText.text}\" color={data.ReadyText.color}",
-            characterTf   // optional context so clicking the log selects this object
-        );
+
+        //  UI Logik für Join ---
+        int pIndex = playerInput.playerIndex; // Das ist 0, 1, 2 oder 3
+
+        // "Press A" ausschalten
+        if (joinButtonsInstructions != null && pIndex < joinButtonsInstructions.Length)
+        {
+            joinButtonsInstructions[pIndex].SetActive(false);
+        }
+
+        // "Press Y" einschalten
+        if (readyInstructions != null && pIndex < readyInstructions.Length)
+        {
+            readyInstructions[pIndex].SetActive(true);
+        }
+        // ------------------------------
+
+        Debug.Log($"Player joined: input={playerInput.playerIndex}");
     }
 
     private void HandlePlayerLeft(PlayerInput playerInput)
     {
+        // --- NEU: UI zurücksetzen wenn Spieler geht ---
+        int pIndex = playerInput.playerIndex;
+
+        if (joinButtonsInstructions != null && pIndex < joinButtonsInstructions.Length)
+            joinButtonsInstructions[pIndex].SetActive(true); // A wieder anzeigen
+
+        if (PressTextInstructions != null && pIndex < PressTextInstructions.Length)
+            PressTextInstructions[pIndex].SetActive(true); // A wieder anzeigen
+
+        if (readyInstructions != null && pIndex < readyInstructions.Length)
+            readyInstructions[pIndex].SetActive(false); // Y ausblenden
+        // ---------------------------------------------
+
         _playerSelection.Remove(playerInput);
     }
-    
-    
+
     private void HandlePlayerReady(PlayerInput playerInput)
     {
         if (!_playerSelection.TryGetValue(playerInput, out var data))
@@ -94,16 +138,36 @@ public class PlayerSelectionManager : MonoBehaviour
 
         data.IsReady = !data.IsReady;
 
+
         if (data.IsReady)
         {
             OnPlayerReadySFX?.Invoke();
+
         }
         if (data.ReadyText != null)
         {
-            data.ReadyText.text = data.IsReady ? "Ready" : "Not Ready";
+
+            data.ReadyText.text = data.IsReady ? "Ready" : " ";
             data.ReadyText.color = data.IsReady ? readyColor : notReadyColor;
 
         }
+
+        // --- UI Instruction ("Press Y") togglen ---
+        int pIndex = playerInput.playerIndex;
+        if (readyInstructions != null && pIndex < readyInstructions.Length)
+        {
+            // Wenn er Ready ist -> Text weg. 
+            // Wenn er NICHT Ready ist -> Text da (damit er weiß, dass er Y drücken kann).
+            readyInstructions[pIndex].SetActive(!data.IsReady);
+        }
+        if (PressTextInstructions != null && pIndex < PressTextInstructions.Length)
+        {
+            // Wenn er Ready ist -> Text weg. 
+            // Wenn er NICHT Ready ist -> Text da (damit er weiß, dass er Y drücken kann).
+            PressTextInstructions[pIndex].SetActive(!data.IsReady);
+        }
+        // -----------------------------------------------
+
         _playerSelection[playerInput] = data;
 
     }
