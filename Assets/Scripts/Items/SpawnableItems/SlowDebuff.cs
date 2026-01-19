@@ -12,6 +12,8 @@ public class SlowDebuff : MonoBehaviour
     public Color slowColor = Color.blue;
     private Color originalColor;
     private Coroutine _visualCo;
+    public GameObject freezeLogo;
+
 
     private Rigidbody2D rb;
     private float activeUntil = 0f;
@@ -51,6 +53,10 @@ public class SlowDebuff : MonoBehaviour
     {
         float blinkInterval = 0.15f; // Geschwindigkeit des Blinkens
 
+        if(freezeLogo != null)
+            freezeLogo.SetActive(true);
+
+
         while (Time.time < activeUntil)
         {
             if (playerSprite != null)
@@ -60,6 +66,8 @@ public class SlowDebuff : MonoBehaviour
             }
             yield return new WaitForSeconds(blinkInterval);
         }
+        if (freezeLogo != null)
+            freezeLogo.SetActive(false);
 
         // Am Ende zurück zur Originalfarbe
         if (playerSprite != null) playerSprite.color = originalColor;

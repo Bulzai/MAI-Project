@@ -163,7 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   faceVelocity: 1
-  lifetime: 5
+  lifetime: 10
   destroyOnAnyHit: 1
   damage: 10
   knockBackStrength: 0

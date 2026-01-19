@@ -128,10 +128,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   faceVelocity: 1
-  lifetime: 5
+  lifetime: 10
   destroyOnAnyHit: 1
-  damage: 10
-  knockBackStrength: 5
+  damage: 5
+  knockBackStrength: 2
   hitMask:
     serializedVersion: 2
     m_Bits: 4294967295

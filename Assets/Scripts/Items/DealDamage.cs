@@ -7,7 +7,7 @@ public class DealDamage : MonoBehaviour
 
     public int damgeAmount = 50;
 
-    public int knockbackForce = 0;
+    public float knockbackForce = 0;
     private void OnTriggerEnter2D(Collider2D other)
     {
 

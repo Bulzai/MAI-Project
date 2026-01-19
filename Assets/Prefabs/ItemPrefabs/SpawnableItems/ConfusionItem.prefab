@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 6952407667446782866}
   - component: {fileID: 7024903264484540056}
   - component: {fileID: 1421244998186324480}
+  - component: {fileID: -3432916501111953795}
   m_Layer: 0
   m_Name: ConfusionItem
   m_TagString: Untagged
@@ -219,3 +220,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.27
+--- !u!114 &-3432916501111953795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8465109100554358415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7125d28ffc84a742a348398af3f2af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  pulseFactor: 1.5

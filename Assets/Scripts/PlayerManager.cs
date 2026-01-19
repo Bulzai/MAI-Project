@@ -195,8 +195,25 @@ public class PlayerManager : MonoBehaviour
 
         int idx = playerInput.playerIndex;
 
+        //PlayerNames
         GameObject root = playerInput.gameObject;
-        root.name = "Player_" + idx;
+
+        switch (idx)
+        {
+            case 0:
+                root.name = "Herbert";
+                break;
+            case 1:
+                root.name = "Gertrude";
+                break;
+            case 2:
+                root.name = "Günter";
+                break;
+            case 3:
+                root.name = "Sigmund";
+                break;
+
+        }
 
         // Find children
         var cursorTf = root.transform.Find("CursorNoPI");

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6952407667446782866}
   - component: {fileID: 7024903264484540056}
   - component: {fileID: 1421244998186324480}
+  - component: {fileID: 5422465581172125789}
   m_Layer: 0
   m_Name: SpeedItem
   m_TagString: Untagged
@@ -131,6 +132,20 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.1, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.43
+--- !u!114 &5422465581172125789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8465109100554358415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7125d28ffc84a742a348398af3f2af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  pulseFactor: 1.5

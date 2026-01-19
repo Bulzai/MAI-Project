@@ -80,8 +80,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5187926d2eee180419eecac142a4d13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damgeAmount: 20
-  knockbackForce: 0
+  damgeAmount: 15
+  knockbackForce: 1.5
 --- !u!1 &3113171560267336708
 GameObject:
   m_ObjectHideFlags: 0
