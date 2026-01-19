@@ -116,8 +116,9 @@ GameObject:
   m_Component:
   - component: {fileID: 837322781960794334}
   - component: {fileID: 5003933511174538883}
-  - component: {fileID: 8631398301970915946}
   - component: {fileID: 5282166769467912945}
+  - component: {fileID: 2832930965220591239}
+  - component: {fileID: 2855242538641702707}
   m_Layer: 0
   m_Name: candy_cane
   m_TagString: Untagged
@@ -192,7 +193,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!60 &8631398301970915946
+--- !u!114 &5282166769467912945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095211655414960086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5187926d2eee180419eecac142a4d13f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damgeAmount: 0
+  knockbackForce: 3
+--- !u!114 &2832930965220591239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095211655414960086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba627c528710eca49a9ada94608422b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableCollider: {fileID: 0}
+--- !u!60 &2855242538641702707
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -226,8 +254,8 @@ PolygonCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    border: {x: 0, y: 1.15, z: 0, w: 0}
+    pivot: {x: 0.46629208, y: 0.6173532}
     oldSize: {x: 4, y: 4}
     newSize: {x: 4, y: 4}
     adaptiveTilingThreshold: 0.5
@@ -236,85 +264,71 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.65999997, y: -0.42999998}
-      - {x: 0.59, y: -0.41}
-      - {x: 0.59, y: -0.31}
-      - {x: 0.55, y: -0.22999999}
-      - {x: 0.53999996, y: -0.16}
-      - {x: 0.55, y: 0.17}
-      - {x: 0.48999998, y: 0.22999999}
-      - {x: 0.48999998, y: 0.29999998}
-      - {x: 0.55, y: 0.35}
-      - {x: 0.55, y: 0.71}
-      - {x: 0.53999996, y: 1.12}
-      - {x: 0.52, y: 1.14}
-      - {x: 0.5, y: 1.14}
-      - {x: 0.5, y: 1.48}
-      - {x: 0.48, y: 1.5}
-      - {x: 0.47, y: 1.65}
-      - {x: 0.42999998, y: 1.73}
-      - {x: 0.29, y: 1.86}
-      - {x: -0.02, y: 1.93}
-      - {x: -0.06, y: 1.9799999}
-      - {x: -0.35999998, y: 1.9799999}
-      - {x: -0.41, y: 1.9499999}
-      - {x: -0.47, y: 1.89}
-      - {x: -0.61, y: 1.87}
-      - {x: -0.69, y: 1.8299999}
-      - {x: -0.78, y: 1.7099999}
-      - {x: -0.9, y: 1.5699999}
-      - {x: -0.9, y: 1.22}
-      - {x: -0.87, y: 1.1899999}
-      - {x: -0.84, y: 1.18}
-      - {x: -0.68, y: 1.14}
-      - {x: -0.51, y: 1.13}
-      - {x: -0.41, y: 1.27}
-      - {x: -0.41, y: 1.37}
-      - {x: -0.47, y: 1.43}
-      - {x: -0.56, y: 1.4599999}
-      - {x: -0.51, y: 1.49}
-      - {x: -0.42999998, y: 1.5699999}
-      - {x: -0.41, y: 1.61}
-      - {x: -0.11, y: 1.61}
-      - {x: -0.089999996, y: 1.65}
-      - {x: 0.17, y: 1.53}
-      - {x: 0.17, y: 1.4699999}
-      - {x: 0.21, y: 1.4499999}
-      - {x: 0.14, y: 1.28}
-      - {x: 0.099999994, y: 1.04}
-      - {x: 0.099999994, y: 0.91999996}
-      - {x: 0.13, y: 0.87}
-      - {x: 0.17, y: 0.78999996}
-      - {x: 0.21, y: 0.77}
-      - {x: 0.14, y: 0.68}
-      - {x: 0.13, y: 0.24}
-      - {x: 0.13, y: -0.049999997}
-      - {x: 0.17, y: -0.12}
-      - {x: 0.14, y: -0.19999999}
-      - {x: 0.14, y: -0.44}
-      - {x: 0.17, y: -0.53}
-      - {x: 0.22999999, y: -0.59}
-      - {x: 0.26, y: -0.71999997}
-      - {x: 0.28, y: -0.74}
-      - {x: 0.48, y: -0.74}
-      - {x: 0.53999996, y: -0.71}
-      - {x: 0.57, y: -0.64}
-      - {x: 0.65999997, y: -0.61}
+    - - {x: 0.7948317, y: -0.8994128}
+      - {x: 0.7248317, y: -0.87941283}
+      - {x: 0.7248317, y: -0.7794128}
+      - {x: 0.6848317, y: -0.6994128}
+      - {x: 0.6748317, y: -0.62941283}
+      - {x: 0.6848317, y: -0.29941285}
+      - {x: 0.6248317, y: -0.23941283}
+      - {x: 0.6248317, y: -0.16941284}
+      - {x: 0.6848317, y: -0.11941284}
+      - {x: 0.6848317, y: 0.24058716}
+      - {x: 0.6748317, y: 0.65058714}
+      - {x: 0.6548317, y: 0.6705871}
+      - {x: 0.63483167, y: 0.6705871}
+      - {x: 0.63483167, y: 1.0105871}
+      - {x: 0.6148317, y: 1.0305871}
+      - {x: 0.6048317, y: 1.1805872}
+      - {x: 0.5648317, y: 1.2605871}
+      - {x: 0.4248317, y: 1.3905871}
+      - {x: 0.11483169, y: 1.4605871}
+      - {x: 0.074831694, y: 1.5105871}
+      - {x: -0.2251683, y: 1.5105871}
+      - {x: -0.2751683, y: 1.4805871}
+      - {x: -0.3351683, y: 1.4205872}
+      - {x: -0.4751683, y: 1.4005871}
+      - {x: -0.5551683, y: 1.3605871}
+      - {x: -0.6451683, y: 1.2405871}
+      - {x: -0.7651683, y: 1.1005871}
+      - {x: -0.7651683, y: 0.75058717}
+      - {x: -0.7351683, y: 0.72058713}
+      - {x: -0.7051683, y: 0.71058714}
+      - {x: -0.5451683, y: 0.6705871}
+      - {x: -0.3751683, y: 0.66058713}
+      - {x: -0.2751683, y: 0.8005871}
+      - {x: -0.2751683, y: 0.90058714}
+      - {x: -0.3351683, y: 0.96058714}
+      - {x: -0.4251683, y: 0.9905871}
+      - {x: -0.3751683, y: 1.0205871}
+      - {x: -0.2951683, y: 1.1005871}
+      - {x: -0.2751683, y: 1.1405871}
+      - {x: 0.024831695, y: 1.1405871}
+      - {x: 0.044831693, y: 1.1805872}
+      - {x: 0.30483168, y: 1.0605872}
+      - {x: 0.30483168, y: 1.0005871}
+      - {x: 0.34483168, y: 0.9805871}
+      - {x: 0.27483168, y: 0.81058717}
+      - {x: 0.23483169, y: 0.57058716}
+      - {x: 0.23483169, y: 0.45058715}
+      - {x: 0.2648317, y: 0.40058714}
+      - {x: 0.30483168, y: 0.32058716}
+      - {x: 0.34483168, y: 0.30058715}
+      - {x: 0.27483168, y: 0.21058716}
+      - {x: 0.2648317, y: -0.22941284}
+      - {x: 0.2648317, y: -0.5194128}
+      - {x: 0.30483168, y: -0.5894128}
+      - {x: 0.27483168, y: -0.66941285}
+      - {x: 0.27483168, y: -0.9094128}
+      - {x: 0.30483168, y: -0.99941283}
+      - {x: 0.3648317, y: -1.0594128}
+      - {x: 0.3948317, y: -1.1894128}
+      - {x: 0.4148317, y: -1.2094128}
+      - {x: 0.6148317, y: -1.2094128}
+      - {x: 0.6748317, y: -1.1794128}
+      - {x: 0.70483166, y: -1.1094128}
+      - {x: 0.7948317, y: -1.0794128}
   m_UseDelaunayMesh: 0
---- !u!114 &5282166769467912945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095211655414960086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5187926d2eee180419eecac142a4d13f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damgeAmount: 0
-  knockbackForce: 3
 --- !u!1 &4711019012961524803
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,6 +338,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8592722864125002311}
+  - component: {fileID: 8993379721076095615}
   - component: {fileID: 6320150467517895385}
   - component: {fileID: 3848979400733802576}
   - component: {fileID: 9126652313449543802}
@@ -332,6 +347,7 @@ GameObject:
   - component: {fileID: 6707197246378523342}
   - component: {fileID: 8888514127905615313}
   - component: {fileID: 8947364497474401286}
+  - component: {fileID: 4401424765363490415}
   m_Layer: 6
   m_Name: cane
   m_TagString: GridItem
@@ -358,6 +374,51 @@ Transform:
   - {fileID: 584169357966260486}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &8993379721076095615
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711019012961524803}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -1.6649551, y: -0.3686682}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 7.5979996, y: 3.8147857}
+  m_EdgeRadius: 0
 --- !u!114 &6320150467517895385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,7 +499,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -3.6997428, y: -0.3686682}
+  m_Offset: {x: -1.6649551, y: -0.3686682}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -449,7 +510,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 6.5972834, y: 3.8147857}
+  m_Size: {x: 7.5979996, y: 3.8147857}
   m_EdgeRadius: 0
 --- !u!114 &4264828439929574030
 MonoBehaviour:
@@ -479,7 +540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   disableCollider: {fileID: 426101349536849372}
-  enableCollider: {fileID: 8631398301970915946}
+  enableCollider: {fileID: 2855242538641702707}
 --- !u!58 &8888514127905615313
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -529,6 +590,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   disableCollider: {fileID: 8888514127905615313}
   enableCollider: {fileID: 0}
+--- !u!114 &4401424765363490415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711019012961524803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 556014f7ca0b4584da2ad7e0ad926fad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableCollider: {fileID: 8993379721076095615}
 --- !u!1 &5119804512999136978
 GameObject:
   m_ObjectHideFlags: 0

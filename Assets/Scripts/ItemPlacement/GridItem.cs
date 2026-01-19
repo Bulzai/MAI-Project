@@ -115,6 +115,7 @@ public class GridItem : MonoBehaviour
         if (isBomb)
         {
             Collider2D col = GetComponentInChildren<Collider2D>();
+
             if (col == null) return;
             Debug.Log("Collider found for bomb placement overlap check.");
     
@@ -137,6 +138,8 @@ public class GridItem : MonoBehaviour
                 // Check if tag matches any target
                 if (bombTargets.Contains(hit.gameObject.tag))
                 {
+                    Debug.Log("collider found: " + (hit != null ? hit.name : "null"));
+
                     GridItem otherItem = hit.GetComponent<GridItem>();
                     Debug.Log("clearing item due to bomb placement: " + hit.gameObject.name);
                     if (otherItem?.Placed == true)
