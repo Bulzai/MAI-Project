@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 [DefaultExecutionOrder(100)]
 public class SlowDebuff : MonoBehaviour
@@ -20,6 +21,16 @@ public class SlowDebuff : MonoBehaviour
     private float multiplier = 1f;
 
     private void Awake() => rb = GetComponent<Rigidbody2D>();
+
+
+    private void OnEnable()
+    {
+        GameEvents.OnMainGameStateEntered += DeactivateIceLogo;
+        GameEvents.OnMainGameStateExited += DeactivateIceLogo;
+    }
+
+    
+
 
     private void Start()
     {
@@ -89,5 +100,10 @@ public class SlowDebuff : MonoBehaviour
     private void OnDisable()
     {
         if (playerSprite != null) playerSprite.color = originalColor;
+    }
+
+    private void DeactivateIceLogo()
+    {
+        freezeLogo.gameObject.SetActive(false); 
     }
 }

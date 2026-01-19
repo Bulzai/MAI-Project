@@ -18,9 +18,12 @@ public class ProjectileLauncher : MonoBehaviour
 
     void OnEnable()
     {
+
+
         _timer = -Mathf.Max(0f, startDelay);  // wait startDelay, then fire at exact multiples of fireInterval
         _started = fireOnEnable;
     }
+
 
     void FixedUpdate()
     {
@@ -33,6 +36,8 @@ public class ProjectileLauncher : MonoBehaviour
             FireOne();
         }
     }
+
+    
 
     void FireOne()
     {

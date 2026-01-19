@@ -264,6 +264,10 @@ public class CursorController : MonoBehaviour
         var gif = go.transform.Find("Gif");
         if (gif) gif.gameObject.SetActive(false);
 
+        var directionPointer = go.transform.Find("direction_pointer");
+        if(directionPointer)
+            directionPointer.gameObject.SetActive(true);
+
         lastCell = Vector3Int.one * int.MinValue;
     }
     /*
