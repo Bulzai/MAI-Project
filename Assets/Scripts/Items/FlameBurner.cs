@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FlameBurner : MonoBehaviour
@@ -8,7 +9,6 @@ public class FlameBurner : MonoBehaviour
     public float startDelay = 0f;       // Verzögerung beim Spielstart (für asynchrone Fallen)
     public float idleTime = 3f;         // Wie lange die Falle AUS ist
     public float burnTime = 4f;         // Wie lange die Falle BRENNT
-    public int damageAmount = 10;       // Schaden pro Tick
     public float endAnimDuration = 1.0f;
 
 
@@ -24,15 +24,31 @@ public class FlameBurner : MonoBehaviour
 
     void OnEnable()
     {
-        // Sicherstellen, dass der Collider am Anfang aus ist, wenn die Falle nicht brennt
+        Debug.Log("enabled flame burner");
+
         if (damageCollider != null)
             damageCollider.enabled = false;
 
-        animator.enabled = true;
-        // Startet den Loop
+        if (spriteRenderer != null) spriteRenderer.enabled = false;
+
+        if (animator != null)
+        {
+            animator.enabled = true;
+            // NEU: Alte Trigger löschen, damit er nicht sofort losfeuert
+            animator.ResetTrigger("Ignite");
+            animator.ResetTrigger("Extinguish");
+            // NEU: Den Animator hart in den Idle-Zustand setzen
+            animator.Play("Idle", 0, 0f);
+        }
+
+        StopAllCoroutines();
         StartCoroutine(FlameCycle());
     }
-
+    private void OnDisable()
+    {
+        if (spriteRenderer != null) spriteRenderer.enabled = false;
+        StopAllCoroutines();
+    }
     // Die Haupt-Logikschleife
     IEnumerator FlameCycle()
     {
@@ -59,13 +75,12 @@ public class FlameBurner : MonoBehaviour
             yield return new WaitForSeconds(0.45f);
 
             if (damageCollider != null) damageCollider.enabled = true;
-            isActive = true;
 
             // === PHASE 3: LOOP (Brennen) ===
             yield return new WaitForSeconds(burnTime);
 
             // === PHASE 4: END (Erlöschen) ===
-            isActive = false;
+
             if (damageCollider != null) damageCollider.enabled = false;
 
             animator.SetTrigger("Extinguish");
@@ -78,16 +93,5 @@ public class FlameBurner : MonoBehaviour
         }
     }
 
-    // Schadenslogik
-    private void OnTriggerStay(Collider other)
-    {
-        // Nur Schaden machen, wenn die Falle aktiv ist und der Cooldown vorbei ist
-        if (isActive && Time.time > lastDamageTime + damageCooldown)
-        {
-            if (other.CompareTag("Player")) // Stelle sicher, dass dein Spieler den Tag "Player" hat
-            {
-                other.GetComponent<PlayerHealthSystem>().TakeDamage(damageAmount,true);
-            }
-        }
-    }
+  
 }

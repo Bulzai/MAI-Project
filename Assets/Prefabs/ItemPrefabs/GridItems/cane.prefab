@@ -348,6 +348,7 @@ GameObject:
   - component: {fileID: 8888514127905615313}
   - component: {fileID: 8947364497474401286}
   - component: {fileID: 4401424765363490415}
+  - component: {fileID: 5272362241509691474}
   m_Layer: 6
   m_Name: cane
   m_TagString: GridItem
@@ -527,6 +528,7 @@ MonoBehaviour:
   activationDelay: 2
   scriptsToToggle:
   - {fileID: 6320150467517895385}
+  animToToggle: {fileID: 0}
 --- !u!114 &6707197246378523342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,6 +605,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableCollider: {fileID: 8993379721076095615}
+--- !u!114 &5272362241509691474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711019012961524803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31603d0e88c64c442a0771a5db4a979b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5119804512999136978
 GameObject:
   m_ObjectHideFlags: 0
