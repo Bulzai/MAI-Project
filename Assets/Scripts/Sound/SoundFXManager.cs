@@ -19,6 +19,8 @@ public class SoundFXManager : MonoBehaviour
     private AudioSource _canonShootSource;
     private AudioSource _confusionAuraSource;
     private AudioSource _slowAuraHitSource;
+    private AudioSource _caneSubmitAndSelectSource;
+    private AudioSource _stickyTileSubmitSource;
     private readonly List<AudioSource> _repelAuraActivatedSources = new List<AudioSource>();
     private void Awake()
         {
@@ -525,16 +527,16 @@ public class SoundFXManager : MonoBehaviour
     
     public void PlayCookieSelectSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.cookieSelectSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.cookieSelectSFX, Camera.main.transform, 0.4f);
     }
     
     public void PlayCandleSelectSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.candleSelectSFX, Camera.main.transform, 0.6f);
+        PlaySoundFXClip(_audioClipRefsSo.candleSelectSFX, Camera.main.transform, 0.3f);
     }
     public void PlayLogSelectSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.woodBlockSelectSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.woodBlockSelectSFX, Camera.main.transform, 0.6f);
     }
     private void HandleItemSubmitSfx(GameObject item)
     {
@@ -582,7 +584,7 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayCookieSubmitSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.cookieSubmitSFX, Camera.main.transform);
+        PlaySoundFXClip(_audioClipRefsSo.cookieSubmitSFX, Camera.main.transform, 0.5f);
     }
     
 
@@ -601,7 +603,7 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayCanonSubmitSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.canonSubmitSFX, Camera.main.transform, 0.6f);
+        PlaySoundFXClip(_audioClipRefsSo.canonSubmitSFX, Camera.main.transform, 0.2f);
     }
 
     public void PlayCandleSubmitSFX()
@@ -616,12 +618,21 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayStickyTileSubmitSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.chocolateSubmitSFX, Camera.main.transform);
+        if( _stickyTileSubmitSource != null && _stickyTileSubmitSource.isPlaying)
+            return;
+        if( _stickyTileSubmitSource != null) Destroy(_stickyTileSubmitSource.gameObject);
+        
+        _stickyTileSubmitSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.chocolateSubmitSFX, Camera.main.transform, 0.8f);
     }
 
     public void PlayCaneSubmitAndSelectSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.caneSubmitAndSelectSFX, Camera.main.transform, 0.8f);
+        if (_caneSubmitAndSelectSource != null && _caneSubmitAndSelectSource.isPlaying)
+            return;
+        if( _caneSubmitAndSelectSource != null) Destroy(_caneSubmitAndSelectSource.gameObject);
+        
+        _caneSubmitAndSelectSource =
+            PlayAndReturnSoundFXClip(_audioClipRefsSo.caneSubmitAndSelectSFX, Camera.main.transform, 0.6f);
     }
 
     public void PlayPlayerKnockedBackSFX()
