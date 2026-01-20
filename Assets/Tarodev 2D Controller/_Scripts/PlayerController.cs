@@ -148,7 +148,7 @@ namespace TarodevController
                     return;
                 }
                 if (lockedControls) return;
-        
+                Debug.Log("controls arent locked");
                 jumpPressed = true;
                 jumpHeld = true;
                 OnPlayerJumped?.Invoke();
