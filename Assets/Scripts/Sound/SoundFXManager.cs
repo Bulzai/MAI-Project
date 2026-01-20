@@ -63,8 +63,8 @@ public class SoundFXManager : MonoBehaviour
 
         // PlayerSelect Events
         PlayerManager.OnPlayerJoinedSFX += PlayPlayerJoinedSFX;
-        PlayerSelectionManager.OnNotAllPlayersReady += PlayForbiddenSignSFX;
-        PlayerSelectionManager.OnNobodyJoinedYet += PlayForbiddenSignSFX;
+        //PlayerSelectionManager.OnNotAllPlayersReady += PlayForbiddenSignSFX;
+        //PlayerSelectionManager.OnNobodyJoinedYet += PlayForbiddenSignSFX;
         PlayerSelectionManager.OnStartGameSFX += PlayGameStartSFX;
         PlayerSelectionManager.OnPlayerReadySFX += PlayPlayerReadySFX;
         PlayerSelectionManager.OnSurpriseBoxStateTransitionStarted += PlayTransitionSFX;
@@ -148,8 +148,8 @@ public class SoundFXManager : MonoBehaviour
 
         // PlayerSelect Events
         PlayerManager.OnPlayerJoinedSFX -= PlayPlayerJoinedSFX;
-        PlayerSelectionManager.OnNotAllPlayersReady -= PlayForbiddenSignSFX;
-        PlayerSelectionManager.OnNobodyJoinedYet -= PlayForbiddenSignSFX;
+        //PlayerSelectionManager.OnNotAllPlayersReady -= PlayForbiddenSignSFX;
+        //PlayerSelectionManager.OnNobodyJoinedYet -= PlayForbiddenSignSFX;
         PlayerSelectionManager.OnStartGameSFX -= PlayGameStartSFX;
         PlayerSelectionManager.OnPlayerReadySFX -= PlayPlayerReadySFX;
         PlayerSelectionManager.OnSurpriseBoxStateTransitionStarted -= PlayTransitionSFX;
