@@ -259,7 +259,7 @@ public class PlayerManager : MonoBehaviour
 
         // ----- Assign AVATAR + Cursor -----
         var characterSpriteRenderer = characterTf.Find("Visual/Sprite")?.GetComponent<SpriteRenderer>();
-        var cursorSpriteRenderer = cursorTf.GetComponent<SpriteRenderer>();
+        var cursorSpriteRenderer = cursorTf.GetComponentInChildren<SpriteRenderer>();
 
         if (characterSpriteRenderer != null)
         {
