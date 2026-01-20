@@ -411,6 +411,7 @@ MonoBehaviour:
   activationDelay: 0
   scriptsToToggle:
   - {fileID: 1171235549917489825}
+  animToToggle: {fileID: 0}
 --- !u!95 &1157042523928235862
 Animator:
   serializedVersion: 5

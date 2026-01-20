@@ -48,7 +48,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7157107378905120667
 Transform:
   m_ObjectHideFlags: 0
@@ -323,6 +323,7 @@ MonoBehaviour:
   forbiddenSignOffset: {x: 0, y: 0, z: 0}
   forbiddenSignScale: 10
   currentFacingDirection: 0
+  isBomb: 0
 --- !u!114 &129006838555908283
 MonoBehaviour:
   m_ObjectHideFlags: 0

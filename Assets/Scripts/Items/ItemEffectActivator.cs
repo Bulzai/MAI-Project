@@ -6,7 +6,7 @@ public class ItemEffectActivator : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float activationDelay = 2f; // seconds
     [SerializeField] private MonoBehaviour[] scriptsToToggle; // scripts you want to enable/disable
-
+    public Animator animToToggle;
     private void OnEnable()
     {
 
@@ -27,6 +27,9 @@ public class ItemEffectActivator : MonoBehaviour
     {
         // Immediately disable all scripts
         SetScriptsEnabled(false);
+
+        if(animToToggle != null ) 
+            animToToggle.enabled = true;
 
         // Start coroutine to re-enable after delay
         StartCoroutine(EnableAfterDelay());
