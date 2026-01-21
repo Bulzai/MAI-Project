@@ -352,8 +352,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startDelay: 0
-  idleTime: 3
-  burnTime: 3
+  idleTime: 2
+  burnTime: 2
   endAnimDuration: 0.5
   animator: {fileID: 984314300335698963}
   damageCollider: {fileID: 2570622330655652473}
