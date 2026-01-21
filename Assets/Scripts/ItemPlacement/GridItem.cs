@@ -111,49 +111,14 @@ public class GridItem : MonoBehaviour
 
     public void Place()
     {
-
         if (isBomb)
         {
-            Collider2D col = GetComponentInChildren<Collider2D>();
-
-            if (col == null) return;
-            Debug.Log("Collider found for bomb placement overlap check.");
-    
-            // All layers - filter by tags in loop
-            LayerMask allLayers = -1;
-
-            Collider2D[] overlapping = Physics2D.OverlapAreaAll(
-                col.bounds.min,
-                col.bounds.max,
-                allLayers
-            );
-
-            HashSet<string> bombTargets = new HashSet<string> { "GridItem", "Ice", "Sticky", "Candle" };
-
-            foreach (Collider2D hit in overlapping)
-            {
-                // Ignore self-collisions
-                if (hit.gameObject == gameObject) continue;
-
-                // Check if tag matches any target
-                if (bombTargets.Contains(hit.gameObject.tag))
-                {
-                    Debug.Log("collider found: " + (hit != null ? hit.name : "null"));
-
-                    GridItem otherItem = hit.GetComponent<GridItem>();
-                    Debug.Log("clearing item due to bomb placement: " + hit.gameObject.name);
-                    if (otherItem?.Placed == true)
-                    {
-                        Debug.Log("clearing area and then destroying " + otherItem.gameObject.name + " due to bomb placement");
-                        otherItem.ClearItemFromBomb();
-                    }
-                }
-            }
-            Destroy(gameObject);
+            // Hand off the logic to a Coroutine so it can handle timing
+            StartCoroutine(BombExplosionSequence());
             return;
         }
-        
 
+        // Normal placement logic for non-bomb items
         UpdateOccupiedCells();
 
         foreach (var cell in occupiedCells)
@@ -165,7 +130,61 @@ public class GridItem : MonoBehaviour
         OnGridItemPlaced?.Invoke(gameObject);
         Debug.Log("invoking ongritemplaced with go " + gameObject);
     }
+    private IEnumerator BombExplosionSequence()
+    {
+        Animator animator = GetComponent<Animator>();
+        Collider2D col = GetComponentInChildren<Collider2D>();
 
+
+        var directionPointer = gameObject.transform.Find("direction_pointer");
+        if (directionPointer)
+            directionPointer.gameObject.SetActive(false);
+
+        // 1. Start the animation
+        if (animator != null)
+        {
+            animator.SetTrigger("Explode");
+        }
+
+        // 2. Wait for the "Impact" frame
+        // Adjust 0.2f to whenever the explosion looks biggest in your animation
+        yield return new WaitForSeconds(0.2f);
+
+        // 3. Detect and Clear Items
+        if (col != null)
+        {
+            LayerMask allLayers = -1;
+            Collider2D[] overlapping = Physics2D.OverlapAreaAll(
+                col.bounds.min,
+                col.bounds.max,
+                allLayers
+            );
+
+            HashSet<string> bombTargets = new HashSet<string> { "GridItem", "Ice", "Sticky", "Candle" };
+
+            foreach (Collider2D hit in overlapping)
+            {
+                if (hit.gameObject == gameObject) continue;
+
+                if (bombTargets.Contains(hit.gameObject.tag))
+                {
+                    GridItem otherItem = hit.GetComponent<GridItem>();
+                    if (otherItem?.Placed == true)
+                    {
+                        otherItem.ClearItemFromBomb();
+                    }
+                }
+            }
+        }
+
+        // 4. Wait for the animation to actually finish before deleting the object
+        // This ensures the explosion doesn't "pop" out of existence mid-frame
+        float remainingTime = 0.6f; // Default fallback
+
+        yield return new WaitForSeconds(remainingTime);
+
+        Destroy(gameObject);
+    }
     public void ClearItemFromBomb()
     {
         UpdateOccupiedCells();

@@ -8,11 +8,11 @@ public class DisableDirectionPointer : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.OnMainGameStateEntered += DeactiveDirectionPointer;
+        PlaceItemState.CountDownStarted += DeactiveDirectionPointer;
     }
     private void OnDisable()
     {
-        GameEvents.OnMainGameStateEntered -= DeactiveDirectionPointer;
+        PlaceItemState.CountDownStarted -= DeactiveDirectionPointer;
 
     }
     void DeactiveDirectionPointer()
