@@ -142,11 +142,6 @@ namespace TarodevController
         {
             if (context.started)
             {
-                if (GameEvents.CurrentState == GameState.PlayerSelectionState)
-                {
-                    OnTryStartGame?.Invoke();
-                    return;
-                }
                 if (lockedControls) return;
                 jumpPressed = true;
                 jumpHeld = true;
