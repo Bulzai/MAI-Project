@@ -11,6 +11,7 @@ TagManager:
   - Ice
   - Candle
   - GridItem
+  - GIFCamera
   layers:
   - Default
   - TransparentFX
