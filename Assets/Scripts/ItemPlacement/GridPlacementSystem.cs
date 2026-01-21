@@ -62,13 +62,13 @@ public class GridPlacementSystem : MonoBehaviour
         Instance = this;
         MainTilemap.gameObject.SetActive(false);
         TempTilemap.gameObject.SetActive(false);
-        GameEvents.OnPlayerSelectionStateExited += ResetMainTileMap;
+        GameEvents.OnMenuStateEntered += ResetMainTileMap;
 
     }
 
     private void OnDestroy()
     {
-        GameEvents.OnPlayerSelectionStateExited -= ResetMainTileMap;
+        GameEvents.OnMenuStateEntered -= ResetMainTileMap;
     }
 
     private void Start()
