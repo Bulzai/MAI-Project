@@ -21,6 +21,7 @@ public class SoundFXManager : MonoBehaviour
     private AudioSource _slowAuraHitSource;
     private AudioSource _caneSubmitAndSelectSource;
     private AudioSource _stickyTileSubmitSource;
+    private AudioSource _fireTransitionSource;
     private readonly List<AudioSource> _repelAuraActivatedSources = new List<AudioSource>();
     private void Awake()
         {
@@ -35,7 +36,7 @@ public class SoundFXManager : MonoBehaviour
 
         // MAIN MENU EVENTS
         PlayButtonEvents.OnPlayButtonSelected += PlayPlayButtonSelectSFX;
-        PlayButtonEvents.OnPlayButtonSubmitted += PlayPlayButtonSubmitSFX;
+        PlayButtonEvents.OnPlayButtonSubmitted += PlayTransitionSFX;
         QuitButtonEvents.OnQuitButtonSelected += PlayQuitButtonSelectSFX;
         QuitButtonEvents.OnQuitButtonSubmitted += PlayQuitButtonSubmitSFX;
         QuitButtonEvents.OnQuitButtonDeselected += StopQuitButtonSelectSFX;
@@ -126,7 +127,7 @@ public class SoundFXManager : MonoBehaviour
     {
         // MAIN MENU EVENTS
         PlayButtonEvents.OnPlayButtonSelected -= PlayPlayButtonSelectSFX;
-        PlayButtonEvents.OnPlayButtonSubmitted -= PlayPlayButtonSubmitSFX;
+        PlayButtonEvents.OnPlayButtonSubmitted -= PlayTransitionSFX;
         QuitButtonEvents.OnQuitButtonSelected -= PlayQuitButtonSelectSFX;
         QuitButtonEvents.OnQuitButtonSubmitted -= PlayQuitButtonSubmitSFX;
         QuitButtonEvents.OnQuitButtonDeselected -= StopQuitButtonSelectSFX;
@@ -263,6 +264,7 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayPlayButtonSubmitSFX()
     {
+        
         PlaySoundFXClip(_audioClipRefsSo.playButtonSubmitSFX, Camera.main.transform);
     }
 
@@ -478,7 +480,10 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayTransitionSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.bigFlameTransitionSFX, Camera.main.transform, 0.5f);
+        if(_fireTransitionSource != null && _fireTransitionSource.isPlaying)
+            return;
+        if( _fireTransitionSource != null) Destroy(_fireTransitionSource.gameObject);
+        _fireTransitionSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.bigFlameTransitionSFX, Camera.main.transform, 0.5f);
     }
 
 

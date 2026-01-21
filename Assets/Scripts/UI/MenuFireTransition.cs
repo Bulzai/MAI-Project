@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,14 +11,24 @@ public class MenuFireTransition : MonoBehaviour
    [SerializeField] private Animator transitionAnimator;
    public MainMenu mainMenu;
    private bool isPlaying = false;
-   
+
+
+   private void Awake()
+   {
+       
+       PlayerSelectionManager.OnReturnToMainMenu += SetIsPlayingFalse;
+
+   }
+   private void OnDestroy()
+   {
+       PlayerSelectionManager.OnReturnToMainMenu -= SetIsPlayingFalse;
+   }
+
    public void PlayFireTransitionAnimation()
    {
        if (isPlaying) return;
        isPlaying = true;
        StartCoroutine(ExecuteTransitionThenChangeState());
-       isPlaying = false;
-
    }
    
    private IEnumerator ExecuteTransitionThenChangeState()
@@ -36,6 +47,10 @@ public class MenuFireTransition : MonoBehaviour
        mainMenu.PlayGame(); 
        yield return new WaitForSeconds(0.5f);
        transitionAnimator.gameObject.GetComponent<Image>().enabled = false;
+       isPlaying = false;
+   }
+   private void SetIsPlayingFalse()
+   {
        isPlaying = false;
    }
 }

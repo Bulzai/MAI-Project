@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
+using TMPro;
 using UnityEngine.UI;
 
 public class PlayerSelectionManager : MonoBehaviour
@@ -15,7 +16,10 @@ public class PlayerSelectionManager : MonoBehaviour
     public static event Action OnSurpriseBoxStateTransitionStarted;
     public static event Action OnNotAllPlayersReady;
     public static event Action OnNobodyJoinedYet;
-
+    
+    [SerializeField] private TMP_Text countdownText;
+    private Coroutine countdownRoutine;
+    
     [SerializeField] private Animator transitionAnimator;
 
     bool _isTransitionRunning = false;
@@ -47,7 +51,6 @@ public class PlayerSelectionManager : MonoBehaviour
         GameEvents.OnPlayerSelectionStateExited += HandlePlayerSelectionStateExit;
         TarodevController.PlayerController.OnReturnToMainMenu += HandleReturnToMainMenu;
         UIController.OnCancelPressed += HandleReturnToMainMenu;
-        UIController.OnSubmitPressed += TryStartGame;
 
 
         ResetUI();
@@ -73,7 +76,6 @@ public class PlayerSelectionManager : MonoBehaviour
         GameEvents.OnPlayerSelectionStateExited -= HandlePlayerSelectionStateExit;
         TarodevController.PlayerController.OnReturnToMainMenu -= HandleReturnToMainMenu;
         UIController.OnCancelPressed -= HandleReturnToMainMenu;
-        UIController.OnSubmitPressed -= TryStartGame;
 
     }
 
@@ -111,6 +113,7 @@ public class PlayerSelectionManager : MonoBehaviour
         // ------------------------------
 
         Debug.Log($"Player joined: input={playerInput.playerIndex}");
+        StopCountdownIfRunning();
     }
 
     private void HandlePlayerLeft(PlayerInput playerInput)
@@ -142,7 +145,6 @@ public class PlayerSelectionManager : MonoBehaviour
         if (data.IsReady)
         {
             OnPlayerReadySFX?.Invoke();
-
         }
         if (data.ReadyText != null)
         {
@@ -169,7 +171,7 @@ public class PlayerSelectionManager : MonoBehaviour
         // -----------------------------------------------
 
         _playerSelection[playerInput] = data;
-
+        TryStartGame();
     }
 
     private void TryStartGame()
@@ -184,16 +186,13 @@ public class PlayerSelectionManager : MonoBehaviour
 
         if (!everyoneReady)
         {
+            StopCountdownIfRunning();
             OnNotAllPlayersReady?.Invoke();
             return;
         }
-
-        // 1. SFX SOFORT abspielen
-
+        
         // 2. Die Transition-Sequenz starten
-        if (_isTransitionRunning) return;
-        StartCoroutine(TransitionToSurpriseBox());
-        OnStartGameSFX?.Invoke();
+        StartEnterCountdown();
     }
 
     private IEnumerator TransitionToSurpriseBox()
@@ -240,6 +239,50 @@ public class PlayerSelectionManager : MonoBehaviour
         PlayerSelection.SetActive(false);
         MainMenu.SetActive(true);
     }
+    
+    
+    //countdown stuff
+    private void StopCountdownIfRunning()
+    {
+        if (countdownRoutine != null)
+        {
+            StopCoroutine(countdownRoutine);
+            countdownRoutine = null;
+        }
+        if (countdownText != null)
+            countdownText.gameObject.SetActive(false);
+    }
+    
+    private void StartEnterCountdown()
+    {
+        StopCountdownIfRunning();
+        countdownRoutine = StartCoroutine(PlayCountdown(OnCountdownFinished));
+    }
+
+    private void OnCountdownFinished()
+    {
+        if (_isTransitionRunning) return;
+        StartCoroutine(TransitionToSurpriseBox());
+        OnStartGameSFX?.Invoke();
+    }
+
+    public IEnumerator PlayCountdown(Action onFinished, int seconds = 3, float timing = 1f)
+    {
+        float countdown = seconds;
+        countdownText.gameObject.SetActive(true);
+
+        while (countdown > 0)
+        {
+            countdownText.text = countdown.ToString();
+            yield return new WaitForSeconds(timing);
+            countdown--;
+        }
+
+        countdownText.gameObject.SetActive(false);
+        countdownRoutine = null;
+        onFinished?.Invoke();  // Only called on successful finish
+    }
+
     
 }
 
