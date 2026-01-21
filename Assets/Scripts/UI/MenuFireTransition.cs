@@ -9,10 +9,15 @@ public class MenuFireTransition : MonoBehaviour
    public GameObject playerSelectionGameObject;
    [SerializeField] private Animator transitionAnimator;
    public MainMenu mainMenu;
+   private bool isPlaying = false;
    
    public void PlayFireTransitionAnimation()
    {
+       if (isPlaying) return;
+       isPlaying = true;
        StartCoroutine(ExecuteTransitionThenChangeState());
+       isPlaying = false;
+
    }
    
    private IEnumerator ExecuteTransitionThenChangeState()
@@ -31,6 +36,6 @@ public class MenuFireTransition : MonoBehaviour
        mainMenu.PlayGame(); 
        yield return new WaitForSeconds(0.5f);
        transitionAnimator.gameObject.GetComponent<Image>().enabled = false;
-
+       isPlaying = false;
    }
 }
