@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,280 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Closing_Guide_Map_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5120
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2509a7bb82d249849bc53000ec7be25d
+      internalID: 1729011209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_1
+      rect:
+        serializedVersion: 2
+        x: 2150
+        y: 5120
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eed8fe0b6056cea4bac053ec06a80891
+      internalID: -2046815265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_2
+      rect:
+        serializedVersion: 2
+        x: 4300
+        y: 5120
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59881d8fc844a474f9b54ae43f1d3ba7
+      internalID: -1831585699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3840
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ca0697043c4f2449bcbd111b8d2d1ff
+      internalID: -101423043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_4
+      rect:
+        serializedVersion: 2
+        x: 2150
+        y: 3840
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93e684a9f4e2a6940a2b92a7b7746077
+      internalID: 1271080929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_5
+      rect:
+        serializedVersion: 2
+        x: 4300
+        y: 3840
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89701d85f3f4436428fc4674e3946b68
+      internalID: -109015877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2560
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 654b919aa59a64a4ab5d3a448b57b15a
+      internalID: -1650563442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_7
+      rect:
+        serializedVersion: 2
+        x: 2150
+        y: 2560
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 002ea456eae5d844c9127119b565be31
+      internalID: -769432423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_8
+      rect:
+        serializedVersion: 2
+        x: 4300
+        y: 2560
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d7d8284deb338945ba60b931bc9f0ba
+      internalID: -2108819061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1280
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f47fcf7f86b588f4f8f7247bd74bcf3c
+      internalID: 86372381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_10
+      rect:
+        serializedVersion: 2
+        x: 2150
+        y: 1280
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2f5d941fbcc95f46bb43763201362b2
+      internalID: -807284735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_11
+      rect:
+        serializedVersion: 2
+        x: 4300
+        y: 1280
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d919706077dcab4d8ef09f336356982
+      internalID: 1427184195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closing_Guide_Map_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2ac66681f449ea4e8af44aa10a1a17a
+      internalID: 865142896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +379,20 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Closing_Guide_Map_0: 1729011209
+      Closing_Guide_Map_1: -2046815265
+      Closing_Guide_Map_10: -807284735
+      Closing_Guide_Map_11: 1427184195
+      Closing_Guide_Map_12: 865142896
+      Closing_Guide_Map_2: -1831585699
+      Closing_Guide_Map_3: -101423043
+      Closing_Guide_Map_4: 1271080929
+      Closing_Guide_Map_5: -109015877
+      Closing_Guide_Map_6: -1650563442
+      Closing_Guide_Map_7: -769432423
+      Closing_Guide_Map_8: -2108819061
+      Closing_Guide_Map_9: 86372381
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

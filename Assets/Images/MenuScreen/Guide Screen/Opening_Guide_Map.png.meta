@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,301 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Opening_Guide_Map_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5120
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a95b3b3c3f37284fbdf23f35f35ca56
+      internalID: 1546509566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_1
+      rect:
+        serializedVersion: 2
+        x: 2150
+        y: 5120
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5951c53ca6631c040afaf31df1020f6b
+      internalID: 1690054412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_2
+      rect:
+        serializedVersion: 2
+        x: 4300
+        y: 5120
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ccc51118b2c2c64387f6f0f854711b9
+      internalID: -49226233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3840
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48df1d77f749318418cb77732917cb09
+      internalID: 1393882724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_4
+      rect:
+        serializedVersion: 2
+        x: 2150
+        y: 3840
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 953fd91f389286f49b625083e188b1ef
+      internalID: 159571349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_5
+      rect:
+        serializedVersion: 2
+        x: 4300
+        y: 3840
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d59e167288fa0d4eb398cc411d3411e
+      internalID: 601187835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2560
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63d0f684c75411145a5973b6cc7a1e59
+      internalID: 1029136191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_7
+      rect:
+        serializedVersion: 2
+        x: 2150
+        y: 2560
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1dc8e87c1aea0647ad52b924f0d7c6d
+      internalID: 1855182725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_8
+      rect:
+        serializedVersion: 2
+        x: 4300
+        y: 2560
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c7b6f26ad80da1458a7ca658f401a32
+      internalID: 90567733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1280
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13486975cca28834ca9081a70bc410d2
+      internalID: -1424834003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_10
+      rect:
+        serializedVersion: 2
+        x: 2150
+        y: 1280
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 944574883042d7246bedeefa716d0c72
+      internalID: 873788543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_11
+      rect:
+        serializedVersion: 2
+        x: 4300
+        y: 1280
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04090f1f21b290b44af779ab309da3e2
+      internalID: -1283236555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1dc851e591a9f57439dc919a2a05efa2
+      internalID: -719183015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Opening_Guide_Map_13
+      rect:
+        serializedVersion: 2
+        x: 4300
+        y: 0
+        width: 2150
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1febf77651e38d444991a256b65f2b0d
+      internalID: -889355769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +400,21 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Opening_Guide_Map_0: 1546509566
+      Opening_Guide_Map_1: 1690054412
+      Opening_Guide_Map_10: 873788543
+      Opening_Guide_Map_11: -1283236555
+      Opening_Guide_Map_12: -719183015
+      Opening_Guide_Map_13: -889355769
+      Opening_Guide_Map_2: -49226233
+      Opening_Guide_Map_3: 1393882724
+      Opening_Guide_Map_4: 159571349
+      Opening_Guide_Map_5: 601187835
+      Opening_Guide_Map_6: 1029136191
+      Opening_Guide_Map_7: 1855182725
+      Opening_Guide_Map_8: 90567733
+      Opening_Guide_Map_9: -1424834003
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

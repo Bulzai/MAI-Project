@@ -20,6 +20,10 @@ public class PlaceItemState : MonoBehaviour
 
     public static Action CountDownStarted;
     public static Action CountDownFinished;
+
+
+    public GameObject guideScreen;
+    public Animator guideAnimator;
     
     private void Awake()
     {
@@ -55,10 +59,42 @@ public class PlaceItemState : MonoBehaviour
         playerManager.pickedPrefabByPlayer.Clear();
         playerManager.playersThatPlaced.Clear();
         HideAllCursors();
-        
-        if (countdownCoroutine != null) return;     
-            countdownCoroutine = StartCoroutine(CountdownBeforeMainGame());
 
+        if (countdownCoroutine == null)
+        {
+            StartCoroutine(ShowGuideSequence());
+        }
+
+    }
+
+    private IEnumerator ShowGuideSequence()
+    {
+
+        Debug.Log("in coroutine");
+        guideScreen.SetActive(true);
+
+        // 1. Trigger the "Open" animation
+        // Use a Trigger named "Open" or a Bool named "isOpen"
+        guideAnimator.SetTrigger("Open");
+
+        // 2. Wait for the screen to stay visible
+        // Adjust 'showTime' to how long you want players to read the guide
+        float showTime = 6.0f;
+        yield return new WaitForSeconds(showTime);
+
+        // 3. Trigger the "Close" animation
+        guideAnimator.SetTrigger("Close");
+
+        // 4. WAIT for the closing animation to actually finish
+        // We look at the animator's current state to get the exact clip length
+        float closeAnimDuration = 2f;
+        yield return new WaitForSeconds(closeAnimDuration);
+        guideScreen.SetActive(false);
+
+        // 5. NOW start the actual game countdown
+        countdownCoroutine = StartCoroutine(CountdownBeforeMainGame());
+
+        Debug.Log("finished");
     }
     private IEnumerator CountdownBeforeMainGame( int countdown = 2, float timing = 0.6f)
     {
