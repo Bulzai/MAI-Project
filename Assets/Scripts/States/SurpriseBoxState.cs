@@ -232,6 +232,8 @@ public class SurpriseBoxState : MonoBehaviour
 
         }
     }
+
+  
     private IEnumerator ExecuteTransitionThenChangeState()
     {
         OnFireTransitionAnimationStarted?.Invoke();
