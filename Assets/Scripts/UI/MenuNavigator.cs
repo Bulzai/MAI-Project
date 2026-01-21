@@ -27,6 +27,5 @@ public class MenuNavigator : MonoBehaviour
         // Set the new selection
         eventSystem.SetSelectedGameObject(elementToSelect.gameObject);
 
-        Debug.Log($"Jumped to: {elementToSelect.name}", this);
     }
 }
