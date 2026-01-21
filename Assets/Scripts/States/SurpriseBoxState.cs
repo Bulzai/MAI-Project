@@ -236,6 +236,8 @@ public class SurpriseBoxState : MonoBehaviour
   
     private IEnumerator ExecuteTransitionThenChangeState()
     {
+        yield return new WaitForSeconds(1.5f);
+
         OnFireTransitionAnimationStarted?.Invoke();
         // 1. Das Parent-Objekt finden und aktivieren
         transitionAnimator.gameObject.GetComponent<Image>().enabled = true;

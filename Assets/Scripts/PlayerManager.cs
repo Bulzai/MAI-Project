@@ -123,9 +123,14 @@ public class PlayerManager : MonoBehaviour
             // last survivor:
             var winner = players.Where(pi => !_eliminationOrder.Contains(pi) && !IsDestroyed(pi)).FirstOrDefault();
             if (winner != null) _eliminationOrder.Add(winner);
-
-            GameEvents.ChangeState(GameState.ScoreState);
+            StartCoroutine(TransitionToScoreState());
         }
+    }
+    private IEnumerator TransitionToScoreState()
+    {
+        yield return new WaitForSeconds(2f);  // Adjust delay as needed
+    
+        GameEvents.ChangeState(GameState.ScoreState);
     }
 
     private IEnumerator HandlePlayerEliminationCoroutine(PlayerInput p)

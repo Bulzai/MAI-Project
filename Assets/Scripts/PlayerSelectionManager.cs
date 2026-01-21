@@ -234,7 +234,7 @@ public class PlayerSelectionManager : MonoBehaviour
     private void HandleReturnToMainMenu()
     {
         if (GameEvents.CurrentState != GameState.PlayerSelectionState) return;
-        
+        StopCountdownIfRunning();
         OnReturnToMainMenu?.Invoke();
         PlayerSelection.SetActive(false);
         MainMenu.SetActive(true);
