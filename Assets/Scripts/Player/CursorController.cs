@@ -183,7 +183,6 @@ public class CursorController : MonoBehaviour
     {
         if (gridItem == null || gridItem.Placed)
         {
-            OnCantPlaceItem?.Invoke();
             return;
         }
 
