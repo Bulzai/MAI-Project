@@ -137,14 +137,18 @@ MonoBehaviour:
   chocolateSelectSFX: {fileID: 5773656466734081815, guid: ac898821990c2cf4697c773c4c19d4af, type: 3}
   chocolateSubmitSFX: {fileID: 5773656466734081815, guid: ac898821990c2cf4697c773c4c19d4af, type: 3}
   chocolateHitSFX: {fileID: 5773656466734081815, guid: ac898821990c2cf4697c773c4c19d4af, type: 3}
-  canonSelectSFX: {fileID: 5773656466734081815, guid: 2dc1c9e4c18643d4e98df8c6d82feec5, type: 3}
+  canonSelectSFX: {fileID: 5773656466734081815, guid: 0313053917c1d13469e0ad47f9adebaa, type: 3}
   canonSubmitSFX: {fileID: 5773656466734081815, guid: 2dc1c9e4c18643d4e98df8c6d82feec5, type: 3}
   canonShootSFX: {fileID: 5773656466734081815, guid: 4fc109c1b0903f046930930dee2fc56b, type: 3}
   candleSelectSFX: {fileID: 5773656466734081815, guid: 33ca915e346f2524f9380a87de0a9f2c, type: 3}
   candleSubmitSFX: {fileID: 5773656466734081815, guid: 5d54e0e6c78028c4796bff925546e233, type: 3}
   candleIgniteSFX: {fileID: 5773656466734081815, guid: 33ca915e346f2524f9380a87de0a9f2c, type: 3}
-  iceSelectSFX: {fileID: 0}
-  iceSubmitSFX: {fileID: 0}
+  flameThrowerSelectSFX: {fileID: 5773656466734081815, guid: 7d158000ead0b1547bd11d8cfe952156, type: 3}
+  flameThrowerSubmitSFX: {fileID: 5773656466734081815, guid: 1e67dbc7a9c800b478f41819025ce379, type: 3}
+  flameThrowerBurnSFX: {fileID: 5773656466734081815, guid: bfd70d9c3c36f64438a41aa936374afc, type: 3}
+  bombSelectSFX: {fileID: 5773656466734081815, guid: 5a9301c21e16b7843b12918a64e02f24, type: 3}
+  bombSubmitSFX: {fileID: 5773656466734081815, guid: 4cb0f7a5a30e9104db15651926fc4ad9, type: 3}
+  bombExplodeSFX: {fileID: 5773656466734081815, guid: 724d4b2a5de3e684e99ea684655163ea, type: 3}
   forbiddenSignSFX: {fileID: 5773656466734081815, guid: 461d2b955e90f1243811acbe3e4cf3fb, type: 3}
   impactSFX:
   - {fileID: 5773656466734081815, guid: f1b9ed6c1af9d4e45a69a6d0bbb7cbce, type: 3}
@@ -167,10 +171,11 @@ MonoBehaviour:
   repelAuraSFX: {fileID: 5773656466734081815, guid: 8cc6a33adac451f4a8fb153230290eae, type: 3}
   confusionAuraSFX: {fileID: 5773656466734081815, guid: 42466639a4326e040996d4f978db1342, type: 3}
   auraSpawnSFX: {fileID: 5773656466734081815, guid: 6e5f13c4ad8ea9d47823cbd8c8fb21a2, type: 3}
+  guideScrollOpenSFX: {fileID: 5773656466734081815, guid: 69678ce37b9478143b057739e811af1a, type: 3}
+  guideScrollCloseSFX: {fileID: 5773656466734081815, guid: 4bee98b13633af74eb792bcbf19493c6, type: 3}
   pointsIncreaseSFX: {fileID: 5773656466734081815, guid: 832c1313e412eaf45b6ca6ea70ce6713, type: 3}
   bigFlameStartSFX: {fileID: 5773656466734081815, guid: 8bcdab55816bf8e4ca70b8c5efc7de3e, type: 3}
   bigFlameEndSFX: {fileID: 5773656466734081815, guid: eb9a6e3434aed15419f2037b24dc1167, type: 3}
-  countdownSurpriseBoxSFX: {fileID: 0}
   countDownGameStartSFX: {fileID: 5773656466734081815, guid: 39cc8f85d36667248a532d33d66d5041, type: 3}
   pauseMenuOpenSFX: {fileID: 5773656466734081815, guid: 6b54931400d230843ab6958d66f8b280, type: 3}
   pauseMenuCloseSFX: {fileID: 5773656466734081815, guid: be1ad5bd166cd184e85bbaf258359357, type: 3}
@@ -179,3 +184,4 @@ MonoBehaviour:
   - {fileID: 5773656466734081815, guid: dcf2abf09b93c054f95d79de8a595ff1, type: 3}
   - {fileID: 5773656466734081815, guid: 09cac59c395c9e349a0c12ff4306db37, type: 3}
   bigFlameTransitionSFX: {fileID: 5773656466734081815, guid: 5770f53729f2a8548b215399b45c6825, type: 3}
+  playerSelectionCountDownSFX: {fileID: 5773656466734081815, guid: 2ed014c9652f13f46a6178b36b8f0fc9, type: 3}

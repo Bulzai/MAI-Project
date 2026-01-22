@@ -59,9 +59,14 @@ public class AudioClipRefsSO : ScriptableObject
     public GameObject candleSelectSFX;
     public GameObject candleSubmitSFX;
     public GameObject candleIgniteSFX;
-
-    public GameObject iceSelectSFX;
-    public GameObject iceSubmitSFX;
+    
+    public GameObject flameThrowerSelectSFX;
+    public GameObject flameThrowerSubmitSFX;
+    public GameObject flameThrowerBurnSFX;
+    
+    public GameObject bombSelectSFX;
+    public GameObject bombSubmitSFX;
+    public GameObject bombExplodeSFX;
     
     public GameObject forbiddenSignSFX;
 
@@ -81,6 +86,9 @@ public class AudioClipRefsSO : ScriptableObject
     public GameObject confusionAuraSFX;
     public GameObject auraSpawnSFX;
     
+    [Header("GuideScroll SFX")]
+    public GameObject guideScrollOpenSFX;
+    public GameObject guideScrollCloseSFX;
     
     [Header("Final Score SFX")]
     public GameObject pointsIncreaseSFX;
@@ -88,7 +96,6 @@ public class AudioClipRefsSO : ScriptableObject
     [Header("Main Game SFX")]
     public GameObject bigFlameStartSFX;
     public GameObject bigFlameEndSFX;
-    public GameObject countdownSurpriseBoxSFX;
     public GameObject countDownGameStartSFX;
 
     [Header("Pause Game SFX")]
@@ -98,5 +105,9 @@ public class AudioClipRefsSO : ScriptableObject
  
     [Header("Transition SFX")]
     public GameObject bigFlameTransitionSFX;
+
+    [Header("PlayerSelection SFX")] 
+    public GameObject playerSelectionCountDownSFX;
+
 
 }

@@ -224,7 +224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalPrefab: {fileID: 4366111143107458009}
   isAvailable: 1
-  spawnRate: 90
+  spawnRate: 130
 --- !u!114 &4768463138552303426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,23 +590,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.77603
+      value: 0.8743264
       objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.7979556
+      value: 0.8851203
       objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalScale.z
-      value: 4.6648526
+      value: 2.2964725
       objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.35
+      value: 0.014
       objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0009819
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 4187779237051084106, guid: c00cc5ab2f9b4ab428126e31444aebb9, type: 3}
       propertyPath: m_LocalPosition.z

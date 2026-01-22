@@ -48,6 +48,8 @@ public class MenuFireTransition : MonoBehaviour
        yield return new WaitForSeconds(0.5f);
        transitionAnimator.gameObject.GetComponent<Image>().enabled = false;
        isPlaying = false;
+       yield return new WaitForSeconds(0.5f);
+
    }
    private void SetIsPlayingFalse()
    {

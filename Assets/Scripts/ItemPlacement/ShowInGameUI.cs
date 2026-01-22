@@ -16,6 +16,7 @@ public class ShowInGameUI : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnPlaceItemStateEntered += Show;
+        PlaceItemState.OnGuideScrollOpen += Hide;
         GameEvents.OnMainGameStateEntered += Hide;
     }
 
@@ -23,6 +24,8 @@ public class ShowInGameUI : MonoBehaviour
     {
         GameEvents.OnPlaceItemStateEntered -= Show;
         GameEvents.OnMainGameStateEntered -= Hide;
+        PlaceItemState.OnGuideScrollOpen -= Hide;
+
     }
 
     private void Show()

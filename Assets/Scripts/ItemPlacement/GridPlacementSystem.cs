@@ -59,6 +59,7 @@ public class GridPlacementSystem : MonoBehaviour
 
     private void Awake()
     {
+        ResetMainTileMap();
         Instance = this;
         MainTilemap.gameObject.SetActive(false);
         TempTilemap.gameObject.SetActive(false);

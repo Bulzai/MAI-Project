@@ -6,7 +6,7 @@ using UnityEngine;
 public class FlameBurner : MonoBehaviour
 {
     [Header("Einstellungen")]
-    public float startDelay = 0f;       // Verzögerung beim Spielstart (für asynchrone Fallen)
+    public float startDelay = 0f;       // Verzï¿½gerung beim Spielstart (fï¿½r asynchrone Fallen)
     public float idleTime = 3f;         // Wie lange die Falle AUS ist
     public float burnTime = 4f;         // Wie lange die Falle BRENNT
     public float endAnimDuration = 1.0f;
@@ -22,6 +22,7 @@ public class FlameBurner : MonoBehaviour
     private float damageCooldown = 0.5f; // Damit man nicht jeden Frame Schaden bekommt
     private float lastDamageTime;
 
+    public static event System.Action OnFlameBurnerAnimationStarted;
     void OnEnable()
     {
         Debug.Log("enabled flame burner");
@@ -34,7 +35,7 @@ public class FlameBurner : MonoBehaviour
         if (animator != null)
         {
             animator.enabled = true;
-            // NEU: Alte Trigger löschen, damit er nicht sofort losfeuert
+            // NEU: Alte Trigger lï¿½schen, damit er nicht sofort losfeuert
             animator.ResetTrigger("Ignite");
             animator.ResetTrigger("Extinguish");
             // NEU: Den Animator hart in den Idle-Zustand setzen
@@ -63,15 +64,15 @@ public class FlameBurner : MonoBehaviour
 
             yield return new WaitForSeconds(idleTime);
 
-            // === PHASE 2: START (Zünden) ===
+            // === PHASE 2: START (Zï¿½nden) ===
             // Jetzt Sprite einschalten, BEVOR die Animation startet -> NEU
             if (spriteRenderer != null) spriteRenderer.enabled = true;
 
             animator.SetTrigger("Ignite");
 
             //--------SOUND HIER START ----------
-
-            // Kurz warten bis Flamme groß genug für Schaden
+            OnFlameBurnerAnimationStarted?.Invoke();
+            // Kurz warten bis Flamme groï¿½ genug fï¿½r Schaden
             yield return new WaitForSeconds(0.45f);
 
             if (damageCollider != null) damageCollider.enabled = true;
@@ -79,7 +80,7 @@ public class FlameBurner : MonoBehaviour
             // === PHASE 3: LOOP (Brennen) ===
             yield return new WaitForSeconds(burnTime);
 
-            // === PHASE 4: END (Erlöschen) ===
+            // === PHASE 4: END (Erlï¿½schen) ===
 
             if (damageCollider != null) damageCollider.enabled = false;
 

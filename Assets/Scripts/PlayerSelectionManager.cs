@@ -16,7 +16,8 @@ public class PlayerSelectionManager : MonoBehaviour
     public static event Action OnSurpriseBoxStateTransitionStarted;
     public static event Action OnNotAllPlayersReady;
     public static event Action OnNobodyJoinedYet;
-    
+    public static event Action OnPlayerSelectionCountDownStarted;
+    public static event Action OnPlayerSelectionCountDownStopped;
     [SerializeField] private TMP_Text countdownText;
     private Coroutine countdownRoutine;
     
@@ -193,6 +194,7 @@ public class PlayerSelectionManager : MonoBehaviour
         
         // 2. Die Transition-Sequenz starten
         StartEnterCountdown();
+        OnPlayerSelectionCountDownStarted?.Invoke();
     }
 
     private IEnumerator TransitionToSurpriseBox()
@@ -208,6 +210,7 @@ public class PlayerSelectionManager : MonoBehaviour
         yield return new WaitForSeconds(1.1f);
 
         // 4. State-Wechsel genau JETZT ausf�hren
+
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
         {
             GameEvents.ChangeState(GameState.SurpriseBoxState);
@@ -244,6 +247,7 @@ public class PlayerSelectionManager : MonoBehaviour
     //countdown stuff
     private void StopCountdownIfRunning()
     {
+        OnPlayerSelectionCountDownStopped?.Invoke();
         if (countdownRoutine != null)
         {
             StopCoroutine(countdownRoutine);

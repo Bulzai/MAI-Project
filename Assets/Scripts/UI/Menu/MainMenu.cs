@@ -28,10 +28,14 @@ public class MainMenu : MonoBehaviour
         Time.timeScale = 1f;
         //SceneManager.LoadScene("MovementScene");
     }
-
-    public void QuitGame()
+    private IEnumerator PauseBeforeQuitting()
     {
+        yield return new WaitForSeconds(0.4f);
         Debug.Log("Quit");
         Application.Quit();
+    }
+    public void QuitGame()
+    {
+        StartCoroutine(PauseBeforeQuitting());
     }
 }

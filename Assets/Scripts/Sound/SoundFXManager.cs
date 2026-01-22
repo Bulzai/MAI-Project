@@ -22,6 +22,10 @@ public class SoundFXManager : MonoBehaviour
     private AudioSource _caneSubmitAndSelectSource;
     private AudioSource _stickyTileSubmitSource;
     private AudioSource _fireTransitionSource;
+    private AudioSource _playerSelectionCountdownSource;
+    private AudioSource _flameThrowerBurnSource;
+
+    private bool guideScrollIsOpen;
     private readonly List<AudioSource> _repelAuraActivatedSources = new List<AudioSource>();
     private void Awake()
         {
@@ -69,8 +73,11 @@ public class SoundFXManager : MonoBehaviour
         PlayerSelectionManager.OnStartGameSFX += PlayGameStartSFX;
         PlayerSelectionManager.OnPlayerReadySFX += PlayPlayerReadySFX;
         PlayerSelectionManager.OnSurpriseBoxStateTransitionStarted += PlayTransitionSFX;
+        PlayerSelectionManager.OnPlayerSelectionCountDownStarted += PlayPlayerSelectionCountdownSFX;
+        PlayerSelectionManager.OnPlayerSelectionCountDownStopped += StopPlayerSelectionCountdownSFX;
+        
         // Surpriseboxstate Events
-        GameEvents.OnSurpriseBoxStateEntered += PlayCountdownSFX;
+        SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
         SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
         CursorController.OnEnableCursor += PlayEnableCursorSFX;
         SurpriseBoxState.OnPlayerPickedItem += HandleItemSubmitSfx;
@@ -82,7 +89,11 @@ public class SoundFXManager : MonoBehaviour
         CursorController.OnCantPlaceItem += PlayForbiddenSignSFX;
         GridItem.OnRotateItem += PlayRotateItemSFX;
         GridItem.OnGridItemPlaced += HandleItemSubmitSfx;
-
+        PlaceItemState.OnGuideScrollClose += PlayGuideScrollCloseSFX;
+        PlaceItemState.OnGuideScrollOpen += PlayGuideScrollOpenSFX;
+        GridItem._OnBombPlaced += PlayBombExplodeSFX;
+        PlaceItemState.CountDownStarted += AllowFlameThrowerBurnSFXToPlayAgain;
+        
         // Main Game Events
 
         GameEvents.OnMainGameStateExited += PlayMainGameBigFlameEndSFX;
@@ -92,7 +103,8 @@ public class SoundFXManager : MonoBehaviour
         GameEvents.OnMainGameStateExited += PlayTransitionSFX;
         ProjectileLauncher.OnFireCanon += PlayCanonFireSFX;
         PlayerItemHandler.OnConfusionAuraHit += PlayConfusionAuraSFX;
-
+        FlameBurner.OnFlameBurnerAnimationStarted += PlayFlameThrowerBurnSFX;
+        
         // ScoreState Events
         PlayerScoreManager.OnPointsIncrease += PlayPointsIncreaseSFX;
         PlayerScoreManager.OnPointsIncreaseEnd += StopPointsIncreaseSFX;
@@ -154,13 +166,15 @@ public class SoundFXManager : MonoBehaviour
         PlayerSelectionManager.OnStartGameSFX -= PlayGameStartSFX;
         PlayerSelectionManager.OnPlayerReadySFX -= PlayPlayerReadySFX;
         PlayerSelectionManager.OnSurpriseBoxStateTransitionStarted -= PlayTransitionSFX;
+        PlayerSelectionManager.OnPlayerSelectionCountDownStarted -= PlayPlayerSelectionCountdownSFX;
+        PlayerSelectionManager.OnPlayerSelectionCountDownStopped -= StopPlayerSelectionCountdownSFX;
 
         // Surpriseboxstate Events
-        GameEvents.OnSurpriseBoxStateEntered -= PlayCountdownSFX;
+        SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
         SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
         CursorController.OnEnableCursor -= PlayEnableCursorSFX;
+        SurpriseBoxState.OnPlayerPickedItem -= HandleItemSubmitSfx;
         GridItem.OnPlayerSelecedtItem -= PlayPlayerSelecedtItemSFX;
-
 
         // PLACEITEM STATE EVENTS
         PlaceItemState.CountDownStarted -= PlayCountdownSFX;
@@ -168,6 +182,10 @@ public class SoundFXManager : MonoBehaviour
         CursorController.OnCantPlaceItem -= PlayForbiddenSignSFX;
         GridItem.OnRotateItem -= PlayRotateItemSFX;
         GridItem.OnGridItemPlaced -= HandleItemSubmitSfx;
+        PlaceItemState.OnGuideScrollClose -= PlayGuideScrollCloseSFX;
+        PlaceItemState.OnGuideScrollOpen -= PlayGuideScrollOpenSFX;
+        GridItem._OnBombPlaced -= PlayBombExplodeSFX;
+        PlaceItemState.CountDownStarted -= AllowFlameThrowerBurnSFXToPlayAgain;
 
         // Main Game Events
         GameEvents.OnMainGameStateExited -= PlayMainGameBigFlameEndSFX;
@@ -177,6 +195,7 @@ public class SoundFXManager : MonoBehaviour
         GameEvents.OnMainGameStateExited -= PlayTransitionSFX;
         ProjectileLauncher.OnFireCanon -= PlayCanonFireSFX;
         PlayerItemHandler.OnConfusionAuraHit -= PlayConfusionAuraSFX;
+        FlameBurner.OnFlameBurnerAnimationStarted -= PlayFlameThrowerBurnSFX;
 
         // ScoreState Events
         PlayerScoreManager.OnPointsIncrease -= PlayPointsIncreaseSFX;
@@ -228,6 +247,17 @@ public class SoundFXManager : MonoBehaviour
         var go = Instantiate(prefab, spawnTransform.position, Quaternion.identity);
         var audioSource = go.GetComponent<AudioSource>();
         audioSource.volume = volume;
+        audioSource.Play();
+        float clipLength = audioSource.clip.length;
+        Destroy(go, clipLength);
+    }
+    
+    public void PlayPausedGameSFXClip(GameObject audioPrefab, Transform spawnTransform, float volume = 1)
+    {
+        GameObject go = Instantiate(audioPrefab, spawnTransform.position, Quaternion.identity);
+        var audioSource = go.GetComponent<AudioSource>();
+        audioSource.volume = volume;
+        audioSource.ignoreListenerPause = true;
         audioSource.Play();
         float clipLength = audioSource.clip.length;
         Destroy(go, clipLength);
@@ -338,12 +368,12 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayPauseMenuOpenSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.pauseMenuOpenSFX, Camera.main.transform);
+        PlayPausedGameSFXClip(_audioClipRefsSo.pauseMenuOpenSFX, Camera.main.transform);
     }
 
     public void PlayPauseMenuCloseSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.pauseMenuCloseSFX, Camera.main.transform);
+        PlayPausedGameSFXClip(_audioClipRefsSo.pauseMenuCloseSFX, Camera.main.transform);
     }
 
     public void PlayCountdownSFX()
@@ -508,7 +538,7 @@ public class SoundFXManager : MonoBehaviour
                 break;
 
             case "Effect_Shooter":
-                PlayCanonSubmitSFX();
+                PlayCanonSelectSFX();
                 break;
 
             case "Candle":
@@ -525,6 +555,12 @@ public class SoundFXManager : MonoBehaviour
 
             case "cane":
                 PlayCaneSubmitAndSelectSFX();
+                break;
+            case "Bomb":
+                PlayBombSelectSFX();
+                break;
+            case "FlameBurner":
+                PlayFlameThrowerSelectSFX();
                 break;
 
         } 
@@ -580,6 +616,12 @@ public class SoundFXManager : MonoBehaviour
             case "cane":
                 PlayCaneSubmitAndSelectSFX();
                 break;
+            case "Bomb":
+                PlayBombSubmitSFX();
+                break;
+            case "FlameBurner":
+                PlayFlameThrowerSubmitSFX();
+                break;
 
         }
     }
@@ -606,9 +648,13 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayCanonSubmitSFX()
     {
-        PlaySoundFXClip(_audioClipRefsSo.canonSubmitSFX, Camera.main.transform, 0.2f);
+        PlaySoundFXClip(_audioClipRefsSo.canonSubmitSFX, Camera.main.transform, 0.4f);
     }
 
+    public void PlayCanonSelectSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.canonSelectSFX, Camera.main.transform, 0.4f);
+    }
     public void PlayCandleSubmitSFX()
     {
         PlaySoundFXClip(_audioClipRefsSo.candleSubmitSFX, Camera.main.transform, 0.6f);
@@ -735,4 +781,76 @@ public class SoundFXManager : MonoBehaviour
         if (_confusionAuraSource != null) Destroy(_confusionAuraSource.gameObject);
         _confusionAuraSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.confusionAuraSFX, Camera.main.transform, 0.7f);
     }
+    
+    public void PlayGuideScrollOpenSFX()
+    {
+        StopFlameThrowerBurnSFX();
+        PlaySoundFXClip(_audioClipRefsSo.guideScrollOpenSFX, Camera.main.transform);
+    }
+    
+    public void PlayGuideScrollCloseSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.guideScrollCloseSFX, Camera.main.transform);
+    }
+    
+    
+    public void PlayPlayerSelectionCountdownSFX()
+    {
+        if (_playerSelectionCountdownSource != null && _playerSelectionCountdownSource.isPlaying)
+            Destroy(_playerSelectionCountdownSource.gameObject);
+        _playerSelectionCountdownSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.playerSelectionCountDownSFX, Camera.main.transform);
+    }
+
+    public void PlayBombSelectSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.bombSelectSFX, Camera.main.transform, 1f);
+    }
+    
+    public void PlayBombSubmitSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.bombSubmitSFX, Camera.main.transform, 0.8f);
+    }
+
+    public void PlayBombExplodeSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.bombExplodeSFX, Camera.main.transform, 0.8f);
+    }
+
+    public void PlayFlameThrowerSelectSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.flameThrowerSelectSFX, Camera.main.transform, 0.4f);
+    }
+
+    public void PlayFlameThrowerSubmitSFX()
+    {
+        PlaySoundFXClip(_audioClipRefsSo.flameThrowerSubmitSFX, Camera.main.transform, 0.8f);
+    }
+    
+    public void PlayFlameThrowerBurnSFX()
+    {
+        if (guideScrollIsOpen) return;
+        if (_flameThrowerBurnSource != null && _flameThrowerBurnSource.isPlaying)
+            return;
+        if( _flameThrowerBurnSource != null) Destroy(_flameThrowerBurnSource.gameObject);
+        _flameThrowerBurnSource = PlayAndReturnSoundFXClip(_audioClipRefsSo.flameThrowerBurnSFX, Camera.main.transform, 0.5f);
+    }
+
+    public void StopPlayerSelectionCountdownSFX()
+    {
+        if (_playerSelectionCountdownSource != null) 
+            _playerSelectionCountdownSource.Stop();
+    }
+    
+    public void StopFlameThrowerBurnSFX()
+    {
+        guideScrollIsOpen = true;
+        if (_flameThrowerBurnSource != null) 
+            _flameThrowerBurnSource.Stop();
+    }
+    
+    public void AllowFlameThrowerBurnSFXToPlayAgain()
+    {
+        guideScrollIsOpen = false;
+    }
+
 }

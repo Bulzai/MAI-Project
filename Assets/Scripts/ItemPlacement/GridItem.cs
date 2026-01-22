@@ -16,7 +16,7 @@ public class GridItem : MonoBehaviour
     public static event Action OnRotateItem;
     public static event Action<GameObject> OnGridItemPlaced;
     public static event Action<GameObject> OnPlayerSelecedtItem;
-
+    public static event Action _OnBombPlaced;
     
     [Header("Attachment Settings")]
     public bool isAttachable = false;               // true for icy/sticky surfaces
@@ -115,6 +115,7 @@ public class GridItem : MonoBehaviour
         {
             // Hand off the logic to a Coroutine so it can handle timing
             StartCoroutine(BombExplosionSequence());
+            _OnBombPlaced?.Invoke();
             return;
         }
 

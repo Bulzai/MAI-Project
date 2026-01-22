@@ -20,6 +20,8 @@ public class PlaceItemState : MonoBehaviour
 
     public static Action CountDownStarted;
     public static Action CountDownFinished;
+    public static event Action OnGuideScrollOpen;
+    public static event Action OnGuideScrollClose;
 
 
     public GameObject guideScreen;
@@ -71,12 +73,14 @@ public class PlaceItemState : MonoBehaviour
     {
 
         Debug.Log("in coroutine");
+        yield return new WaitForSeconds(1.45f);
+
         guideScreen.SetActive(true);
 
         // 1. Trigger the "Open" animation
         // Use a Trigger named "Open" or a Bool named "isOpen"
         guideAnimator.SetTrigger("Open");
-
+        OnGuideScrollOpen?.Invoke();
         // 2. Wait for the screen to stay visible
         // Adjust 'showTime' to how long you want players to read the guide
         float showTime = 6.0f;
@@ -84,14 +88,16 @@ public class PlaceItemState : MonoBehaviour
 
         // 3. Trigger the "Close" animation
         guideAnimator.SetTrigger("Close");
+        OnGuideScrollClose?.Invoke();
 
         // 4. WAIT for the closing animation to actually finish
         // We look at the animator's current state to get the exact clip length
         float closeAnimDuration = 2f;
         yield return new WaitForSeconds(closeAnimDuration);
         guideScreen.SetActive(false);
-
-        // 5. NOW start the actual game countdown
+        
+        yield return new WaitForSeconds(0.7f);
+        // 5. NOW start the actual  game countdown
         countdownCoroutine = StartCoroutine(CountdownBeforeMainGame());
 
         Debug.Log("finished");

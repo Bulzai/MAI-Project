@@ -104,6 +104,8 @@ public class SurpriseBoxState : MonoBehaviour
 
     public IEnumerator PlayCountdown( Action onFinished, int seconds = 2, float timing = 0.6f)
     {
+        yield return new WaitForSeconds(0.7f);
+        OnSurpriseBoxStateCounterStarted?.Invoke();
         float countdown = seconds;
 
         countdownText.gameObject.SetActive(true);
@@ -236,7 +238,7 @@ public class SurpriseBoxState : MonoBehaviour
   
     private IEnumerator ExecuteTransitionThenChangeState()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
 
         OnFireTransitionAnimationStarted?.Invoke();
         // 1. Das Parent-Objekt finden und aktivieren
