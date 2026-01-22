@@ -439,7 +439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAttachable: 0
   ifAttachableAttachHere: {fileID: 0}
-  placementOffset: {x: 3.47, y: 1.01, z: 0}
+  placementOffset: {x: 2, y: 2, z: 0}
   forbiddenSignOffset: {x: 0, y: 0, z: 0}
   forbiddenSignScale: 10
   currentFacingDirection: 0
