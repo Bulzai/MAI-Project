@@ -16,7 +16,6 @@ public class PlaceItemState : MonoBehaviour
     //[SerializeField] private GridPlacementSystem gridPlacementSystem;
 
     [SerializeField] private TMP_Text countdownText;
-    [SerializeField] private TMP_Text milkText;
 
     public static Action CountDownStarted;
     public static Action CountDownFinished;
@@ -115,7 +114,6 @@ public class PlaceItemState : MonoBehaviour
         
         while (countdown > 0)
         {
-            milkText.gameObject.SetActive(true);
             countdownText.gameObject.SetActive(true);
             countdownText.text = countdown.ToString();
 
@@ -128,7 +126,6 @@ public class PlaceItemState : MonoBehaviour
         GameEvents.ChangeState(GameState.MainGameState);
         CountDownFinished?.Invoke();
         countdownText.gameObject.SetActive(false);
-        milkText.gameObject.SetActive(false);
         countdownCoroutine = null;               
 
     }
