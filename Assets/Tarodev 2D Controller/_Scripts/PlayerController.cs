@@ -150,6 +150,8 @@ namespace TarodevController
             else if (context.canceled)
             {
                 jumpHeld = false;
+                _jumpToConsume = false;
+                _timeJumpWasPressed = 0;
             }
         }
 
