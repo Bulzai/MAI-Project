@@ -19,8 +19,6 @@ public class PlayerManager : MonoBehaviour
     public static event Action OnPlayerJoinedSFX;
     
     
-    
-    
     public static PlayerManager Instance { get; private set; }
 
     public PlayerAnimator playerAnimator;
