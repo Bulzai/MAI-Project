@@ -33,7 +33,6 @@ public class MenuFireTransition : MonoBehaviour
    
    private IEnumerator ExecuteTransitionThenChangeState()
    {
-      // SupriseBoxState.OnFireTransitionAnimationStarted?.Invoke();
        // 1. Das Parent-Objekt finden und aktivieren
        transitionAnimator.gameObject.GetComponent<Image>().enabled = true;
 

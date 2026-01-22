@@ -65,6 +65,7 @@ public class PlaceItemState : MonoBehaviour
         if (countdownCoroutine == null)
         {
             StartCoroutine(ShowGuideSequence());
+            Debug.Log("Finshed placing starting roll seq");
         }
 
     }
@@ -100,9 +101,8 @@ public class PlaceItemState : MonoBehaviour
         }
         else
         {
-            // Optional: Hier könntest du eine kurze Verzögerung einbauen, 
             // damit das Spiel in späteren Runden nicht zu abrupt startet.
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.7f);
         }
 
         // 5. In JEDEM Fall (oder nach der Animation) den Countdown starten

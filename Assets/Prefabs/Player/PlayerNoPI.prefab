@@ -40649,7 +40649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pulseSpeed: 6
   pulseAmount: 0.15
-  baseScale: {x: 1.157822, y: 1.157822, z: 1.157822}
+  baseScale: {x: 2.809175, y: 2.809175, z: 2.809175}
 --- !u!1001 &8791851149583599559
 PrefabInstance:
   m_ObjectHideFlags: 0
