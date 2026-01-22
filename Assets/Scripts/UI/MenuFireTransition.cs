@@ -8,6 +8,7 @@ public class MenuFireTransition : MonoBehaviour
 {
    public StateChanger _stateChanger;
    public GameObject playerSelectionGameObject;
+   public GameObject playerSelectionState;
    [SerializeField] private Animator transitionAnimator;
    public MainMenu mainMenu;
    private bool isPlaying = false;
@@ -17,15 +18,21 @@ public class MenuFireTransition : MonoBehaviour
    {
        
        PlayerSelectionManager.OnReturnToMainMenu += SetIsPlayingFalse;
+       GameEvents.OnMenuStateEntered += SetIsPlayingFalse;
+       GameEvents.OnScoreStateEntered += SetIsPlayingFalse;
 
    }
    private void OnDestroy()
    {
        PlayerSelectionManager.OnReturnToMainMenu -= SetIsPlayingFalse;
+       GameEvents.OnMenuStateEntered -= SetIsPlayingFalse;
+       GameEvents.OnScoreStateEntered -= SetIsPlayingFalse;
+
    }
 
    public void PlayFireTransitionAnimation()
    {
+       Debug.Log("is playing: " + isPlaying);
        if (isPlaying) return;
        isPlaying = true;
        StartCoroutine(ExecuteTransitionThenChangeState());
@@ -43,6 +50,8 @@ public class MenuFireTransition : MonoBehaviour
 
        playerSelectionGameObject.SetActive(true);
        _stateChanger.GoToPlayerSelectState();
+       playerSelectionState.SetActive(true);
+
        mainMenu.PlayGame(); 
        yield return new WaitForSeconds(0.5f);
        transitionAnimator.gameObject.GetComponent<Image>().enabled = false;
