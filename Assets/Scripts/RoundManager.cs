@@ -16,7 +16,7 @@ public class RoundController : MonoBehaviour
     public PlayerManager playerManagerFinal;
     private PlayerScoreManager playerScoreManager;
 
-    private int currentRound = 0;
+    public int currentRound = 0;
     private Coroutine _advanceRoutine;
 
     private void Awake()
