@@ -15,7 +15,10 @@ EditorBuildSettings:
     path: Assets/Scenes/FinalScene.unity
     guid: fa3213cfe438e8e43afbe7c4cdf14ce1
   - enabled: 1
-    path: Assets/Scenes/FinalScene_v3.unity
+    path: Assets/Scenes/MultiPlayerScene.unity
     guid: 4805fbb964ae0184b88b20b245d4fb91
+  - enabled: 1
+    path: Assets/Scenes/SinglePlayerScene.unity
+    guid: a24a7aabe006e2244bb73147cfff0f88
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 23aa2018685cbe84fa6eac94a01a750b, type: 2}

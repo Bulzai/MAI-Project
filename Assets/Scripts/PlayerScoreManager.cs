@@ -36,6 +36,8 @@ public class PlayerScoreManager : MonoBehaviour
     private readonly int[] _roundPoints = new[] { 100, 75, 50, 25 };
     
 
+    
+    
 
     private static bool IsDestroyed(Object o) => o == null;
 

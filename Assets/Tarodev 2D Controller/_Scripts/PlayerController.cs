@@ -18,7 +18,7 @@ namespace TarodevController
         
         // SFX
         public static event Action OnPlayerJumped;
-        public static event Action OnPlayerLanded;
+        public static event Action OnPlayerLonanded;
         public static event Action OnPlayerRunning;
         
         [SerializeField] private ScriptableStats _stats;

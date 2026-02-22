@@ -12,7 +12,10 @@ public enum GameState
     PlaceItemState,
     MainGameState,
     ScoreState,
-    FinalScoreState
+    FinalScoreState,
+    SelectAIState,
+    CalculateItemPlacementState,
+    SinglePlayerGameState
 }
 
 public static class GameEvents
@@ -40,6 +43,12 @@ public static class GameEvents
     public static event Action OnScoreStateEntered;
 
     public static event Action OnFinalScoreStateEntered;
+    
+    public static event Action OnSelectAIStateEntered;
+    public static event Action OnSelectAIStateExited;
+    public static event Action OnSinglePlayerGameStateEntered;
+    public static event Action OnSinglePlayerGameStateExited;
+
 
     //—— Other events ——//
     public static event Action OnItemSelectionPanelOpened;
@@ -61,6 +70,12 @@ public static class GameEvents
                 break;
             case GameState.MainGameState:
                 OnMainGameStateExited?.Invoke();
+                break;
+            case GameState.SelectAIState:
+                OnSelectAIStateExited?.Invoke();
+                break;
+            case GameState.SinglePlayerGameState:
+                OnSinglePlayerGameStateExited?.Invoke();
                 break;
             // case GameState.MenuState:     OnMenuStateExited?.Invoke();     break;
             // ...etc for other states if you want exit hooks
@@ -97,6 +112,12 @@ public static class GameEvents
                 break;
             case GameState.FinalScoreState:
                 OnFinalScoreStateEntered?.Invoke();
+                break;
+            case GameState.SelectAIState:
+                OnSelectAIStateEntered?.Invoke();
+                break;
+            case GameState.SinglePlayerGameState:
+                OnSinglePlayerGameStateEntered?.Invoke();
                 break;
         }
     }

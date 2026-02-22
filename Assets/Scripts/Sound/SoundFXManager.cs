@@ -115,7 +115,6 @@ public class SoundFXManager : MonoBehaviour
         PlayerHealthSystem.OnPlayerTakeDamage += PlayPlayerTakeDamageSFX;
         PlayerHealthSystem.OnPlayerDeath += PlayPlayerDeathSFX;
         PlayerController.OnPlayerJumped += PlayJumpSFX;
-        PlayerController.OnPlayerLanded += PlayLandSFX;
         PlayerController.OnPlayerRunning += PlayFootstepSFX;
 
         // Aura Events
@@ -207,7 +206,6 @@ public class SoundFXManager : MonoBehaviour
         PlayerHealthSystem.OnPlayerTakeDamage -= PlayPlayerTakeDamageSFX;
         PlayerHealthSystem.OnPlayerDeath -= PlayPlayerDeathSFX;
         PlayerController.OnPlayerJumped -= PlayJumpSFX;
-        PlayerController.OnPlayerLanded -= PlayLandSFX;
         PlayerController.OnPlayerRunning -= PlayFootstepSFX;
 
 
