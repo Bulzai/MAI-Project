@@ -8,27 +8,31 @@ public class DynamicCamera2DManager : MonoBehaviour
     public float maxOrthographicSize = 20f;
     public float padding = 0.1f; // Padding around objects in screen space (0-1)
     public Vector3 fallbackPosition = Vector3.zero; // Position to use when no valid targets
-    public float fallbackSize = 10f; // Size to use when no valid targets
+    public float fallbackSize = 18f; // Size to use when no valid targets
     private bool dynamicEnabled = false;
     
     
     private Transform[] FocusObjects;
     
     
-    private void OnEnable()
+    private void Awake()
     {
         GameEvents.OnPlayerSelectionStateEntered += SetCameraPlayerSelectionStatePosition;
         GameEvents.OnSurpriseBoxStateEntered += SetCameraSurpriseBoxStatePosition;
         GameEvents.OnPlaceItemStateEntered += SetCameraPlaceItemStatePosition;
-        GameEvents.OnMainGameStateEntered +=  EnableDynamicCamera2D;
+        PlaceItemState.CountDownFinished +=  EnableDynamicCamera2D;
+        PlaceItemState.CountDownStarted += SetCameraDefaultPosition;
+        GameEvents.OnScoreStateEntered += SetCameraDefaultPosition;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         GameEvents.OnPlayerSelectionStateEntered -= SetCameraPlayerSelectionStatePosition;
         GameEvents.OnSurpriseBoxStateEntered -= SetCameraSurpriseBoxStatePosition;
         GameEvents.OnPlaceItemStateEntered -= SetCameraPlaceItemStatePosition;
-        GameEvents.OnMainGameStateEntered -=  EnableDynamicCamera2D;
+        PlaceItemState.CountDownFinished -=  EnableDynamicCamera2D;
+        PlaceItemState.CountDownStarted -= SetCameraDefaultPosition;
+        GameEvents.OnScoreStateEntered -= SetCameraDefaultPosition;
     }
     
     void Start()
@@ -136,9 +140,11 @@ public class DynamicCamera2DManager : MonoBehaviour
         DynamicCamera.transform.position = new Vector3(0f, 5.93f, -30f);
     }
 
-    private void SetCameraMainGameState()
+    private void SetCameraDefaultPosition()
     {
-        
+        dynamicEnabled = false;
+        DynamicCamera.orthographicSize = 18f;
+        DynamicCamera.transform.position = new Vector3(0, 8, -30);
     }
     private void EnableDynamicCamera2D()
     {

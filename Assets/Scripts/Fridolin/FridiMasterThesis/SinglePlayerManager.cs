@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TarodevController;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,7 @@ public class SinglePlayerManager : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private GameObject playerObject;
     [SerializeField] private Transform spawnPointPlayer;
+    [SerializeField] private CharacterAnimationLibrary characterLibrary;
 
     public static SinglePlayerManager Instance { get; private set; }
 
@@ -23,13 +25,14 @@ public class SinglePlayerManager : MonoBehaviour
         Instance = this;
         
         
-        GameEvents.OnMainGameStateEntered += SpawnPlayer;
+        PlaceItemState.CountDownStarted += SpawnPlayer;
         //GameEvents.OnMainGameStateExited += DespawnPlayer;
+        
     }
 
     private void OnDestroy()
     {
-        GameEvents.OnMainGameStateEntered -= SpawnPlayer;
+        PlaceItemState.CountDownStarted -= SpawnPlayer;
         //GameEvents.OnMainGameStateExited -= DespawnPlayer;
     }
 
@@ -53,6 +56,12 @@ public class SinglePlayerManager : MonoBehaviour
         GameObject root = playerObject;
 
         var characterTf = root.transform.Find("PlayerNoPI");
+        // ------------ASSIGN CHARACTER ANIMATION SET---------------------
+        var characterAnimator = characterTf.Find("Visual")?.GetComponent<PlayerAnimator>();
+        if (characterAnimator != null)
+        {
+            characterAnimator.SetLibrary(characterLibrary);
+        }
 
         var characterGO = characterTf.gameObject;
         characterGO.SetActive(true);
@@ -71,7 +80,6 @@ public class SinglePlayerManager : MonoBehaviour
             // If SetOnFire() actually sets burning, consider renaming;
             // keeping your call to preserve behavior.
             health.SetOnFire();
-            Debug.Log("current health: " + health.currentHealth);
         }
             
         var pi = root.GetComponent<PlayerInput>();
@@ -79,11 +87,7 @@ public class SinglePlayerManager : MonoBehaviour
         {
             pi.ActivateInput();
             pi.SwitchCurrentActionMap("Player");
-            Debug.Log("PlayerInput activated and switched to Player action map.");
         }
-        
-        characterGO.GetComponent<TarodevController.PlayerController>().EnableControls();
-            
         characterGO.transform.position = spawnPointPlayer.position;
 
     }

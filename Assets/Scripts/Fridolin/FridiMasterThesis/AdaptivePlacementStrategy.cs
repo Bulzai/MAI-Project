@@ -8,11 +8,12 @@ public class AdaptivePlacementStrategy : MonoBehaviour
     
     public void StartAdaptivePlacement()
     {
+        Debug.Log("AdaptivePlacementStrategy: StartAdaptivePlacement");
         PlacementFinished();
     }
     
     public void PlacementFinished()
     {
-        GameEvents.ChangeState(GameState.MainGameState);
+        StartCoroutine(CountdownManager.Instance.StartCountdown());
     }
 }

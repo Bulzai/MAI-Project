@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 //things to make sure: supported Items should only have a collider thinner than one cell and it should not overlap 2 cells
@@ -66,6 +67,7 @@ public class GridItem : MonoBehaviour
         occupiedCells.Clear();
 
         Collider2D col = GetComponentInChildren<Collider2D>();
+
         if (col == null)
         {
             Debug.LogWarning($"[GridItem] No collider found on {name}.");
@@ -88,11 +90,17 @@ public class GridItem : MonoBehaviour
                 {
                     Vector3Int cell = grid.WorldToCell(p);
                     if (!occupiedCells.Contains(cell))
+                    {
                         occupiedCells.Add(cell);
+                    }
                 }
             }
         }
+
     }
+    
+
+    
     public bool CanBePlaced()
     {
         if (isBomb)
@@ -126,10 +134,9 @@ public class GridItem : MonoBehaviour
         {
             GridPlacementSystem.Instance.TakeCell(cell);
         }
-
         Placed = true;
         OnGridItemPlaced?.Invoke(gameObject);
-        Debug.Log("invoking ongritemplaced with go " + gameObject);
+
     }
     private IEnumerator BombExplosionSequence()
     {
@@ -189,11 +196,9 @@ public class GridItem : MonoBehaviour
     public void ClearItemFromBomb()
     {
         UpdateOccupiedCells();
-        Debug.Log("clearing item");
         foreach (var cell in occupiedCells)
         {
             GridPlacementSystem.Instance.ClearCell(cell);
-            Debug.Log("clearing cell " + cell);
         }
         Destroy(gameObject);
     }
@@ -206,7 +211,6 @@ public class GridItem : MonoBehaviour
     }
     public void RotateClockwise()
     {
-        Debug.Log("RotateClockwise called on " + gameObject.tag);
         if (gameObject.tag == "Candle")
         {
             FlipHorizontal();
@@ -348,4 +352,17 @@ public class GridItem : MonoBehaviour
         }
     }
 
+    public void RotateRandomly()
+    {
+        int times = Random.Range(0, 4);
+        bool rotateClockwise = Random.value > 0.5f;
+        
+        for (int i = 0; i < times; i++)
+        {
+            if (rotateClockwise)
+                RotateClockwise();
+            else
+                RotateCounterclockwise();
+        }
+    }
 }

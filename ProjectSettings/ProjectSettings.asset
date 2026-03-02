@@ -915,11 +915,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: e0dc7922-2850-4caf-86a6-78e0fbb628fe
+  cloudProjectId: 5c9bfcc6-bd37-436f-bfcf-39dc3b194556
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: NMAProject
-  organizationId: bajtazar
+  projectName: MasterAIThesis
+  organizationId: unity_d06d6fc23e69a6e3c4b0
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

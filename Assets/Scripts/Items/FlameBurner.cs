@@ -25,8 +25,6 @@ public class FlameBurner : MonoBehaviour
     public static event System.Action OnFlameBurnerAnimationStarted;
     void OnEnable()
     {
-        Debug.Log("enabled flame burner");
-
         if (damageCollider != null)
             damageCollider.enabled = false;
 

@@ -639,10 +639,6 @@ public class GridPlacementSystem : MonoBehaviour
 
     public void TakeCell(Vector3Int cell)
     {
-        //if (!MainTilemap.gameObject.activeSelf)
-        //    MainTilemap.gameObject.SetActive(true);
-
-        // Mark this cell as occupied (blue tile)
         MainTilemap.SetTile(cell, tileBases[TileType.Red]);
     }
     

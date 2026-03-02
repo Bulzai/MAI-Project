@@ -34,12 +34,17 @@ public class RandomPlacementStrategy : MonoBehaviour
             if (platformMap.GetTile(pos) == validPlatformTile)
                 platformCells.Add(pos);
         }
-        
+
+        SinglePlayerScoreManager.SecondPlaythroughStarted += ClearItemParent;
+
     }
     
 
     public void StartRandomPlacement()
     {
+        // SHOW LOADING TEXT
+        
+        
         for (int i = 0; i < itemsToPlacePerRound; i++)
         {
             // do this on other thread
@@ -47,18 +52,23 @@ public class RandomPlacementStrategy : MonoBehaviour
             GameObject gridItemInstance = Instantiate(gridItem);
             TryPlaceItem(placeItemStateBounds.bounds, gridItemInstance);
         }
-            PlacementFinished();
+        PlacementFinished();
+            
     }
 
     public void PlacementFinished()
     {
-        GameEvents.ChangeState(GameState.MainGameState);
+        //HIDE LOADING TEXT
+        Debug.Log("Placement finished, starting countdown...");
+        StartCoroutine(CountdownManager.Instance.StartCountdown());
     }
     
         
     private bool CheckSpaceAndPlace(GameObject gridItemGO)
     {
         GridItem gridItemScript = gridItemGO.GetComponent<GridItem>();
+        gridItemScript.RotateRandomly();
+        Physics2D.SyncTransforms();
         if (gridItemScript.CanBePlaced())       
         {
             gridItemScript.Place();
@@ -86,10 +96,18 @@ public class RandomPlacementStrategy : MonoBehaviour
                 continue;
             
             gridItem.transform.position = candidateWorld;
-            Debug.Log("GridItem candidate position: " + candidateWorld);
+
             if (CheckSpaceAndPlace(gridItem))
                 return;
             
+        }
+    }
+    
+    private void ClearItemParent()
+    {
+        foreach (Transform child in itemsParent)
+        {
+            Destroy(child.gameObject);
         }
     }
     

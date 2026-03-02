@@ -123,7 +123,8 @@ public class SinglePlayerScoreManager : MonoBehaviour
     {
         PlayerTimeSurvivedText.text = "9000";
 
-        
+        SendDummyDataToPlayTestDataManager();
+
         if (scoreboardUI != null)
             scoreboardUI.SetActive(true);
     }
@@ -135,7 +136,6 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
     private void CaclulateFinalScore()
     {
-        
     }
     
     
@@ -151,7 +151,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     private IEnumerator OnContinueButtonClickedCoroutine()
     {
         yield return new WaitForSeconds(0.8f);
-        GameEvents.ChangeState(GameState.CalculateItemPlacementState);
+        GameEvents.ChangeState(GameState.SelectAIState);
 
     }
     
@@ -186,8 +186,23 @@ public class SinglePlayerScoreManager : MonoBehaviour
     private IEnumerator OnSecondPlaythroughButtonClickedCoroutine()
     {
         yield return new WaitForSeconds(0.8f);
-        GameEvents.ChangeState(GameState.CalculateItemPlacementState);
         SecondPlaythroughStarted?.Invoke();
+        
     }
 
+    private void SendDummyDataToPlayTestDataManager()
+    {
+        PlayTestDataManager.Instance?.LogRoundScoreAsync(
+            1,           // roundIndex
+            45,          // durationSeconds  
+            127,         // milkCollected
+            23,          // healthLost
+            1560,        // distanceTravelled
+            8,           // hitsTaken
+            342,         // damageDealt
+            87,          // blockedCoverage
+            4            // previousGamesPlayed
+        );
+        Debug.Log("Logged dummy RoundScore event!");
+    }
 }

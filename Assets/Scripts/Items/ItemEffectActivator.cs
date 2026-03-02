@@ -4,7 +4,7 @@ using UnityEngine;
 public class ItemEffectActivator : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private float activationDelay = 2f; // seconds
+    private float activationDelay = 4f; // seconds
     [SerializeField] private MonoBehaviour[] scriptsToToggle; // scripts you want to enable/disable
     public Animator animToToggle;
     private void OnEnable()
