@@ -15,21 +15,20 @@ public class SinglePlayerScoreManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI PlayerMilkCollectedText;
     [SerializeField] private TextMeshProUGUI PlayerDamageFromItemsText;
     [SerializeField] private Button ContinueButton;
-    [SerializeField] private Button SecondPlaythroughButton;
+    [SerializeField] private Button NextPlaythroughButton;
     [SerializeField] private Button MenuButton;
+    [SerializeField] private Button SmartPlacementQuestionnaireButton;
+    [SerializeField] private Button RandomPlacementQuestionnaireButton;
     
     [Header("Round Settings")]
     [SerializeField] private int maxRounds = 5;
     private int currentRound = 0;
     
     
-    // SECOND PLAYTHROUGH
-    private bool isSecondPlaythrough = false;
-    
     // EVENTS
     public static event Action StartFireTransition;
-    public static event Action SecondPlaythroughStarted;
-
+    public static event Action OnPlaythroughStarted;
+    public static event Action OnNextRoundStarted;
     
     public static SinglePlayerScoreManager Instance { get; private set; }
 
@@ -46,8 +45,8 @@ public class SinglePlayerScoreManager : MonoBehaviour
         PlayerHealthSystem.OnPlayerDeath += HandlePlayerDeath;
         ContinueButton.onClick.AddListener(OnContinueClicked);
         MenuButton.onClick.AddListener(OnMenuClicked);
-        SecondPlaythroughButton.onClick.AddListener(OnSecondPlaythroughButtonClicked);
-
+        NextPlaythroughButton.onClick.AddListener(OnNextPlaythroughButtonClicked);
+        
     }
 
     private void OnDestroy()
@@ -99,24 +98,47 @@ public class SinglePlayerScoreManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1.5f);
             ContinueButton.gameObject.SetActive(true);
+            PlayTestDataManager.Instance.LogRoundScore();
+        } 
+        else
+        {
+            PlayTestDataManager.Instance.LogRoundScore();
+            PlayTestDataManager.Instance.LogTotalScore();
+            ShowCorrectQuestionnaireButton();
+            ShowFinalScore();
+        } 
+    }
+
+    public void ShowCorrectQuestionnaireButton()
+    { 
+        PlaythroughType playthroughType = AISelector.Instance.currentPlaythroughType;
+        switch (playthroughType)
+        {
+            case PlaythroughType.Undefined:
+                Debug.LogError("Playthrough type is undefined!");
+                break;
+            case PlaythroughType.VersionA:
+                RandomPlacementQuestionnaireButton.gameObject.SetActive(true);
+                break;
+            case PlaythroughType.VersionB:
+                SmartPlacementQuestionnaireButton.gameObject.SetActive(true);
+                break;
+            default:
+                Debug.LogError("Unhandled playthrough type!");
+                break;
         }
+        RandomPlacementQuestionnaireButton.gameObject.SetActive(false);
+        SmartPlacementQuestionnaireButton.gameObject.SetActive(false);
+        
+        ShowMenuAndNextPlaythroughButtons();
         
 
-        if (currentRound >= maxRounds && !isSecondPlaythrough)
-        {
-            ShowFinalScore();
-            yield return new WaitForSeconds(1.5f);
-            SecondPlaythroughButton.gameObject.SetActive(true);    
-        }
-        
-        if (currentRound >= maxRounds && isSecondPlaythrough)
-        {
-            ShowFinalScore();
-            yield return new WaitForSeconds(1.5f);
-            MenuButton.gameObject.SetActive(true);
-        }
-        
-
+    }
+    
+    public void ShowMenuAndNextPlaythroughButtons()
+    {
+        MenuButton.gameObject.SetActive(true);
+        NextPlaythroughButton.gameObject.SetActive(true);
     }
     
     private void PrepareScoreBoardUI()
@@ -124,7 +146,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
         PlayerTimeSurvivedText.text = "9000";
 
         SendDummyDataToPlayTestDataManager();
-
+        PlayTestDataManager.Instance.SavePreviousGamesPlayed();
         if (scoreboardUI != null)
             scoreboardUI.SetActive(true);
     }
@@ -145,7 +167,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
         Debug.Log("Continue clicked!");
         StartFireTransition.Invoke();
         StartCoroutine(OnContinueButtonClickedCoroutine());
-
+        PlayTestDataManager.Instance.LogRoundScore();
     }
     
     private IEnumerator OnContinueButtonClickedCoroutine()
@@ -164,45 +186,42 @@ public class SinglePlayerScoreManager : MonoBehaviour
     }
     private IEnumerator OnMenuButtonClickedCoroutine()
     {
+        HideAllButtons();
         yield return new WaitForSeconds(0.8f);
         GameEvents.ChangeState(GameState.MenuState);
 
     }
 
 
-    private void OnSecondPlaythroughButtonClicked()
+    private void OnNextPlaythroughButtonClicked()
     {
-        SecondPlaythroughButton.gameObject.SetActive(false);    
+        HideAllButtons();
         StartFireTransition.Invoke();
-        StartCoroutine(OnSecondPlaythroughButtonClickedCoroutine());
+        StartCoroutine(OnNextPlaythroughButtonClickedCoroutine());
         currentRound = 0;
-        isSecondPlaythrough = true;
-        // Start second playthrough
-        // clear all data values
-        // write data to file
 
     }
 
-    private IEnumerator OnSecondPlaythroughButtonClickedCoroutine()
+    private IEnumerator OnNextPlaythroughButtonClickedCoroutine()
     {
         yield return new WaitForSeconds(0.8f);
-        SecondPlaythroughStarted?.Invoke();
+        OnPlaythroughStarted?.Invoke();
         
     }
 
     private void SendDummyDataToPlayTestDataManager()
     {
-        PlayTestDataManager.Instance?.LogRoundScore(
-            1,           // roundIndex
-            45,          // durationSeconds  
-            127,         // milkCollected
-            23,          // healthLost
-            1560,        // distanceTravelled
-            8,           // hitsTaken
-            342,         // damageDealt
-            87,          // blockedCoverage
-            4            // previousGamesPlayed
-        );
+        PlayTestDataManager.Instance?.LogRoundScore();
         Debug.Log("Logged dummy RoundScore event!");
+    }
+    
+    
+    private void HideAllButtons()
+    {
+        ContinueButton.gameObject.SetActive(false);
+        MenuButton.gameObject.SetActive(false);
+        NextPlaythroughButton.gameObject.SetActive(false);
+        SmartPlacementQuestionnaireButton.gameObject.SetActive(false);
+        RandomPlacementQuestionnaireButton.gameObject.SetActive(false);
     }
 }

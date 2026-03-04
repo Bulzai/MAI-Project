@@ -35,7 +35,7 @@ public class RandomPlacementStrategy : MonoBehaviour
                 platformCells.Add(pos);
         }
 
-        SinglePlayerScoreManager.SecondPlaythroughStarted += ClearItemParent;
+        SinglePlayerScoreManager.OnPlaythroughStarted += ClearItemParent;
 
     }
     

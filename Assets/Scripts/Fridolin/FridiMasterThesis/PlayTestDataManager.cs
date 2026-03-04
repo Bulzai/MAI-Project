@@ -19,6 +19,32 @@ public class PlayTestDataManager : MonoBehaviour
     public static PlayTestDataManager Instance { get; private set; }
 
 
+    private int blockedZoneCoverageSum;
+    private IntCounter nrTimesAddedToBlockedZoneCoverageSum { get; } = new();
+    public int previousGamesPlayed { get; private set; } = 0;
+    
+    // Round totals (reset per round)
+    public IntCounter roundIndex { get; } = new();
+    public IntCounter roundDurationSeconds { get; } = new();
+    public IntCounter roundMilkCollected { get; } = new();
+    public IntCounter roundHealthLost { get; } = new();
+    public IntCounter roundDistanceTravelled { get; } = new();
+    public IntCounter roundHitsTaken { get; } = new();
+    public IntCounter roundDamageDealt { get; } = new();
+    public IntCounter roundBlockedZoneCoveragePercent { get; } = new();
+    
+    
+    // Game totals (reset per game)
+    public IntCounter totalDurationSeconds { get; } = new();
+    public IntCounter totalMilkCollected { get; } = new();
+    public IntCounter totalHealthLost { get; } = new();
+    public IntCounter totalDistanceTravelled { get; } = new();
+    public IntCounter totalHitsTaken { get; } = new();
+    public IntCounter totalDamageDealt { get; } = new();
+    public IntCounter totalBlockedZoneCoveragePercent { get; } = new();
+    
+    
+
     private void Awake()
     {
         if (Instance != null)
@@ -33,6 +59,7 @@ public class PlayTestDataManager : MonoBehaviour
         sessionId = Guid.NewGuid().ToString("N")[..8];
         userId = LoadOrCreateUserId();
         CreatePlaytestFolder();
+        LoadPreviousGamesPlayed();
     }
 
     private void Start()
@@ -50,6 +77,44 @@ public class PlayTestDataManager : MonoBehaviour
     private void OnDestroy()
     {
         UnityServices.Initialized -= ChangeLocalDataToAnalyticsData;
+    }
+    
+    
+    private void LoadPreviousGamesPlayed()
+    {
+        string path = Path.Combine(playtestFolder, "previous_games_played.txt");
+        try 
+        {
+            if (File.Exists(path)) 
+            {
+                string content = File.ReadAllText(path).Trim();
+                if (int.TryParse(content, out int count))
+                {
+                    previousGamesPlayed = count;
+                    return;  // Success!
+                }
+            }
+        }
+        catch (Exception e) 
+        {
+            Debug.LogError($"Load games played failed: {e.Message}");
+        }
+        Debug.Log($"Loaded: {previousGamesPlayed} prior games");
+    }
+
+    public void SavePreviousGamesPlayed()
+    {
+        string path = Path.Combine(playtestFolder, "previous_games_played.txt");
+        try 
+        {
+            File.WriteAllText(path, previousGamesPlayed.ToString());  // Just "17"
+            Debug.Log($"Saved: {previousGamesPlayed} games");
+        }
+        catch (Exception e) 
+        {
+            Debug.LogError($"Save games played failed: {e.Message}");
+            // Continue - don't crash playtest!
+        }
     }
     
     private void CreatePlaytestFolder()
@@ -95,10 +160,7 @@ public class PlayTestDataManager : MonoBehaviour
         });
     }
 
-
-    public void LogRoundScore(int roundIndex, int durationSeconds, int milkCollected,
-        int healthLost, int distanceTravelled, int hitsTaken, int damageDealt, int blockedCoverage,
-        int previousGamesPlayed)
+    public void LogTotalScore()
     {
         Debug.Log("sessionfilepath: " + sessionFilePath);
         Debug.Log($"Logs at: {Application.persistentDataPath}");
@@ -108,62 +170,129 @@ public class PlayTestDataManager : MonoBehaviour
             CreateSessionFile();
         }
 
-        var scoreEvent = new LocalRoundScoreEvent
+        var localTotalScoreEvent = new LocalTotalScoreEvent
         {
-            roundIndex = roundIndex,
-            roundDurationSeconds = durationSeconds,
-            roundMilkCollected = milkCollected,
-            roundHealthLost = healthLost,
-            roundDistanceTravelled = distanceTravelled,
-            roundHitsTaken = hitsTaken,
-            roundDamageDealt = damageDealt,
-            roundBlockedZoneCoveragePercent = blockedCoverage,
-            previousGamesPlayedBySamePlayer = previousGamesPlayed
+            totalDurationSeconds = totalDurationSeconds.Value,
+            totalMilkCollected = totalMilkCollected.Value,
+            totalHealthLost = totalHealthLost.Value,
+            totalDistanceTravelled = totalDistanceTravelled.Value,
+            totalHitsTaken = totalHitsTaken.Value,
+            totalDamageDealt = totalDamageDealt.Value,
+            totalBlockedZoneCoveragePercent = totalBlockedZoneCoveragePercent.Value
         };
     
-        LogRoundScoreEvent(scoreEvent);
+        localTotalScoreEvent.timestamp = DateTime.UtcNow.ToString("o");
+        localTotalScoreEvent.userId = userId;
+        localTotalScoreEvent.sessionId = sessionId;
 
+        string jsonLine = JsonUtility.ToJson(localTotalScoreEvent, true) + "\n";
+        File.AppendAllText(sessionFilePath, jsonLine);
+        Debug.Log($"Logged local TotalScore event");
+
+    
         // Try online (Unity Analytics)
         if (UnityServices.State == ServicesInitializationState.Initialized)
         {
             try
             {
-                var unityEvent = new RoundScore
+                var analyticsTotalScoreEvent = new TotalScore
                 {
-                    roundIndex = roundIndex,
-                    roundDurationSeconds = durationSeconds,
-                    roundMilkCollected = milkCollected,
-                    roundHealthLost = healthLost,
-                    roundDistanceTravelled = distanceTravelled,
-                    roundHitsTaken = hitsTaken,
-                    roundDamageDealt = damageDealt,
-                    roundBlockedZoneCoveragePercent = blockedCoverage,
-                    previousGamesPlayedBySamePlayer = previousGamesPlayed
+                    totalDurationSeconds = totalDurationSeconds.Value,
+                    totalMilkCollected = totalMilkCollected.Value,
+                    totalHealthLost = totalHealthLost.Value,
+                    totalDistanceTravelled = totalDistanceTravelled.Value,
+                    totalHitsTaken = totalHitsTaken.Value,
+                    totalDamageDealt = totalDamageDealt.Value,
+                    totalBlockedZoneCoveragePercent = totalBlockedZoneCoveragePercent.Value
                 };
-                AnalyticsService.Instance.RecordEvent(unityEvent);
+                AnalyticsService.Instance.RecordEvent(analyticsTotalScoreEvent);
+                Debug.Log("Logged online TotalScore event");
             }
             catch (Exception e)
             {
                 Debug.LogWarning($"Online send failed: {e.Message}");
             }
         }
+        ResetAllCounters();
+        //TODO 
+        // fix all excpetion handling and implement LogPlaythroughPlacementStrategy(); which logs the strategy to a txt or json file in playtestfolder
     }
 
-    public Task LogTotalScore( /* your TotalScore parameters here - same pattern */){
-        // Similar implementation to LogRoundScore, but with TotalScore parameters
-        return Task.CompletedTask;
-    }
-
-    private void LogRoundScoreEvent(LocalRoundScoreEvent scoreEvent)
+    public void LogRoundScore()
     {
-        scoreEvent.timestamp = DateTime.UtcNow.ToString("o");
-        scoreEvent.userId = userId;
-        scoreEvent.sessionId = sessionId;
+        Debug.Log("sessionfilepath: " + sessionFilePath);
+        Debug.Log($"Logs at: {Application.persistentDataPath}");
 
-        string jsonLine = JsonUtility.ToJson(scoreEvent, true) + "\n";
+        if (sessionFilePath == null)
+        {
+            CreateSessionFile();
+        }
+
+        var localRoundScoreEvent = new LocalRoundScoreEvent
+        {
+            roundIndex = roundIndex.Value,
+            roundDurationSeconds = roundDurationSeconds.Value,
+            roundMilkCollected = roundMilkCollected.Value,
+            roundHealthLost = roundHealthLost.Value,
+            roundDistanceTravelled = roundDistanceTravelled.Value,
+            roundHitsTaken = roundHitsTaken.Value,
+            roundDamageDealt = roundDamageDealt.Value,
+            roundBlockedZoneCoveragePercent = roundBlockedZoneCoveragePercent.Value,
+            previousGamesPlayedBySamePlayer = previousGamesPlayed
+        };
+        
+        localRoundScoreEvent.timestamp = DateTime.UtcNow.ToString("o");
+        localRoundScoreEvent.userId = userId;
+        localRoundScoreEvent.sessionId = sessionId;
+
+        string jsonLine = JsonUtility.ToJson(localRoundScoreEvent, true) + "\n";
         File.AppendAllText(sessionFilePath, jsonLine);
-        Debug.Log($"Logged: {jsonLine}");
+        Debug.Log($"Logged local RoundScore event");
+
+        
+        // Try online (Unity Analytics)
+        if (UnityServices.State == ServicesInitializationState.Initialized)
+        {
+            try
+            {
+                var analyticsRoundScoreEvent = new RoundScore
+                {
+                    roundIndex = roundIndex.Value,
+                    roundDurationSeconds = roundDurationSeconds.Value,
+                    roundMilkCollected = roundMilkCollected.Value,
+                    roundHealthLost = roundHealthLost.Value,
+                    roundDistanceTravelled = roundDistanceTravelled.Value,
+                    roundHitsTaken = roundHitsTaken.Value,
+                    roundDamageDealt = roundDamageDealt.Value,
+                    roundBlockedZoneCoveragePercent = roundBlockedZoneCoveragePercent.Value,
+                    previousGamesPlayedBySamePlayer = previousGamesPlayed
+                };
+                AnalyticsService.Instance.RecordEvent(analyticsRoundScoreEvent);
+                Debug.Log("Logged online RoundScore event");
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Online send failed: {e.Message}");
+            }
+        }
+        UpdateTotalScoresWithCurrentRound();
+        ResetAllRoundCounters();
     }
+    
+    private void UpdateTotalScoresWithCurrentRound()
+    {
+        totalDurationSeconds.Increment(roundDurationSeconds.Value);
+        totalMilkCollected.Increment(roundMilkCollected.Value);
+        totalHealthLost.Increment(roundHealthLost.Value);
+        totalDistanceTravelled.Increment(roundDistanceTravelled.Value);
+        totalHitsTaken.Increment(roundHitsTaken.Value);
+        totalDamageDealt.Increment(roundDamageDealt.Value);
+        blockedZoneCoverageSum+= roundBlockedZoneCoveragePercent.Value;
+        nrTimesAddedToBlockedZoneCoverageSum.Increment();
+        totalBlockedZoneCoveragePercent.Reset();
+        totalBlockedZoneCoveragePercent.Increment(blockedZoneCoverageSum/ nrTimesAddedToBlockedZoneCoverageSum.Value);
+    }
+
     
     private void LogGameInitializedEvent(InitGameEvent initEvent)
     {
@@ -206,6 +335,37 @@ public class PlayTestDataManager : MonoBehaviour
 #endif
     }
     
+    public void ResetAllRoundCounters()
+    {
+        roundIndex.Reset();
+        roundDurationSeconds.Reset();
+        roundMilkCollected.Reset();
+        roundHealthLost.Reset();
+        roundDistanceTravelled.Reset();
+        roundHitsTaken.Reset();
+        roundDamageDealt.Reset();
+        roundBlockedZoneCoveragePercent.Reset();
+    }
+    
+    
+    public void ResetAllTotalScoreCounters()
+    {
+        totalDurationSeconds.Reset();
+        totalMilkCollected.Reset();
+        totalHealthLost.Reset();
+        totalDistanceTravelled.Reset();
+        totalHitsTaken.Reset();
+        totalDamageDealt.Reset();
+        totalBlockedZoneCoveragePercent.Reset();
+        blockedZoneCoverageSum = 0;
+        nrTimesAddedToBlockedZoneCoverageSum.Reset();
+    }
+
+    public void ResetAllCounters()
+    {
+        ResetAllTotalScoreCounters();
+        ResetAllRoundCounters();
+    }
     
     
 }
@@ -241,7 +401,7 @@ public class InitGameEvent
 
 
 [Serializable]
-public class LocalRoundTotalScoreEvent
+public class LocalTotalScoreEvent
 {
     public string eventName = "totalScore";
     public string timestamp;
@@ -256,3 +416,4 @@ public class LocalRoundTotalScoreEvent
     public int totalDamageDealt;
     public int totalBlockedZoneCoveragePercent;
 }
+

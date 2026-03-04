@@ -1441,7 +1441,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start Second playthrough
+  m_text: Play again
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -7894,8 +7894,10 @@ MonoBehaviour:
   PlayerMilkCollectedText: {fileID: 68532363}
   PlayerDamageFromItemsText: {fileID: 82695554}
   ContinueButton: {fileID: 1324739223}
-  SecondPlaythroughButton: {fileID: 782554058}
+  NextPlaythroughButton: {fileID: 782554058}
   MenuButton: {fileID: 1633319916}
+  SmartPlacementQuestionnaireButton: {fileID: 23784304}
+  RandomPlacementQuestionnaireButton: {fileID: 2085243643}
   maxRounds: 2
 --- !u!1 &590510295
 GameObject:
@@ -10905,7 +10907,7 @@ GameObject:
   - component: {fileID: 782554057}
   - component: {fileID: 782554056}
   m_Layer: 5
-  m_Name: StartSecondPlayThroughButton
+  m_Name: StartNextPlayThroughButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -207192,7 +207194,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2085243644}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 894979306}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2085243644
 MonoBehaviour:
   m_ObjectHideFlags: 0
