@@ -192,7 +192,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
 
     private void SendDummyDataToPlayTestDataManager()
     {
-        PlayTestDataManager.Instance?.LogRoundScoreAsync(
+        PlayTestDataManager.Instance?.LogRoundScore(
             1,           // roundIndex
             45,          // durationSeconds  
             127,         // milkCollected
