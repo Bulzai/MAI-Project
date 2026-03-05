@@ -15,5 +15,9 @@ public class TotalScore : Unity.Services.Analytics.Event
     public int totalHealthLost { set { SetParameter("totalHealthLost", value); } }
     public int totalHitsTaken { set { SetParameter("totalHitsTaken", value); } }
     public int totalMilkCollected { set { SetParameter("totalMilkCollected", value); } }
+    
+    public string totalPlacementStrategy {set { SetParameter("totalPlacementStrategy", value); } }
+    
+    public int totalPreviousGamesPlayedBySamePlayer { set { SetParameter("totalPreviousGamesPlayedBySamePlayer", value); } }
 
 }

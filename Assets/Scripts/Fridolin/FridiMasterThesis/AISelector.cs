@@ -46,10 +46,10 @@ public class AISelector : MonoBehaviour
              case PlaythroughType.Undefined:
                  Debug.LogError("Playthrough type is undefined!");
                  break;
-             case PlaythroughType.VersionA:
+             case PlaythroughType.A:
                  randomPlacementStrategy.StartRandomPlacement();
                  break;
-             case PlaythroughType.VersionB:
+             case PlaythroughType.B:
                  adaptivePlacementStrategy.StartAdaptivePlacement();
                  break;
              default:
@@ -99,15 +99,15 @@ public class AISelector : MonoBehaviour
     
         currentPlaythroughType = gamesPlayed switch
         {
-            0 => Random.Range(0f, 1f) < 0.5f ? PlaythroughType.VersionA : PlaythroughType.VersionB, 
-            1 => currentPlaythroughType == PlaythroughType.VersionA ? PlaythroughType.VersionB : PlaythroughType.VersionA,  // 2nd: other
-            _ => Random.Range(0f, 1f) < 0.5f ? PlaythroughType.VersionA : PlaythroughType.VersionB  // 3+: random
+            0 => Random.Range(0f, 1f) < 0.5f ? PlaythroughType.A : PlaythroughType.B, 
+            1 => currentPlaythroughType == PlaythroughType.A ? PlaythroughType.B : PlaythroughType.A,  // 2nd: other
+            _ => Random.Range(0f, 1f) < 0.5f ? PlaythroughType.A : PlaythroughType.B  // 3+: random
         };
     }
 }
 public enum PlaythroughType
 {
-    VersionA, 
-    VersionB,
+    A, 
+    B,
     Undefined
 }

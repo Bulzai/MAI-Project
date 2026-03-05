@@ -85,7 +85,6 @@ public class ExtingSpawner : MonoBehaviour
     private void Awake()
     {
         GameEvents.OnSelectAIStateEntered += PrepareSpawnPositionsSinglePLayer;
-        
         GameEvents.OnSurpriseBoxStateEntered += PrepareSpawnPositions;
         GameEvents.OnPlaceItemStateEntered += ShowPreviews;
         GameEvents.OnPlaceItemStateEntered += MarkExtinguisherTiles;
@@ -128,6 +127,7 @@ public class ExtingSpawner : MonoBehaviour
     
     public void PrepareSpawnPositionsSinglePLayer()
     {
+        Debug.Log("Preparing spawn positions for single player mode... in curent state: " + GameEvents.CurrentState);
         if (spawnPositionsPreparedSinglePlayer) return; // only do once per game
 
         finalSpawnCells.Clear();
@@ -146,7 +146,9 @@ public class ExtingSpawner : MonoBehaviour
             spawnIsTriangle.Add(true);
             triangleCount++;
         }
+
         spawnPositionsPrepared = true;
+        spawnPositionsPreparedSinglePlayer = true;
         MarkExtinguisherTiles();    
     }
     public void PrepareSpawnPositions()
@@ -498,5 +500,7 @@ public class ExtingSpawner : MonoBehaviour
     public void ResetExtinguisherSpawns()
     {
         spawnPositionsPrepared = false;
+        spawnPositionsPreparedSinglePlayer = false;
+        PrepareSpawnPositionsSinglePLayer();
     }
 }

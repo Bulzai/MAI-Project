@@ -15,5 +15,7 @@ public class RoundScore : Unity.Services.Analytics.Event
     public int roundHitsTaken { set { SetParameter("roundHitsTaken", value); } }
     public int roundDamageDealt { set { SetParameter("roundDamageDealt", value); } }
     public int roundBlockedZoneCoveragePercent { set { SetParameter("roundBlockedZoneCoveragePercent", value); } }
-    public int previousGamesPlayedBySamePlayer { set { SetParameter("previousGamesPlayedBySamePlayer", value); } }
+    public string roundPlacementStrategy { set { SetParameter("roundPlacementStrategy", value); } }
+    
+    public int roundPreviousGamesPlayedBySamePlayer { set { SetParameter("roundPreviousGamesPlayedBySamePlayer", value); } }
 }

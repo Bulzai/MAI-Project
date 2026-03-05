@@ -21,7 +21,7 @@ public class PlayTestDataManager : MonoBehaviour
 
     private int blockedZoneCoverageSum;
     private IntCounter nrTimesAddedToBlockedZoneCoverageSum { get; } = new();
-    public int previousGamesPlayed { get; private set; } = 0;
+    public int previousGamesPlayed { get; set; } = 0;
     
     // Round totals (reset per round)
     public IntCounter roundIndex { get; } = new();
@@ -120,27 +120,58 @@ public class PlayTestDataManager : MonoBehaviour
     private void CreatePlaytestFolder()
     {
         playtestFolder = Path.Combine(Application.persistentDataPath, "PlaytestData");
-        if (!Directory.Exists(playtestFolder))
+        try
         {
-            Directory.CreateDirectory(playtestFolder);
+            if (!Directory.Exists(playtestFolder))
+            {
+                Directory.CreateDirectory(playtestFolder);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to create playtest folder: {e.Message}");
+            playtestFolder = Application.persistentDataPath; // Fallback
         }
     }
-
     private void ChangeLocalDataToAnalyticsData()
     {
-        sessionId = AnalyticsService.Instance.SessionID;
-        userId = AnalyticsService.Instance.GetAnalyticsUserID();
+        try
+        {
+            sessionId = AnalyticsService.Instance.SessionID;
+            userId = AnalyticsService.Instance.GetAnalyticsUserID();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"Analytics service unavailable, using local IDs: {e.Message}");
+        }
     }
 
     private static string LoadOrCreateUserId()
     {
         string userFile = Path.Combine(Application.persistentDataPath, "user_id.txt");
-        if (File.Exists(userFile))
-            return File.ReadAllText(userFile).Trim();
+        try
+        {
+            if (File.Exists(userFile))
+            {
+                return File.ReadAllText(userFile).Trim();  // ← No try-catch!
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to read user ID: {e.Message}");
+        }
 
         string guid = Convert.ToBase64String(Guid.NewGuid().ToByteArray())[..16]
             .Replace("/", "").Replace("+", "").Replace("=", "");
-        File.WriteAllText(userFile, guid);
+        try
+        {
+            File.WriteAllText(userFile, guid);  // ← No try-catch!
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to write user ID: {e.Message}");
+            // Still return GUID - don't crash
+        }
         return guid;
     }
 
@@ -151,13 +182,20 @@ public class PlayTestDataManager : MonoBehaviour
         Debug.Log("sessionfilepath: " + sessionFilePath);
         Debug.Log($"Logs at: {Application.persistentDataPath}");
 
-
-        LogGameInitializedEvent(new InitGameEvent
+        try
         {
-            timestamp = DateTime.UtcNow.ToString("o"),
-            userId = userId,
-            sessionId = sessionId
-        });
+            LogGameInitializedEvent(new InitGameEvent
+            {
+                timestamp = DateTime.UtcNow.ToString("o"),
+                userId = userId,
+                sessionId = sessionId
+            });
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to create session file: {e.Message}");
+            sessionFilePath = null; // Mark as failed
+        }
     }
 
     public void LogTotalScore()
@@ -178,18 +216,25 @@ public class PlayTestDataManager : MonoBehaviour
             totalDistanceTravelled = totalDistanceTravelled.Value,
             totalHitsTaken = totalHitsTaken.Value,
             totalDamageDealt = totalDamageDealt.Value,
-            totalBlockedZoneCoveragePercent = totalBlockedZoneCoveragePercent.Value
+            totalBlockedZoneCoveragePercent = totalBlockedZoneCoveragePercent.Value,
+            totalPreviousGamesPlayedBySamePlayer = previousGamesPlayed,
+            totalPlacementStrategy = AISelector.Instance.currentPlaythroughType.ToString()
         };
     
         localTotalScoreEvent.timestamp = DateTime.UtcNow.ToString("o");
         localTotalScoreEvent.userId = userId;
         localTotalScoreEvent.sessionId = sessionId;
 
-        string jsonLine = JsonUtility.ToJson(localTotalScoreEvent, true) + "\n";
-        File.AppendAllText(sessionFilePath, jsonLine);
-        Debug.Log($"Logged local TotalScore event");
-
-    
+        try
+        {
+            string jsonLine = JsonUtility.ToJson(localTotalScoreEvent, true) + "\n";
+            File.AppendAllText(sessionFilePath, jsonLine);
+            Debug.Log($"Logged local {localTotalScoreEvent.eventName} event");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to log {localTotalScoreEvent.eventName}: {e.Message}");
+        }
         // Try online (Unity Analytics)
         if (UnityServices.State == ServicesInitializationState.Initialized)
         {
@@ -203,7 +248,9 @@ public class PlayTestDataManager : MonoBehaviour
                     totalDistanceTravelled = totalDistanceTravelled.Value,
                     totalHitsTaken = totalHitsTaken.Value,
                     totalDamageDealt = totalDamageDealt.Value,
-                    totalBlockedZoneCoveragePercent = totalBlockedZoneCoveragePercent.Value
+                    totalBlockedZoneCoveragePercent = totalBlockedZoneCoveragePercent.Value,
+                    totalPlacementStrategy = AISelector.Instance.currentPlaythroughType.ToString(),
+                    totalPreviousGamesPlayedBySamePlayer = previousGamesPlayed
                 };
                 AnalyticsService.Instance.RecordEvent(analyticsTotalScoreEvent);
                 Debug.Log("Logged online TotalScore event");
@@ -217,6 +264,8 @@ public class PlayTestDataManager : MonoBehaviour
         //TODO 
         // fix all excpetion handling and implement LogPlaythroughPlacementStrategy(); which logs the strategy to a txt or json file in playtestfolder
     }
+    
+    
 
     public void LogRoundScore()
     {
@@ -238,7 +287,8 @@ public class PlayTestDataManager : MonoBehaviour
             roundHitsTaken = roundHitsTaken.Value,
             roundDamageDealt = roundDamageDealt.Value,
             roundBlockedZoneCoveragePercent = roundBlockedZoneCoveragePercent.Value,
-            previousGamesPlayedBySamePlayer = previousGamesPlayed
+            roundPreviousGamesPlayedBySamePlayer = previousGamesPlayed,
+            roundPlacementStrategy = AISelector.Instance.currentPlaythroughType.ToString()
         };
         
         localRoundScoreEvent.timestamp = DateTime.UtcNow.ToString("o");
@@ -265,7 +315,8 @@ public class PlayTestDataManager : MonoBehaviour
                     roundHitsTaken = roundHitsTaken.Value,
                     roundDamageDealt = roundDamageDealt.Value,
                     roundBlockedZoneCoveragePercent = roundBlockedZoneCoveragePercent.Value,
-                    previousGamesPlayedBySamePlayer = previousGamesPlayed
+                    roundPlacementStrategy = AISelector.Instance.currentPlaythroughType.ToString(),
+                    roundPreviousGamesPlayedBySamePlayer = previousGamesPlayed
                 };
                 AnalyticsService.Instance.RecordEvent(analyticsRoundScoreEvent);
                 Debug.Log("Logged online RoundScore event");
@@ -290,7 +341,16 @@ public class PlayTestDataManager : MonoBehaviour
         blockedZoneCoverageSum+= roundBlockedZoneCoveragePercent.Value;
         nrTimesAddedToBlockedZoneCoverageSum.Increment();
         totalBlockedZoneCoveragePercent.Reset();
-        totalBlockedZoneCoveragePercent.Increment(blockedZoneCoverageSum/ nrTimesAddedToBlockedZoneCoverageSum.Value);
+        try
+        {
+            if (nrTimesAddedToBlockedZoneCoverageSum.Value > 0)
+                totalBlockedZoneCoveragePercent.Increment(blockedZoneCoverageSum / nrTimesAddedToBlockedZoneCoverageSum.Value);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to calculate avg blocked zone coverage: {e.Message}");
+        }
+        
     }
 
     
@@ -311,29 +371,27 @@ public class PlayTestDataManager : MonoBehaviour
         Application.OpenURL(randomPlacementQuestionnaireUrl);
     }
     
-
-#if UNITY_EDITOR || UNITY_STANDALONE
-#endif
-
     public void OpenPlaytestFolder()
     {
         string logFolder = playtestFolder;
-    
+        try
+        {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-        // Windows Explorer
-        Process.Start("explorer.exe", $"/open,\"{Application.persistentDataPath.Replace("/", "\\")}\"");
+            Process.Start("explorer.exe", $"/open,\"{Application.persistentDataPath.Replace("/", "\\")}\"");
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-        // Mac Finder  
         Process.Start("open", logFolder);
 #elif UNITY_STANDALONE_LINUX
-        // Linux File Manager
         Process.Start("xdg-open", logFolder);
 #else
-        // Mobile/WebGL - copy path to clipboard or show message
         Debug.Log($"Logs at: {logFolder}");
-        Application.OpenURL(logFolder);  // May work on some platforms
 #endif
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"Failed to open folder ({e.Message}). Path: {logFolder}");
+        }
     }
+    
     
     public void ResetAllRoundCounters()
     {
@@ -386,7 +444,8 @@ public class LocalRoundScoreEvent
     public int roundHitsTaken;
     public int roundDamageDealt;
     public int roundBlockedZoneCoveragePercent;
-    public int previousGamesPlayedBySamePlayer;
+    public int roundPreviousGamesPlayedBySamePlayer;
+    public string roundPlacementStrategy;
 }
 
 [Serializable]
@@ -415,5 +474,7 @@ public class LocalTotalScoreEvent
     public int totalHitsTaken;
     public int totalDamageDealt;
     public int totalBlockedZoneCoveragePercent;
+    public int totalPreviousGamesPlayedBySamePlayer;
+    public string totalPlacementStrategy;
 }
 

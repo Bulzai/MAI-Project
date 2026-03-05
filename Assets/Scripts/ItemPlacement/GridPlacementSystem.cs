@@ -64,12 +64,13 @@ public class GridPlacementSystem : MonoBehaviour
         MainTilemap.gameObject.SetActive(false);
         TempTilemap.gameObject.SetActive(false);
         GameEvents.OnMenuStateEntered += ResetMainTileMap;
-
+        SinglePlayerScoreManager.OnNextRoundStarted += ResetMainTileMap;
     }
 
     private void OnDestroy()
     {
         GameEvents.OnMenuStateEntered -= ResetMainTileMap;
+        SinglePlayerScoreManager.OnNextRoundStarted -= ResetMainTileMap;
     }
 
     private void Start()

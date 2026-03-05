@@ -19,6 +19,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     [SerializeField] private Button MenuButton;
     [SerializeField] private Button SmartPlacementQuestionnaireButton;
     [SerializeField] private Button RandomPlacementQuestionnaireButton;
+    [SerializeField] private Button OpenPlaytestDataFolderButton;
     
     [Header("Round Settings")]
     [SerializeField] private int maxRounds = 5;
@@ -96,12 +97,14 @@ public class SinglePlayerScoreManager : MonoBehaviour
 
         if (currentRound < maxRounds)
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2.5f);
             ContinueButton.gameObject.SetActive(true);
             PlayTestDataManager.Instance.LogRoundScore();
         } 
         else
         {
+            PlayTestDataManager.Instance.previousGamesPlayed++;
+            PlayTestDataManager.Instance.SavePreviousGamesPlayed();
             PlayTestDataManager.Instance.LogRoundScore();
             PlayTestDataManager.Instance.LogTotalScore();
             ShowCorrectQuestionnaireButton();
@@ -117,36 +120,45 @@ public class SinglePlayerScoreManager : MonoBehaviour
             case PlaythroughType.Undefined:
                 Debug.LogError("Playthrough type is undefined!");
                 break;
-            case PlaythroughType.VersionA:
+            case PlaythroughType.A:
                 RandomPlacementQuestionnaireButton.gameObject.SetActive(true);
                 break;
-            case PlaythroughType.VersionB:
+            case PlaythroughType.B:
                 SmartPlacementQuestionnaireButton.gameObject.SetActive(true);
                 break;
             default:
                 Debug.LogError("Unhandled playthrough type!");
                 break;
         }
-        RandomPlacementQuestionnaireButton.gameObject.SetActive(false);
-        SmartPlacementQuestionnaireButton.gameObject.SetActive(false);
-        
-        ShowMenuAndNextPlaythroughButtons();
-        
-
     }
     
-    public void ShowMenuAndNextPlaythroughButtons()
+    public void AfterQuestionnaireButtonWasClicked()
     {
+        StartCoroutine(AfterQuestionnaireDelayed());
+    }
+
+    private IEnumerator AfterQuestionnaireDelayed()
+    {
+        yield return new WaitForSeconds(1f);
+    
+        if (PlayTestDataManager.Instance.previousGamesPlayed > 1)
+            OpenPlaytestDataFolderButton.gameObject.SetActive(true);
+        else
+        {
+            NextPlaythroughButton.gameObject.SetActive(true);
+        }
+    }
+    public void AfterOpenPlaytestFolderButtonClicked()
+    {
+        OpenPlaytestDataFolderButton.gameObject.SetActive(false);
         MenuButton.gameObject.SetActive(true);
         NextPlaythroughButton.gameObject.SetActive(true);
     }
-    
+
     private void PrepareScoreBoardUI()
     {
         PlayerTimeSurvivedText.text = "9000";
 
-        SendDummyDataToPlayTestDataManager();
-        PlayTestDataManager.Instance.SavePreviousGamesPlayed();
         if (scoreboardUI != null)
             scoreboardUI.SetActive(true);
     }
@@ -167,14 +179,12 @@ public class SinglePlayerScoreManager : MonoBehaviour
         Debug.Log("Continue clicked!");
         StartFireTransition.Invoke();
         StartCoroutine(OnContinueButtonClickedCoroutine());
-        PlayTestDataManager.Instance.LogRoundScore();
     }
     
     private IEnumerator OnContinueButtonClickedCoroutine()
     {
         yield return new WaitForSeconds(0.8f);
-        GameEvents.ChangeState(GameState.SelectAIState);
-
+        OnNextRoundStarted?.Invoke();
     }
     
     private void OnMenuClicked()
@@ -207,12 +217,6 @@ public class SinglePlayerScoreManager : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         OnPlaythroughStarted?.Invoke();
         
-    }
-
-    private void SendDummyDataToPlayTestDataManager()
-    {
-        PlayTestDataManager.Instance?.LogRoundScore();
-        Debug.Log("Logged dummy RoundScore event!");
     }
     
     
