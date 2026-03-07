@@ -35,7 +35,6 @@ public class RandomPlacementStrategy : MonoBehaviour
                 platformCells.Add(pos);
         }
 
-        SinglePlayerScoreManager.OnPlaythroughStarted += ClearItemParent;
 
     }
     
@@ -103,7 +102,7 @@ public class RandomPlacementStrategy : MonoBehaviour
         }
     }
     
-    private void ClearItemParent()
+    public void ClearItemParent()
     {
         foreach (Transform child in itemsParent)
         {

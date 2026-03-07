@@ -59,8 +59,11 @@ public class AISelector : MonoBehaviour
      }
     private void StartNextPlaythrough()
     {
+        Debug.Log("selecting placement strategy for next playthrough");
         SelectPlacementStrategy();
+        Debug.Log("placement strategy is: " + currentPlaythroughType);
         StartPlacementStrategy();
+        Debug.Log("after startplacementstrategy and current playthrough type is: " + currentPlaythroughType);
     }
      /*
     public void HandleSelectAIStateEntered()

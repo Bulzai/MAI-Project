@@ -77,8 +77,7 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnMainGameStateExited -= StopSpawning;
         GameEvents.OnMainGameStateExited -= DisableExtinguisherContainer;
         GameEvents.OnMainGameStateEntered -= EnableExtinguisherContainer;
-        GameEvents.OnFinalScoreStateEntered -= ResetExtinguisherSpawns;
-        SinglePlayerScoreManager.OnPlaythroughStarted -= ResetExtinguisherSpawns;
+        SinglePlayerScoreManager.OnPrepareNextPlaythrough -= ResetExtinguisherSpawns;
 
     }
 
@@ -94,7 +93,7 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnMainGameStateExited += StopSpawning;
         GameEvents.OnMainGameStateExited += DisableExtinguisherContainer;
         GameEvents.OnMenuStateEntered += ResetExtinguisherSpawns;
-        SinglePlayerScoreManager.OnPlaythroughStarted += ResetExtinguisherSpawns;
+        SinglePlayerScoreManager.OnPrepareNextPlaythrough += ResetExtinguisherSpawns;
         
         platformCells = new HashSet<Vector3Int>();
         foreach (var pos in platformMap.cellBounds.allPositionsWithin)
@@ -115,12 +114,14 @@ public class ExtingSpawner : MonoBehaviour
     {
         HidePreviewsAndUnblockTiles(); // ensure previews are gone
 
+        Debug.Log("spawnroutine: " + _spawnRoutine);
         if (_spawnRoutine != null) StopCoroutine(_spawnRoutine);
         _spawnRoutine = StartCoroutine(SpawnLoopRoutine());
     }
 
     private void StopSpawning()
     {
+        Debug.Log("Stopping extinguisher spawns...");
         if (_spawnRoutine != null) StopCoroutine(_spawnRoutine);
         _spawnRoutine = null;
     }
@@ -128,6 +129,7 @@ public class ExtingSpawner : MonoBehaviour
     public void PrepareSpawnPositionsSinglePLayer()
     {
         Debug.Log("Preparing spawn positions for single player mode... in curent state: " + GameEvents.CurrentState);
+        Debug.Log("Spawn positions prepared single player: " + spawnPositionsPreparedSinglePlayer);
         if (spawnPositionsPreparedSinglePlayer) return; // only do once per game
 
         finalSpawnCells.Clear();
@@ -315,7 +317,6 @@ public class ExtingSpawner : MonoBehaviour
 
     private void DisableExtinguisherContainer()
     {
-        
         foreach (Transform child in extinguisherContainer) Destroy(child.gameObject);
         extinguisherContainer.gameObject.SetActive(false);
     }
@@ -348,6 +349,7 @@ public class ExtingSpawner : MonoBehaviour
 
     private IEnumerator SpawnLoopRoutine()
     {
+        Debug.Log("Nextindex at start of spawn loop: " + _nextIndex);
         while (!spawnPositionsPrepared)
         {
             if (loadingScreen != null) loadingScreen.SetActive(true);
@@ -363,8 +365,9 @@ public class ExtingSpawner : MonoBehaviour
             // time to spawn, or pickup requested immediate advance
             if (timer <= 0f || _advanceRequested)
             {
+                Debug.Log("next index inside while loop: " + _nextIndex + ", advance requested: " + _advanceRequested);
                 _advanceRequested = false;
-
+                
                 SpawnExtinguisherAtIndex(_nextIndex);
                 _nextIndex = (_nextIndex + 1) % finalSpawnCells.Count;
 
@@ -379,6 +382,10 @@ public class ExtingSpawner : MonoBehaviour
 
     public void SpawnExtinguisherAtIndex(int index)
     {
+        Debug.Log("Spawning extinguisher at index: " + index);
+        Debug.Log("all finalspawncells listed: " + string.Join(", ", finalSpawnCells));
+        Debug.Log("finalspawncell at index: " + finalSpawnCells[index]);
+        Debug.Log("finalspawncellcount " + finalSpawnCells.Count);
         Vector3Int cell = finalSpawnCells[index];
         Vector3 pos = grid.CellToWorld(cell) + grid.cellSize / 2f;
 
@@ -499,8 +506,11 @@ public class ExtingSpawner : MonoBehaviour
     
     public void ResetExtinguisherSpawns()
     {
+        GridPlacementSystem.Instance.ResetMainTileMap();
         spawnPositionsPrepared = false;
+        Debug.Log("Reseting extinguisher spawns for next playthrough...");
         spawnPositionsPreparedSinglePlayer = false;
+        Debug.Log("spawnpositionspreparedSingeplayer after reset: " + spawnPositionsPreparedSinglePlayer);
         PrepareSpawnPositionsSinglePLayer();
     }
 }

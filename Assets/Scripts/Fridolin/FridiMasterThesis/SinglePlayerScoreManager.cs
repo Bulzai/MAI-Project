@@ -29,6 +29,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     // EVENTS
     public static event Action StartFireTransition;
     public static event Action OnPlaythroughStarted;
+    public static event Action OnPrepareNextPlaythrough;
     public static event Action OnNextRoundStarted;
     
     public static SinglePlayerScoreManager Instance { get; private set; }
@@ -109,6 +110,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
             PlayTestDataManager.Instance.LogTotalScore();
             ShowCorrectQuestionnaireButton();
             ShowFinalScore();
+            RandomPlacementStrategy.Instance.ClearItemParent();
         } 
     }
 
@@ -214,6 +216,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
 
     private IEnumerator OnNextPlaythroughButtonClickedCoroutine()
     {
+        OnPrepareNextPlaythrough?.Invoke();
         yield return new WaitForSeconds(0.8f);
         OnPlaythroughStarted?.Invoke();
         
