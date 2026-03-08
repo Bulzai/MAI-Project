@@ -9,7 +9,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     [Header("Transition")]
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private GameObject scoreboardUI;
-    
+    [SerializeField] private GameObject rows;
     [Header("Scoreboard UI Elements")]
     [SerializeField] private TextMeshProUGUI PlayerTimeSurvivedText;
     [SerializeField] private TextMeshProUGUI PlayerMilkCollectedText;
@@ -68,9 +68,14 @@ public class SinglePlayerScoreManager : MonoBehaviour
         StartCoroutine(TransitionToScoreState());
     }
     
+    public void Handle10MilkCartonsCollected()
+    {
+        HandlePlayerDeath();
+    }
+    
     private IEnumerator TransitionToScoreState()
     {
-        yield return new WaitForSeconds(2f);  // Adjust delay as needed
+        yield return new WaitForSeconds(1.0f);  // Adjust delay as needed
         
         GameEvents.ChangeState(GameState.ScoreState);
         StartScoreboardSequence();
@@ -136,6 +141,9 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
     public void AfterQuestionnaireButtonWasClicked()
     {
+        RandomPlacementQuestionnaireButton.gameObject.SetActive(false);
+        SmartPlacementQuestionnaireButton.gameObject.SetActive(false);
+
         StartCoroutine(AfterQuestionnaireDelayed());
     }
 
@@ -153,12 +161,16 @@ public class SinglePlayerScoreManager : MonoBehaviour
     public void AfterOpenPlaytestFolderButtonClicked()
     {
         OpenPlaytestDataFolderButton.gameObject.SetActive(false);
-        MenuButton.gameObject.SetActive(true);
+        //MenuButton.gameObject.SetActive(true);
         NextPlaythroughButton.gameObject.SetActive(true);
     }
 
     private void PrepareScoreBoardUI()
     {
+        for (int i = 0; i < currentRound; i++)
+        {
+            rows.transform.GetChild(i).gameObject.SetActive(true);
+        }
         PlayerTimeSurvivedText.text = "9000";
 
         if (scoreboardUI != null)
@@ -186,9 +198,18 @@ public class SinglePlayerScoreManager : MonoBehaviour
     private IEnumerator OnContinueButtonClickedCoroutine()
     {
         yield return new WaitForSeconds(0.8f);
+        HideScoreBoard();
         OnNextRoundStarted?.Invoke();
     }
     
+    private void HideScoreBoard()
+    {
+        for (int i = 0; i < currentRound; i++)
+        {
+            rows.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        scoreboardUI.SetActive(false);
+    }
     private void OnMenuClicked()
     {
         MenuButton.gameObject.SetActive(false);    
@@ -218,6 +239,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     {
         OnPrepareNextPlaythrough?.Invoke();
         yield return new WaitForSeconds(0.8f);
+        HideScoreBoard();
         OnPlaythroughStarted?.Invoke();
         
     }

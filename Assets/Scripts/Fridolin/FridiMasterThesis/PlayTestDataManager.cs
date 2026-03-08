@@ -10,12 +10,25 @@ using Debug = UnityEngine.Debug;
 
 public class PlayTestDataManager : MonoBehaviour
 {
+    // 11 is with filled out -1 because something went wrong
+    // 10 is with >=10 previouslyPlayedgames
+    [Header("Google Forms - Playtest A")]
+    [SerializeField] private string[] playtestAForms = new string[11];
+
+    [Header("Google Forms - Playtest B")]
+    [SerializeField] private string[] playtestBForms = new string[11];
+
     private string sessionFilePath;
     private string userId;
     private string sessionId;
     private string playtestFolder;
     private string smartPlacementQuestionnaireUrl = "https://forms.gle/sHwD4YwLMEZendz27";
     private string randomPlacementQuestionnaireUrl = "";
+
+    private string oneGamePlayedPreviously =
+        "https://docs.google.com/forms/d/e/1FAIpQLSdeWe-ZOilO4Nkfgbdi0GM5tIqHfo6v6k_NmZDYB0xK44JsTA/viewform?usp=pp_url&entry.1468044015=1";
+    
+    
     public static PlayTestDataManager Instance { get; private set; }
 
 
@@ -79,6 +92,21 @@ public class PlayTestDataManager : MonoBehaviour
         UnityServices.Initialized -= ChangeLocalDataToAnalyticsData;
     }
     
+    public string GetFormLink(PlaythroughType playtestType, int previousGamesPlayed)
+    {
+        return playtestType switch
+        {
+            PlaythroughType.A => GetFormFromArray(playtestAForms, previousGamesPlayed),
+            PlaythroughType.B => GetFormFromArray(playtestBForms, previousGamesPlayed),
+            _ => playtestAForms[11]
+        };
+    }
+    
+    private string GetFormFromArray(string[] forms, int gamesPlayed)
+    {
+        int index = previousGamesPlayed -1;
+        return forms[index];
+    }
     
     private void LoadPreviousGamesPlayed()
     {
@@ -107,7 +135,7 @@ public class PlayTestDataManager : MonoBehaviour
         string path = Path.Combine(playtestFolder, "previous_games_played.txt");
         try 
         {
-            File.WriteAllText(path, previousGamesPlayed.ToString());  // Just "17"
+            File.WriteAllText(path, previousGamesPlayed.ToString()); 
             Debug.Log($"Saved: {previousGamesPlayed} games");
         }
         catch (Exception e) 

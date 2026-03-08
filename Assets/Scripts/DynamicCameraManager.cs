@@ -5,10 +5,10 @@ public class DynamicCamera2DManager : MonoBehaviour
     public Camera DynamicCamera;
     public float speed = 1f;
     public float minOrthographicSize = 5f;
-    public float maxOrthographicSize = 20f;
+    public float maxOrthographicSize = 21f;
     public float padding = 0.1f; // Padding around objects in screen space (0-1)
     public Vector3 fallbackPosition = Vector3.zero; // Position to use when no valid targets
-    public float fallbackSize = 18f; // Size to use when no valid targets
+    public float fallbackSize = 21f; // Size to use when no valid targets
     private bool dynamicEnabled = false;
     
     
@@ -143,7 +143,7 @@ public class DynamicCamera2DManager : MonoBehaviour
     private void SetCameraDefaultPosition()
     {
         dynamicEnabled = false;
-        DynamicCamera.orthographicSize = 18f;
+        DynamicCamera.orthographicSize = 21f;
         DynamicCamera.transform.position = new Vector3(0, 8, -30);
     }
     private void EnableDynamicCamera2D()

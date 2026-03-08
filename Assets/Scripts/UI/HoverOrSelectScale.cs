@@ -14,7 +14,7 @@ public class HoverOrSelectScale : MonoBehaviour,
 
     private Vector3 _originalScale;
     private bool _isPointerOver = false;
-    private bool _isSelected = false;
+    public bool _isSelected = false;
     private float _pulseTime = 0f; // Local pulse timer
 
     void Awake()
@@ -25,7 +25,6 @@ public class HoverOrSelectScale : MonoBehaviour,
     void OnEnable()
     {
         _isPointerOver = false;
-        _isSelected = false;
         _pulseTime = 0f;
         transform.localScale = _originalScale;
     }

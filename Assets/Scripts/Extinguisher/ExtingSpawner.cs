@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 
 public class ExtingSpawner : MonoBehaviour
 {
+    private const int NR_OF_EXTINGUISHERS_TO_SPAWN = 10;
     [Header("Grid Reference")]
     [SerializeField] private GridPlacementSystem gridPlacement;
 
@@ -114,22 +115,18 @@ public class ExtingSpawner : MonoBehaviour
     {
         HidePreviewsAndUnblockTiles(); // ensure previews are gone
 
-        Debug.Log("spawnroutine: " + _spawnRoutine);
         if (_spawnRoutine != null) StopCoroutine(_spawnRoutine);
         _spawnRoutine = StartCoroutine(SpawnLoopRoutine());
     }
 
     private void StopSpawning()
     {
-        Debug.Log("Stopping extinguisher spawns...");
         if (_spawnRoutine != null) StopCoroutine(_spawnRoutine);
         _spawnRoutine = null;
     }
     
     public void PrepareSpawnPositionsSinglePLayer()
     {
-        Debug.Log("Preparing spawn positions for single player mode... in curent state: " + GameEvents.CurrentState);
-        Debug.Log("Spawn positions prepared single player: " + spawnPositionsPreparedSinglePlayer);
         if (spawnPositionsPreparedSinglePlayer) return; // only do once per game
 
         finalSpawnCells.Clear();
@@ -349,7 +346,7 @@ public class ExtingSpawner : MonoBehaviour
 
     private IEnumerator SpawnLoopRoutine()
     {
-        Debug.Log("Nextindex at start of spawn loop: " + _nextIndex);
+        int extinguishersToSpawn = NR_OF_EXTINGUISHERS_TO_SPAWN;
         while (!spawnPositionsPrepared)
         {
             if (loadingScreen != null) loadingScreen.SetActive(true);
@@ -365,27 +362,26 @@ public class ExtingSpawner : MonoBehaviour
             // time to spawn, or pickup requested immediate advance
             if (timer <= 0f || _advanceRequested)
             {
-                Debug.Log("next index inside while loop: " + _nextIndex + ", advance requested: " + _advanceRequested);
                 _advanceRequested = false;
-                
+                extinguishersToSpawn--;
+                if (extinguishersToSpawn < 0) break;
                 SpawnExtinguisherAtIndex(_nextIndex);
                 _nextIndex = (_nextIndex + 1) % finalSpawnCells.Count;
 
                 timer = spawnInterval; // reset the “counter”
-            }
 
+            }
+            
             timer -= Time.deltaTime;
             yield return null; // frame-by-frame so we can interrupt
         }
+        SinglePlayerScoreManager.Instance.Handle10MilkCartonsCollected();
     }
 
 
     public void SpawnExtinguisherAtIndex(int index)
     {
-        Debug.Log("Spawning extinguisher at index: " + index);
-        Debug.Log("all finalspawncells listed: " + string.Join(", ", finalSpawnCells));
-        Debug.Log("finalspawncell at index: " + finalSpawnCells[index]);
-        Debug.Log("finalspawncellcount " + finalSpawnCells.Count);
+
         Vector3Int cell = finalSpawnCells[index];
         Vector3 pos = grid.CellToWorld(cell) + grid.cellSize / 2f;
 
@@ -508,9 +504,7 @@ public class ExtingSpawner : MonoBehaviour
     {
         GridPlacementSystem.Instance.ResetMainTileMap();
         spawnPositionsPrepared = false;
-        Debug.Log("Reseting extinguisher spawns for next playthrough...");
         spawnPositionsPreparedSinglePlayer = false;
-        Debug.Log("spawnpositionspreparedSingeplayer after reset: " + spawnPositionsPreparedSinglePlayer);
         PrepareSpawnPositionsSinglePLayer();
     }
 }

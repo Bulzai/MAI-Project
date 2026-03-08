@@ -20,7 +20,7 @@ public class CountdownManager : MonoBehaviour
         Instance = this;
     }
 
-    public IEnumerator StartCountdown( int countdown = 2, float timing = 0.8f)
+    public IEnumerator StartCountdown( int countdown = 2, float timing = 0.7f)
     {
         PlaceItemState.CountDownStarted?.Invoke();
         GameEvents.ChangeState(GameState.MainGameState);
