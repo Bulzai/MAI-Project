@@ -64,15 +64,6 @@ public class GridPlacementSystem : MonoBehaviour
         MainTilemap.gameObject.SetActive(false);
         TempTilemap.gameObject.SetActive(false);
         GameEvents.OnMenuStateEntered += ResetMainTileMap;
-    }
-
-    private void OnDestroy()
-    {
-        GameEvents.OnMenuStateEntered -= ResetMainTileMap;
-    }
-
-    private void Start()
-    {
         if (tileBases == null) tileBases = new Dictionary<TileType, TileBase>();
 
         string tilePath = "Tiles/";
@@ -85,6 +76,16 @@ public class GridPlacementSystem : MonoBehaviour
         tileBases.Add(TileType.Black, Resources.Load<TileBase>(tilePath + "TilesGrid 1_2"));
         tileBases.Add(TileType.Orange, Resources.Load<TileBase>(tilePath + "TilesGrid 1_1"));
         tileBases.Add(TileType.Blue, Resources.Load<TileBase>(tilePath + "TilesGrid 1_8"));
+
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.OnMenuStateEntered -= ResetMainTileMap;
+    }
+
+    private void Start()
+    {
 
 
     }
@@ -640,7 +641,13 @@ public class GridPlacementSystem : MonoBehaviour
     {
         MainTilemap.SetTile(cell, tileBases[TileType.Red]);
     }
-    
+    public void TakeCellBounds(Vector3Int cell)
+    {
+        //get random tiletype
+        TileType randomType = (TileType)UnityEngine.Random.Range(0, Enum.GetValues(typeof(TileType)).Length);
+        TempTilemap.SetTile(cell, tileBases[randomType]);
+    }
+
     public void ClearCell(Vector3Int cell)
     {
         //if (!MainTilemap.gameObject.activeSelf)
@@ -679,7 +686,6 @@ public enum TileType
     Blue,
     Red,
     Turquois,
-    Green,
     Orange,
     Violet,
     Yellow,

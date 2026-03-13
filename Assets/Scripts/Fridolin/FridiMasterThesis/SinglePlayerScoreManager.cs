@@ -23,7 +23,6 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
     [Header("Round Settings")]
     [SerializeField] private int maxRounds = 5;
-    private int currentRound = 0;
     
     
     // EVENTS
@@ -58,10 +57,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
         MenuButton.onClick.RemoveListener(OnMenuClicked);
     }
     
-    private void IncreaseRoundsCounter()
-    {
-        currentRound++;
-    }
+
     
     private void HandlePlayerDeath()
     { 
@@ -83,7 +79,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
     private void StartScoreboardSequence()
     {
-        IncreaseRoundsCounter();
+        PlayTestDataManager.Instance.roundIndex.Increment();
         StartFireTransition?.Invoke();
         StopAllCoroutines();
         StartCoroutine(ScoreboardSequenceCoroutine());
@@ -101,7 +97,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
         // change text values
 
-        if (currentRound < maxRounds)
+        if (PlayTestDataManager.Instance.roundIndex.Value < maxRounds)
         {
             yield return new WaitForSeconds(2.5f);
             ContinueButton.gameObject.SetActive(true);
@@ -167,7 +163,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
 
     private void PrepareScoreBoardUI()
     {
-        for (int i = 0; i < currentRound; i++)
+        for (int i = 0; i < PlayTestDataManager.Instance.roundIndex.Value; i++)
         {
             rows.transform.GetChild(i).gameObject.SetActive(true);
         }
@@ -204,7 +200,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
     private void HideScoreBoard()
     {
-        for (int i = 0; i < currentRound; i++)
+        for (int i = 0; i < PlayTestDataManager.Instance.roundIndex.Value; i++)
         {
             rows.transform.GetChild(i).gameObject.SetActive(false);
         }
@@ -231,7 +227,6 @@ public class SinglePlayerScoreManager : MonoBehaviour
         HideAllButtons();
         StartFireTransition.Invoke();
         StartCoroutine(OnNextPlaythroughButtonClickedCoroutine());
-        currentRound = 0;
 
     }
 

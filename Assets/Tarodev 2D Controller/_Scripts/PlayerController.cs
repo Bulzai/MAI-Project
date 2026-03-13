@@ -145,7 +145,7 @@ namespace TarodevController
                 if (lockedControls) return;
                 jumpPressed = true;
                 jumpHeld = true;
-                OnPlayerJumped?.Invoke();
+                if (GameEvents.CurrentState == GameState.MainGameState) OnPlayerJumped?.Invoke();
             }
             else if (context.canceled)
             {

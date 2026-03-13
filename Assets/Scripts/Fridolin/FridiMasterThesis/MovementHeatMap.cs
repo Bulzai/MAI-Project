@@ -10,10 +10,10 @@ public class MovementHeatmap : MonoBehaviour
     public Collider2D playerCollider;
     
     [Header("Config")]
-    public float decayPerRound = 0.8f; // Recent rounds weigh more
+    public float decayPerRound = 0.8f;
     public int maxRounds = 10;
     
-    private Dictionary<Vector3Int, CellData> heatmap = new(1024);
+    private Dictionary<Vector3Int, CellData> heatmap = new(3000);
     private Vector3Int[] activeCells;
     private float currentDecay = 1f;
     private int currentRound = 0;

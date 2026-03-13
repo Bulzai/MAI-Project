@@ -1,5 +1,82 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &589379185134338296
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2555869497298953077}
+  - component: {fileID: 7904799098813400048}
+  m_Layer: 0
+  m_Name: AttackRangeCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2555869497298953077
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589379185134338296}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.79687655, w: 0.60414225}
+  m_LocalPosition: {x: -1.8200002, y: -2.71, z: 0}
+  m_LocalScale: {x: 2.7719638, y: 4.0078635, z: 2.0397906}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1011671276980388990}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -105.666}
+--- !u!61 &7904799098813400048
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589379185134338296}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.5, y: 0.35}
+    newSize: {x: 1.5, y: 0.35}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 0.35}
+  m_EdgeRadius: 0
 --- !u!1 &938866988785782912
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,6 +291,7 @@ GameObject:
   - component: {fileID: 7836686667989777130}
   - component: {fileID: 6559029422137995047}
   - component: {fileID: 1408195972219445002}
+  - component: {fileID: 324638697836912337}
   m_Layer: 6
   m_Name: FlameBurner
   m_TagString: GridItem
@@ -240,6 +318,7 @@ Transform:
   - {fileID: 8385507283747247656}
   - {fileID: 3548471961753597189}
   - {fileID: 2256432084709213480}
+  - {fileID: 2555869497298953077}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!60 &6999728589641541804
@@ -569,6 +648,20 @@ MonoBehaviour:
   scriptsToToggle:
   - {fileID: 2051723310366954555}
   animToToggle: {fileID: 984314300335698963}
+--- !u!114 &324638697836912337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4366111143107458009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d2c1145dd946aa4daddb2f03e619311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lethalityScore: 50
+  attackRangeCollider: {fileID: 7904799098813400048}
 --- !u!1 &4479385391483712919
 GameObject:
   m_ObjectHideFlags: 0

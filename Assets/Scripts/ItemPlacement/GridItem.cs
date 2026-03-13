@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 
-//things to make sure: supported Items should only have a collider thinner than one cell and it should not overlap 2 cells
+//things to make sure: supported Items (items that need to be placed on a surface) should only have a collider thinner than one cell and it should not overlap 2 cells
 // set requires support true for those items
 // placementOffset positions the item relative to the cursor
 // forbiddenSignScale should be adjusted manually depending on item size (for the sign not to stretch, the item should only be scaled uniformly, for example: 1,1,1; 0.5,0.5,0.5
@@ -14,6 +14,7 @@ using Random = UnityEngine.Random;
 
 public class GridItem : MonoBehaviour
 {
+    
     public static event Action OnRotateItem;
     public static event Action<GameObject> OnGridItemPlaced;
     public static event Action<GameObject> OnPlayerSelecedtItem;
@@ -46,6 +47,8 @@ public class GridItem : MonoBehaviour
     //public int length = 1; // 1 or 2
     private List<Vector3Int> occupiedCells = new List<Vector3Int>();
 
+    
+    private IAdaptiveItemScoreCalculator _adaptiveScoreCalculator;
 
     [SerializeField] private bool isBomb = false;
     void Awake()
@@ -54,8 +57,12 @@ public class GridItem : MonoBehaviour
 
         //_originalSize = area.size;
         //adjustPosition = originalPositionHorizontal;
-
-
+        
+        _adaptiveScoreCalculator = GetComponent<IAdaptiveItemScoreCalculator>();
+        if (_adaptiveScoreCalculator == null)
+        {
+            Debug.LogWarning($"[GridItem] No IAdaptiveItemScoreCalculator found on {name}.");
+        }
     }
 
     public bool GetIsBomb()
@@ -135,6 +142,15 @@ public class GridItem : MonoBehaviour
             GridPlacementSystem.Instance.TakeCell(cell);
         }
         Placed = true;
+
+        if (_adaptiveScoreCalculator != null)
+        {
+            _adaptiveScoreCalculator.ApplyLethality();
+        }
+        else
+        {
+            Debug.Log("[GridItem] " + this.name  + " No adaptive score calculator found, skipping lethality application.");
+        }
         OnGridItemPlaced?.Invoke(gameObject);
 
     }
@@ -214,7 +230,6 @@ public class GridItem : MonoBehaviour
         if (gameObject.tag == "Candle")
         {
             FlipHorizontal();
-            OnRotateItem?.Invoke();
             return;
         }
 
@@ -239,7 +254,6 @@ public class GridItem : MonoBehaviour
             case FacingDirection.Down: currentFacingDirection = FacingDirection.Left; break;
             case FacingDirection.Left: currentFacingDirection = FacingDirection.Up; break;
         }
-        OnRotateItem?.Invoke();
         UpdateOccupiedCells();
     }
 
@@ -352,17 +366,33 @@ public class GridItem : MonoBehaviour
         }
     }
 
-    public void RotateRandomly()
+    public int RotateRandomly()
     {
         int times = Random.Range(0, 4);
-        bool rotateClockwise = Random.value > 0.5f;
         
         for (int i = 0; i < times; i++)
         {
-            if (rotateClockwise)
-                RotateClockwise();
-            else
-                RotateCounterclockwise();
+            RotateClockwise();
         }
+        return times;
+    }
+
+
+
+    public void GetCellScores(out float totalLethalityScore, out int totalCellVisits, out int maxLethalityScore)
+    {
+        totalCellVisits = _adaptiveScoreCalculator.GetTotalCellVisits();
+        totalLethalityScore = _adaptiveScoreCalculator.GetTotalLethalityScore();
+        maxLethalityScore = _adaptiveScoreCalculator.GetMaxLethalityScore();
+    }
+
+    public void UpdateHitCells()
+    {
+        _adaptiveScoreCalculator?.UpdateHitCells();
+    }
+    
+    public void Reset()
+    {
+        _adaptiveScoreCalculator?.Reset();
     }
 }

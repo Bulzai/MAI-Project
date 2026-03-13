@@ -50,7 +50,7 @@ public class AISelector : MonoBehaviour
                  randomPlacementStrategy.StartRandomPlacement();
                  break;
              case PlaythroughType.B:
-                 adaptivePlacementStrategy.StartAdaptivePlacement();
+                 randomPlacementStrategy.StartAdaptivePlacement();
                  break;
              default:
                  Debug.LogError("Unhandled playthrough type!");

@@ -272,6 +272,73 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &4585404926377046650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7780358542808148577}
+  - component: {fileID: 7058845675758719170}
+  m_Layer: 0
+  m_Name: AttackRangeCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7780358542808148577
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4585404926377046650}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.68, y: 3.23, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8592722864125002311}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &7058845675758719170
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4585404926377046650}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 2.2501776, y: -0.12578176}
+  serializedVersion: 2
+  m_Radius: 4.7726684
 --- !u!1 &4711019012961524803
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,6 +362,7 @@ GameObject:
   - component: {fileID: 593663420370522366}
   - component: {fileID: 512127332499025330}
   - component: {fileID: 7031565421046294086}
+  - component: {fileID: 6104405174709076753}
   m_Layer: 6
   m_Name: Spike
   m_TagString: GridItem
@@ -320,6 +388,7 @@ Transform:
   - {fileID: 8660515025556485242}
   - {fileID: 2137544268384672082}
   - {fileID: 8126271428894904111}
+  - {fileID: 7780358542808148577}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!61 &8078981533061986098
@@ -673,6 +742,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   directionPointer: {fileID: 501140373282781438}
+--- !u!114 &6104405174709076753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711019012961524803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d2c1145dd946aa4daddb2f03e619311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lethalityScore: 100
+  attackRangeCollider: {fileID: 7058845675758719170}
 --- !u!1 &6798446061416838796
 GameObject:
   m_ObjectHideFlags: 0
