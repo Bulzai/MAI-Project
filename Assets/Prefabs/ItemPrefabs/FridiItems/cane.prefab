@@ -603,8 +603,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2c1145dd946aa4daddb2f03e619311, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lethalityScore: 50
+  lethalityScore: 0
   attackRangeCollider: {fileID: 6043210693417558956}
+  maxHitCellsPossible: 55
 --- !u!1 &5119804512999136978
 GameObject:
   m_ObjectHideFlags: 0

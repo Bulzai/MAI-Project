@@ -41,6 +41,13 @@ public class AISelector : MonoBehaviour
     }
      private void StartPlacementStrategy()
      {
+         Debug.Log(" current round index is: " + PlayTestDataManager.Instance.roundIndex.Value);
+         if (PlayTestDataManager.Instance.roundIndex.Value == 0)
+         {
+             Debug.Log("Not placing in first round");
+             randomPlacementStrategy.PlacementFinished();
+             return;
+         }
          switch (currentPlaythroughType)
          {
              case PlaythroughType.Undefined:

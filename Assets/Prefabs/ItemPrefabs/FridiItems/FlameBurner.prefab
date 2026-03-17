@@ -662,6 +662,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lethalityScore: 50
   attackRangeCollider: {fileID: 7904799098813400048}
+  maxHitCellsPossible: 15
 --- !u!1 &4479385391483712919
 GameObject:
   m_ObjectHideFlags: 0

@@ -39,6 +39,6 @@ public class CountdownManager : MonoBehaviour
         PlaceItemState.CountDownFinished?.Invoke();
         countdownText.gameObject.SetActive(false);
         countdownCoroutine = null;               
-
+        PlayTestDataManager.Instance.StartRoundTimer();
     }
 }

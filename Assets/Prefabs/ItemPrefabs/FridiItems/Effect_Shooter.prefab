@@ -311,7 +311,8 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 8
-  direction: {x: 0, y: 1}
+  direction: {fileID: 2242705295382345368}
+  maxRange: 47
 --- !u!1 &4551790633826046867
 GameObject:
   m_ObjectHideFlags: 0

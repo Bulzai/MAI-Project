@@ -379,11 +379,12 @@ public class GridItem : MonoBehaviour
 
 
 
-    public void GetCellScores(out float totalLethalityScore, out int totalCellVisits, out int maxLethalityScore)
+    public void GetCellScores(out float averageLethalityScore, out int totalCellVisits, out int maxLethalityScore, out float attackRangeUtilizationScore)
     {
-        totalCellVisits = _adaptiveScoreCalculator.GetTotalCellVisits();
-        totalLethalityScore = _adaptiveScoreCalculator.GetTotalLethalityScore();
+        totalCellVisits = _adaptiveScoreCalculator.GetNormalizedTotalCellVisits();
+        averageLethalityScore = _adaptiveScoreCalculator.GetNormalizedAverageLethalityScore();
         maxLethalityScore = _adaptiveScoreCalculator.GetMaxLethalityScore();
+        attackRangeUtilizationScore = _adaptiveScoreCalculator.GetNormalizedAttackRangeUtilizationScore();
     }
 
     public void UpdateHitCells()

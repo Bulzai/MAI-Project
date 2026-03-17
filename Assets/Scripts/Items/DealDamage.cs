@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DealDamage : MonoBehaviour
 {
-
+    [SerializeField] bool isBigFlame = false;
     public int damgeAmount = 50;
 
     public float knockbackForce = 0;
@@ -18,7 +18,7 @@ public class DealDamage : MonoBehaviour
             if (player != null)
             {
                 Debug.Log("Player hit." + damgeAmount + " damage took");
-                player.TakeDamage(damgeAmount, true);
+                player.TakeDamage(damgeAmount, true, isBigFlame);
 
 
                 Vector2 dir = (other.transform.position - transform.position);

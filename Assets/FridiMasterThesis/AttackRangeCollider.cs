@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class AttackRangeCollider : MonoBehaviour, IAdaptiveItemScoreCalculator
 {
+    // max lethality score is 100 from spike
     [SerializeField] int lethalityScore = 50;
     
     [SerializeField] private Collider2D attackRangeCollider;
     private List<Vector3Int> hitCells = new List<Vector3Int>();
 
+    [SerializeField] private int maxHitCellsPossible = 10;
 
     private void Update()
     {
-
+        UpdateHitCells();
     }
     
     public void UpdateHitCells()
@@ -41,13 +43,14 @@ public class AttackRangeCollider : MonoBehaviour, IAdaptiveItemScoreCalculator
                 {
                     Vector3Int cell = grid.WorldToCell(p);
                     // Only add if in heatmap!
-                    if (HeatMap.Instance.heatmap.ContainsKey(cell) && !hitCells.Contains(cell))
+                    if (HeatMap.Instance.heatmap.ContainsKey(cell) && !hitCells.Contains(cell) && GridPlacementSystem.Instance.CanTakeCell(cell))
                     {
                         hitCells.Add(cell);
                     }
                 }
             }
         }
+        Debug.Log("UpdatehitCells count for " + name + ": " + hitCells.Count);
 
     }
 
@@ -61,13 +64,14 @@ public class AttackRangeCollider : MonoBehaviour, IAdaptiveItemScoreCalculator
         return totalScore;
     }
 
-    public float GetAverageLethalityScore()
+    public float GetNormalizedAverageLethalityScore()
     {
+        Debug.Log("GetNormalizedAverageLethalityScore for " + name + ": " + ((float)GetTotalLethalityScore() / hitCells.Count) / 100f);
         if (hitCells.Count == 0) return 0f;
-        return (float)GetTotalLethalityScore() / hitCells.Count;
+        return ((float)GetTotalLethalityScore() / hitCells.Count) / 100f;
     }
 
-    public int GetTotalCellVisits()
+    public int GetNormalizedTotalCellVisits()
     {
         int totalVisits = 0;
         foreach (Vector3Int cell in hitCells)
@@ -97,7 +101,13 @@ public class AttackRangeCollider : MonoBehaviour, IAdaptiveItemScoreCalculator
             HeatMap.Instance.heatmap[cell].cellLethalityScore += lethalityScore;
         }
     }
-    
+
+    public float GetNormalizedAttackRangeUtilizationScore()
+    {
+        Debug.Log("GetNormalizedAttackRangeUtilizationScore for " + name + ": " + (float)hitCells.Count/maxHitCellsPossible);
+        return hitCells.Count/maxHitCellsPossible;
+    }
+
     public void Reset()
     {
         hitCells.Clear();

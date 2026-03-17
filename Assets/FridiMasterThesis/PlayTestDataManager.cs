@@ -38,7 +38,7 @@ public class PlayTestDataManager : MonoBehaviour
     
     // Round totals (reset per round)
     public IntCounter roundIndex { get; } = new();
-    public IntCounter roundDurationSeconds { get; } = new();
+    public float roundDurationInSeconds;
     public IntCounter roundMilkCollected { get; } = new();
     public IntCounter roundHealthLost { get; } = new();
     public IntCounter roundDistanceTravelled { get; } = new();
@@ -48,7 +48,7 @@ public class PlayTestDataManager : MonoBehaviour
     
     
     // Game totals (reset per game)
-    public IntCounter totalDurationSeconds { get; } = new();
+    public float totalDurationInSeconds;
     public IntCounter totalMilkCollected { get; } = new();
     public IntCounter totalHealthLost { get; } = new();
     public IntCounter totalDistanceTravelled { get; } = new();
@@ -57,11 +57,15 @@ public class PlayTestDataManager : MonoBehaviour
     public IntCounter totalBlockedZoneCoveragePercent { get; } = new();
     
     
+    //round timing stuff
+    private bool isRunning = false;
 
     private void Awake()
     {
-        if (Instance != null)
+        Debug.Log("playtestdatamanager awake, initializing singleton and loading user/session data");
+        if (Instance != null && Instance != this)
         {
+            Debug.Log("Another instance of PlayTestDataManager already exists, destroying this one.");
             Destroy(gameObject);
             return;
         }
@@ -73,6 +77,7 @@ public class PlayTestDataManager : MonoBehaviour
         userId = LoadOrCreateUserId();
         CreatePlaytestFolder();
         LoadPreviousGamesPlayed();
+        GameEvents.OnMainGameStateExited += StopRoundTimer;
     }
 
     private void Start()
@@ -90,8 +95,18 @@ public class PlayTestDataManager : MonoBehaviour
     private void OnDestroy()
     {
         UnityServices.Initialized -= ChangeLocalDataToAnalyticsData;
+        GameEvents.OnMainGameStateExited -= StopRoundTimer;
     }
-    
+
+
+    private void Update()
+    {
+        if ((isRunning))
+        {
+            roundDurationInSeconds += Time.deltaTime;
+        }
+    }
+
     public string GetFormLink(PlaythroughType playtestType, int previousGamesPlayed)
     {
         return playtestType switch
@@ -238,7 +253,7 @@ public class PlayTestDataManager : MonoBehaviour
 
         var localTotalScoreEvent = new LocalTotalScoreEvent
         {
-            totalDurationSeconds = totalDurationSeconds.Value,
+            totalDurationInSeconds = totalDurationInSeconds,
             totalMilkCollected = totalMilkCollected.Value,
             totalHealthLost = totalHealthLost.Value,
             totalDistanceTravelled = totalDistanceTravelled.Value,
@@ -270,7 +285,7 @@ public class PlayTestDataManager : MonoBehaviour
             {
                 var analyticsTotalScoreEvent = new TotalScore
                 {
-                    totalDurationSeconds = totalDurationSeconds.Value,
+                    totalDurationInSeconds = totalDurationInSeconds,
                     totalMilkCollected = totalMilkCollected.Value,
                     totalHealthLost = totalHealthLost.Value,
                     totalDistanceTravelled = totalDistanceTravelled.Value,
@@ -308,7 +323,7 @@ public class PlayTestDataManager : MonoBehaviour
         var localRoundScoreEvent = new LocalRoundScoreEvent
         {
             roundIndex = roundIndex.Value,
-            roundDurationSeconds = roundDurationSeconds.Value,
+            roundDurationInSeconds = roundDurationInSeconds,
             roundMilkCollected = roundMilkCollected.Value,
             roundHealthLost = roundHealthLost.Value,
             roundDistanceTravelled = roundDistanceTravelled.Value,
@@ -336,7 +351,7 @@ public class PlayTestDataManager : MonoBehaviour
                 var analyticsRoundScoreEvent = new RoundScore
                 {
                     roundIndex = roundIndex.Value,
-                    roundDurationSeconds = roundDurationSeconds.Value,
+                    roundDurationInSeconds = roundDurationInSeconds,
                     roundMilkCollected = roundMilkCollected.Value,
                     roundHealthLost = roundHealthLost.Value,
                     roundDistanceTravelled = roundDistanceTravelled.Value,
@@ -360,7 +375,7 @@ public class PlayTestDataManager : MonoBehaviour
     
     private void UpdateTotalScoresWithCurrentRound()
     {
-        totalDurationSeconds.Increment(roundDurationSeconds.Value);
+        totalDurationInSeconds += roundDurationInSeconds;
         totalMilkCollected.Increment(roundMilkCollected.Value);
         totalHealthLost.Increment(roundHealthLost.Value);
         totalDistanceTravelled.Increment(roundDistanceTravelled.Value);
@@ -372,7 +387,7 @@ public class PlayTestDataManager : MonoBehaviour
         try
         {
             if (nrTimesAddedToBlockedZoneCoverageSum.Value > 0)
-                totalBlockedZoneCoveragePercent.Increment(blockedZoneCoverageSum / nrTimesAddedToBlockedZoneCoverageSum.Value);
+                totalBlockedZoneCoveragePercent.Increment(Mathf.RoundToInt((float)blockedZoneCoverageSum / nrTimesAddedToBlockedZoneCoverageSum.Value));
         }
         catch (Exception e)
         {
@@ -423,8 +438,7 @@ public class PlayTestDataManager : MonoBehaviour
     
     public void ResetAllRoundCounters()
     {
-        roundIndex.Reset();
-        roundDurationSeconds.Reset();
+        roundDurationInSeconds = 0f;
         roundMilkCollected.Reset();
         roundHealthLost.Reset();
         roundDistanceTravelled.Reset();
@@ -436,7 +450,8 @@ public class PlayTestDataManager : MonoBehaviour
     
     public void ResetAllTotalScoreCounters()
     {
-        totalDurationSeconds.Reset();
+        roundIndex.Reset();
+        totalDurationInSeconds = 0f;
         totalMilkCollected.Reset();
         totalHealthLost.Reset();
         totalDistanceTravelled.Reset();
@@ -454,6 +469,16 @@ public class PlayTestDataManager : MonoBehaviour
     }
     
     
+    public void StartRoundTimer()
+    {
+        isRunning = true;
+    }
+    
+    public void StopRoundTimer()
+    {
+        isRunning = false;
+    }
+    
 }
 
 [Serializable]
@@ -465,7 +490,7 @@ public class LocalRoundScoreEvent
     public string sessionId;
     
     public int roundIndex;
-    public int roundDurationSeconds;
+    public float roundDurationInSeconds;
     public int roundMilkCollected;
     public int roundHealthLost;
     public int roundDistanceTravelled;
@@ -495,7 +520,7 @@ public class LocalTotalScoreEvent
     public string userId;
     public string sessionId;
     
-    public int totalDurationSeconds;
+    public float totalDurationInSeconds;
     public int totalMilkCollected;
     public int totalHealthLost;
     public int totalDistanceTravelled;

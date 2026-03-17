@@ -119,48 +119,31 @@ public class RandomPlacementStrategy : MonoBehaviour
         for (int i = 0; i < itemsToPlacePerRound; i++)
         {
 
-            Dictionary<ItemType, PlacementCandidate> placementCandidates = new Dictionary<ItemType, PlacementCandidate>();
+            PlacementCandidate[] placementCandidates = new PlacementCandidate[System.Enum.GetValues(typeof(ItemType)).Length];
             foreach (ItemType itemType in System.Enum.GetValues(typeof(ItemType)))
             {
                 Debug.Log("itemType: " + itemType);
                 if(itemType == ItemType.none) continue;
                 GameObject instantiatedItem = ItemPools.Instance.GetInstantiatedItem(itemType);
                 instantiatedItem.SetActive(true);
-                if (GetBestItemPlacement(placeItemStateBounds.bounds, instantiatedItem, out PlacementCandidate bestCandidate))
-                    placementCandidates.Add(itemType, bestCandidate);
+                if (GetBestItemPlacement(placeItemStateBounds.bounds, instantiatedItem, itemType, out PlacementCandidate bestCandidate))
+                    placementCandidates[(int)itemType] = bestCandidate;
                 instantiatedItem.SetActive(false);
             }
             
-            // choose random PlacementCandidate from the Dictionary and place the corresponding item there
-            ItemType bestItemType = ItemType.none;
-            int bestVisits = -1;
-            float bestLethality = 100f;
-            
-            Debug.Log("placement candidates: ");
-            
-            //TODO this is always going to select the first item that is effect shooter because in round 0 there ar eno cellvisits
-            foreach(var kvp in placementCandidates)
+            bool  smthWentWrong = GetBestPlacementCandidate(placementCandidates, out PlacementCandidate bestPlacementCandidate);
+            if (smthWentWrong)
             {
-                Debug.Log("kvp: " + kvp.Key + " visits: " + kvp.Value.totalCellVisits + " lethality: " + kvp.Value.averageLethalityScore);
-                ItemType candidateItemType = kvp.Key;
-                PlacementCandidate candidate = kvp.Value;
-                    
-                if (candidate.totalCellVisits > bestVisits || 
-                    (candidate.totalCellVisits == bestVisits && candidate.averageLethalityScore < bestLethality))
-                {
-                    bestItemType = candidateItemType;
-                    bestVisits = candidate.totalCellVisits;
-                    bestLethality = candidate.averageLethalityScore;
-                }
+                Debug.Log("no item got a valid placement candidate");
             }
-
+            ItemType bestItemType = bestPlacementCandidate.itemType;
             if (bestItemType != ItemType.none)
             {
                 GameObject bestItem = Instantiate(ItemPools.Instance.GetItemFromKey(bestItemType));
-                bestItem.transform.rotation = placementCandidates[bestItemType].rotation;
-                Debug.Log("Instantiated item: " + bestItem.name + " at position: " + placementCandidates[bestItemType].position);
-                bestItem.transform.position = placementCandidates[bestItemType].position;
-
+                bestItem.transform.rotation = bestPlacementCandidate.rotation;
+                Debug.Log("Instantiated item: " + bestItem.name + " at position: " + bestPlacementCandidate.position);
+                bestItem.transform.position = bestPlacementCandidate.position;
+                Physics2D.SyncTransforms();
                 GridItem gridItemScript = bestItem.GetComponent<GridItem>();
                 gridItemScript.UpdateHitCells();
                 gridItemScript.Place();
@@ -172,7 +155,40 @@ public class RandomPlacementStrategy : MonoBehaviour
 
     }
 
-    private bool GetBestItemPlacement(Bounds bounds, GameObject gridItem, out PlacementCandidate bestCandidate)
+    //TODO this is always going to select the first item that is effect shooter because in round 0 there ar eno cellvisits
+    private bool GetBestPlacementCandidate(PlacementCandidate[] placementCandidates, out PlacementCandidate bestCandidate)
+    {
+        bool returnValue = false;
+        bestCandidate = new PlacementCandidate();
+
+        int bestVisits = -1;
+        float bestLethality = 100f;
+        float bestOverallScore = -1f;
+        float currentOverallScore = -1f;
+        float totalCellVisitsWeight = 0.45f;
+        float averageLethalityWeight = 0.1f;
+        float attackRangeUtilizationWeight = 0.45f;
+        
+        foreach(PlacementCandidate candidate in placementCandidates)
+        {
+            currentOverallScore = candidate.totalCellVisits * totalCellVisitsWeight -
+                               candidate.averageLethalityScore * averageLethalityWeight +
+                               candidate.attackRangeUtilizationScore * attackRangeUtilizationWeight;
+            
+            if (currentOverallScore > bestOverallScore)
+            {
+                Debug.Log("Candidate: " + candidate.itemType + " totalCellVisits: " + candidate.totalCellVisits + 
+                          " averageLethalityScore: " + candidate.averageLethalityScore + " attackRangeUtilizationScore: " 
+                          + candidate.attackRangeUtilizationScore + " overallScore: " + currentOverallScore);
+                bestOverallScore = currentOverallScore;
+                bestCandidate = candidate;
+                returnValue = true;
+            }
+        }
+        return returnValue;
+    }
+    
+    private bool GetBestItemPlacement(Bounds bounds, GameObject gridItem, ItemType itemType, out PlacementCandidate bestCandidate)
     {
         bool returnValue = false;
         
@@ -185,41 +201,25 @@ public class RandomPlacementStrategy : MonoBehaviour
             Vector3 candidateWorld = new Vector3(x, y, 0);
             Vector3Int candidateCell = grid.WorldToCell(candidateWorld);
 
-            // skip platforms
+            // skip red tiles
             if (platformCells.Contains(candidateCell))
                 continue;
             
             gridItem.transform.position = candidateWorld;
 
-            if (CheckSpaceAndCalculateScores(gridItem, out PlacementCandidate validCandidate))
+            if (CheckSpaceAndCalculateScores(gridItem, itemType, out PlacementCandidate validCandidate))
             {
                 Debug.Log("checkspaceandcalculatescores was true");
                 candidates[attempt] = validCandidate;
-                returnValue = true;
             }
         }
-
-        // get item with highest total cell visits, if tie then lowest average lethality score, if tie then random of the candidates
-        bestCandidate = new PlacementCandidate();
-        int bestVisits = -1;
-        float bestLethality = 100f;
         
-        foreach(PlacementCandidate candidate in candidates)
-        {
-            if (candidate.totalCellVisits > bestVisits || 
-                (candidate.totalCellVisits == bestVisits && candidate.averageLethalityScore < bestLethality))
-            {
-                bestCandidate = candidate;
-                bestVisits = candidate.totalCellVisits;
-                bestLethality = candidate.averageLethalityScore;
-            }
-        }
-
+        returnValue = GetBestPlacementCandidate(candidates, out bestCandidate);
         return returnValue;
 
     }
     
-    private bool CheckSpaceAndCalculateScores(GameObject gridItemGO, out PlacementCandidate placementCandidate)
+    private bool CheckSpaceAndCalculateScores(GameObject gridItemGO, ItemType itemType, out PlacementCandidate placementCandidate)
     {
         placementCandidate = new PlacementCandidate();
         GridItem gridItemScript = gridItemGO.GetComponent<GridItem>();
@@ -230,12 +230,14 @@ public class RandomPlacementStrategy : MonoBehaviour
             return false;
         }
         gridItemScript.UpdateHitCells();
-        gridItemScript.GetCellScores(out float averageLethalityScore, out int totalCellVisits, out int maxLethatilityScore);
+        gridItemScript.GetCellScores(out float averageLethalityScore, out int totalCellVisits, out int maxLethatilityScore, out float attackRangeUtilizationScore);
         placementCandidate.averageLethalityScore = averageLethalityScore;
         placementCandidate.totalCellVisits = totalCellVisits;
         placementCandidate.position = gridItemGO.transform.position;
         placementCandidate.maxLethalityScore = maxLethatilityScore;
         placementCandidate.rotation = gridItemGO.transform.rotation;
+        placementCandidate.itemType = itemType;
+        placementCandidate.attackRangeUtilizationScore = attackRangeUtilizationScore;
         gridItemScript.Reset();
         if(placementCandidate.maxLethalityScore > allowedMaxLethalityScore)
             return false;
@@ -246,9 +248,11 @@ public class RandomPlacementStrategy : MonoBehaviour
 
 public struct PlacementCandidate
 {
+    public ItemType itemType;
     public Vector3 position;
     public Quaternion rotation;
     public float averageLethalityScore;
     public int maxLethalityScore;
     public int totalCellVisits;
+    public float attackRangeUtilizationScore;
 }

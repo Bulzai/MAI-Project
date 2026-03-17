@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
 using TarodevController;
+using Unity.VisualScripting;
 
 public class PlayerHealthSystem : MonoBehaviour
 {
@@ -64,12 +65,14 @@ public class PlayerHealthSystem : MonoBehaviour
         GameEvents.OnMainGameStateExited += ResetConfusion;
         GameEvents.OnMainGameStateEntered += ResetConfusion;
         PlaceItemState.CountDownFinished += RespawnPlayer;
+        GameEvents.OnMainGameStateExited += UpdateRoundHealthLost;
     }
     private void OnDisable()
     {
         PlaceItemState.CountDownFinished -= RespawnPlayer;
         GameEvents.OnMainGameStateExited -= ResetConfusion;
         GameEvents.OnMainGameStateEntered -= ResetConfusion;
+        GameEvents.OnMainGameStateExited -= UpdateRoundHealthLost;
 
 
     }
@@ -90,6 +93,9 @@ public class PlayerHealthSystem : MonoBehaviour
 
     public void Extinguish()
     {
+        
+        CancelInvoke(nameof(SetOnFire));
+
         if (isBurning)
         {
             isBurning = false;
@@ -102,6 +108,9 @@ public class PlayerHealthSystem : MonoBehaviour
 
             Invoke("SetOnFire", reigniteDelay);
         }
+        
+        Invoke(nameof(SetOnFire), reigniteDelay);
+
     }
 
     private IEnumerator BurnOverTime()
@@ -113,12 +122,23 @@ public class PlayerHealthSystem : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int amount, bool isItemDmg)
+    public void TakeDamage(int amount, bool isItemDmg, bool isBigFlameDamage = false)
     {
 
         currentHealth -= amount;
 
-        if (isItemDmg && amount > 0)
+        if (isItemDmg && !isBigFlameDamage && amount > 0)
+        {
+            PlayTestDataManager.Instance.roundDamageDealt.Increment(amount);
+            PlayTestDataManager.Instance.roundHitsTaken.Increment();
+            OnPlayerTakeDamage?.Invoke();
+            if (animator != null)
+                animator.PlayHitReaction();
+
+            StartCoroutine(FlashRed());
+        }
+        
+        if (isBigFlameDamage)
         {
             OnPlayerTakeDamage?.Invoke();
             if (animator != null)
@@ -211,6 +231,7 @@ public class PlayerHealthSystem : MonoBehaviour
 
     private void Die()
     {
+        UpdateRoundHealthLost();
         GameEvents.PlayerEliminated(_playerInput);
         playerController.DisableControls();
         DisableOrEnableFireSprite(false);
@@ -247,6 +268,21 @@ public class PlayerHealthSystem : MonoBehaviour
 
         pc.AddImpulse(impulse);
         OnPlayerKnockedBack?.Invoke();
+    }
+    
+    private void UpdateRoundHealthLost()
+    {
+        Debug.Log("Updating health and roundhealthlostvalue is: " + PlayTestDataManager.Instance.roundHealthLost.Value);
+        if (PlayTestDataManager.Instance.roundHealthLost.Value != 0) return;
+        if (currentHealth <= 0)
+        {
+            PlayTestDataManager.Instance.roundHealthLost.Increment(100);    
+            return;
+        }
+        int healthLost = 0;
+        if (currentHealth > 0)
+            healthLost = maxHealth - currentHealth;
+        PlayTestDataManager.Instance.roundHealthLost.Increment(healthLost);
     }
 
 }

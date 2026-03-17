@@ -17,7 +17,7 @@ public class ExtinguisherPickUp : MonoBehaviour
 
         health.Extinguish();
         OnMilkCollected?.Invoke();
-
+        PlayTestDataManager.Instance.roundMilkCollected.Increment();
         Destroy(gameObject);
 
         // tell the loop: spawn the next one immediately

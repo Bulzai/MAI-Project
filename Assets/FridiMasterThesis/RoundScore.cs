@@ -8,7 +8,7 @@ public class RoundScore : Unity.Services.Analytics.Event
     }
 
     public int roundIndex { set { SetParameter("roundIndex", value); } }
-    public int roundDurationSeconds { set { SetParameter("roundDurationSeconds", value); } }
+    public float roundDurationInSeconds { set { SetParameter("roundDurationSeconds", value); } }
     public int roundMilkCollected { set { SetParameter("roundMilkCollected", value); } }
     public int roundHealthLost { set { SetParameter("roundHealthLost", value); } }
     public int roundDistanceTravelled { set { SetParameter("roundDistanceTravelled", value); } }

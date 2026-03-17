@@ -11,9 +11,8 @@ public class HeatMap : MonoBehaviour
     public Collider2D playerCollider;
     
     [Header("Config")]
-    public float decayPerRound = 0.8f;
-    public int maxRounds = 10;
 
+    
     
     public Dictionary<Vector3Int, CellData> heatmap = new(); // Your main data store
     public Vector3Int[] activeCells; // Fast iteration array
@@ -81,7 +80,6 @@ public class HeatMap : MonoBehaviour
                     heatmap[cell] = new CellData(); // Initialize CellData
                     //GridPlacementSystem.Instance.TakeCellBounds(cell);
 
-
                 }
             }
         }
@@ -135,8 +133,9 @@ public class HeatMap : MonoBehaviour
         foreach(Vector3Int cell in enteredCells)
         {
             heatmap[cell].cellVisits[PlayTestDataManager.Instance.roundIndex.Value].Increment();
+            PlayTestDataManager.Instance.roundDistanceTravelled.Increment();
             GridPlacementSystem.Instance.TakeCellBounds(cell);
-            Debug.Log(" lethality score of cell " + cell + " is now " + heatmap[cell].cellLethalityScore);
+            //Debug.Log(" lethality score of cell " + cell + " is now " + heatmap[cell].cellLethalityScore);
             //Debug.Log("Updated cell " + cell + " for round " + PlayTestDataManager.Instance.roundIndex.Value + " new count: " + heatmap[cell].cellVisits[PlayTestDataManager.Instance.roundIndex.Value].Value);
         }
         

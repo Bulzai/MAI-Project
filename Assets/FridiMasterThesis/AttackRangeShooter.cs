@@ -7,16 +7,20 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
     [SerializeField] private Transform[] sideFirePoints;
     [SerializeField] private Transform mainFirePoint;
     [SerializeField] private LayerMask hitLayers = -1;  // ← ADD THIS LINE
-    [SerializeField] private Vector2 direction;
+    [SerializeField] private Transform direction;
+    // max lethality score is 100 from spike
     private int mainRayLethalityScore = 50;
     private int sideRayLethalityScore = 30;
-    private int maxRange = 50;
+    [SerializeField] private int maxRange = 46;
     private List<Vector3Int> mainCells = new List<Vector3Int>();
     private List<Vector3Int>[] sideCells = new List<Vector3Int>[sideFirePointsLength];
     private static int sideFirePointsLength = 4;
     private float mainRayActualLength;
     private float[] sideRayActualLengths = new float[sideFirePointsLength];
-    
+
+    private void Update()
+    {
+    }
     
     void Awake()
     {
@@ -31,8 +35,12 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
     {
         // MAIN - Always draw + log
         Vector2 mainOrigin = mainFirePoint.position;
-        Vector2 mainDir = direction;  // or .right if you want right
-    
+        Vector2 mainDir = direction.right.normalized; 
+       
+        if (transform.localScale.x < 0f)
+        {
+            mainDir.y = -mainDir.y;
+        }
     
         RaycastHit2D mainHit = Physics2D.Raycast(mainOrigin, mainDir, maxRange, hitLayers);
         Debug.DrawRay(mainOrigin, mainDir * mainHit.distance, Color.red, 0.1f);  // ALWAYS draws
@@ -46,8 +54,8 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
             Transform firePoint = sideFirePoints[i];
             Vector2 origin = firePoint.position;
         
-            RaycastHit2D hit = Physics2D.Raycast(origin, direction, maxRange, hitLayers);
-            Debug.DrawRay(origin, direction * hit.distance, Color.yellow, 0.1f);  // ALWAYS draws
+            RaycastHit2D hit = Physics2D.Raycast(origin, mainDir, maxRange, hitLayers);
+            Debug.DrawRay(origin, mainDir * hit.distance, Color.yellow, 0.1f);  // ALWAYS draws
             //Debug.Log($"Side {i} hit: {hit.collider?.name ?? "NOTHING"}");
         }
     }
@@ -69,7 +77,7 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
         }
     }
 
-    List<Vector3Int> GetRayCells(Vector2 origin, Vector2 direction, float maxDistance)
+    List<Vector3Int> GetRayCells(Vector2 origin, float maxDistance)
     {
         List<Vector3Int> cells = new();
         Vector3Int prevCell = HeatMap.Instance.grid.WorldToCell(origin);
@@ -77,7 +85,8 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
         float distance = 0f;
         while (distance < maxDistance)
         {
-            Vector2 point = origin + direction.normalized * (distance + 0.3f);
+            Vector2 dir = direction.right.normalized;
+            Vector2 point = origin + dir * (distance + 0.3f);
             Vector3Int currentCell = HeatMap.Instance.grid.WorldToCell(point);
         
             if (currentCell != prevCell && HeatMap.Instance.heatmap.ContainsKey(currentCell))
@@ -91,7 +100,7 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
     
         return cells;
     }
-    public float GetAverageLethalityScore()
+    public float GetNormalizedAverageLethalityScore()
     {
         float averageLethalityScore = 0;
         int nrOfCells = mainCells.Count;
@@ -134,7 +143,7 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
         return totalScore;
     }
 
-    public int GetTotalCellVisits()
+    public int GetNormalizedTotalCellVisits()
     {
         int totalVisits = 0;
         
@@ -180,23 +189,37 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
     public void UpdateHitCells()
     {
         Vector2 mainOrigin = mainFirePoint.position;
-        Vector2 mainDir = direction;
+        Vector2 mainDir = direction.right.normalized;
+        if (transform.localScale.x < 0f)
+        {
+            mainDir.y = -mainDir.y;
+        }
         RaycastHit2D mainHit = Physics2D.Raycast(mainOrigin, mainDir, maxRange, hitLayers);
         mainRayActualLength = mainHit.collider ? mainHit.distance : maxRange;
-        mainCells = GetRayCells(mainOrigin, mainDir, mainRayActualLength);
+        mainCells = GetRayCells(mainOrigin, mainRayActualLength);
         for (int i = 0; i < sideFirePointsLength; i++)
         {
             Transform fp = sideFirePoints[i];
             Vector2 origin = fp.position;
-            Vector2 dir = direction;
-        
+            Vector2 dir = direction.right.normalized;
+            if (transform.localScale.x < 0f)
+            {
+                dir.y = dir.y;
+            }
             RaycastHit2D hit = Physics2D.Raycast(origin, dir, mainRayActualLength, hitLayers);
             Physics.SyncTransforms();
 
             sideRayActualLengths[i] = hit.collider ? hit.distance : mainRayActualLength;
         
-            sideCells[i] = GetRayCells(origin, dir, sideRayActualLengths[i]);
+            sideCells[i] = GetRayCells(origin, sideRayActualLengths[i]);
         }
+        Debug.Log("mainrayactual length: " + mainRayActualLength);
+    }
+    
+    public float GetNormalizedAttackRangeUtilizationScore()
+    {
+        Debug.Log("mainRayActualLength: " + mainRayActualLength + " maxRange: " + maxRange);
+        return mainRayActualLength/maxRange;
     }
 
 

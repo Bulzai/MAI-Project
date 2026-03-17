@@ -80,6 +80,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     private void StartScoreboardSequence()
     {
         PlayTestDataManager.Instance.roundIndex.Increment();
+        Debug.Log("Round index incremented to: " + PlayTestDataManager.Instance.roundIndex.Value);
         StartFireTransition?.Invoke();
         StopAllCoroutines();
         StartCoroutine(ScoreboardSequenceCoroutine());
@@ -200,7 +201,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
     private void HideScoreBoard()
     {
-        for (int i = 0; i < PlayTestDataManager.Instance.roundIndex.Value; i++)
+        for (int i = 0; i < rows.transform.childCount; i++)
         {
             rows.transform.GetChild(i).gameObject.SetActive(false);
         }
