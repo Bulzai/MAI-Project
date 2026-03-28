@@ -164,7 +164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5187926d2eee180419eecac142a4d13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damgeAmount: 15
+  isBigFlame: 0
+  damgeAmount: 25
   knockbackForce: 1
 --- !u!1 &3113171560267336708
 GameObject:

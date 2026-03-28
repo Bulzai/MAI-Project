@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ItemPools : MonoBehaviour
 {   
@@ -55,7 +58,6 @@ public class ItemPools : MonoBehaviour
 
     public GameObject GetItemFromKey(ItemType type)
     {
-        Debug.Log("returning Gameobject: " + itemDictionary[type].name);
         return itemDictionary[type];
     }
 
@@ -63,7 +65,6 @@ public class ItemPools : MonoBehaviour
     {
         if (itemPool.Count == 0)
         {
-            Debug.LogWarning("Item pool is empty!");
             return null;
         }
 
@@ -94,10 +95,9 @@ public class InstantiatedItemEntry
 
 public enum ItemType
 {
+    none,
     Effect_Shooter,
     Spike,
     Candle,
-    FlameBurner,
-    cane, 
-    none
+    FlameBurner 
 }

@@ -22,7 +22,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     [SerializeField] private Button OpenPlaytestDataFolderButton;
     
     [Header("Round Settings")]
-    [SerializeField] private int maxRounds = 5;
+    public int MAX_ROUNDS = 6;
     
     
     // EVENTS
@@ -66,13 +66,19 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
     public void Handle10MilkCartonsCollected()
     {
-        HandlePlayerDeath();
+        TransitionToScoreStateNoPause();
     }
     
     private IEnumerator TransitionToScoreState()
     {
         yield return new WaitForSeconds(1.0f);  // Adjust delay as needed
         
+        GameEvents.ChangeState(GameState.ScoreState);
+        StartScoreboardSequence();
+    }
+    
+    private void TransitionToScoreStateNoPause()
+    {
         GameEvents.ChangeState(GameState.ScoreState);
         StartScoreboardSequence();
     }
@@ -98,7 +104,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
         // change text values
 
-        if (PlayTestDataManager.Instance.roundIndex.Value < maxRounds)
+        if (PlayTestDataManager.Instance.roundIndex.Value < MAX_ROUNDS)
         {
             yield return new WaitForSeconds(2.5f);
             ContinueButton.gameObject.SetActive(true);

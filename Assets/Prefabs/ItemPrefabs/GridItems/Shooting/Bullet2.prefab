@@ -130,7 +130,7 @@ MonoBehaviour:
   faceVelocity: 1
   lifetime: 10
   destroyOnAnyHit: 1
-  damage: 5
+  damage: 10
   knockBackStrength: 2
   hitMask:
     serializedVersion: 2

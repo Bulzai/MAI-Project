@@ -64,6 +64,7 @@ public class GridItem : MonoBehaviour
             Debug.LogWarning($"[GridItem] No IAdaptiveItemScoreCalculator found on {name}.");
         }
     }
+    
 
     public bool GetIsBomb()
     {
@@ -99,6 +100,7 @@ public class GridItem : MonoBehaviour
                     if (!occupiedCells.Contains(cell))
                     {
                         occupiedCells.Add(cell);
+                        
                     }
                 }
             }
@@ -118,9 +120,10 @@ public class GridItem : MonoBehaviour
         foreach (var cell in occupiedCells)
         {
             if (!GridPlacementSystem.Instance.CanTakeCell(cell))
+            {
                 return false;
+            }
         }
-
         return true;
     }
 
@@ -379,12 +382,14 @@ public class GridItem : MonoBehaviour
 
 
 
-    public void GetCellScores(out float averageLethalityScore, out int totalCellVisits, out int maxLethalityScore, out float attackRangeUtilizationScore)
+    public void GetCellScores(out float averageLethalityScore, out int[] totalCellVisits, out int maxLethalityScore, out float attackRangeUtilizationScore, out int ownLethalityScore, out int NrOfCellsAboveLethality)
     {
-        totalCellVisits = _adaptiveScoreCalculator.GetNormalizedTotalCellVisits();
+        totalCellVisits = _adaptiveScoreCalculator.GetTotalCellVisits();
         averageLethalityScore = _adaptiveScoreCalculator.GetNormalizedAverageLethalityScore();
         maxLethalityScore = _adaptiveScoreCalculator.GetMaxLethalityScore();
         attackRangeUtilizationScore = _adaptiveScoreCalculator.GetNormalizedAttackRangeUtilizationScore();
+        ownLethalityScore = _adaptiveScoreCalculator.GetOwnLethalityScore();
+        NrOfCellsAboveLethality = _adaptiveScoreCalculator.GetHowManyCellsWouldBeAboveMaxLethality();
     }
 
     public void UpdateHitCells()

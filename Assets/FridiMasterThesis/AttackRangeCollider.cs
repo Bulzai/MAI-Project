@@ -10,11 +10,24 @@ public class AttackRangeCollider : MonoBehaviour, IAdaptiveItemScoreCalculator
     [SerializeField] private Collider2D attackRangeCollider;
     private List<Vector3Int> hitCells = new List<Vector3Int>();
 
-    [SerializeField] private int maxHitCellsPossible = 10;
+    [SerializeField] private float maxHitCellsPossible = 10f;
+    private float maxAllowedLethalityScore = 100f;
 
     private void Update()
     {
-        UpdateHitCells();
+    }
+
+
+    public int GetHowManyCellsWouldBeAboveMaxLethality()
+    {
+        int counter = 0;
+        foreach(Vector3Int cell in hitCells)
+        {
+            if(HeatMap.Instance.heatmap[cell].cellLethalityScore + lethalityScore > maxAllowedLethalityScore)
+                counter++;
+        }
+        //Debug.Log("Cells above max lethality threshold: " + counter);
+        return counter;
     }
     
     public void UpdateHitCells()
@@ -50,7 +63,6 @@ public class AttackRangeCollider : MonoBehaviour, IAdaptiveItemScoreCalculator
                 }
             }
         }
-        Debug.Log("UpdatehitCells count for " + name + ": " + hitCells.Count);
 
     }
 
@@ -66,18 +78,32 @@ public class AttackRangeCollider : MonoBehaviour, IAdaptiveItemScoreCalculator
 
     public float GetNormalizedAverageLethalityScore()
     {
-        Debug.Log("GetNormalizedAverageLethalityScore for " + name + ": " + ((float)GetTotalLethalityScore() / hitCells.Count) / 100f);
         if (hitCells.Count == 0) return 0f;
-        return ((float)GetTotalLethalityScore() / hitCells.Count) / 100f;
+        return ((float)GetTotalLethalityScore() / (hitCells.Count * maxAllowedLethalityScore));
     }
 
-    public int GetNormalizedTotalCellVisits()
+    // 0th entry of totalvisits is current round, 1st entry is previous round, 2nd entry is 2 rounds ago
+    //round starts with 0, in round 1 is where first items get placed
+    public int[] GetTotalCellVisits()
     {
-        int totalVisits = 0;
+        int[] totalVisits = {0,0,0};
+        int currentRoundIndex = PlayTestDataManager.Instance.roundIndex.Value;
         foreach (Vector3Int cell in hitCells)
         {
-            totalVisits += HeatMap.Instance.heatmap[cell].cellVisits[PlayTestDataManager.Instance.roundIndex.Value]
+            totalVisits[0] += HeatMap.Instance.heatmap[cell].cellVisits[currentRoundIndex-1]
                 .Value;
+            if (currentRoundIndex > 1)
+            {
+                totalVisits[1] += HeatMap.Instance.heatmap[cell].cellVisits[currentRoundIndex-2]
+                    .Value;
+            }
+
+            if (currentRoundIndex > 2)
+            {
+                totalVisits[2] += HeatMap.Instance.heatmap[cell].cellVisits[currentRoundIndex-3]
+                    .Value;
+            }
+            
         }
 
         return totalVisits;
@@ -102,10 +128,14 @@ public class AttackRangeCollider : MonoBehaviour, IAdaptiveItemScoreCalculator
         }
     }
 
+    public int GetOwnLethalityScore()
+    {
+        return lethalityScore;
+    }
+
     public float GetNormalizedAttackRangeUtilizationScore()
     {
-        Debug.Log("GetNormalizedAttackRangeUtilizationScore for " + name + ": " + (float)hitCells.Count/maxHitCellsPossible);
-        return hitCells.Count/maxHitCellsPossible;
+        return (float)hitCells.Count/maxHitCellsPossible;
     }
 
     public void Reset()

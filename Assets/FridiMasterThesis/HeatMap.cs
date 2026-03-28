@@ -150,12 +150,12 @@ public class HeatMap : MonoBehaviour
 [System.Serializable]
 public class CellData 
 {
-    public IntCounter[] cellVisits = new IntCounter[5]; // Fixed size 5
+    public IntCounter[] cellVisits = new IntCounter[SinglePlayerScoreManager.Instance.MAX_ROUNDS];
     public int cellLethalityScore = 0;
     
     public CellData() 
     {
-        for(int i = 0; i < 5; i++) cellVisits[i] = new IntCounter();
+        for(int i = 0; i < cellVisits.Length; i++) cellVisits[i] = new IntCounter();
     }
     
     public void Clear() 

@@ -165,7 +165,7 @@ MonoBehaviour:
   faceVelocity: 1
   lifetime: 10
   destroyOnAnyHit: 1
-  damage: 10
+  damage: 5
   knockBackStrength: 0
   hitMask:
     serializedVersion: 2

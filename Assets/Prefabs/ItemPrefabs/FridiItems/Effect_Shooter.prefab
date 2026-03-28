@@ -192,8 +192,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab:
   - {fileID: 5391782045131714913, guid: 01a69f6fc33698e419e6dfe82785b148, type: 3}
-  - {fileID: 5391782045131714913, guid: 97d7f499e7905d840b8a8692e0f28105, type: 3}
-  - {fileID: 5391782045131714913, guid: 20db5ada1c15a6842a1d375dee3623c9, type: 3}
   muzzle: {fileID: 2242705295382345368}
   direction: {fileID: 2242705295382345368}
   fireInterval: 2
@@ -304,9 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sideFirePoints:
   - {fileID: 883404297560508177}
-  - {fileID: 7959819403171869938}
   - {fileID: 7051852263931624979}
-  - {fileID: 3225387848951957337}
   mainFirePoint: {fileID: 3161161831713273801}
   hitLayers:
     serializedVersion: 2

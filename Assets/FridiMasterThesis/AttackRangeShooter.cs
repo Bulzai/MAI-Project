@@ -9,17 +9,19 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
     [SerializeField] private LayerMask hitLayers = -1;  // ← ADD THIS LINE
     [SerializeField] private Transform direction;
     // max lethality score is 100 from spike
-    private int mainRayLethalityScore = 50;
-    private int sideRayLethalityScore = 30;
+    private int mainRayLethalityScore = 51;
+    private int sideRayLethalityScore = 51;
     [SerializeField] private int maxRange = 46;
     private List<Vector3Int> mainCells = new List<Vector3Int>();
     private List<Vector3Int>[] sideCells = new List<Vector3Int>[sideFirePointsLength];
-    private static int sideFirePointsLength = 4;
+    private static int sideFirePointsLength = 2;
     private float mainRayActualLength;
     private float[] sideRayActualLengths = new float[sideFirePointsLength];
-
+    private float maxAllowedLethalityScore = 100f;
+    
     private void Update()
     {
+
     }
     
     void Awake()
@@ -102,12 +104,12 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
     }
     public float GetNormalizedAverageLethalityScore()
     {
-        float averageLethalityScore = 0;
+        float totalLethalityScore = 0;
         int nrOfCells = mainCells.Count;
 
         foreach(Vector3Int cell in mainCells)
         {
-            averageLethalityScore += HeatMap.Instance.heatmap[cell].cellLethalityScore;
+            totalLethalityScore += HeatMap.Instance.heatmap[cell].cellLethalityScore;
         }
 
         for (int i = 0; i < sideFirePointsLength; i++)
@@ -115,11 +117,11 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
             nrOfCells += sideCells[i].Count;
             foreach(Vector3Int cell in sideCells[i])
             {
-                averageLethalityScore += HeatMap.Instance.heatmap[cell].cellLethalityScore;
+                totalLethalityScore += HeatMap.Instance.heatmap[cell].cellLethalityScore;
             }
         }
         if (nrOfCells == 0) return 0;
-        return averageLethalityScore/nrOfCells;
+        return totalLethalityScore/(nrOfCells * maxAllowedLethalityScore);
     }
 
     public int GetTotalLethalityScore()
@@ -142,26 +144,45 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
     
         return totalScore;
     }
-
-    public int GetNormalizedTotalCellVisits()
+    // 0th entry of totalvisits is current round, 1st entry is previous round, 2nd entry is 2 rounds ago
+    //round starts with 0, in round 1 is where first items get placed
+    public int[] GetTotalCellVisits()
     {
-        int totalVisits = 0;
+        int[] totalVisits = {0,0,0};
+        int currentRoundIndex = PlayTestDataManager.Instance.roundIndex.Value;
         
         foreach(Vector3Int cell in mainCells)
         {
-            totalVisits += HeatMap.Instance.heatmap[cell].cellVisits[PlayTestDataManager.Instance.roundIndex.Value].Value;
+            totalVisits[0] += HeatMap.Instance.heatmap[cell].cellVisits[currentRoundIndex-1].Value;
+            
+            if (currentRoundIndex > 1)
+                totalVisits[1] += HeatMap.Instance.heatmap[cell].cellVisits[currentRoundIndex-2].Value;
+            if (currentRoundIndex > 2)
+                totalVisits[2] += HeatMap.Instance.heatmap[cell].cellVisits[currentRoundIndex-3].Value;
         }
 
         for (int i = 0; i < sideFirePointsLength; i++)
         {
 
-            foreach(Vector3Int cell in sideCells[i])
+            foreach (Vector3Int cell in sideCells[i])
             {
-                totalVisits += HeatMap.Instance.heatmap[cell].cellVisits[PlayTestDataManager.Instance.roundIndex.Value].Value;
+                totalVisits[0] += HeatMap.Instance.heatmap[cell].cellVisits[currentRoundIndex-1].Value;
+
+                if (currentRoundIndex > 1)
+                    totalVisits[1] += HeatMap.Instance.heatmap[cell].cellVisits[currentRoundIndex - 2].Value;
+
+                if (currentRoundIndex > 2)
+                    totalVisits[2] += HeatMap.Instance.heatmap[cell].cellVisits[currentRoundIndex - 3].Value;
             }
         }
     
         return totalVisits;
+    }
+
+
+    public int GetOwnLethalityScore()
+    {
+        return mainRayLethalityScore;
     }
 
     public int GetMaxLethalityScore()
@@ -185,6 +206,33 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
     
         return maxScore;
     }
+    
+    public int GetHowManyCellsWouldBeAboveMaxLethality()
+    {
+        int counter = 0;
+        
+        foreach(Vector3Int cell in mainCells)
+        {
+            if (HeatMap.Instance.heatmap[cell].cellLethalityScore + mainRayLethalityScore > maxAllowedLethalityScore)
+                counter++;
+        }
+
+        for (int i = 0; i < sideFirePointsLength; i++)
+        {
+
+            foreach(Vector3Int cell in sideCells[i])
+            {
+                if (HeatMap.Instance.heatmap[cell].cellLethalityScore + mainRayLethalityScore > maxAllowedLethalityScore)
+                    counter++;
+            }
+        }
+    
+        //Debug.Log("Cells above max lethality threshold: " + counter);
+        return counter;
+    }
+
+    
+    
 
     public void UpdateHitCells()
     {
@@ -213,12 +261,12 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
         
             sideCells[i] = GetRayCells(origin, sideRayActualLengths[i]);
         }
-        Debug.Log("mainrayactual length: " + mainRayActualLength);
+        //Debug.Log("mainrayactual length: " + mainRayActualLength);
     }
     
     public float GetNormalizedAttackRangeUtilizationScore()
     {
-        Debug.Log("mainRayActualLength: " + mainRayActualLength + " maxRange: " + maxRange);
+        //Debug.Log("mainRayActualLength: " + mainRayActualLength + " maxRange: " + maxRange);
         return mainRayActualLength/maxRange;
     }
 
