@@ -303,8 +303,8 @@ MonoBehaviour:
   - {fileID: 1976432613068415581, guid: 9c7876b72dabc834fb2923354bc99ba8, type: 3}
   muzzle: {fileID: 2242705295382345368}
   direction: {fileID: 2242705295382345368}
-  fireInterval: 0.5
-  burstPause: 2.6
+  fireInterval: 0.8
+  burstPause: 3.4
   shotsPerBurst: 5
   fireOnEnable: 1
   startDelay: 0
