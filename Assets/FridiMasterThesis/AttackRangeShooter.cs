@@ -18,10 +18,10 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
     private float mainRayActualLength;
     private float[] sideRayActualLengths = new float[sideFirePointsLength];
     private float maxAllowedLethalityScore = 100f;
+    private float circleCastRadius = 0.5f;
     
     private void Update()
     {
-
     }
     
     void Awake()
@@ -44,7 +44,7 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
             mainDir.y = -mainDir.y;
         }
     
-        RaycastHit2D mainHit = Physics2D.Raycast(mainOrigin, mainDir, maxRange, hitLayers);
+        RaycastHit2D mainHit = Physics2D.CircleCast(mainOrigin, circleCastRadius,mainDir, maxRange, hitLayers);
         Debug.DrawRay(mainOrigin, mainDir * mainHit.distance, Color.red, 0.1f);  // ALWAYS draws
         //Debug.Log($"Main hit: {mainHit.collider?.name ?? "NOTHING"}");
 
@@ -56,8 +56,7 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
             Transform firePoint = sideFirePoints[i];
             Vector2 origin = firePoint.position;
         
-            RaycastHit2D hit = Physics2D.Raycast(origin, mainDir, maxRange, hitLayers);
-            Debug.DrawRay(origin, mainDir * hit.distance, Color.yellow, 0.1f);  // ALWAYS draws
+            Debug.DrawRay(origin, mainDir * mainHit.distance, Color.yellow, 0.1f);  // ALWAYS draws
             //Debug.Log($"Side {i} hit: {hit.collider?.name ?? "NOTHING"}");
         }
     }
@@ -242,7 +241,7 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
         {
             mainDir.y = -mainDir.y;
         }
-        RaycastHit2D mainHit = Physics2D.Raycast(mainOrigin, mainDir, maxRange, hitLayers);
+        RaycastHit2D mainHit = Physics2D.CircleCast(mainOrigin, circleCastRadius,mainDir, maxRange, hitLayers);
         mainRayActualLength = mainHit.collider ? mainHit.distance : maxRange;
         mainCells = GetRayCells(mainOrigin, mainRayActualLength);
         for (int i = 0; i < sideFirePointsLength; i++)
@@ -254,7 +253,7 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
             {
                 dir.y = dir.y;
             }
-            RaycastHit2D hit = Physics2D.Raycast(origin, dir, mainRayActualLength, hitLayers);
+            RaycastHit2D hit = Physics2D.CircleCast(mainOrigin, circleCastRadius,mainDir, mainRayActualLength, hitLayers);
             Physics.SyncTransforms();
 
             sideRayActualLengths[i] = hit.collider ? hit.distance : mainRayActualLength;

@@ -6,6 +6,7 @@ using UnityEngine;
 public class CountdownManager : MonoBehaviour
 {
     [SerializeField] private TMP_Text countdownText;
+    [SerializeField] private TextMeshProUGUI tutorialText;
     private Coroutine countdownCoroutine;
     public static CountdownManager Instance { get; private set; }
 
@@ -27,6 +28,7 @@ public class CountdownManager : MonoBehaviour
         
         while (countdown > 0)
         {
+            tutorialText.gameObject.SetActive(true);
             countdownText.gameObject.SetActive(true);
             countdownText.text = countdown.ToString();
 
@@ -38,6 +40,7 @@ public class CountdownManager : MonoBehaviour
 
         PlaceItemState.CountDownFinished?.Invoke();
         countdownText.gameObject.SetActive(false);
+        tutorialText.gameObject.SetActive(false);
         countdownCoroutine = null;               
         PlayTestDataManager.Instance.StartRoundTimer();
     }

@@ -303,10 +303,7 @@ public class PlayTestDataManager : MonoBehaviour
                 Debug.LogWarning($"Online send failed: {e.Message}");
             }
         }
-        ResetAllCounters();
-        //TODO 
-        // fix all excpetion handling and implement LogPlaythroughPlacementStrategy(); which logs the strategy to a txt or json file in playtestfolder
-    }
+  }
     
     
 
@@ -477,6 +474,15 @@ public class PlayTestDataManager : MonoBehaviour
     public void StopRoundTimer()
     {
         isRunning = false;
+    }
+
+    public string GetSessionID()
+    {
+        return sessionId;
+    }
+    public string GetUserID()
+    {
+        return userId;
     }
     
 }

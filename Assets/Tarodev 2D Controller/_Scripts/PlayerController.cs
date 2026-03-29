@@ -94,6 +94,24 @@ namespace TarodevController
 
         public void AddImpulse(Vector2 deltaVelocity) => _externalImpulse += deltaVelocity;
 
+        public void ResetState()
+        {
+            _frameVelocity = Vector2.zero;
+            _externalImpulse = Vector2.zero;
+            _rb.velocity = Vector2.zero;
+
+            _endedJumpEarly = false;
+            _jumpToConsume = false;
+            _bufferedJumpUsable = false;
+            _coyoteUsable = false;
+
+            _wallStickCounter = 0f;
+            _onWall = false;
+
+            _grounded = false;
+
+            movementInput = Vector2.zero;
+        }
         private void Awake()
         {
             // PlayerInput lives on PlayerRoot (parent of PlayerNoPI)
@@ -117,6 +135,7 @@ namespace TarodevController
             }
             if (grounderDistance <= 0f) grounderDistance = 0.05f;
             PlaceItemState.CountDownFinished += EnableControls;
+            GameEvents.OnMainGameStateEntered += ResetState;
             GameEvents.OnMainGameStateExited += DisableControls;
         }
         
@@ -124,6 +143,7 @@ namespace TarodevController
         {
             PlaceItemState.CountDownFinished -= EnableControls;
             GameEvents.OnMainGameStateExited -= DisableControls;
+            GameEvents.OnMainGameStateEntered -= ResetState;
         }
 
         private void Update()

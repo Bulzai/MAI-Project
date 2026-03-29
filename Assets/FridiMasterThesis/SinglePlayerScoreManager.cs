@@ -11,8 +11,6 @@ public class SinglePlayerScoreManager : MonoBehaviour
     [SerializeField] private GameObject scoreboardUI;
     [SerializeField] private GameObject rows;
     [Header("Scoreboard UI Elements")]
-    [SerializeField] private TextMeshProUGUI PlayerTimeSurvivedText;
-    [SerializeField] private TextMeshProUGUI PlayerMilkCollectedText;
     [SerializeField] private TextMeshProUGUI PlayerDamageFromItemsText;
     [SerializeField] private Button ContinueButton;
     [SerializeField] private Button NextPlaythroughButton;
@@ -20,13 +18,15 @@ public class SinglePlayerScoreManager : MonoBehaviour
     [SerializeField] private Button SmartPlacementQuestionnaireButton;
     [SerializeField] private Button RandomPlacementQuestionnaireButton;
     [SerializeField] private Button OpenPlaytestDataFolderButton;
-    
+    [SerializeField] private TextMeshProUGUI[] MilkCollectedScores;
+    [SerializeField] private TextMeshProUGUI totalMilkCollectedText;
+    [SerializeField] private TMP_Text textToCopyText;
     [Header("Round Settings")]
-    public int MAX_ROUNDS = 6;
+    public int MAX_ROUNDS = 2;
     
     
     // EVENTS
-    public static event Action StartFireTransition;
+    public static event Action StartFireTransition; 
     public static event Action OnPlaythroughStarted;
     public static event Action OnPrepareNextPlaythrough;
     public static event Action OnNextRoundStarted;
@@ -117,7 +117,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
             PlayTestDataManager.Instance.LogRoundScore();
             PlayTestDataManager.Instance.LogTotalScore();
             ShowCorrectQuestionnaireButton();
-            ShowFinalScore();
+            PlayTestDataManager.Instance.ResetAllCounters();
             RandomPlacementStrategy.Instance.ClearItemParent();
         } 
     }
@@ -140,6 +140,14 @@ public class SinglePlayerScoreManager : MonoBehaviour
                 Debug.LogError("Unhandled playthrough type!");
                 break;
         }
+        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        textToCopyText.gameObject.SetActive(true);
+        textToCopyText.text = "userId " + PlayTestDataManager.Instance.GetUserID() + "\n" +
+                              "sessionId " + PlayTestDataManager.Instance.GetSessionID() + "\n" +
+                              "previousGamesPlayed " + PlayTestDataManager.Instance.previousGamesPlayed;
+
     }
     
     public void AfterQuestionnaireButtonWasClicked()
@@ -170,23 +178,21 @@ public class SinglePlayerScoreManager : MonoBehaviour
 
     private void PrepareScoreBoardUI()
     {
+        int currentRoundIndex = PlayTestDataManager.Instance.roundIndex.Value;
         for (int i = 0; i < PlayTestDataManager.Instance.roundIndex.Value; i++)
         {
             rows.transform.GetChild(i).gameObject.SetActive(true);
         }
-        PlayerTimeSurvivedText.text = "9000";
+        
+        MilkCollectedScores[currentRoundIndex - 1].text = PlayTestDataManager.Instance.roundMilkCollected.Value.ToString();
 
+        if (currentRoundIndex == MAX_ROUNDS)
+        {
+            rows.transform.GetChild(currentRoundIndex).gameObject.SetActive(true);
+            totalMilkCollectedText.text = PlayTestDataManager.Instance.totalMilkCollected.Value.ToString();
+        }
         if (scoreboardUI != null)
             scoreboardUI.SetActive(true);
-    }
-
-    private void ShowFinalScore()
-    {
-        CaclulateFinalScore();
-    }
-    
-    private void CaclulateFinalScore()
-    {
     }
     
     
@@ -231,6 +237,10 @@ public class SinglePlayerScoreManager : MonoBehaviour
 
     private void OnNextPlaythroughButtonClicked()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        textToCopyText.gameObject.SetActive(false);
+
         HideAllButtons();
         StartFireTransition.Invoke();
         StartCoroutine(OnNextPlaythroughButtonClickedCoroutine());
