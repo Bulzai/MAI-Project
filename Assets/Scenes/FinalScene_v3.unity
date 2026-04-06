@@ -101120,6 +101120,7 @@ MonoBehaviour:
   togglePrefab: {fileID: 8049391933156477521, guid: acf7d4e5326d5d54492ecaaf74cc6b64, type: 3}
   grid: {fileID: 422424823}
   placeableItemSelection: {fileID: 827081530}
+  continueButton: {fileID: 0}
 --- !u!114 &422424822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111065,7 +111066,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -448}
+  m_AnchoredPosition: {x: 0, y: -414}
   m_SizeDelta: {x: 46.245, y: 43.1281}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &930531196
@@ -111144,8 +111145,8 @@ MonoBehaviour:
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 996657996}
-    m_SelectOnRight: {fileID: 734148320}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
   m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
