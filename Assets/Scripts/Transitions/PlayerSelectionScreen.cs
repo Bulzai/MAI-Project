@@ -8,12 +8,12 @@ public class PlayerSelectionScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.OnSurpriseBoxStateEntered += HideBackground;
+        GameEvents.OnPlaceableItemSelectionStateEntered += HideBackground;
     }
 
     private void OnDisable()
     {
-        GameEvents.OnSurpriseBoxStateEntered -= HideBackground;
+        GameEvents.OnPlaceableItemSelectionStateEntered -= HideBackground;
     }
 
     private void HideBackground()

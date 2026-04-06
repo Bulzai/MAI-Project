@@ -134,24 +134,57 @@ public class SurpriseBoxState : MonoBehaviour
     public void SpawnObjects()
     {
         var availableTiles = new List<GameObject>(spawnBoxes);
-        if (itemPool == null || itemPool.Count == 0 || availableTiles.Count == 0) return;
 
-        HashSet<int> usedIndices = new HashSet<int>();
+        // selected item pool
+        var currentAllowedPool = PlaceableItemSelection.Instance.activeItemPool;
 
-        for (int i = 0; i < numberToSpawn && availableTiles.Count > 0; i++)
+        if (itemPool == null || currentAllowedPool.Count == 0 || itemPool.Count == 0 || availableTiles.Count == 0)
         {
-            if (usedIndices.Count >= itemPool.Count)
+            Debug.LogWarning("No items are selected or available to spawn");
+            return; 
+        }
+
+        // calculate spawn count: current players + 1
+        // ensures leftover for more choices
+        int playerCount = playerManager.playerCount;
+        int targetSpawnCount = playerCount + 1;
+
+        // check: does not spawn more items than available tiles
+        targetSpawnCount = Mathf.Min(targetSpawnCount, availableTiles.Count);
+
+        //HashSet<int> usedIndices = new HashSet<int>();
+
+        for (int i = 0; i < targetSpawnCount; i++)
+        {
+            // look up active item pool not general one and pick any
+            int prefabIndex = UnityEngine.Random.Range(0, currentAllowedPool.Count);
+            var prefab = currentAllowedPool[prefabIndex];
+
+            /*
+            if (usedIndices.Count >= currentAllowedPool.Count)
             {
                 Debug.LogWarning("All unique items used — cannot spawn more without duplicates.");
                 break;
             }
 
             int prefabIndex;
+            */
+
+            // check spawn rate
+            float rate = prefab.GetComponent<SelectableItem>().GetSpawnRate();
+            if (UnityEngine.Random.Range(0f, 100f) > rate)
+            {
+                i--;
+                continue;
+            }
+
+            /*
             int attempts = 0;
 
             do
             {
-                prefabIndex = UnityEngine.Random.Range(0, itemPool.Count);
+                // look at current allowed item pool
+                prefabIndex = UnityEngine.Random.Range(0, currentAllowedPool.Count);
                 attempts++;
                 if (attempts > 50)
                 {
@@ -160,22 +193,16 @@ public class SurpriseBoxState : MonoBehaviour
                 }
             }
             while (usedIndices.Contains(prefabIndex));
-
-            var prefab = itemPool[prefabIndex];
-            float rate = prefab.GetComponent<SelectableItem>().GetSpawnRate();
-
-            if (UnityEngine.Random.Range(0f, 100f) > rate)
-            {
-                i--;
-                continue;
-            }
-
+            
             usedIndices.Add(prefabIndex);
+            */
 
+            // pick random tile and remove from available list
             int idx = UnityEngine.Random.Range(0, availableTiles.Count);
             var tile = availableTiles[idx];
             availableTiles.RemoveAt(idx);
 
+            // position calculation
             var col = tile.GetComponent<MeshCollider>();
             Vector2 pos;
 
@@ -189,6 +216,8 @@ public class SurpriseBoxState : MonoBehaviour
             {
                 pos = tile.transform.position;
             }
+
+            // instantiate
             var go = Instantiate(prefab, pos, prefab.transform.rotation, itemBoxItemList);
             itemsInBox.Add(go);
         }

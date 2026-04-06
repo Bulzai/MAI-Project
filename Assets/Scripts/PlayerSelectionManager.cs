@@ -14,6 +14,7 @@ public class PlayerSelectionManager : MonoBehaviour
     public static event Action OnStartGameSFX;
     public static event Action OnPlayerReadySFX;
     public static event Action OnSurpriseBoxStateTransitionStarted;
+    public static event Action OnPlaceableItemSelectionTransitionStarted;
     public static event Action OnNotAllPlayersReady;
     public static event Action OnNobodyJoinedYet;
     public static event Action OnPlayerSelectionCountDownStarted;
@@ -197,7 +198,7 @@ public class PlayerSelectionManager : MonoBehaviour
         OnPlayerSelectionCountDownStarted?.Invoke();
     }
 
-    private IEnumerator TransitionToSurpriseBox()
+    private IEnumerator TransitionToPlaceableItemSelection()
     {
         _isTransitionRunning = true;
         // Vorbereitung: Image enablen & Animation starten
@@ -205,7 +206,7 @@ public class PlayerSelectionManager : MonoBehaviour
         Image transitionImage = transitionAnimator.GetComponent<Image>();
         transitionImage.enabled = true;
         transitionAnimator.SetTrigger("Play");
-        OnSurpriseBoxStateTransitionStarted?.Invoke();
+        OnPlaceableItemSelectionTransitionStarted?.Invoke();
         // 3. Warten, bis die Transition den Bildschirm verdeckt (deine 1.1s)
         yield return new WaitForSeconds(1.1f);
 
@@ -213,7 +214,7 @@ public class PlayerSelectionManager : MonoBehaviour
 
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
         {
-            GameEvents.ChangeState(GameState.SurpriseBoxState);
+            GameEvents.ChangeState(GameState.PlaceableItemSelectionState);
         }
 
         // 5. Kurz warten, damit der neue State geladen/initialisiert ist
@@ -266,7 +267,7 @@ public class PlayerSelectionManager : MonoBehaviour
     private void OnCountdownFinished()
     {
         if (_isTransitionRunning) return;
-        StartCoroutine(TransitionToSurpriseBox());
+        StartCoroutine(TransitionToPlaceableItemSelection());
         OnStartGameSFX?.Invoke();
     }
 

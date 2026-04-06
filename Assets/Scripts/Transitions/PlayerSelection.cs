@@ -5,26 +5,24 @@ using UnityEngine;
 
 public class PlayerSelection : MonoBehaviour
 {
-    
-    
-    public GameObject SurpriseBox;
+    public GameObject PlaceableItemSelectionManager; 
     public GameObject SelectPlayer;
     public GameObject GameWorld;
     public GameObject PlayerSelectionButton;
     private void OnEnable()
     {
-        GameEvents.OnSurpriseBoxStateEntered += StartSurpriseBoxSequence;
+        GameEvents.OnPlaceableItemSelectionStateEntered += StartPlaceableItemSelectionSequence;
     }
     private void OnDisable()
     {
-        GameEvents.OnSurpriseBoxStateEntered -= StartSurpriseBoxSequence;
+        GameEvents.OnPlaceableItemSelectionStateEntered -= StartPlaceableItemSelectionSequence;
     }
-    public void StartSurpriseBoxSequence()
+    public void StartPlaceableItemSelectionSequence()
     {
 
         GameWorld.SetActive(false);
         SelectPlayer.SetActive(false);
-        SurpriseBox.SetActive(true);
+        PlaceableItemSelectionManager.SetActive(true);
         PlayerSelectionButton.SetActive(false);  
     }
 }

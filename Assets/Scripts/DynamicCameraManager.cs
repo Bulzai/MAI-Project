@@ -18,6 +18,7 @@ public class DynamicCamera2DManager : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnPlayerSelectionStateEntered += SetCameraPlayerSelectionStatePosition;
+        GameEvents.OnPlaceableItemSelectionStateEntered += SetCameraPlaceableItemSelectionStatePosition;
         GameEvents.OnSurpriseBoxStateEntered += SetCameraSurpriseBoxStatePosition;
         GameEvents.OnPlaceItemStateEntered += SetCameraPlaceItemStatePosition;
         GameEvents.OnMainGameStateEntered +=  EnableDynamicCamera2D;
@@ -26,6 +27,7 @@ public class DynamicCamera2DManager : MonoBehaviour
     private void OnDisable()
     {
         GameEvents.OnPlayerSelectionStateEntered -= SetCameraPlayerSelectionStatePosition;
+        GameEvents.OnPlaceableItemSelectionStateEntered -= SetCameraPlaceableItemSelectionStatePosition;
         GameEvents.OnSurpriseBoxStateEntered -= SetCameraSurpriseBoxStatePosition;
         GameEvents.OnPlaceItemStateEntered -= SetCameraPlaceItemStatePosition;
         GameEvents.OnMainGameStateEntered -=  EnableDynamicCamera2D;
@@ -123,6 +125,12 @@ public class DynamicCamera2DManager : MonoBehaviour
     }
 
     private void SetCameraSurpriseBoxStatePosition()
+    {
+        dynamicEnabled = false;
+        DynamicCamera.orthographicSize = 13;
+        DynamicCamera.transform.position = new Vector3(0f, 1.86f, -30);
+    }
+    private void SetCameraPlaceableItemSelectionStatePosition()
     {
         dynamicEnabled = false;
         DynamicCamera.orthographicSize = 13;
