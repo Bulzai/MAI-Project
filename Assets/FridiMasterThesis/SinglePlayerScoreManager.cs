@@ -21,12 +21,16 @@ public class SinglePlayerScoreManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] MilkCollectedScores;
     [SerializeField] private TextMeshProUGUI totalMilkCollectedText;
     [SerializeField] private TMP_Text textToCopyText;
+    [SerializeField] private GameObject TextToCopyGO;
+    [SerializeField] private TMP_Text CopiedFeedbackText;
+
     [Header("Round Settings")]
     public int MAX_ROUNDS = 2;
     
     
     // EVENTS
-    public static event Action StartFireTransition; 
+    public static event Action StartFireTransition;
+    public static event Action StartSlowFireTransition;
     public static event Action OnPlaythroughStarted;
     public static event Action OnPrepareNextPlaythrough;
     public static event Action OnNextRoundStarted;
@@ -141,17 +145,17 @@ public class SinglePlayerScoreManager : MonoBehaviour
                 break;
         }
         
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        textToCopyText.gameObject.SetActive(true);
         textToCopyText.text = "userId " + PlayTestDataManager.Instance.GetUserID() + "\n" +
                               "sessionId " + PlayTestDataManager.Instance.GetSessionID() + "\n" +
                               "previousGamesPlayed " + PlayTestDataManager.Instance.previousGamesPlayed;
+        TextToCopyGO.SetActive(true);
 
     }
     
     public void AfterQuestionnaireButtonWasClicked()
     {
+        CopiedFeedbackText.gameObject.SetActive(false);
+
         RandomPlacementQuestionnaireButton.gameObject.SetActive(false);
         SmartPlacementQuestionnaireButton.gameObject.SetActive(false);
 
@@ -200,8 +204,8 @@ public class SinglePlayerScoreManager : MonoBehaviour
     {
         ContinueButton.gameObject.SetActive(false);    
         Debug.Log("Continue clicked!");
-        StartFireTransition.Invoke();
         StartCoroutine(OnContinueButtonClickedCoroutine());
+        StartSlowFireTransition.Invoke();
     }
     
     private IEnumerator OnContinueButtonClickedCoroutine()
@@ -237,8 +241,6 @@ public class SinglePlayerScoreManager : MonoBehaviour
 
     private void OnNextPlaythroughButtonClicked()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
         textToCopyText.gameObject.SetActive(false);
 
         HideAllButtons();
@@ -259,6 +261,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
     private void HideAllButtons()
     {
+        TextToCopyGO.SetActive(false);
         ContinueButton.gameObject.SetActive(false);
         MenuButton.gameObject.SetActive(false);
         NextPlaythroughButton.gameObject.SetActive(false);

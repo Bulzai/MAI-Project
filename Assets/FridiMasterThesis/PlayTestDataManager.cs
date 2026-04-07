@@ -22,12 +22,13 @@ public class PlayTestDataManager : MonoBehaviour
     private string userId;
     private string sessionId;
     private string playtestFolder;
-    private string smartPlacementQuestionnaireUrl = "https://forms.gle/sHwD4YwLMEZendz27";
-    private string randomPlacementQuestionnaireUrl = "";
+    private string smartPlacementQuestionnaireUrl = "https://forms.gle/1auwuZRr8rQKx1HHA";
+    private string randomPlacementQuestionnaireUrl = "https://forms.gle/KNgrwQSwnkLyYVnYA";
 
     private string oneGamePlayedPreviously =
         "https://docs.google.com/forms/d/e/1FAIpQLSdeWe-ZOilO4Nkfgbdi0GM5tIqHfo6v6k_NmZDYB0xK44JsTA/viewform?usp=pp_url&entry.1468044015=1";
-    
+
+    private string backgroundSurveyUrl = "https://forms.gle/RvMUncCC3n6K59xi6";
     
     public static PlayTestDataManager Instance { get; private set; }
 

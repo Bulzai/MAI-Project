@@ -54,10 +54,10 @@ public class AISelector : MonoBehaviour
                  Debug.LogError("Playthrough type is undefined!");
                  break;
              case PlaythroughType.A:
-                 randomPlacementStrategy.StartRandomPlacement();
+                 randomPlacementStrategy.StartRandomPlacementCoroutine();
                  break;
              case PlaythroughType.B:
-                 randomPlacementStrategy.StartAdaptivePlacement();
+                 randomPlacementStrategy.StartAdaptivePlacementCoroutine();
                  break;
              default:
                  Debug.LogError("Unhandled playthrough type!");

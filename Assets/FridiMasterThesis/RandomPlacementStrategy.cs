@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
+using UnityEngine.UI;
 
 public class RandomPlacementStrategy : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class RandomPlacementStrategy : MonoBehaviour
     
     [SerializeField] private BoxCollider2D placeItemStateBounds;
     [SerializeField] private Transform itemsParent;
-    
+    [SerializeField] private Animator transitionAnimator;
+
     private int attemptsPerSpawn = 2000;
     private int itemsToPlaceFirst3Rounds = 3;
     private int itemstoPlaceLast3Rounds = 2;
@@ -48,13 +50,35 @@ public class RandomPlacementStrategy : MonoBehaviour
 
     }
     
-
-    public void StartRandomPlacement()
+    private IEnumerator PlacementRoutine(System.Func<IEnumerator> placementMethod, float minDuration)
     {
-        // SHOW LOADING TEXT
+        Debug.Log("started placement routine with method: " + placementMethod.Method.Name);
+        float startTime = Time.time;
 
-        StartAdaptivePlacement();
-        return;
+        // Run the actual placement (random or adaptive)
+        yield return StartCoroutine(placementMethod());
+
+        float elapsed = Time.time - startTime;
+
+        // Wait remaining time if needed
+        if (elapsed < minDuration)
+        {
+            yield return new WaitForSeconds(minDuration - elapsed);
+        }
+        CircleLoadAnim.playAnim = false;
+        Debug.Log("Circleloadanim playanim set to false");
+        yield return new WaitForSeconds(0.6f);
+        PlacementFinished();
+    }
+
+    public void StartRandomPlacementCoroutine()
+    {
+        StartCoroutine(PlacementRoutine(StartRandomPlacement, 3f));
+    }
+    
+    public IEnumerator StartRandomPlacement()
+    {
+
         int itemsToPlacePerRound = 0;
         if (PlayTestDataManager.Instance.roundIndex.Value < 4)
             itemsToPlacePerRound = itemsToPlaceFirst3Rounds;
@@ -69,8 +93,12 @@ public class RandomPlacementStrategy : MonoBehaviour
             GameObject gridItemInstance = Instantiate(gridItem);
             TryPlaceItem(placeItemStateBounds.bounds, gridItemInstance);
         }
-        PlacementFinished();
-            
+
+        yield return null;
+    }
+    public void StartAdaptivePlacementCoroutine()
+    {
+        StartCoroutine(PlacementRoutine(StartAdaptivePlacement, 3f));
     }
 
     public void PlacementFinished()
@@ -78,6 +106,8 @@ public class RandomPlacementStrategy : MonoBehaviour
         //HIDE LOADING TEXT
         Debug.Log("Placement finished, starting countdown...");
         StartCoroutine(CountdownManager.Instance.StartCountdown());
+        CircleLoadAnim.playAnim = true;
+
     }
     
         
@@ -128,7 +158,7 @@ public class RandomPlacementStrategy : MonoBehaviour
         }
     }
 
-    public void StartAdaptivePlacement()
+    public IEnumerator StartAdaptivePlacement()
     {
         int itemsToPlacePerRound = 0;
         if (PlayTestDataManager.Instance.roundIndex.Value < 4)
@@ -181,8 +211,7 @@ public class RandomPlacementStrategy : MonoBehaviour
             }
             maxTotalCellVisits = new int[]{1,1,1};
         }
-        PlacementFinished();
-
+        yield return null;
     }
 
     //TODO this is always going to select the first item that is effect shooter because in round 0 there ar eno cellvisits
