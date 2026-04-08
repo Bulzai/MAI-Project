@@ -5,9 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject MenuGameObject;
-    public GameObject SelectPlayer;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -22,9 +19,6 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-
-        MenuGameObject.SetActive(false);
-        SelectPlayer.SetActive(true);
         Time.timeScale = 1f;
         //SceneManager.LoadScene("MovementScene");
     }

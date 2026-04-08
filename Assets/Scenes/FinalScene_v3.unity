@@ -163,13 +163,14 @@ GameObject:
   m_Component:
   - component: {fileID: 9365648}
   - component: {fileID: 9365649}
+  - component: {fileID: 9365650}
   m_Layer: 0
   m_Name: PlaceItemState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9365648
 Transform:
   m_ObjectHideFlags: 0
@@ -204,6 +205,23 @@ MonoBehaviour:
   guideScreen: {fileID: 538661467}
   guideAnimator: {fileID: 899228032}
   roundController: {fileID: 770550881}
+--- !u!114 &9365650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9365647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac74eef9c2cdb743a161d4816d6207f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextUIElements: {fileID: 0}
+  nextStateGo: {fileID: 780870650}
+  nextState: 2
+  currentUIElements: {fileID: 238950884}
+  currentState: {fileID: 9365647}
 --- !u!1 &11885834
 GameObject:
   m_ObjectHideFlags: 0
@@ -89699,13 +89717,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 98960556}
+  - component: {fileID: 98960557}
   m_Layer: 5
   m_Name: PlaceableItemSelection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &98960556
 RectTransform:
   m_ObjectHideFlags: 0
@@ -89727,6 +89746,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &98960557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98960555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac74eef9c2cdb743a161d4816d6207f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextUIElements: {fileID: 0}
+  nextStateGo: {fileID: 780870650}
+  nextState: 2
+  currentUIElements: {fileID: 98960555}
+  currentState: {fileID: 430870792}
 --- !u!1 &110315039
 GameObject:
   m_ObjectHideFlags: 0
@@ -92748,7 +92784,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &238950885
 RectTransform:
   m_ObjectHideFlags: 0
@@ -101098,6 +101134,7 @@ GameObject:
   - component: {fileID: 422424823}
   - component: {fileID: 422424822}
   - component: {fileID: 422424821}
+  - component: {fileID: 422424824}
   m_Layer: 5
   m_Name: PlaceableItemSelectionUi
   m_TagString: Untagged
@@ -101120,7 +101157,7 @@ MonoBehaviour:
   togglePrefab: {fileID: 8049391933156477521, guid: acf7d4e5326d5d54492ecaaf74cc6b64, type: 3}
   grid: {fileID: 422424823}
   placeableItemSelection: {fileID: 827081530}
-  continueButton: {fileID: 0}
+  continueButton: {fileID: 930531200}
 --- !u!114 &422424822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101138,13 +101175,13 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 0, y: 0}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_CellSize: {x: 180, y: 180}
+  m_Spacing: {x: 400, y: 80}
+  m_Constraint: 1
+  m_ConstraintCount: 3
 --- !u!224 &422424823
 RectTransform:
   m_ObjectHideFlags: 0
@@ -101164,6 +101201,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &422424824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422424820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42520c091b2cb22489ef6dfd1e3e6728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultSelectable: {fileID: 930531200}
 --- !u!1 &428570263
 GameObject:
   m_ObjectHideFlags: 0
@@ -101228,7 +101278,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &430870793
 Transform:
   m_ObjectHideFlags: 0
@@ -102426,6 +102476,7 @@ GameObject:
   m_Component:
   - component: {fileID: 485684851}
   - component: {fileID: 485684852}
+  - component: {fileID: 485684853}
   m_Layer: 5
   m_Name: MainMenuUI
   m_TagString: Untagged
@@ -102470,6 +102521,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultSelectable: {fileID: 19490359}
+--- !u!114 &485684853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485684850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac74eef9c2cdb743a161d4816d6207f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextUIElements: {fileID: 1754208610}
+  nextStateGo: {fileID: 2072970263}
+  nextState: 0
+  currentUIElements: {fileID: 1707829880}
+  currentState: {fileID: 0}
 --- !u!1 &493484161
 GameObject:
   m_ObjectHideFlags: 0
@@ -108333,13 +108401,14 @@ GameObject:
   m_Component:
   - component: {fileID: 780870651}
   - component: {fileID: 780870652}
+  - component: {fileID: 780870653}
   m_Layer: 0
   m_Name: SurpriseBoxState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &780870651
 Transform:
   m_ObjectHideFlags: 0
@@ -108370,9 +108439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerManager: {fileID: 2041737856}
   SurpriseBox: {fileID: 1205235881}
-  SelectPlayer: {fileID: 1754208610}
   GameWorld: {fileID: 2136622800}
-  PlayerSelectionButton: {fileID: 0}
   spawnBoxes:
   - {fileID: 568994277}
   - {fileID: 54501755}
@@ -108401,6 +108468,23 @@ MonoBehaviour:
   - {fileID: 1298910944}
   transitionAnimator: {fileID: 2010682647}
   playAnimTrigger: Play
+--- !u!114 &780870653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780870650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac74eef9c2cdb743a161d4816d6207f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextUIElements: {fileID: 238950884}
+  nextStateGo: {fileID: 9365647}
+  nextState: 3
+  currentUIElements: {fileID: 780870650}
+  currentState: {fileID: 0}
 --- !u!1 &784634667
 GameObject:
   m_ObjectHideFlags: 0
@@ -108431,9 +108515,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 849097962}
+  - {fileID: 430870793}
   - {fileID: 780870651}
   - {fileID: 2023976910}
-  - {fileID: 430870793}
   - {fileID: 9365648}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -109096,7 +109180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efd3ee6f2a5c22d418eb93bb849e24d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectionUIPanel: {fileID: 422424820}
   generalItemPool:
   - {fileID: 4366111143107458009, guid: f0f5d11c8733f2b4b9384257503c134a, type: 3}
   - {fileID: 5978482745451247659, guid: 620d66ef6926fcf48b95a005014f5440, type: 3}
@@ -109165,7 +109248,6 @@ GameObject:
   - component: {fileID: 841288303}
   - component: {fileID: 841288302}
   - component: {fileID: 841288301}
-  - component: {fileID: 841288304}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -109291,8 +109373,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bf575afcbfc3f42990267e77cd0911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuGameObject: {fileID: 1707829880}
-  SelectPlayer: {fileID: 1754208610}
 --- !u!114 &841288303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109306,22 +109386,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUi: {fileID: 169075034}
---- !u!114 &841288304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 841288296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbac6f1ad17d9c442821ad19111e2c07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlaceableItemSelectionManager: {fileID: 1575454749}
-  SelectPlayer: {fileID: 1754208610}
-  GameWorld: {fileID: 2136622800}
-  PlayerSelectionButton: {fileID: 1754208610}
 --- !u!114 &841288305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125822,7 +125886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1707829881
 RectTransform:
   m_ObjectHideFlags: 0
@@ -126892,10 +126956,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1754208610}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36cc954218c00f6478d4d04e54eddb18, type: 3}
+  m_Script: {fileID: 11500000, guid: fac74eef9c2cdb743a161d4816d6207f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Background: {fileID: 849097961}
+  nextUIElements: {fileID: 98960555}
+  nextStateGo: {fileID: 430870792}
+  nextState: 1
+  currentUIElements: {fileID: 1754208610}
+  currentState: {fileID: 849097961}
 --- !u!1 &1761788233
 GameObject:
   m_ObjectHideFlags: 0
@@ -220224,6 +220292,7 @@ GameObject:
   - component: {fileID: 2041737853}
   - component: {fileID: 2041737854}
   - component: {fileID: 2041737856}
+  - component: {fileID: 2041737857}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: PlayerManager
@@ -220369,6 +220438,26 @@ MonoBehaviour:
   - {fileID: 232725130}
   - {fileID: 1448344667}
   - {fileID: 936073293}
+--- !u!114 &2041737857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041737852}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9272f340cfaab604680eff8faa3b30cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenuUI: {fileID: 1707829880}
+  playerSelectionUI: {fileID: 1754208610}
+  playerSelectionState: {fileID: 849097961}
+  placeableItemSelectionUI: {fileID: 98960555}
+  placeableItemSelectionState: {fileID: 430870792}
+  surpriseBoxState: {fileID: 780870650}
+  placeItemUI: {fileID: 238950884}
+  placeItemState: {fileID: 9365647}
 --- !u!1 &2045790367
 GameObject:
   m_ObjectHideFlags: 0
@@ -225868,7 +225957,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2072970264
 MonoBehaviour:
   m_ObjectHideFlags: 0

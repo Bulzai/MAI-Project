@@ -16,9 +16,7 @@ public class SurpriseBoxState : MonoBehaviour
     [SerializeField] private PlayerManager playerManager;
 
     public GameObject SurpriseBox;
-    public GameObject SelectPlayer;
     public GameObject GameWorld;
-    public GameObject PlayerSelectionButton;
 
     [Header("Item Stuff")]
     [SerializeField] private List<GameObject> spawnBoxes;
@@ -45,6 +43,9 @@ public class SurpriseBoxState : MonoBehaviour
             return;
         }
         Instance = this;
+
+        itemBoxItemList = SurpriseBox.transform;
+
         DontDestroyOnLoad(gameObject);
 
         PlayerSelectionManager.OnReturnToMainMenu += DeactivePlayerNames;
@@ -61,8 +62,11 @@ public class SurpriseBoxState : MonoBehaviour
         GameEvents.OnSurpriseBoxStateEntered += SpawnObjects;
         //GameEvents.OnSurpriseBoxStateEntered += ShowAllCursors;
         GameEvents.OnSurpriseBoxStateEntered += DeactivePlayerNames;
-
         GameEvents.OnSurpriseBoxStateEntered += StartEnterCountdown;
+        //ActivateItemBox();
+        //SpawnObjects();
+        //DeactivePlayerNames();
+        //StartEnterCountdown();
     }
 
     private void OnDisable()
@@ -72,6 +76,7 @@ public class SurpriseBoxState : MonoBehaviour
         GameEvents.OnSurpriseBoxStateEntered -= ShowAllCursors;
         GameEvents.OnSurpriseBoxStateEntered -= DeactivePlayerNames;
         GameEvents.OnSurpriseBoxStateEntered -= StartEnterCountdown;
+
 
         // optional safety
         StopCountdownIfRunning();
@@ -138,6 +143,9 @@ public class SurpriseBoxState : MonoBehaviour
         // selected item pool
         var currentAllowedPool = PlaceableItemSelection.Instance.activeItemPool;
 
+        // check how many items
+        Debug.Log($"Attempting to spawn. Pool Count: {currentAllowedPool.Count}. Tiles: {availableTiles.Count}");
+
         if (itemPool == null || currentAllowedPool.Count == 0 || itemPool.Count == 0 || availableTiles.Count == 0)
         {
             Debug.LogWarning("No items are selected or available to spawn");
@@ -170,12 +178,16 @@ public class SurpriseBoxState : MonoBehaviour
             int prefabIndex;
             */
 
-            // check spawn rate
-            float rate = prefab.GetComponent<SelectableItem>().GetSpawnRate();
-            if (UnityEngine.Random.Range(0f, 100f) > rate)
+            // if only one item is selected, ignore spawn rate
+            if (currentAllowedPool.Count > 1) 
             {
-                i--;
-                continue;
+                // check spawn rate
+                float rate = prefab.GetComponent<SelectableItem>().GetSpawnRate();
+                if (UnityEngine.Random.Range(0f, 100f) > rate)
+                {
+                    i--;
+                    continue;
+                }
             }
 
             /*
@@ -220,6 +232,8 @@ public class SurpriseBoxState : MonoBehaviour
             // instantiate
             var go = Instantiate(prefab, pos, prefab.transform.rotation, itemBoxItemList);
             itemsInBox.Add(go);
+
+            Debug.Log($"Spawned {go.name} at {pos}");
         }
     }
 
@@ -288,6 +302,7 @@ public class SurpriseBoxState : MonoBehaviour
     }
     public void ShowAllCursors()
     {
+        Debug.Log("Showing cursors");
         foreach (var kvp in playerManager.playerRoots)
         {
             int idx = kvp.Key;

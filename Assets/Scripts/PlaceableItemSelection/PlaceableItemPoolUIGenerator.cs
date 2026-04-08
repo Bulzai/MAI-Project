@@ -27,6 +27,9 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
 
     private void GenerateToggles()
     {
+        GameObject firstToggle = null;
+        GameObject lastToggle = null;
+
         Debug.Log("GENERATOR: I am now running!");
 
         // check if the manager exists yet
@@ -49,6 +52,23 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
             // create toggle ui
             GameObject newToggleGO = Instantiate(togglePrefab, grid);
 
+            // get script
+            PlaceableItemToggleUI toggleScript = newToggleGO.GetComponent<PlaceableItemToggleUI>();
+
+            if (toggleScript != null)
+            {
+                toggleScript.SetupToggle(item);
+
+                // track for navigation
+                if (firstToggle == null) firstToggle = newToggleGO;
+                lastToggle = newToggleGO;
+            }
+            else
+            {
+                Debug.LogError("The ItemToggle prefab is missing the PlaceableItemToggleUI script!");
+                continue; // Skip to the next item instead of crashing the whole loop
+            }
+
             // get data from item
             SpriteRenderer sprite = item.GetComponentInChildren<SpriteRenderer>();
 
@@ -59,13 +79,29 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
             }
 
             // set toggle logic
-            newToggleGO.GetComponent<PlaceableItemToggleUI>().SetupToggle(item);
+            //newToggleGO.GetComponent<PlaceableItemToggleUI>().SetupToggle(item);
+        }
+
+        if (continueButton != null && lastToggle != null)
+        {
+            var nav = continueButton.navigation;
+            nav.mode = UnityEngine.UI.Navigation.Mode.Explicit;
+
+            // link play button up to last item
+            nav.selectOnUp = lastToggle.GetComponentInChildren<UnityEngine.UI.Toggle>();
+            continueButton.navigation = nav;
+
+            // set down to go back to play
+            //var tNav = lastToggle.GetComponentInChildren<UnityEngine.UI.Toggle>().navigation;
+            //tNav.mode = UnityEngine.UI.Navigation.Mode.Explicit;
+            //tNav.selectOnDown = continueButton;
+            //lastToggle.GetComponentInChildren<UnityEngine.UI.Toggle>().navigation = tNav;
         }
 
         // get button component
-        UnityEngine.UI.Button playButton = continueButton.GetComponent<UnityEngine.UI.Button>();
+        //UnityEngine.UI.Button playButton = continueButton.GetComponent<UnityEngine.UI.Button>();
         // get toggle component from first item
-        UnityEngine.UI.Navigation playNav = playButton.navigation;
+        //UnityEngine.UI.Navigation playNav = playButton.navigation;
         // TODO ADD LOGIC FOR NAV WHEN BUTTON UP TO LAST ITEM
         //playNav.selectOnUp = first
     }

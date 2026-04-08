@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class PlayerSelection : MonoBehaviour
 {
-    public GameObject PlaceableItemSelectionManager; 
+    public GameObject PlaceableItemSelectionUI;
+    public GameObject PlaceableItemSelectionBackground;
     public GameObject SelectPlayer;
     public GameObject GameWorld;
     public GameObject PlayerSelectionButton;
@@ -19,10 +20,10 @@ public class PlayerSelection : MonoBehaviour
     }
     public void StartPlaceableItemSelectionSequence()
     {
-
+        PlaceableItemSelectionUI.SetActive(true);
+        PlaceableItemSelectionBackground.SetActive(true);
         GameWorld.SetActive(false);
         SelectPlayer.SetActive(false);
-        PlaceableItemSelectionManager.SetActive(true);
         PlayerSelectionButton.SetActive(false);  
     }
 }

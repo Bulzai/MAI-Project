@@ -10,14 +10,14 @@ public class PlaceableItemToggleUI : MonoBehaviour
 
     private void Awake()
     {
-        _toggle = GetComponent<Toggle>();
+        _toggle = GetComponentInChildren<Toggle>();
         _toggle.onValueChanged.AddListener(OnToggleClicked);
     }
 
     public void SetupToggle(GameObject prefab)
     {
         itemPrefab= prefab;
-        _toggle = GetComponent<Toggle>();
+        _toggle = GetComponentInChildren<Toggle>();
 
         // check if item already in pool
         if (PlaceableItemSelection.Instance != null) 

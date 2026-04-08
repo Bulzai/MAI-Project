@@ -7,9 +7,6 @@ public class PlaceableItemSelection : MonoBehaviour
 {
     public static PlaceableItemSelection Instance { get; private set; }
 
-    [Header("UI")]
-    [SerializeField] private GameObject selectionUIPanel;
-
     [Header("Item Pool")]
     [SerializeField] private List<GameObject> generalItemPool;
 
@@ -33,23 +30,10 @@ public class PlaceableItemSelection : MonoBehaviour
         activeItemPool = new List<GameObject>(generalItemPool);
     }
 
-    private void OnEnable()
-    {
-        GameEvents.OnPlaceableItemSelectionStateEntered += ShowSelectionUI;
-    }
-
     private void OnDisable()
     {
-        GameEvents.OnPlaceableItemSelectionStateEntered -= ShowSelectionUI;
-    }
-
-    private void ShowSelectionUI()
-    {
-        selectionUIPanel.SetActive(true);
-        // TODO turn on buttons for selection and start
-
-        // show cursors so players can click the toggles
-        //SurpriseBoxState.Instance.ShowAllCursors();
+        //GameEvents.ChangeState(GameState.SurpriseBoxState);
+        FinishedSelection();
     }
 
     public void ToggleItemAvailability(GameObject itemPrefab, bool isSelected)
@@ -73,8 +57,6 @@ public class PlaceableItemSelection : MonoBehaviour
 
     public void FinishedSelection()
     {
-        selectionUIPanel.SetActive(false);
-
         // next up: Surprise box
         GameEvents.ChangeState(GameState.SurpriseBoxState);
     }
@@ -87,7 +69,6 @@ public class PlaceableItemSelection : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        surpriseBoxState.ShowAllCursors();
     }
 
     // Update is called once per frame
