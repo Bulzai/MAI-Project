@@ -241,7 +241,6 @@ public class SinglePlayerScoreManager : MonoBehaviour
 
     private void OnNextPlaythroughButtonClicked()
     {
-        textToCopyText.gameObject.SetActive(false);
 
         HideAllButtons();
         StartFireTransition.Invoke();
@@ -261,6 +260,7 @@ public class SinglePlayerScoreManager : MonoBehaviour
     
     private void HideAllButtons()
     {
+        CopiedFeedbackText.gameObject.SetActive(false);
         TextToCopyGO.SetActive(false);
         ContinueButton.gameObject.SetActive(false);
         MenuButton.gameObject.SetActive(false);

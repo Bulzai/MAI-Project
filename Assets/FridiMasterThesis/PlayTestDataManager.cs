@@ -10,31 +10,17 @@ using Debug = UnityEngine.Debug;
 
 public class PlayTestDataManager : MonoBehaviour
 {
-    // 11 is with filled out -1 because something went wrong
-    // 10 is with >=10 previouslyPlayedgames
-    [Header("Google Forms - Playtest A")]
-    [SerializeField] private string[] playtestAForms = new string[11];
-
-    [Header("Google Forms - Playtest B")]
-    [SerializeField] private string[] playtestBForms = new string[11];
-
     private string sessionFilePath;
     private string userId;
     private string sessionId;
     private string playtestFolder;
     private string smartPlacementQuestionnaireUrl = "https://forms.gle/1auwuZRr8rQKx1HHA";
     private string randomPlacementQuestionnaireUrl = "https://forms.gle/KNgrwQSwnkLyYVnYA";
-
-    private string oneGamePlayedPreviously =
-        "https://docs.google.com/forms/d/e/1FAIpQLSdeWe-ZOilO4Nkfgbdi0GM5tIqHfo6v6k_NmZDYB0xK44JsTA/viewform?usp=pp_url&entry.1468044015=1";
-
-    private string backgroundSurveyUrl = "https://forms.gle/RvMUncCC3n6K59xi6";
+    
     
     public static PlayTestDataManager Instance { get; private set; }
 
 
-    private int blockedZoneCoverageSum;
-    private IntCounter nrTimesAddedToBlockedZoneCoverageSum { get; } = new();
     public int previousGamesPlayed { get; set; } = 0;
     
     // Round totals (reset per round)
@@ -45,6 +31,7 @@ public class PlayTestDataManager : MonoBehaviour
     public IntCounter roundDistanceTravelled { get; } = new();
     public IntCounter roundHitsTaken { get; } = new();
     public IntCounter roundDamageDealt { get; } = new();
+    //is actually  just GetCoveredByAttackRangeCellCount
     public IntCounter roundBlockedZoneCoveragePercent { get; } = new();
     
     
@@ -107,22 +94,7 @@ public class PlayTestDataManager : MonoBehaviour
             roundDurationInSeconds += Time.deltaTime;
         }
     }
-
-    public string GetFormLink(PlaythroughType playtestType, int previousGamesPlayed)
-    {
-        return playtestType switch
-        {
-            PlaythroughType.A => GetFormFromArray(playtestAForms, previousGamesPlayed),
-            PlaythroughType.B => GetFormFromArray(playtestBForms, previousGamesPlayed),
-            _ => playtestAForms[11]
-        };
-    }
     
-    private string GetFormFromArray(string[] forms, int gamesPlayed)
-    {
-        int index = previousGamesPlayed -1;
-        return forms[index];
-    }
     
     private void LoadPreviousGamesPlayed()
     {
@@ -183,6 +155,8 @@ public class PlayTestDataManager : MonoBehaviour
         {
             sessionId = AnalyticsService.Instance.SessionID;
             userId = AnalyticsService.Instance.GetAnalyticsUserID();
+            CircleLoadAnim.playAnim = false;
+            Debug.Log($"Analytics initialized. SessionID: {sessionId}, UserID: {userId}");
         }
         catch (Exception e)
         {
@@ -310,6 +284,8 @@ public class PlayTestDataManager : MonoBehaviour
 
     public void LogRoundScore()
     {
+        roundBlockedZoneCoveragePercent.Reset();
+        roundBlockedZoneCoveragePercent.Increment(HeatMap.Instance.GetCoveredByAttackRangeCellCount());
         Debug.Log("sessionfilepath: " + sessionFilePath);
         Debug.Log($"Logs at: {Application.persistentDataPath}");
 
@@ -379,19 +355,8 @@ public class PlayTestDataManager : MonoBehaviour
         totalDistanceTravelled.Increment(roundDistanceTravelled.Value);
         totalHitsTaken.Increment(roundHitsTaken.Value);
         totalDamageDealt.Increment(roundDamageDealt.Value);
-        blockedZoneCoverageSum+= roundBlockedZoneCoveragePercent.Value;
-        nrTimesAddedToBlockedZoneCoverageSum.Increment();
         totalBlockedZoneCoveragePercent.Reset();
-        try
-        {
-            if (nrTimesAddedToBlockedZoneCoverageSum.Value > 0)
-                totalBlockedZoneCoveragePercent.Increment(Mathf.RoundToInt((float)blockedZoneCoverageSum / nrTimesAddedToBlockedZoneCoverageSum.Value));
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Failed to calculate avg blocked zone coverage: {e.Message}");
-        }
-        
+        totalBlockedZoneCoveragePercent.Increment(roundBlockedZoneCoveragePercent.Value);
     }
 
     
@@ -456,8 +421,7 @@ public class PlayTestDataManager : MonoBehaviour
         totalHitsTaken.Reset();
         totalDamageDealt.Reset();
         totalBlockedZoneCoveragePercent.Reset();
-        blockedZoneCoverageSum = 0;
-        nrTimesAddedToBlockedZoneCoverageSum.Reset();
+
     }
 
     public void ResetAllCounters()

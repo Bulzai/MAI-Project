@@ -9,7 +9,7 @@ public class CircleLoadAnim : MonoBehaviour
     public List<Sprite> sprites;
     private float animSpeed = 0.15f;
     private int index;
-    public static bool playAnim = false;
+    public static bool playAnim = true;
     
     public void StartCircleAnim()
     {

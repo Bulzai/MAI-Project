@@ -107,6 +107,7 @@ public class RandomPlacementStrategy : MonoBehaviour
         Debug.Log("Placement finished, starting countdown...");
         StartCoroutine(CountdownManager.Instance.StartCountdown());
         CircleLoadAnim.playAnim = true;
+        
 
     }
     
@@ -118,6 +119,7 @@ public class RandomPlacementStrategy : MonoBehaviour
         Physics2D.SyncTransforms();
         if (gridItemScript.CanBePlaced())       
         {
+            gridItemScript.UpdateHitCells();
             gridItemScript.Place();
             gridItemGO.transform.SetParent(itemsParent);
             gridItemGO.layer = LayerMask.NameToLayer("Ground/Wall");

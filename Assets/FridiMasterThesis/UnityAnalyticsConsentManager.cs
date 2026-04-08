@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.Services.Core;
 using Unity.Services.Analytics;
 using Unity.Services.Core.Environments;
@@ -9,7 +10,7 @@ using UnityEngine;
 public class UnityAnalyticsConsentManager : MonoBehaviour
 {
     public static UnityAnalyticsConsentManager Instance;
-    
+    [SerializeField] private TMP_Text textToCopyText;
     private const int MAX_RETRIES = 5;
     private const int RETRY_DELAY_MS = 2000;
     private bool _servicesInitialized = false;
