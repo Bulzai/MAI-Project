@@ -6,6 +6,7 @@ public class HideStateBackground : MonoBehaviour
 {
     public GameObject nextUIElements;
     public GameObject nextStateGo;
+    public GameObject gameWorld;
     public int nextState;
 
 
@@ -49,6 +50,12 @@ public class HideStateBackground : MonoBehaviour
             case 3:
                 GameEvents.OnPlaceItemStateEntered -= ContinueNextState;
                 break;
+            case 4:
+                GameEvents.OnMainGameStateEntered -= ContinueNextState;
+                break;
+            case 5:
+                GameEvents.OnMainGameStateExited -= ContinueNextState;
+                break;
             default:
                 break;
         }
@@ -56,10 +63,11 @@ public class HideStateBackground : MonoBehaviour
 
     private void ContinueNextState()
     {
-        if (nextState != 2) nextUIElements.SetActive(true);
-        nextStateGo.SetActive(true);
+        if (nextState == 3) gameWorld.SetActive(true);
+        if (nextState != 2 && nextState != 4 && nextState != 5) nextUIElements.SetActive(true);
+        if (nextState != 4) nextStateGo.SetActive(true);
 
-        currentUIElements.SetActive(false);
+        if (nextState != 5) currentUIElements.SetActive(false);
 
         if (nextState != 0 && nextState != 3) currentState.SetActive(false);
     }

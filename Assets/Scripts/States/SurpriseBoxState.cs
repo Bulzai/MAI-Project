@@ -63,10 +63,10 @@ public class SurpriseBoxState : MonoBehaviour
         //GameEvents.OnSurpriseBoxStateEntered += ShowAllCursors;
         GameEvents.OnSurpriseBoxStateEntered += DeactivePlayerNames;
         GameEvents.OnSurpriseBoxStateEntered += StartEnterCountdown;
-        //ActivateItemBox();
-        //SpawnObjects();
-        //DeactivePlayerNames();
-        //StartEnterCountdown();
+        ActivateItemBox();
+        SpawnObjects();
+        DeactivePlayerNames();
+        StartEnterCountdown();
     }
 
     private void OnDisable()
