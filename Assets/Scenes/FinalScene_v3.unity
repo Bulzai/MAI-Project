@@ -218,8 +218,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextUIElements: {fileID: 0}
-  nextStateGo: {fileID: 780870650}
-  nextState: 2
+  nextStateGo: {fileID: 0}
+  gameWorld: {fileID: 0}
+  nextState: 4
   currentUIElements: {fileID: 238950884}
   currentState: {fileID: 9365647}
 --- !u!1 &11885834
@@ -89760,6 +89761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextUIElements: {fileID: 0}
   nextStateGo: {fileID: 780870650}
+  gameWorld: {fileID: 0}
   nextState: 2
   currentUIElements: {fileID: 98960555}
   currentState: {fileID: 430870792}
@@ -92801,7 +92803,6 @@ RectTransform:
   - {fileID: 235368071}
   - {fileID: 1880238750}
   - {fileID: 1477122880}
-  - {fileID: 1476749235}
   - {fileID: 2089758465}
   - {fileID: 246464802}
   - {fileID: 710172508}
@@ -102534,7 +102535,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextUIElements: {fileID: 1754208610}
-  nextStateGo: {fileID: 2072970263}
+  nextStateGo: {fileID: 849097961}
+  gameWorld: {fileID: 0}
   nextState: 0
   currentUIElements: {fileID: 1707829880}
   currentState: {fileID: 0}
@@ -108482,6 +108484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextUIElements: {fileID: 238950884}
   nextStateGo: {fileID: 9365647}
+  gameWorld: {fileID: 2136622800}
   nextState: 3
   currentUIElements: {fileID: 780870650}
   currentState: {fileID: 0}
@@ -109275,6 +109278,7 @@ RectTransform:
   - {fileID: 98960556}
   - {fileID: 818559016}
   - {fileID: 1228359224}
+  - {fileID: 1476749235}
   - {fileID: 238950885}
   - {fileID: 1856140569}
   - {fileID: 538661468}
@@ -109673,7 +109677,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &849097962
 Transform:
   m_ObjectHideFlags: 0
@@ -120714,17 +120718,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1476749234}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1763679134}
-  m_Father: {fileID: 238950885}
+  m_Father: {fileID: 841288297}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -621, y: -103}
+  m_AnchoredPosition: {x: 122, y: -63}
   m_SizeDelta: {x: 325.3152, y: 274.9247}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1476749236
@@ -126961,6 +126965,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextUIElements: {fileID: 98960555}
   nextStateGo: {fileID: 430870792}
+  gameWorld: {fileID: 0}
   nextState: 1
   currentUIElements: {fileID: 1754208610}
   currentState: {fileID: 849097961}
@@ -220292,7 +220297,6 @@ GameObject:
   - component: {fileID: 2041737853}
   - component: {fileID: 2041737854}
   - component: {fileID: 2041737856}
-  - component: {fileID: 2041737857}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: PlayerManager
@@ -220438,26 +220442,6 @@ MonoBehaviour:
   - {fileID: 232725130}
   - {fileID: 1448344667}
   - {fileID: 936073293}
---- !u!114 &2041737857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2041737852}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9272f340cfaab604680eff8faa3b30cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainMenuUI: {fileID: 1707829880}
-  playerSelectionUI: {fileID: 1754208610}
-  playerSelectionState: {fileID: 849097961}
-  placeableItemSelectionUI: {fileID: 98960555}
-  placeableItemSelectionState: {fileID: 430870792}
-  surpriseBoxState: {fileID: 780870650}
-  placeItemUI: {fileID: 238950884}
-  placeItemState: {fileID: 9365647}
 --- !u!1 &2045790367
 GameObject:
   m_ObjectHideFlags: 0
@@ -225957,7 +225941,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2072970264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232431,6 +232415,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2136622801}
   - component: {fileID: 2136622802}
+  - component: {fileID: 2136622803}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -232470,6 +232455,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 027d443cf47392945b18a17ed0b363c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2136622803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136622800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac74eef9c2cdb743a161d4816d6207f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextUIElements: {fileID: 0}
+  nextStateGo: {fileID: 780870650}
+  gameWorld: {fileID: 0}
+  nextState: 5
+  currentUIElements: {fileID: 0}
+  currentState: {fileID: 2136622800}
 --- !u!1 &2138144546
 GameObject:
   m_ObjectHideFlags: 0
