@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class HoverOrSelectScale : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
@@ -17,9 +18,13 @@ public class HoverOrSelectScale : MonoBehaviour,
     private bool _isSelected = false;
     private float _pulseTime = 0f; // Local pulse timer
 
+    private Toggle _toggle;
+
     void Awake()
     {
         _originalScale = transform.localScale;
+
+        _toggle = GetComponentInChildren<Toggle>();
     }
 
     void OnEnable()
@@ -32,12 +37,37 @@ public class HoverOrSelectScale : MonoBehaviour,
 
     void Update()
     {
+        bool shouldPulse = false;
+        bool isToggledOn = (_toggle != null && _toggle.isOn);
+
         // Advance local pulse timer only when selected
-        if (_isSelected) _pulseTime += Time.deltaTime;
+        // add logic for toggle
+        bool childIsSelected = false;
+        if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject != null)
+        {
+            // check if the currently selected thing is this object or one of its children
+            GameObject selected = EventSystem.current.currentSelectedGameObject;
+            childIsSelected = (selected == gameObject || selected.transform.IsChildOf(transform));
+        }
+
+        shouldPulse = _isSelected || _isPointerOver || childIsSelected;
+
+        if (_toggle != null)
+        {
+            Image img = GetComponentInChildren<Image>();
+
+            if(img != null)
+    {
+                // Ticked = White, Unticked = Black
+                img.color = isToggledOn ? Color.white : Color.black;
+            }
+        }
 
         Vector3 targetScale;
-        if (_isSelected)
+        if (shouldPulse)
         {
+            _pulseTime += Time.deltaTime;
+
             // Consistent pulse starting from select moment
             float pulse = Mathf.Sin(_pulseTime * pulseSpeed * Mathf.PI * 2f);
             float pulseMultiplier = Mathf.Lerp(selectMultiplierMin, selectMultiplierMax, (pulse + 1f) / 2f);
@@ -57,6 +87,7 @@ public class HoverOrSelectScale : MonoBehaviour,
 
     public void OnPointerEnter(PointerEventData eventData) => _isPointerOver = true;
     public void OnPointerExit(PointerEventData eventData) => _isPointerOver = false;
+
 
     public void OnSelect(BaseEventData eventData)
     {

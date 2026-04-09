@@ -15,6 +15,8 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private GameObject surpriseBoxState;
     [SerializeField] private GameObject placeItemUI;
     [SerializeField] private GameObject placeItemState;
+    [SerializeField] private GameObject GameMap;
+    [SerializeField] private GameObject Scoreboard;
 
     private Dictionary<GameState, List<GameObject>> stateMap;
 
@@ -31,7 +33,13 @@ public class GameStateManager : MonoBehaviour
 
             { GameState.SurpriseBoxState, new List<GameObject> { surpriseBoxState } },
 
-            { GameState.PlaceItemState, new List<GameObject> { placeItemUI, placeItemState } }
+            { GameState.PlaceItemState, new List<GameObject> { placeItemUI, placeItemState } },
+
+            { GameState.MainGameState, new List<GameObject> { GameMap } },
+
+            //{ GameState.ScoreState, new List<GameObject> { Scoreboard } },
+
+            //{ GameState.FinalScoreState, new List<GameObject> { Scoreboard } }
         };
     }
 

@@ -40,8 +40,14 @@ public class PlaceItemState : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log("ENTERED PLACE ITEM");
         GameEvents.OnPlaceItemStateEntered += BeginPlacementPhaseAll;
-        //BeginPlacementPhaseAll();
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log("ENTERED PLACE ITEM");
+        GameEvents.OnPlaceItemStateEntered -= BeginPlacementPhaseAll;
     }
 
     public void HideAllCursors()

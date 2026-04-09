@@ -170,6 +170,8 @@ public class CursorController : MonoBehaviour
 
         currentlyHoveredGO.SetActive(false);
 
+        Debug.Log($"currently hovered is : {currentlyHoveredGO.activeSelf}");
+
         SurpriseBoxState.Instance.NotifyPlayerPicked(
             playerInput.playerIndex,
             item.getOriginalPrefab()
@@ -236,6 +238,8 @@ public class CursorController : MonoBehaviour
     {
         var go = Instantiate(prefabToAttach, transform.position, Quaternion.identity, transform);
         gridItem = go.GetComponent<GridItem>();
+
+        Debug.Log("BEGIN PLACEMENT ACTIVATE");
 
         if (!gridItem)
             Debug.LogError("Spawned object missing GridItem component!");

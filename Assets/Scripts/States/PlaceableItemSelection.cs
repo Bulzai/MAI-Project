@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,10 @@ public class PlaceableItemSelection : MonoBehaviour
 
     [SerializeField] private SurpriseBoxState surpriseBoxState;
 
+    [Header("UI Feedback")]
+    [SerializeField] public GameObject warningText;
+    [SerializeField] private float warningDuration = 2f;
+    private Coroutine _warningCoroutine;
 
     // items surprise box will spawn
     public List<GameObject> activeItemPool { get; private set; } = new List<GameObject>();
@@ -32,7 +37,6 @@ public class PlaceableItemSelection : MonoBehaviour
 
     private void OnDisable()
     {
-        //GameEvents.ChangeState(GameState.SurpriseBoxState);
         FinishedSelection();
     }
 
@@ -40,7 +44,7 @@ public class PlaceableItemSelection : MonoBehaviour
     {
         if (!isSelected && activeItemPool.Count <= 1)
         {
-            // TODO ADD WARNING IN UI
+            ShowWarning("Cannot deselect the last item!");
             Debug.LogWarning("Cannot deselect the last item! The Surprise Box needs at least one thing to spawn.");
             return;
         }
@@ -53,6 +57,22 @@ public class PlaceableItemSelection : MonoBehaviour
         { 
             activeItemPool.Remove(itemPrefab);
         }
+    }
+    private void ShowWarning(string message)
+    {
+        if (warningText == null) return;
+
+        if (_warningCoroutine != null) StopCoroutine(_warningCoroutine);
+        _warningCoroutine = StartCoroutine(WarningRoutine(message));
+    }
+
+    private IEnumerator WarningRoutine(string message)
+    {
+        warningText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(warningDuration);
+
+        warningText.gameObject.SetActive(false);
     }
 
     public void FinishedSelection()
