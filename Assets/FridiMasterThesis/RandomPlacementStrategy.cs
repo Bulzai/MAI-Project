@@ -17,8 +17,8 @@ public class RandomPlacementStrategy : MonoBehaviour
     [SerializeField] private Animator transitionAnimator;
 
     private int attemptsPerSpawn = 2000;
-    private int itemsToPlaceFirst3Rounds = 3;
-    private int itemstoPlaceLast3Rounds = 2;
+    private int itemsToPlaceFirst3Rounds = 2;
+    private int itemstoPlaceLast3Rounds = 1;
     [Header("Grid + Tilemap")]
     private HashSet<Vector3Int> platformCells;
     [SerializeField] private Grid grid;

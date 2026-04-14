@@ -12,6 +12,7 @@ TagManager:
   - Candle
   - GridItem
   - GIFCamera
+  - Milk
   layers:
   - Default
   - TransparentFX

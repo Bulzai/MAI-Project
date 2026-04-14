@@ -34,10 +34,10 @@ MonoBehaviour:
   CoyoteTime: 0.15
   JumpBuffer: 0.2
   WallCheckDistance: 0.12
-  WallSlideSpeed: 13
+  WallSlideSpeed: 8.5
   WallJumpPower: 35
   WallJumpHorizontalSpeed: 14
   WallJumpCoyoteTime: 0.1
-  WallStickTime: 0.06
+  WallStickTime: 0.5
   ApexThreshold: 4
   ApexBonusMultiplier: 1.15
