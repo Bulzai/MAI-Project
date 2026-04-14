@@ -20,6 +20,8 @@ public class HoverOrSelectScale : MonoBehaviour,
 
     private Toggle _toggle;
 
+    public GameObject gifObject;
+
     void Awake()
     {
         _originalScale = transform.localScale;
@@ -33,12 +35,15 @@ public class HoverOrSelectScale : MonoBehaviour,
         _isSelected = false;
         _pulseTime = 0f;
         transform.localScale = _originalScale;
+
+        if (gifObject != null) gifObject.SetActive(false);
     }
 
     void Update()
     {
         bool shouldPulse = false;
         bool isToggledOn = (_toggle != null && _toggle.isOn);
+        Image img = GetComponentInChildren<Image>();
 
         // Advance local pulse timer only when selected
         // add logic for toggle
@@ -52,10 +57,13 @@ public class HoverOrSelectScale : MonoBehaviour,
 
         shouldPulse = _isSelected || _isPointerOver || childIsSelected;
 
-        if (_toggle != null)
+        if (gifObject != null)
         {
-            Image img = GetComponentInChildren<Image>();
+            gifObject.SetActive(shouldPulse);
+        }
 
+        if (_toggle != null && GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
+        {
             if(img != null)
     {
                 // Ticked = White, Unticked = Black
@@ -72,6 +80,15 @@ public class HoverOrSelectScale : MonoBehaviour,
             float pulse = Mathf.Sin(_pulseTime * pulseSpeed * Mathf.PI * 2f);
             float pulseMultiplier = Mathf.Lerp(selectMultiplierMin, selectMultiplierMax, (pulse + 1f) / 2f);
             targetScale = _originalScale * pulseMultiplier;
+
+            if (_toggle != null && GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
+            {
+                if (img != null)
+                {
+                    //
+                }
+            }
+
         }
         else if (_isPointerOver)
         {

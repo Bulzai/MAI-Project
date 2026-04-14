@@ -21,6 +21,7 @@ public class PlayerSelectionManager : MonoBehaviour
     public static event Action OnPlayerSelectionCountDownStopped;
     [SerializeField] private TMP_Text countdownText;
     private Coroutine countdownRoutine;
+    public GameObject[] countdownObjects;
     
     [SerializeField] private Animator transitionAnimator;
 
@@ -136,14 +137,8 @@ public class PlayerSelectionManager : MonoBehaviour
         _playerSelection.Remove(playerInput);
     }
 
-    private void HandlePlayerReady(PlayerInput playerInput)
+    private void HandleJoinMenuReady(PlayerInput playerInput, PlayerSelectionData data)
     {
-        if (!_playerSelection.TryGetValue(playerInput, out var data))
-            return;
-
-        data.IsReady = !data.IsReady;
-
-
         if (data.IsReady)
         {
             OnPlayerReadySFX?.Invoke();
@@ -174,6 +169,54 @@ public class PlayerSelectionManager : MonoBehaviour
 
         _playerSelection[playerInput] = data;
         TryStartGame();
+    }
+
+    private void HandleItemMenuReady(PlayerInput playerInput, PlayerSelectionData data)
+    {
+        if (data.IsReady) OnPlayerReadySFX?.Invoke();
+
+        _playerSelection[playerInput] = data;
+
+        Debug.Log($"Player {playerInput.playerIndex} toggled ready in Item Selection: {data.IsReady}");
+    }
+
+    private void HandlePlayerReady(PlayerInput playerInput)
+    {
+        Debug.Log("HandlePlayerReady");
+
+        if (!_playerSelection.TryGetValue(playerInput, out var data))
+            return;
+
+        data.IsReady = !data.IsReady;
+
+
+
+        // run based on current state
+        if (GameEvents.CurrentState == GameState.PlayerSelectionState)
+        {
+            HandleJoinMenuReady(playerInput, data);
+        }
+        else if (GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
+        {
+            HandleItemMenuReady(playerInput, data);
+        }
+
+    }
+
+    public void ResetAllPlayersReadyStatus()
+    {
+        // We create a list of keys to avoid "Collection Modified" errors
+        var keys = _playerSelection.Keys.ToList();
+
+        foreach (var key in keys)
+        {
+            var data = _playerSelection[key];
+            data.IsReady = false;
+
+            _playerSelection[key] = data;
+
+            Debug.Log($"Player is {_playerSelection[key].IsReady}");
+        }
     }
 
     private void TryStartGame()
@@ -232,7 +275,7 @@ public class PlayerSelectionManager : MonoBehaviour
                 data.ReadyText.text = string.Empty;
         }
 
-        _playerSelection.Clear();
+        //_playerSelection.Clear();
     }
 
     private void HandleReturnToMainMenu()
@@ -246,7 +289,7 @@ public class PlayerSelectionManager : MonoBehaviour
     
     
     //countdown stuff
-    private void StopCountdownIfRunning()
+    public void StopCountdownIfRunning()
     {
         OnPlayerSelectionCountDownStopped?.Invoke();
         if (countdownRoutine != null)
@@ -258,7 +301,7 @@ public class PlayerSelectionManager : MonoBehaviour
             countdownText.gameObject.SetActive(false);
     }
     
-    private void StartEnterCountdown()
+    public void StartEnterCountdown()
     {
         StopCountdownIfRunning();
         countdownRoutine = StartCoroutine(PlayCountdown(OnCountdownFinished));
@@ -273,6 +316,20 @@ public class PlayerSelectionManager : MonoBehaviour
 
     public IEnumerator PlayCountdown(Action onFinished, int seconds = 3, float timing = 1f)
     {
+        // ensure all countdown numbers are hidden
+        //foreach (var obj in countdownObjects) obj.SetActive(false);
+
+        //for (int i = countdownObjects.Length - 1; i >= 0; i--)
+        //{
+        //    // activate current number
+        //    countdownObjects[i].SetActive(true);
+
+        //    yield return new WaitForSeconds(timing);
+
+        //    // deactivate before moving to next
+        //    countdownObjects[i].SetActive(false);
+        //}
+
         float countdown = seconds;
         countdownText.gameObject.SetActive(true);
 
@@ -286,6 +343,14 @@ public class PlayerSelectionManager : MonoBehaviour
         countdownText.gameObject.SetActive(false);
         countdownRoutine = null;
         onFinished?.Invoke();  // Only called on successful finish
+    }
+
+    public bool AreAllPlayersReady()
+    {
+        // no one joined
+        if (_playerSelection.Count == 0) return false;
+
+        return _playerSelection.Values.All(p => p.IsReady);
     }
 
     

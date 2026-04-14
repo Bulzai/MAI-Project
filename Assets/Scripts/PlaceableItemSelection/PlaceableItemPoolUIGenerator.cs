@@ -1,14 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Android;
+using UnityEngine.UI;
 
 public class PlaceableItemPoolUIGenerator : MonoBehaviour
 {
     [SerializeField] private GameObject togglePrefab;
     [SerializeField] private Transform grid;
+    [SerializeField] public Transform gifGrid;
     [SerializeField] private PlaceableItemSelection placeableItemSelection;
     [SerializeField] private UnityEngine.UI.Button continueButton;
+
+    private Toggle firstToggle;
+
+    public Selectable GetDefaultSelectable()
+    {
+        return firstToggle;
+    }
+
 
     private IEnumerator WaitAndGenerate()
     {
@@ -27,7 +36,7 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
 
     private void GenerateToggles()
     {
-        GameObject firstToggle = null;
+        firstToggle = null;
         GameObject lastToggle = null;
 
         Debug.Log("GENERATOR: I am now running!");
@@ -52,15 +61,45 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
             // create toggle ui
             GameObject newToggleGO = Instantiate(togglePrefab, grid);
 
-            // get script
-            PlaceableItemToggleUI toggleScript = newToggleGO.GetComponent<PlaceableItemToggleUI>();
+            // get gif go on item prefab
+            Transform itemGif = item.transform.Find("Gif");
+
+            if (itemGif != null && gifGrid != null)
+            {
+                // instantiante into gif grid
+                GameObject spawnedGif = Instantiate(itemGif.gameObject, gifGrid);
+
+                // reset position
+                //spawnedGif.transform.localPosition = Vector3.zero;
+
+                spawnedGif.transform.localScale = Vector3.one * 0.6f;
+                spawnedGif.transform.localPosition = Vector3.zero;
+                spawnedGif.transform.localRotation = Quaternion.identity;
+
+                //spawnedGif.transform.localScale = Vector3.one * 1f;
+                
+                // 6. Tell the Hover script about this new gif
+                HoverOrSelectScale hoverLogic = newToggleGO.GetComponent<HoverOrSelectScale>();
+                if (hoverLogic != null)
+                {
+                    hoverLogic.gifObject = spawnedGif;
+
+                    // hide the GIF by default if you only want it to show on hover
+                    spawnedGif.SetActive(false);
+                }
+
+            }
+            else Debug.Log("Either gif or grid is null");
+
+                // get script
+                PlaceableItemToggleUI toggleScript = newToggleGO.GetComponent<PlaceableItemToggleUI>();
 
             if (toggleScript != null)
             {
                 toggleScript.SetupToggle(item);
 
                 // track for navigation
-                if (firstToggle == null) firstToggle = newToggleGO;
+                if (firstToggle == null) firstToggle = newToggleGO.GetComponentInChildren<Toggle>();
                 lastToggle = newToggleGO;
             }
             else
@@ -74,12 +113,18 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
 
             if (sprite != null)
             {
-                // take sprite and put to UI image
-                newToggleGO.transform.Find("Image").GetComponent<UnityEngine.UI.Image>().sprite = sprite.sprite;
+                Image uiImage = newToggleGO.transform.Find("Image").GetComponent<Image>();
+
+                if (uiImage != null)
+                {
+                    uiImage.sprite = sprite.sprite;
+
+                    // prevents stretching by forcing ui element 
+                    // to respect the original sprite's width/height ratio.
+                    uiImage.preserveAspect = true;
+                }
             }
 
-            // set toggle logic
-            //newToggleGO.GetComponent<PlaceableItemToggleUI>().SetupToggle(item);
         }
 
         if (continueButton != null && lastToggle != null)
@@ -90,20 +135,10 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
             // link play button up to last item
             nav.selectOnUp = lastToggle.GetComponentInChildren<UnityEngine.UI.Toggle>();
             continueButton.navigation = nav;
-
-            // set down to go back to play
-            //var tNav = lastToggle.GetComponentInChildren<UnityEngine.UI.Toggle>().navigation;
-            //tNav.mode = UnityEngine.UI.Navigation.Mode.Explicit;
-            //tNav.selectOnDown = continueButton;
-            //lastToggle.GetComponentInChildren<UnityEngine.UI.Toggle>().navigation = tNav;
         }
 
-        // get button component
-        //UnityEngine.UI.Button playButton = continueButton.GetComponent<UnityEngine.UI.Button>();
-        // get toggle component from first item
-        //UnityEngine.UI.Navigation playNav = playButton.navigation;
-        // TODO ADD LOGIC FOR NAV WHEN BUTTON UP TO LAST ITEM
-        //playNav.selectOnUp = first
+        // force update in case toggles arent found
+        Canvas.ForceUpdateCanvases();
     }
     // Start is called before the first frame update
     void Start()

@@ -83,6 +83,8 @@ public class PlayerManager : MonoBehaviour
 
         GameEvents.OnPlayerEliminated += HandlePlayerElimination;
 
+        GameEvents.OnPlaceableItemSelectionStateEntered += PrepareInputForItemSelection;
+
     }
 
     private void OnDisable()
@@ -91,13 +93,15 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnPlayerSelectionStateExited -= DeactivateCharacterPrefab;
         PlaceItemState.CountDownStarted -= ActivateCharacterPrefab;
         GameEvents.OnMainGameStateExited -= DeactivateCharacterPrefab;
-        GameEvents.OnPlayerSelectionStateEntered -= DisablePlayerJoining;
+        GameEvents.OnPlayerSelectionStateExited -= DisablePlayerJoining;
         GameEvents.OnPlayerEliminated -= HandlePlayerElimination;
+
+        GameEvents.OnPlaceableItemSelectionStateEntered -= PrepareInputForItemSelection;
         //GameEvents.OnMenuStateEntered -= SetInputToActiveAndUI;
 
     }
 
-   
+
 
     // ============== EXISTING PLAYERMANAGER METHODS (with lobby integration) ==============
 
@@ -401,6 +405,30 @@ public class PlayerManager : MonoBehaviour
             {
                 Debug.LogWarning($"No placement spawn defined for player {idx}, using default.");
                 characterGO.transform.position = Vector3.zero;
+            }
+        }
+    }
+
+    public void PrepareInputForItemSelection()
+    {
+        foreach (var kvp in playerRoots)
+        {
+            GameObject root = kvp.Value;
+            if (root == null) continue;
+
+            //var characterTf = root.transform.Find("PlayerNoPI");
+            //if (characterTf != null)
+            //{
+            //    characterTf.gameObject.SetActive(true);
+            //    Debug.Log($"Player {kvp.Key} active: {characterTf.gameObject.activeSelf}");
+            //}
+
+            var pi = root.GetComponent<PlayerInput>();
+            if (pi != null)
+            {
+                pi.ActivateInput();
+                pi.SwitchCurrentActionMap("Player");
+                Debug.Log($"Input activated for Player {kvp.Key}");
             }
         }
     }

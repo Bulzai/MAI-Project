@@ -157,8 +157,10 @@ namespace TarodevController
 
         public void OnReady(InputAction.CallbackContext context)
         {
-            if (GameEvents.CurrentState == GameState.PlayerSelectionState)
+            if (GameEvents.CurrentState == GameState.PlayerSelectionState ||
+                GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
             {
+                Debug.Log($"Ready pressed in state: {GameEvents.CurrentState}");
                 if (context.started)
                     OnPlayerReady?.Invoke(_playerInput); 
             }

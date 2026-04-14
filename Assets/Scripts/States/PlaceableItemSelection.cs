@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlaceableItemSelection : MonoBehaviour
 {
     public static PlaceableItemSelection Instance { get; private set; }
+    [SerializeField] public GameObject selectionManagerGO;
+    private PlayerSelectionManager selectionManager;
+    public Button playButton;
+    public GameObject readyWarningText;
+    private Coroutine _readyWarningCoroutine;
 
     [Header("Item Pool")]
     [SerializeField] private List<GameObject> generalItemPool;
@@ -33,11 +39,15 @@ public class PlaceableItemSelection : MonoBehaviour
 
         // default setting: all items are selected
         activeItemPool = new List<GameObject>(generalItemPool);
+
+        selectionManager = selectionManagerGO.GetComponent<PlayerSelectionManager>();
+
+        selectionManager.ResetAllPlayersReadyStatus();
     }
 
     private void OnDisable()
     {
-        FinishedSelection();
+        //FinishedSelection();
     }
 
     public void ToggleItemAvailability(GameObject itemPrefab, bool isSelected)
@@ -81,6 +91,33 @@ public class PlaceableItemSelection : MonoBehaviour
         GameEvents.ChangeState(GameState.SurpriseBoxState);
     }
 
+    private void ShowReadyWarning()
+    {
+        if (readyWarningText == null) return;
+
+        if (_readyWarningCoroutine != null) StopCoroutine(_readyWarningCoroutine);
+        _readyWarningCoroutine = StartCoroutine(ReadyWarningRoutine());
+    }
+
+    private IEnumerator ReadyWarningRoutine()
+    {
+        readyWarningText.SetActive(true);
+
+        yield return new WaitForSeconds(2f);
+
+        readyWarningText.SetActive(false);
+    }
+
+    public void AttemptFinishSelection()
+    {
+        if (!selectionManager.AreAllPlayersReady())
+        {
+            ShowReadyWarning();
+            //selectionManager.StopCountdownIfRunning();
+        }
+        else selectionManager.StartEnterCountdown();
+    }
+
     public List<GameObject> getGeneralItemPool()
     {
         return generalItemPool;
@@ -94,6 +131,13 @@ public class PlaceableItemSelection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playButton != null && selectionManager != null)
+        {
+            // button is only clickable if everyone is ready
+            playButton.interactable = selectionManager.AreAllPlayersReady();
+            AttemptFinishSelection();
+        }
+
         
     }
 }

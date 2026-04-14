@@ -22,7 +22,8 @@ public class PlayerScoreManager : MonoBehaviour
 
 
     [Header("Last Round UI")]
-    [SerializeField] private GameObject menuButton; // <-- assign in inspector
+    [SerializeField] private GameObject menuButton;
+    [SerializeField] private GameObject menuReturnText;
 
     [Header("Transition")]
     [SerializeField] private Animator transitionAnimator;
@@ -135,7 +136,7 @@ public class PlayerScoreManager : MonoBehaviour
     // Call this from RoundController BEFORE you change into ScoreState (for last round).
     public void SetMenuButtonActiveOrDeactive(bool isLastRound)
     {
-
+        menuReturnText.SetActive(isLastRound);
         menuButton.SetActive(isLastRound);
     }
 
