@@ -19,6 +19,9 @@ public class PlayerSelectionManager : MonoBehaviour
     public static event Action OnNobodyJoinedYet;
     public static event Action OnPlayerSelectionCountDownStarted;
     public static event Action OnPlayerSelectionCountDownStopped;
+
+    [SerializeField] public PlaceableItemSelection placeableItemSelection;
+
     [SerializeField] private TMP_Text countdownText;
     private Coroutine countdownRoutine;
     public GameObject[] countdownObjects;
@@ -168,7 +171,7 @@ public class PlayerSelectionManager : MonoBehaviour
         // -----------------------------------------------
 
         _playerSelection[playerInput] = data;
-        TryStartGame();
+        //TryStartGame();
     }
 
     private void HandleItemMenuReady(PlayerInput playerInput, PlayerSelectionData data)
@@ -177,13 +180,13 @@ public class PlayerSelectionManager : MonoBehaviour
 
         _playerSelection[playerInput] = data;
 
+        placeableItemSelection.UpdateReadyStatus(playerInput, data);
+
         Debug.Log($"Player {playerInput.playerIndex} toggled ready in Item Selection: {data.IsReady}");
     }
 
     private void HandlePlayerReady(PlayerInput playerInput)
     {
-        Debug.Log("HandlePlayerReady");
-
         if (!_playerSelection.TryGetValue(playerInput, out var data))
             return;
 
@@ -198,9 +201,10 @@ public class PlayerSelectionManager : MonoBehaviour
         }
         else if (GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
         {
+
             HandleItemMenuReady(playerInput, data);
         }
-
+        TryStartGame();
     }
 
     public void ResetAllPlayersReadyStatus()
@@ -219,7 +223,7 @@ public class PlayerSelectionManager : MonoBehaviour
         }
     }
 
-    private void TryStartGame()
+    public void TryStartGame()
     {
         if (_playerSelection.Count == 0)
         {
@@ -241,7 +245,7 @@ public class PlayerSelectionManager : MonoBehaviour
         OnPlayerSelectionCountDownStarted?.Invoke();
     }
 
-    private IEnumerator TransitionToPlaceableItemSelection()
+    private IEnumerator TransitionToNextState()
     {
         _isTransitionRunning = true;
         // Vorbereitung: Image enablen & Animation starten
@@ -259,6 +263,9 @@ public class PlayerSelectionManager : MonoBehaviour
         {
             GameEvents.ChangeState(GameState.PlaceableItemSelectionState);
         }
+        else if (GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
+            GameEvents.ChangeState(GameState.SurpriseBoxState);
+
 
         // 5. Kurz warten, damit der neue State geladen/initialisiert ist
         yield return new WaitForSeconds(0.45f);
@@ -310,7 +317,7 @@ public class PlayerSelectionManager : MonoBehaviour
     private void OnCountdownFinished()
     {
         if (_isTransitionRunning) return;
-        StartCoroutine(TransitionToPlaceableItemSelection());
+        StartCoroutine(TransitionToNextState());
         OnStartGameSFX?.Invoke();
     }
 
@@ -345,6 +352,7 @@ public class PlayerSelectionManager : MonoBehaviour
         onFinished?.Invoke();  // Only called on successful finish
     }
 
+    // for all players
     public bool AreAllPlayersReady()
     {
         // no one joined
@@ -353,7 +361,18 @@ public class PlayerSelectionManager : MonoBehaviour
         return _playerSelection.Values.All(p => p.IsReady);
     }
 
-    
+    // individual players
+    public bool isPlayerReady(int index)
+    {
+        var player = _playerSelection.Keys.FirstOrDefault(p => p.playerIndex == index);
+        if (player != null) return _playerSelection[player].IsReady;
+        return false;
+    }
+
+    public bool isPlayerJoined(int index)
+    {
+        return _playerSelection.Keys.Any(p  => p.playerIndex == index);
+    }
 }
 
 public struct PlayerSelectionData

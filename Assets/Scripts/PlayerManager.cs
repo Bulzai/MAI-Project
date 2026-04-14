@@ -44,6 +44,7 @@ public class PlayerManager : MonoBehaviour
     public Transform[] spawnPositionsForMenu;
     public Transform[] spawnPositionsForItemPlacement;
     public Transform[] spawnPositionsForItemSelection;
+    public Transform[] spawnPositionsForPlaceableItemSelection;
 
     public Dictionary<int, GameObject> playerRoots = new Dictionary<int, GameObject>();
     public Dictionary<int, GameObject> pickedPrefabByPlayer = new Dictionary<int, GameObject>();
@@ -84,6 +85,7 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnPlayerEliminated += HandlePlayerElimination;
 
         GameEvents.OnPlaceableItemSelectionStateEntered += PrepareInputForItemSelection;
+        GameEvents.OnSurpriseBoxStateEntered += DeactivateCharacterPrefab;
 
     }
 
@@ -97,6 +99,7 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnPlayerEliminated -= HandlePlayerElimination;
 
         GameEvents.OnPlaceableItemSelectionStateEntered -= PrepareInputForItemSelection;
+        GameEvents.OnSurpriseBoxStateEntered -= DeactivateCharacterPrefab;
         //GameEvents.OnMenuStateEntered -= SetInputToActiveAndUI;
 
     }
@@ -416,12 +419,15 @@ public class PlayerManager : MonoBehaviour
             GameObject root = kvp.Value;
             if (root == null) continue;
 
-            //var characterTf = root.transform.Find("PlayerNoPI");
-            //if (characterTf != null)
-            //{
-            //    characterTf.gameObject.SetActive(true);
-            //    Debug.Log($"Player {kvp.Key} active: {characterTf.gameObject.activeSelf}");
-            //}
+            var characterTf = root.transform.Find("PlayerNoPI");
+            if (characterTf != null)
+            {
+                characterTf.gameObject.SetActive(true);
+                Debug.Log($"Player {kvp.Key} active: {characterTf.gameObject.activeSelf}");
+
+                characterTf.transform.position = spawnPositionsForPlaceableItemSelection[kvp.Key].position;
+                namePositionsInJoinMenu[kvp.Key].gameObject.SetActive(true);
+            }
 
             var pi = root.GetComponent<PlayerInput>();
             if (pi != null)

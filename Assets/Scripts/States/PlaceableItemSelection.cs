@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -8,27 +7,30 @@ using UnityEngine.UI;
 public class PlaceableItemSelection : MonoBehaviour
 {
     public static PlaceableItemSelection Instance { get; private set; }
+
     [SerializeField] public GameObject selectionManagerGO;
     private PlayerSelectionManager selectionManager;
-    public Button playButton;
-    public GameObject readyWarningText;
-    private Coroutine _readyWarningCoroutine;
 
     [Header("Item Pool")]
     [SerializeField] private List<GameObject> generalItemPool;
 
-    [SerializeField] private SurpriseBoxState surpriseBoxState;
-
     [Header("UI Feedback")]
+    public Button playButton;
+    public GameObject readyWarningText;
+
     [SerializeField] public GameObject warningText;
     [SerializeField] private float warningDuration = 2f;
     private Coroutine _warningCoroutine;
+
+    [SerializeField] private GameObject[] playerReadyGO;
+    [SerializeField] private GameObject[] playerUnreadyGO;
 
     // items surprise box will spawn
     public List<GameObject> activeItemPool { get; private set; } = new List<GameObject>();
 
     private void Awake()
     {
+        // singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -41,20 +43,27 @@ public class PlaceableItemSelection : MonoBehaviour
         activeItemPool = new List<GameObject>(generalItemPool);
 
         selectionManager = selectionManagerGO.GetComponent<PlayerSelectionManager>();
-
         selectionManager.ResetAllPlayersReadyStatus();
+        ShowPlayerSlots();
     }
 
     private void OnDisable()
     {
-        //FinishedSelection();
+        selectionManager.ResetAllPlayersReadyStatus();
     }
 
+    // GETTER
+    public List<GameObject> getGeneralItemPool()
+    {
+        return generalItemPool;
+    }
+
+    // MAIN LOGIC
     public void ToggleItemAvailability(GameObject itemPrefab, bool isSelected)
     {
         if (!isSelected && activeItemPool.Count <= 1)
         {
-            ShowWarning("Cannot deselect the last item!");
+            LastItemWarning();
             Debug.LogWarning("Cannot deselect the last item! The Surprise Box needs at least one thing to spawn.");
             return;
         }
@@ -68,15 +77,15 @@ public class PlaceableItemSelection : MonoBehaviour
             activeItemPool.Remove(itemPrefab);
         }
     }
-    private void ShowWarning(string message)
+    private void LastItemWarning()
     {
         if (warningText == null) return;
 
         if (_warningCoroutine != null) StopCoroutine(_warningCoroutine);
-        _warningCoroutine = StartCoroutine(WarningRoutine(message));
+        _warningCoroutine = StartCoroutine(WarningRoutine());
     }
 
-    private IEnumerator WarningRoutine(string message)
+    private IEnumerator WarningRoutine()
     {
         warningText.gameObject.SetActive(true);
 
@@ -84,60 +93,42 @@ public class PlaceableItemSelection : MonoBehaviour
 
         warningText.gameObject.SetActive(false);
     }
-
-    public void FinishedSelection()
+  
+    // READY OR NOT
+    private void ShowPlayerSlots()
     {
-        // next up: Surprise box
-        GameEvents.ChangeState(GameState.SurpriseBoxState);
-    }
-
-    private void ShowReadyWarning()
-    {
-        if (readyWarningText == null) return;
-
-        if (_readyWarningCoroutine != null) StopCoroutine(_readyWarningCoroutine);
-        _readyWarningCoroutine = StartCoroutine(ReadyWarningRoutine());
-    }
-
-    private IEnumerator ReadyWarningRoutine()
-    {
-        readyWarningText.SetActive(true);
-
-        yield return new WaitForSeconds(2f);
-
-        readyWarningText.SetActive(false);
-    }
-
-    public void AttemptFinishSelection()
-    {
-        if (!selectionManager.AreAllPlayersReady())
+        for (int i = 0; i < 4; i++)
         {
-            ShowReadyWarning();
-            //selectionManager.StopCountdownIfRunning();
+            bool joined = selectionManager.isPlayerJoined(i);
+
+            // all are unready
+            if (i < playerReadyGO.Length && playerReadyGO[i] != null)
+                playerReadyGO[i].SetActive(false);
+
+            if (i < playerUnreadyGO.Length && playerUnreadyGO[i] != null)
+                playerUnreadyGO[i].SetActive(joined);
         }
-        else selectionManager.StartEnterCountdown();
     }
 
-    public List<GameObject> getGeneralItemPool()
+    public void UpdateReadyStatus(PlayerInput playerInput, PlayerSelectionData data)
     {
-        return generalItemPool;
-    }
+        int index = playerInput.playerIndex;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+        Debug.Log($"{index} player index is {data.IsReady}");
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (playButton != null && selectionManager != null)
+        if (index >= 0 && index < playerReadyGO.Length && index < playerUnreadyGO.Length)
         {
-            // button is only clickable if everyone is ready
-            playButton.interactable = selectionManager.AreAllPlayersReady();
-            AttemptFinishSelection();
-        }
+            // turn on ready and off unready if IsReady is true
+            // turn off ready and on unready if IsReady is false
+            if (playerReadyGO[index] != null)
+                playerReadyGO[index].SetActive(data.IsReady);
 
-        
+            if (playerUnreadyGO[index] != null)
+                playerUnreadyGO[index].SetActive(!data.IsReady);
+        }
+        else
+        {
+            Debug.LogWarning($"Player Index {index} is out of range for the UI arrays!");
+        }
     }
 }
