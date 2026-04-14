@@ -33,16 +33,4 @@ public class PlaceableItemToggleUI : MonoBehaviour
         // if manager rejected change force to stay on
         _toggle.SetIsOnWithoutNotify(PlaceableItemSelection.Instance.activeItemPool.Contains(itemPrefab));
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

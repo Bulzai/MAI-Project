@@ -21,7 +21,6 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
 
     private IEnumerator WaitAndGenerate()
     {
-        // Wait for the end of the frame so Awake() runs on all objects
         yield return new WaitForEndOfFrame();
 
         if (PlaceableItemSelection.Instance != null)
@@ -30,7 +29,7 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Still can't find the Manager! Is it in the scene?");
+            Debug.LogError("No manager in scene!");
         }
     }
 
@@ -39,12 +38,10 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
         firstToggle = null;
         GameObject lastToggle = null;
 
-        Debug.Log("GENERATOR: I am now running!");
-
         // check if the manager exists yet
         if (PlaceableItemSelection.Instance == null)
         {
-            Debug.LogWarning("Manager not found! Waiting for next frame...");
+            Debug.LogWarning("Manager not found!");
             return;
         }
 
@@ -104,7 +101,6 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
             }
             else
             {
-                Debug.LogError("The ItemToggle prefab is missing the PlaceableItemToggleUI script!");
                 continue; // Skip to the next item instead of crashing the whole loop
             }
 
@@ -144,11 +140,5 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
     void Start()
     {
         StartCoroutine(WaitAndGenerate());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
