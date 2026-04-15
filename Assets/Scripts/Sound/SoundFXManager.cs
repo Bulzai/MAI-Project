@@ -77,11 +77,11 @@ public class SoundFXManager : MonoBehaviour
         PlayerSelectionManager.OnPlayerSelectionCountDownStopped += StopPlayerSelectionCountdownSFX;
         
         // Surpriseboxstate Events
-        SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
-        SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
-        CursorController.OnEnableCursor += PlayEnableCursorSFX;
-        SurpriseBoxState.OnPlayerPickedItem += HandleItemSubmitSfx;
-        GridItem.OnPlayerSelecedtItem += PlayPlayerSelecedtItemSFX;
+        //SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
+        //SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
+        //CursorController.OnEnableCursor += PlayEnableCursorSFX;
+        //SurpriseBoxState.OnPlayerPickedItem += HandleItemSubmitSfx;
+        //GridItem.OnPlayerSelecedtItem += PlayPlayerSelecedtItemSFX;
 
         // PLACEITEM STATE EVENTS
         PlaceItemState.CountDownStarted += PlayCountdownSFX;
@@ -131,7 +131,7 @@ public class SoundFXManager : MonoBehaviour
         PlayerItemHandler.OnSpeedAuraActivated += PlaySpeedAuraActivatedSFX;
 
         // Transition Events
-        SurpriseBoxState.OnFireTransitionAnimationStarted += PlayTransitionSFX;
+        //SurpriseBoxState.OnFireTransitionAnimationStarted += PlayTransitionSFX;
 
     }
 
@@ -170,11 +170,11 @@ public class SoundFXManager : MonoBehaviour
         PlayerSelectionManager.OnPlayerSelectionCountDownStopped -= StopPlayerSelectionCountdownSFX;
 
         // Surpriseboxstate Events
-        SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
-        SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
-        CursorController.OnEnableCursor -= PlayEnableCursorSFX;
-        SurpriseBoxState.OnPlayerPickedItem -= HandleItemSubmitSfx;
-        GridItem.OnPlayerSelecedtItem -= PlayPlayerSelecedtItemSFX;
+        //SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
+        //SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
+        //CursorController.OnEnableCursor -= PlayEnableCursorSFX;
+        //SurpriseBoxState.OnPlayerPickedItem -= HandleItemSubmitSfx;
+        //GridItem.OnPlayerSelecedtItem -= PlayPlayerSelecedtItemSFX;
 
         // PLACEITEM STATE EVENTS
         PlaceItemState.CountDownStarted -= PlayCountdownSFX;
@@ -225,7 +225,7 @@ public class SoundFXManager : MonoBehaviour
         PlayerItemHandler.OnSpeedAuraActivated -= PlaySpeedAuraActivatedSFX;
 
         // Transition Events
-        SurpriseBoxState.OnFireTransitionAnimationStarted -= PlayTransitionSFX;
+        //SurpriseBoxState.OnFireTransitionAnimationStarted -= PlayTransitionSFX;
 
     }
 

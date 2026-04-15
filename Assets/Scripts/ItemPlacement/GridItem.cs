@@ -338,14 +338,14 @@ public class GridItem : MonoBehaviour
         Right
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            if (GameEvents.CurrentState == GameState.SurpriseBoxState)
-                OnPlayerSelecedtItem?.Invoke(gameObject);
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        if (GameEvents.CurrentState == GameState.SurpriseBoxState)
+    //            OnPlayerSelecedtItem?.Invoke(gameObject);
             
-        }
-    }
+    //    }
+    //}
 
 }

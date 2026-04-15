@@ -171,7 +171,7 @@ public class DeprecatedCursorController : MonoBehaviour
                     //hit.gameObject.SetActive(false);
                     hit.collider.gameObject.SetActive(false);
 
-                    SurpriseBoxState.Instance.NotifyPlayerPicked(playerInput.playerIndex, itemScript.getOriginalPrefab());
+                    //SurpriseBoxState.Instance.NotifyPlayerPicked(playerInput.playerIndex, itemScript.getOriginalPrefab());
 
 
 

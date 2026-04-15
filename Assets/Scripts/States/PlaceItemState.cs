@@ -138,61 +138,61 @@ public class PlaceItemState : MonoBehaviour
 
     }
 
-    private void BeginPlacementPhaseAll()
-    {
-        GameWorld.SetActive(true);
+    //private void BeginPlacementPhaseAll()
+    //{
+    //    GameWorld.SetActive(true);
 
-        if (playerManager.pickedPrefabByPlayer.Count == 0)
-        {
-            Debug.Log("No picks yet, aborting");
-            return;
-        }
+    //    if (playerManager.pickedPrefabByPlayer.Count == 0)
+    //    {
+    //        Debug.Log("No picks yet, aborting");
+    //        return;
+    //    }
 
 
-        playerManager.playersThatPlaced.Clear();
-        GridPlacementSystem.Instance.ShowGrid();
+    //    playerManager.playersThatPlaced.Clear();
+    //    GridPlacementSystem.Instance.ShowGrid();
 
-        foreach (var kv in playerManager.pickedPrefabByPlayer)
-        {
-            int idx = kv.Key;
-            GameObject prefab = kv.Value;
+    //    foreach (var kv in playerManager.pickedPrefabByPlayer)
+    //    {
+    //        int idx = kv.Key;
+    //        GameObject prefab = kv.Value;
 
-            if (!playerManager.playerRoots.TryGetValue(idx, out var root))
-            {
-                Debug.LogError("Missing root for idx=" + idx);
-                continue;
-            }
+    //        if (!playerManager.playerRoots.TryGetValue(idx, out var root))
+    //        {
+    //            Debug.LogError("Missing root for idx=" + idx);
+    //            continue;
+    //        }
 
-            // enable cursor, disable character
-            var cursor = root.transform.Find("CursorNoPI").gameObject;
-            var character = root.transform.Find("PlayerNoPI").gameObject;
-            playerManager.ResetCursorPositionItemPlacement(idx);
-            cursor.SetActive(true);
-            character.SetActive(false);
-            /*
-            // position at placement spawn. should be already set in playermanagerfinal
-            Vector3 pos = (idx < playerManagerFinal.spawnPositionsForPlacement.Length)
-                ? playerManagerFinal.spawnPositionsForPlacement[idx]
-                : Vector3.zero;
-            //otherwise should work like the following line
+    //        // enable cursor, disable character
+    //        var cursor = root.transform.Find("CursorNoPI").gameObject;
+    //        var character = root.transform.Find("PlayerNoPI").gameObject;
+    //        playerManager.ResetCursorPositionItemPlacement(idx);
+    //        cursor.SetActive(true);
+    //        character.SetActive(false);
+    //        /*
+    //        // position at placement spawn. should be already set in playermanagerfinal
+    //        Vector3 pos = (idx < playerManagerFinal.spawnPositionsForPlacement.Length)
+    //            ? playerManagerFinal.spawnPositionsForPlacement[idx]
+    //            : Vector3.zero;
+    //        //otherwise should work like the following line
 
-            //cursor.transform.position = spawnPositionsForSelection[idx].transform.position;
+    //        //cursor.transform.position = spawnPositionsForSelection[idx].transform.position;
 
-            cursor.transform.position = pos;
-            */
+    //        cursor.transform.position = pos;
+    //        */
 
-            //Debug.Log("Cursor idx=" + idx + " moved to " + pos);
+    //        //Debug.Log("Cursor idx=" + idx + " moved to " + pos);
 
-            // switch input map
-            var pi = root.GetComponent<PlayerInput>();
-            pi.SwitchCurrentActionMap("Cursor");
+    //        // switch input map
+    //        var pi = root.GetComponent<PlayerInput>();
+    //        pi.SwitchCurrentActionMap("Cursor");
 
-            // begin placement on cursor controller
-            var cc = cursor.GetComponent<CursorController>();
-            cc.BeginPlacementPhase(prefab, cc.transform);
-        }
+    //        // begin placement on cursor controller
+    //        var cc = cursor.GetComponent<CursorController>();
+    //        cc.BeginPlacementPhase(prefab, cc.transform);
+    //    }
 
-    }
+    //}
 
 
 

@@ -17,19 +17,8 @@ public class ItemDisplay : MonoBehaviour
     [Header("Item Pool")]
     [SerializeField] private List<GameObject> generalItemPool;
 
-    [Header("UI Feedback")]
-    public Button playButton;
-    public GameObject readyWarningText;
-
-    [SerializeField] public GameObject warningText;
-    [SerializeField] private float warningDuration = 2f;
-    private Coroutine _warningCoroutine;
-
     [SerializeField] private GameObject[] playerReadyGO;
     [SerializeField] private GameObject[] playerUnreadyGO;
-
-    // items surprise box will spawn
-    public List<GameObject> activeItemPool { get; private set; } = new List<GameObject>();
 
     private void Awake()
     {
@@ -41,9 +30,6 @@ public class ItemDisplay : MonoBehaviour
         }
 
         Instance = this;
-
-        // default setting: all items are selected
-        activeItemPool = new List<GameObject>(generalItemPool);
 
         selectionManager = selectionManagerGO.GetComponent<PlayerSelectionManager>();
         playerManager = playerManagerGO.GetComponent<PlayerManager>();
@@ -67,42 +53,6 @@ public class ItemDisplay : MonoBehaviour
     {
         return generalItemPool;
     }
-
-    // MAIN LOGIC
-    //public void ToggleItemAvailability(GameObject itemPrefab, bool isSelected)
-    //{
-    //    if (!isSelected && activeItemPool.Count <= 1)
-    //    {
-    //        LastItemWarning();
-    //        Debug.LogWarning("Cannot deselect the last item! The Surprise Box needs at least one thing to spawn.");
-    //        return;
-    //    }
-
-    //    if (isSelected && !activeItemPool.Contains(itemPrefab))
-    //    {
-    //        activeItemPool.Add(itemPrefab);
-    //    }
-    //    else if (!isSelected && activeItemPool.Contains(itemPrefab))
-    //    { 
-    //        activeItemPool.Remove(itemPrefab);
-    //    }
-    //}
-    //private void LastItemWarning()
-    //{
-    //    if (warningText == null) return;
-
-    //    if (_warningCoroutine != null) StopCoroutine(_warningCoroutine);
-    //    _warningCoroutine = StartCoroutine(WarningRoutine());
-    //}
-
-    //private IEnumerator WarningRoutine()
-    //{
-    //    warningText.gameObject.SetActive(true);
-
-    //    yield return new WaitForSeconds(warningDuration);
-
-    //    warningText.gameObject.SetActive(false);
-    //}
   
     // READY OR NOT
     private void ShowPlayerSlots()

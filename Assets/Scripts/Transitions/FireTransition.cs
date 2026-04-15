@@ -48,7 +48,7 @@ public class FireTransition : MonoBehaviour
        yield return new WaitForSeconds(1f);
 
        NextStateGameObject.SetActive(true);
-       _stateChanger.GoToSurpriseBoxState();
+       //_stateChanger.GoToSurpriseBoxState();
 
        mainMenu.PlayGame(); 
        yield return new WaitForSeconds(0.5f);

@@ -28,13 +28,13 @@ public class CursorScaler : MonoBehaviour
 
     void UpdateSpriteScale()
     {
-        if (GameEvents.CurrentState == GameState.SurpriseBoxState)
-        {
-            transform.localScale = Vector2.one * surpriseBoxScale;
-        }
-        else
-        {
-            transform.localScale = Vector2.one * defaultScale;
-        }
+        //if (GameEvents.CurrentState == GameState.SurpriseBoxState)
+        //{
+        //    transform.localScale = Vector2.one * surpriseBoxScale;
+        //}
+        //else
+        //{
+        transform.localScale = Vector2.one * defaultScale;
+        //}
     }
 }

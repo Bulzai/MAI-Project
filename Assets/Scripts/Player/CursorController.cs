@@ -62,9 +62,9 @@ public class CursorController : MonoBehaviour
 
         switch (GameEvents.CurrentState)
         {
-            case GameState.SurpriseBoxState:
-                HandleHoverHighlight();
-                break;
+            //case GameState.SurpriseBoxState:
+            //    HandleHoverHighlight();
+            //    break;
 
             case GameState.PlaceItemState:
                 ClearHoverIfAny();
@@ -115,16 +115,16 @@ public class CursorController : MonoBehaviour
             return;
         }
 
-        if (GameEvents.CurrentState == GameState.SurpriseBoxState)
-        {
-            Bounds b = surpriseBoxStateBounds.bounds;
-            Vector3 pos = transform.position;
+        //if (GameEvents.CurrentState == GameState.SurpriseBoxState)
+        //{
+        //    Bounds b = surpriseBoxStateBounds.bounds;
+        //    Vector3 pos = transform.position;
 
-            pos.x = Mathf.Clamp(pos.x, b.min.x, b.max.x);
-            pos.y = Mathf.Clamp(pos.y, b.min.y, b.max.y);
+        //    pos.x = Mathf.Clamp(pos.x, b.min.x, b.max.x);
+        //    pos.y = Mathf.Clamp(pos.y, b.min.y, b.max.y);
 
-            transform.position = pos;
-        }
+        //    transform.position = pos;
+        //}
     }
 
 
@@ -146,9 +146,9 @@ public class CursorController : MonoBehaviour
 
         switch (GameEvents.CurrentState)
         {
-            case GameState.SurpriseBoxState:
-                TryPickObject();
-                break;
+            //case GameState.SurpriseBoxState:
+            //    TryPickObject();
+            //    break;
 
             case GameState.PlaceItemState:
                 TryPlaceObject();
@@ -172,10 +172,10 @@ public class CursorController : MonoBehaviour
 
         Debug.Log($"currently hovered is : {currentlyHoveredGO.activeSelf}");
 
-        SurpriseBoxState.Instance.NotifyPlayerPicked(
-            playerInput.playerIndex,
-            item.getOriginalPrefab()
-        );
+        //SurpriseBoxState.Instance.NotifyPlayerPicked(
+        //    playerInput.playerIndex,
+        //    item.getOriginalPrefab()
+        //);
 
         currentlyHoveredGO = null;
         currentlyHoveredHighlight = null;

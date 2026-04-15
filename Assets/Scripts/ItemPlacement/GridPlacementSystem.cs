@@ -17,7 +17,6 @@ public class GridPlacementSystem : MonoBehaviour
     public Tilemap MainTilemap;
     public Tilemap TempTilemap;
     public Tilemap OriginalTilemap;
-    public Tilemap GameTilemap;
     
     public static Dictionary<TileType, TileBase> tileBases = new Dictionary<TileType, TileBase>();
 

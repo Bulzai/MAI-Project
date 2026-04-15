@@ -10,7 +10,7 @@ public enum GameState
     PlayerSelectionState,
     ItemDisplay, // added GameState
     AutomaticPlacement,
-    SurpriseBoxState,
+    //SurpriseBoxState,
     PlaceItemState,
     MainGameState,
     ScoreState,
@@ -34,7 +34,7 @@ public static class GameEvents
 
     public static event Action OnItemDisplayStateEntered; // added action event for placeable item selection
     public static event Action OnAutomaticPlacementStateEntered;
-    public static event Action OnSurpriseBoxStateEntered;
+    //public static event Action OnSurpriseBoxStateEntered;
     public static event Action OnPlaceItemStateEntered;
     
     public static event Action OnMainGameStateEntered;
@@ -92,9 +92,9 @@ public static class GameEvents
             case GameState.AutomaticPlacement:
                 OnAutomaticPlacementStateEntered?.Invoke(); // added placeable item selection case
                 break;
-            case GameState.SurpriseBoxState:
-                OnSurpriseBoxStateEntered?.Invoke();
-                break;
+            //case GameState.SurpriseBoxState:
+            //    OnSurpriseBoxStateEntered?.Invoke();
+            //    break;
             case GameState.PlaceItemState:
                 OnPlaceItemStateEntered?.Invoke();
                 break;
