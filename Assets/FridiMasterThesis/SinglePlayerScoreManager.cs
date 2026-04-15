@@ -101,13 +101,9 @@ public class SinglePlayerScoreManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.8f);
 
-        // 3. UI im Hintergrund vorbereiten (während die Transition noch alles verdeckt)
 
-        // 4. Scoreboard jetzt sichtbar machen
         PrepareScoreBoardUI();
     
-        // change text values
-
         if (PlayTestDataManager.Instance.roundIndex.Value < MAX_ROUNDS)
         {
             yield return new WaitForSeconds(2.5f);
@@ -193,7 +189,8 @@ public class SinglePlayerScoreManager : MonoBehaviour
         if (currentRoundIndex == MAX_ROUNDS)
         {
             rows.transform.GetChild(currentRoundIndex).gameObject.SetActive(true);
-            totalMilkCollectedText.text = PlayTestDataManager.Instance.totalMilkCollected.Value.ToString();
+            int finalMilkScore = PlayTestDataManager.Instance.totalMilkCollected.Value + PlayTestDataManager.Instance.roundMilkCollected.Value;
+            totalMilkCollectedText.text = finalMilkScore.ToString();
         }
         if (scoreboardUI != null)
             scoreboardUI.SetActive(true);

@@ -122,7 +122,7 @@ public class RandomPlacementStrategy : MonoBehaviour
             gridItemScript.UpdateHitCells();
             gridItemScript.Place();
             gridItemGO.transform.SetParent(itemsParent);
-            gridItemGO.layer = LayerMask.NameToLayer("Ground/Wall");
+            //gridItemGO.layer = LayerMask.NameToLayer("Ground/Wall");
             return true;
         }
 
@@ -197,7 +197,7 @@ public class RandomPlacementStrategy : MonoBehaviour
                 gridItemScript.UpdateHitCells();
                 gridItemScript.Place();
                 bestItem.transform.SetParent(itemsParent);
-                bestItem.layer = LayerMask.NameToLayer("Ground/Wall");
+                //bestItem.layer = LayerMask.NameToLayer("Ground/Wall");
             } else
             {
                 Debug.Log("No candidate met both thresholds, placing item with best overall score: " + bestCandidate.itemType);
@@ -209,7 +209,7 @@ public class RandomPlacementStrategy : MonoBehaviour
                 gridItemScript.UpdateHitCells();
                 gridItemScript.Place();
                 bestItem.transform.SetParent(itemsParent);
-                bestItem.layer = LayerMask.NameToLayer("Ground/Wall");
+                //bestItem.layer = LayerMask.NameToLayer("Ground/Wall");
             }
             maxTotalCellVisits = new int[]{1,1,1};
         }

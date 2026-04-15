@@ -18,7 +18,7 @@ public class AgreeChecker : MonoBehaviour
     [SerializeField] private TMP_Text textToCopyText;
     [SerializeField] private GameObject headerGO;
     
-    private string backgroundSurveyUrl = "https://forms.gle/NMEZHJnNVi6Cf5Rn8";
+    private string backgroundSurveyUrl = "https://forms.gle/Ye8jPDvdqsBmF5Az8";
 
     private void Start()
     {

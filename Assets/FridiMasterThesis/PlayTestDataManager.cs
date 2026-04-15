@@ -14,8 +14,8 @@ public class PlayTestDataManager : MonoBehaviour
     private string userId;
     private string sessionId;
     private string playtestFolder;
-    private string smartPlacementQuestionnaireUrl = "https://forms.gle/1auwuZRr8rQKx1HHA";
-    private string randomPlacementQuestionnaireUrl = "https://forms.gle/KNgrwQSwnkLyYVnYA";
+    private string smartPlacementQuestionnaireUrl = "https://forms.gle/nXQBodPrwcAYAh5r6";
+    private string randomPlacementQuestionnaireUrl = "https://forms.gle/GvTnHyinKXV4z7NX8";
     
     
     public static PlayTestDataManager Instance { get; private set; }
@@ -330,8 +330,7 @@ public class PlayTestDataManager : MonoBehaviour
                     roundHealthLost = roundHealthLost.Value,
                     roundDistanceTravelled = roundDistanceTravelled.Value,
                     roundHitsTaken = roundHitsTaken.Value,
-                    roundDamageDealt = roundDamageDealt.Value,
-                    roundBlockedZoneCoveragePercent = roundBlockedZoneCoveragePercent.Value,
+                    roundDamageZoneCoveragePercent = roundBlockedZoneCoveragePercent.Value,
                     roundPlacementStrategy = AISelector.Instance.currentPlaythroughType.ToString(),
                     roundPreviousGamesPlayedBySamePlayer = previousGamesPlayed
                 };
@@ -385,9 +384,9 @@ public class PlayTestDataManager : MonoBehaviour
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             Process.Start("explorer.exe", $"/open,\"{Application.persistentDataPath.Replace("/", "\\")}\"");
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-        Process.Start("open", logFolder);
+            Process.Start("open", $"\"{logFolder}\"");
 #elif UNITY_STANDALONE_LINUX
-        Process.Start("xdg-open", logFolder);
+            Process.Start("xdg-open", logFolder);
 #else
         Debug.Log($"Logs at: {logFolder}");
 #endif

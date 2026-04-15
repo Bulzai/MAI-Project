@@ -214,6 +214,14 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
         {
             if (HeatMap.Instance.heatmap[cell].cellLethalityScore + mainRayLethalityScore > maxAllowedLethalityScore)
                 counter++;
+            
+            // means we hit a spike, is here, because the ray ends when hitting
+            // the spike sprite and then it would always be only a small number of
+            // cells with high lethality, even though it goes through the spike
+            if (HeatMap.Instance.heatmap[cell].cellLethalityScore > 90)
+            {
+                return 9000;
+            }
         }
 
         for (int i = 0; i < sideFirePointsLength; i++)
@@ -223,6 +231,10 @@ public class AttackRangeShooter : MonoBehaviour, IAdaptiveItemScoreCalculator
             {
                 if (HeatMap.Instance.heatmap[cell].cellLethalityScore + mainRayLethalityScore > maxAllowedLethalityScore)
                     counter++;
+                if (HeatMap.Instance.heatmap[cell].cellLethalityScore > 90)
+                {
+                    return 9000;
+                }
             }
         }
     
