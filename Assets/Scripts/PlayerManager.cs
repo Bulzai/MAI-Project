@@ -44,7 +44,9 @@ public class PlayerManager : MonoBehaviour
     public Transform[] spawnPositionsForMenu;
     public Transform[] spawnPositionsForItemPlacement;
     public Transform[] spawnPositionsForItemSelection;
-    public Transform[] spawnPositionsForPlaceableItemSelection;
+    public Transform[] spawnPositionsForItemDisplay;
+
+    public Transform itemContainer;
 
     public Dictionary<int, GameObject> playerRoots = new Dictionary<int, GameObject>();
     public Dictionary<int, GameObject> pickedPrefabByPlayer = new Dictionary<int, GameObject>();
@@ -84,8 +86,9 @@ public class PlayerManager : MonoBehaviour
 
         GameEvents.OnPlayerEliminated += HandlePlayerElimination;
 
-        GameEvents.OnPlaceableItemSelectionStateEntered += PrepareInputForItemSelection;
-        GameEvents.OnSurpriseBoxStateEntered += DeactivateCharacterPrefab;
+        GameEvents.OnItemDisplayStateEntered += PrepareInputForItemSelection;
+        //GameEvents.OnSurpriseBoxStateEntered += DeactivateCharacterPrefab;
+        GameEvents.OnAutomaticPlacementStateEntered += DeactivateCharacterPrefab;
 
     }
 
@@ -98,8 +101,9 @@ public class PlayerManager : MonoBehaviour
         GameEvents.OnPlayerSelectionStateExited -= DisablePlayerJoining;
         GameEvents.OnPlayerEliminated -= HandlePlayerElimination;
 
-        GameEvents.OnPlaceableItemSelectionStateEntered -= PrepareInputForItemSelection;
-        GameEvents.OnSurpriseBoxStateEntered -= DeactivateCharacterPrefab;
+        GameEvents.OnItemDisplayStateEntered -= PrepareInputForItemSelection;
+        //GameEvents.OnSurpriseBoxStateEntered -= DeactivateCharacterPrefab;
+        GameEvents.OnAutomaticPlacementStateEntered -= DeactivateCharacterPrefab;
         //GameEvents.OnMenuStateEntered -= SetInputToActiveAndUI;
 
     }
@@ -425,7 +429,7 @@ public class PlayerManager : MonoBehaviour
                 characterTf.gameObject.SetActive(true);
                 Debug.Log($"Player {kvp.Key} active: {characterTf.gameObject.activeSelf}");
 
-                characterTf.transform.position = spawnPositionsForPlaceableItemSelection[kvp.Key].position;
+                characterTf.transform.position = spawnPositionsForItemDisplay[kvp.Key].position;
                 namePositionsInJoinMenu[kvp.Key].gameObject.SetActive(true);
             }
 
@@ -487,6 +491,8 @@ public class PlayerManager : MonoBehaviour
 
         // Also nuke any lingering PlayerInput objects not tracked in our lists
         NukeAllPlayerObjects();
+        RemoveAllLingeringItems();
+        DeactivateAllNames();
 
         // Clear all runtime state
         _eliminationOrder.Clear();
@@ -504,6 +510,20 @@ public class PlayerManager : MonoBehaviour
 
         // Optionally allow re-joining immediately:
         // EnablePlayerJoining();
+    }
+
+    private void RemoveAllLingeringItems()
+    {
+        if (itemContainer == null) return;
+        foreach (Transform child in itemContainer)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    private void DeactivateAllNames()
+    {
+        foreach (Transform child in namePositionsInJoinMenu) child.gameObject.SetActive(false);
     }
 
     /// <summary>

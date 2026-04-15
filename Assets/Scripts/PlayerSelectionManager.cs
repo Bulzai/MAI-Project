@@ -20,7 +20,7 @@ public class PlayerSelectionManager : MonoBehaviour
     public static event Action OnPlayerSelectionCountDownStarted;
     public static event Action OnPlayerSelectionCountDownStopped;
 
-    [SerializeField] public PlaceableItemSelection placeableItemSelection;
+    [SerializeField] private ItemDisplay itemDisplay;
 
     [SerializeField] private TMP_Text countdownText;
     private Coroutine countdownRoutine;
@@ -171,7 +171,6 @@ public class PlayerSelectionManager : MonoBehaviour
         // -----------------------------------------------
 
         _playerSelection[playerInput] = data;
-        //TryStartGame();
     }
 
     private void HandleItemMenuReady(PlayerInput playerInput, PlayerSelectionData data)
@@ -180,7 +179,7 @@ public class PlayerSelectionManager : MonoBehaviour
 
         _playerSelection[playerInput] = data;
 
-        placeableItemSelection.UpdateReadyStatus(playerInput, data);
+        itemDisplay.UpdateReadyStatus(playerInput, data);
 
         Debug.Log($"Player {playerInput.playerIndex} toggled ready in Item Selection: {data.IsReady}");
     }
@@ -192,14 +191,12 @@ public class PlayerSelectionManager : MonoBehaviour
 
         data.IsReady = !data.IsReady;
 
-
-
         // run based on current state
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
         {
             HandleJoinMenuReady(playerInput, data);
         }
-        else if (GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
+        else if (GameEvents.CurrentState == GameState.ItemDisplay)
         {
 
             HandleItemMenuReady(playerInput, data);
@@ -261,10 +258,10 @@ public class PlayerSelectionManager : MonoBehaviour
 
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
         {
-            GameEvents.ChangeState(GameState.PlaceableItemSelectionState);
+            GameEvents.ChangeState(GameState.ItemDisplay);
         }
-        else if (GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
-            GameEvents.ChangeState(GameState.SurpriseBoxState);
+        else if (GameEvents.CurrentState == GameState.ItemDisplay)
+            GameEvents.ChangeState(GameState.AutomaticPlacement);
 
 
         // 5. Kurz warten, damit der neue State geladen/initialisiert ist

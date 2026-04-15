@@ -82,7 +82,8 @@ public class RoundController : MonoBehaviour
                 playerManagerFinal.ResetEliminations();
 
             // State wechseln
-            GameEvents.ChangeState(GameState.SurpriseBoxState);
+            //GameEvents.ChangeState(GameState.SurpriseBoxState);
+            GameEvents.ChangeState(GameState.AutomaticPlacement);
         }
 
         // 6. Ein winziger Moment warten, damit der neue State geladen ist

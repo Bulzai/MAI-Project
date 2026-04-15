@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlaceableItemPoolUIGenerator : MonoBehaviour
+public class ItemDisplayPoolUIGenerator : MonoBehaviour
 {
     [SerializeField] private GameObject togglePrefab;
     [SerializeField] private Transform grid;
     [SerializeField] public Transform gifGrid;
-    [SerializeField] private PlaceableItemSelection placeableItemSelection;
+    [SerializeField] private ItemDisplay itemDisplay;
     [SerializeField] private UnityEngine.UI.Button continueButton;
 
     private Toggle firstToggle;
@@ -18,12 +18,11 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
         return firstToggle;
     }
 
-
     private IEnumerator WaitAndGenerate()
     {
         yield return new WaitForEndOfFrame();
 
-        if (PlaceableItemSelection.Instance != null)
+        if (ItemDisplay.Instance != null)
         {
             GenerateToggles();
         }
@@ -39,13 +38,13 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
         GameObject lastToggle = null;
 
         // check if the manager exists yet
-        if (PlaceableItemSelection.Instance == null)
+        if (ItemDisplay.Instance == null)
         {
             Debug.LogWarning("Manager not found!");
             return;
         }
 
-        Debug.Log("GENERATOR: Found " + PlaceableItemSelection.Instance.getGeneralItemPool().Count + " items.");
+        Debug.Log("GENERATOR: Found " + ItemDisplay.Instance.getGeneralItemPool().Count + " items.");
 
         // clear existing toggles - stop double spawning
         foreach (Transform child in grid)
@@ -53,7 +52,7 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        foreach (GameObject item in PlaceableItemSelection.Instance.getGeneralItemPool())
+        foreach (GameObject item in ItemDisplay.Instance.getGeneralItemPool())
         {
             // create toggle ui
             GameObject newToggleGO = Instantiate(togglePrefab, grid);
@@ -88,21 +87,21 @@ public class PlaceableItemPoolUIGenerator : MonoBehaviour
             }
             else Debug.Log("Either gif or grid is null");
 
-                // get script
-                PlaceableItemToggleUI toggleScript = newToggleGO.GetComponent<PlaceableItemToggleUI>();
+            // get script
+            //ItemDisplayToggleUI toggleScript = newToggleGO.GetComponent<ItemDisplayToggleUI>();
 
-            if (toggleScript != null)
-            {
-                toggleScript.SetupToggle(item);
+            //if (toggleScript != null)
+            //{
+            //    toggleScript.SetupToggle(item);
 
-                // track for navigation
-                if (firstToggle == null) firstToggle = newToggleGO.GetComponentInChildren<Toggle>();
-                lastToggle = newToggleGO;
-            }
-            else
-            {
-                continue; // Skip to the next item instead of crashing the whole loop
-            }
+            //    // track for navigation
+            if (firstToggle == null) firstToggle = newToggleGO.GetComponentInChildren<Toggle>();
+            //    lastToggle = newToggleGO;
+            //}
+            //else
+            //{
+            //    continue; // Skip to the next item instead of crashing the whole loop
+            //}
 
             // get data from item
             SpriteRenderer sprite = item.GetComponentInChildren<SpriteRenderer>();

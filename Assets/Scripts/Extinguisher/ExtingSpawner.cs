@@ -66,7 +66,8 @@ public class ExtingSpawner : MonoBehaviour
     
     private void OnDestroy()
     {
-        GameEvents.OnSurpriseBoxStateEntered -= PrepareSpawnPositions;
+        //GameEvents.OnSurpriseBoxStateEntered -= PrepareSpawnPositions;
+        GameEvents.OnAutomaticPlacementStateEntered -= PrepareSpawnPositions;
         GameEvents.OnPlaceItemStateEntered -= ShowPreviews;
         GameEvents.OnPlaceItemStateEntered -= MarkExtinguisherTiles;
         PlaceItemState.CountDownStarted -= HidePreviewsAndUnblockTiles;
@@ -79,7 +80,8 @@ public class ExtingSpawner : MonoBehaviour
 
     private void Awake()
     {
-        GameEvents.OnSurpriseBoxStateEntered += PrepareSpawnPositions;
+        //GameEvents.OnSurpriseBoxStateEntered += PrepareSpawnPositions;
+        GameEvents.OnAutomaticPlacementStateEntered += PrepareSpawnPositions;
         GameEvents.OnPlaceItemStateEntered += ShowPreviews;
         GameEvents.OnPlaceItemStateEntered += MarkExtinguisherTiles;
         PlaceItemState.CountDownStarted += HidePreviewsAndUnblockTiles;

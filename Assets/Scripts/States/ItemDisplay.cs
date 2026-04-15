@@ -1,15 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class PlaceableItemSelection : MonoBehaviour
+public class ItemDisplay : MonoBehaviour
 {
-    public static PlaceableItemSelection Instance { get; private set; }
+    public static ItemDisplay Instance { get; private set; }
 
-    [SerializeField] public GameObject selectionManagerGO;
+    [SerializeField] private GameObject selectionManagerGO;
+    [SerializeField] private GameObject playerManagerGO;
     private PlayerSelectionManager selectionManager;
+    private PlayerManager playerManager;
 
     [Header("Item Pool")]
     [SerializeField] private List<GameObject> generalItemPool;
@@ -43,6 +46,11 @@ public class PlaceableItemSelection : MonoBehaviour
         activeItemPool = new List<GameObject>(generalItemPool);
 
         selectionManager = selectionManagerGO.GetComponent<PlayerSelectionManager>();
+        playerManager = playerManagerGO.GetComponent<PlayerManager>();
+    }
+
+    private void OnEnable()
+    {
         selectionManager.ResetAllPlayersReadyStatus();
         ShowPlayerSlots();
     }
@@ -50,6 +58,8 @@ public class PlaceableItemSelection : MonoBehaviour
     private void OnDisable()
     {
         selectionManager.ResetAllPlayersReadyStatus();
+        playerManager.DeactivateCharacterPrefab();
+        ResetReadiness();
     }
 
     // GETTER
@@ -59,40 +69,40 @@ public class PlaceableItemSelection : MonoBehaviour
     }
 
     // MAIN LOGIC
-    public void ToggleItemAvailability(GameObject itemPrefab, bool isSelected)
-    {
-        if (!isSelected && activeItemPool.Count <= 1)
-        {
-            LastItemWarning();
-            Debug.LogWarning("Cannot deselect the last item! The Surprise Box needs at least one thing to spawn.");
-            return;
-        }
+    //public void ToggleItemAvailability(GameObject itemPrefab, bool isSelected)
+    //{
+    //    if (!isSelected && activeItemPool.Count <= 1)
+    //    {
+    //        LastItemWarning();
+    //        Debug.LogWarning("Cannot deselect the last item! The Surprise Box needs at least one thing to spawn.");
+    //        return;
+    //    }
 
-        if (isSelected && !activeItemPool.Contains(itemPrefab))
-        {
-            activeItemPool.Add(itemPrefab);
-        }
-        else if (!isSelected && activeItemPool.Contains(itemPrefab))
-        { 
-            activeItemPool.Remove(itemPrefab);
-        }
-    }
-    private void LastItemWarning()
-    {
-        if (warningText == null) return;
+    //    if (isSelected && !activeItemPool.Contains(itemPrefab))
+    //    {
+    //        activeItemPool.Add(itemPrefab);
+    //    }
+    //    else if (!isSelected && activeItemPool.Contains(itemPrefab))
+    //    { 
+    //        activeItemPool.Remove(itemPrefab);
+    //    }
+    //}
+    //private void LastItemWarning()
+    //{
+    //    if (warningText == null) return;
 
-        if (_warningCoroutine != null) StopCoroutine(_warningCoroutine);
-        _warningCoroutine = StartCoroutine(WarningRoutine());
-    }
+    //    if (_warningCoroutine != null) StopCoroutine(_warningCoroutine);
+    //    _warningCoroutine = StartCoroutine(WarningRoutine());
+    //}
 
-    private IEnumerator WarningRoutine()
-    {
-        warningText.gameObject.SetActive(true);
+    //private IEnumerator WarningRoutine()
+    //{
+    //    warningText.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(warningDuration);
+    //    yield return new WaitForSeconds(warningDuration);
 
-        warningText.gameObject.SetActive(false);
-    }
+    //    warningText.gameObject.SetActive(false);
+    //}
   
     // READY OR NOT
     private void ShowPlayerSlots()
@@ -129,6 +139,17 @@ public class PlaceableItemSelection : MonoBehaviour
         else
         {
             Debug.LogWarning($"Player Index {index} is out of range for the UI arrays!");
+        }
+    }
+
+    private void ResetReadiness()
+    {
+        for(int i = 0; i < playerReadyGO.Length; i++)
+        {
+            if (playerReadyGO[i] != null)
+                playerReadyGO[i].SetActive(false);
+            if (playerUnreadyGO[i] != null)
+                playerUnreadyGO[i].SetActive(false);
         }
     }
 }

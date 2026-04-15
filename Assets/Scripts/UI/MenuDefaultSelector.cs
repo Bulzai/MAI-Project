@@ -36,7 +36,7 @@ using UnityEngine.UI;
 public class MenuDefaultSelector : MonoBehaviour
 {
     [SerializeField] private Selectable defaultSelectable;
-    [SerializeField] private PlaceableItemPoolUIGenerator dynamicSelectableProvider;
+    [SerializeField] private ItemDisplayPoolUIGenerator dynamicSelectableProvider;
 
     private void OnEnable()
     {

@@ -137,7 +137,7 @@ public class SurpriseBoxState : MonoBehaviour
         var availableTiles = new List<GameObject>(spawnBoxes);
 
         // selected item pool
-        var currentAllowedPool = PlaceableItemSelection.Instance.activeItemPool;
+        var currentAllowedPool = ItemDisplay.Instance.activeItemPool;
 
         // check how many items
         Debug.Log($"Attempting to spawn. Pool Count: {currentAllowedPool.Count}. Tiles: {availableTiles.Count}");

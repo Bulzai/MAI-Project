@@ -10,8 +10,9 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private GameObject mainMenuUI;
     [SerializeField] private GameObject playerSelectionUI;
     [SerializeField] private GameObject playerSelectionState;
-    [SerializeField] private GameObject placeableItemSelectionUI;
-    [SerializeField] private GameObject placeableItemSelectionState;
+    [SerializeField] private GameObject itemDisplayUI;
+    [SerializeField] private GameObject itemDisplayManager;
+    [SerializeField] private GameObject automaticPlacementState;
     [SerializeField] private GameObject surpriseBoxState;
     [SerializeField] private GameObject placeItemUI;
     [SerializeField] private GameObject placeItemState;
@@ -29,11 +30,13 @@ public class GameStateManager : MonoBehaviour
 
             { GameState.PlayerSelectionState, new List<GameObject> { playerSelectionUI, playerSelectionState } },
 
-            { GameState.PlaceableItemSelectionState, new List<GameObject> { placeableItemSelectionUI, placeableItemSelectionState } },
+            { GameState.ItemDisplay, new List<GameObject> { itemDisplayUI, itemDisplayManager } },
 
-            { GameState.SurpriseBoxState, new List<GameObject> { surpriseBoxState } },
+            // { GameState.SurpriseBoxState, new List<GameObject> { surpriseBoxState } },
 
-            { GameState.PlaceItemState, new List<GameObject> { placeItemUI, placeItemState } },
+            { GameState.AutomaticPlacement, new List<GameObject> { automaticPlacementState } },
+
+            { GameState.PlaceItemState, new List<GameObject> {  placeItemState } },
 
             { GameState.MainGameState, new List<GameObject> { GameMap } },
         };

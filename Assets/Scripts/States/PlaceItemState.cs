@@ -41,13 +41,13 @@ public class PlaceItemState : MonoBehaviour
     private void OnEnable()
     {
         Debug.Log("ENTERED PLACE ITEM");
-        GameEvents.OnPlaceItemStateEntered += BeginPlacementPhaseAll;
+        GameEvents.OnPlaceItemStateEntered += AllPlayersFinishedPlacing;
     }
 
     private void OnDisable()
     {
-        Debug.Log("ENTERED PLACE ITEM");
-        GameEvents.OnPlaceItemStateEntered -= BeginPlacementPhaseAll;
+        Debug.Log("EXITED PLACE ITEM");
+        GameEvents.OnPlaceItemStateEntered -= AllPlayersFinishedPlacing;
     }
 
     public void HideAllCursors()
@@ -60,9 +60,10 @@ public class PlaceItemState : MonoBehaviour
         }
     }
 
-
     private void AllPlayersFinishedPlacing()
     {
+        // added
+        GameWorld.SetActive(true);
 
         GridPlacementSystem.Instance.HideGrid();
         playerManager.pickedPrefabByPlayer.Clear();

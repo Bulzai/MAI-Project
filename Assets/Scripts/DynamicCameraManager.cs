@@ -18,7 +18,7 @@ public class DynamicCamera2DManager : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnPlayerSelectionStateEntered += SetCameraPlayerSelectionStatePosition;
-        GameEvents.OnPlaceableItemSelectionStateEntered += SetCameraPlaceableItemSelectionStatePosition;
+        GameEvents.OnItemDisplayStateEntered += SetCameraPlaceableItemSelectionStatePosition;
         GameEvents.OnSurpriseBoxStateEntered += SetCameraSurpriseBoxStatePosition;
         GameEvents.OnPlaceItemStateEntered += SetCameraPlaceItemStatePosition;
         GameEvents.OnMainGameStateEntered +=  EnableDynamicCamera2D;
@@ -27,7 +27,7 @@ public class DynamicCamera2DManager : MonoBehaviour
     private void OnDisable()
     {
         GameEvents.OnPlayerSelectionStateEntered -= SetCameraPlayerSelectionStatePosition;
-        GameEvents.OnPlaceableItemSelectionStateEntered -= SetCameraPlaceableItemSelectionStatePosition;
+        GameEvents.OnItemDisplayStateEntered -= SetCameraPlaceableItemSelectionStatePosition;
         GameEvents.OnSurpriseBoxStateEntered -= SetCameraSurpriseBoxStatePosition;
         GameEvents.OnPlaceItemStateEntered -= SetCameraPlaceItemStatePosition;
         GameEvents.OnMainGameStateEntered -=  EnableDynamicCamera2D;

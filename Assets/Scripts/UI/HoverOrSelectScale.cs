@@ -62,15 +62,6 @@ public class HoverOrSelectScale : MonoBehaviour,
             gifObject.SetActive(shouldPulse);
         }
 
-        if (_toggle != null && GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
-        {
-            if(img != null)
-    {
-                // Ticked = White, Unticked = Black
-                img.color = isToggledOn ? Color.white : Color.black;
-            }
-        }
-
         Vector3 targetScale;
         if (shouldPulse)
         {
@@ -81,7 +72,7 @@ public class HoverOrSelectScale : MonoBehaviour,
             float pulseMultiplier = Mathf.Lerp(selectMultiplierMin, selectMultiplierMax, (pulse + 1f) / 2f);
             targetScale = _originalScale * pulseMultiplier;
 
-            if (_toggle != null && GameEvents.CurrentState == GameState.PlaceableItemSelectionState)
+            if (_toggle != null && GameEvents.CurrentState == GameState.ItemDisplay)
             {
                 if (img != null)
                 {
