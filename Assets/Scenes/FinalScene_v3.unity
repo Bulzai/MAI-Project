@@ -100144,7 +100144,7 @@ GameObject:
   - component: {fileID: 382065973}
   - component: {fileID: 382065972}
   m_Layer: 2
-  m_Name: Bento
+  m_Name: Bushes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100159,9 +100159,9 @@ Transform:
   m_GameObject: {fileID: 382065970}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 0.5217392}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: -0.3496, y: 2.03, z: 0}
+  m_LocalScale: {x: 1.570691, y: 1.338402, z: 0.5819138}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 196134550}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -100227,7 +100227,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -2
-  m_Sprite: {fileID: 2055272334, guid: ffe16dc9926d2a64a876bb127a67a61d, type: 3}
+  m_Sprite: {fileID: -569211957, guid: 65adfb02fb6ca9048906b9006d492dd2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -100352,9 +100352,9 @@ Transform:
   m_GameObject: {fileID: 393434806}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.16, y: 12.490002, z: 0}
-  m_LocalScale: {x: 1.8424481, y: 1.8424481, z: 1.8424481}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: -2.804, y: 10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 196134550}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -107994,7 +107994,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &780870651
 Transform:
   m_ObjectHideFlags: 0
@@ -113619,15 +113619,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.2
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.2
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.2
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
       propertyPath: m_LocalPosition.x
@@ -113635,7 +113635,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12.6
+      value: 10.02
       objectReference: {fileID: 0}
     - target: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
       propertyPath: m_LocalPosition.z
@@ -115552,7 +115552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1205235882
 Transform:
   m_ObjectHideFlags: 0
