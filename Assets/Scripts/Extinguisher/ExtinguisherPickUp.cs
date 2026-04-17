@@ -1,10 +1,12 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ExtinguisherPickUp : MonoBehaviour
 {
     private ExtingSpawner spawner;
     public static event Action OnMilkCollected;
+
     public void Init(ExtingSpawner spawnerRef)
     {
         spawner = spawnerRef;
@@ -18,9 +20,14 @@ public class ExtinguisherPickUp : MonoBehaviour
         health.Extinguish();
         OnMilkCollected?.Invoke();
 
+        PlayerInput playerInput = collision.GetComponentInParent<PlayerInput>();
+        if (playerInput != null && PopupTextManager.Instance != null)
+        {
+            PopupTextManager.Instance.ShowPopupForPlayer("Milk Power +6s", playerInput.playerIndex);
+        }
+
         Destroy(gameObject);
 
-        // tell the loop: spawn the next one immediately
         spawner?.RequestAdvance();
     }
 }
