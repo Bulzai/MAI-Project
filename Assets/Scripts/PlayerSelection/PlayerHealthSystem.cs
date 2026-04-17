@@ -12,7 +12,9 @@ public class PlayerHealthSystem : MonoBehaviour
     
     private PlayerInput _playerInput;
     public PlayerAnimator animator;
-    
+
+    public HealthBarUI healthBarUI;
+
     public int maxHealth = 100;
     public float burnTickInterval = 1f;
     public int burnDamagePerTick = 5;
@@ -50,14 +52,24 @@ public class PlayerHealthSystem : MonoBehaviour
     {
         _playerInput = GetComponentInParent<PlayerInput>();
         currentHealth = maxHealth;
+
+        if (_playerInput != null && HealthBarManager.Instance != null)
+        {
+            healthBarUI = HealthBarManager.Instance.GetHealthBar(_playerInput.playerIndex);
+
+            if (healthBarUI != null)
+            {
+                healthBarUI.maxHealth = maxHealth;
+                healthBarUI.SetHealth(currentHealth);
+            }
+        }
+
         fireSprite = transform.GetChild(0).GetChild(0).gameObject;
         fireSprite.gameObject.SetActive(false); // start off
 
         originalColor = spriteRenderer.color;
 
-
         playerController = GetComponent<TarodevController.PlayerController>();
-        //Invoke("SetOnFire", 3f);
     }
     private void OnEnable()
     {
@@ -115,8 +127,10 @@ public class PlayerHealthSystem : MonoBehaviour
 
     public void TakeDamage(int amount, bool isItemDmg)
     {
-
         currentHealth -= amount;
+
+        if (healthBarUI != null)
+            healthBarUI.SetHealth(currentHealth);
 
         if (isItemDmg && amount > 0)
         {
@@ -132,7 +146,6 @@ public class PlayerHealthSystem : MonoBehaviour
             OnPlayerDeath?.Invoke();
             animator.PlayDeath();
             Die();
-            
         }
     }
     private IEnumerator FlashRed()
