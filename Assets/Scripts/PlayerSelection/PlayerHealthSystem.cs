@@ -130,7 +130,9 @@ public class PlayerHealthSystem : MonoBehaviour
         currentHealth -= amount;
 
         if (healthBarUI != null)
+        {
             healthBarUI.SetHealth(currentHealth);
+        }
 
         if (isItemDmg && amount > 0)
         {
