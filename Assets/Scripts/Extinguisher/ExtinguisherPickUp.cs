@@ -21,9 +21,11 @@ public class ExtinguisherPickUp : MonoBehaviour
         OnMilkCollected?.Invoke();
 
         PlayerInput playerInput = collision.GetComponentInParent<PlayerInput>();
-        if (playerInput != null && PopupTextManager.Instance != null)
+
+        if (playerInput != null)
         {
-            PopupTextManager.Instance.ShowPopupForPlayer("Milk Power +6s", playerInput.playerIndex, Color.cyan);
+            PopupTextManager.Instance?.ShowPopupForPlayer("Milk Power +6s", playerInput.playerIndex, Color.cyan);
+            GameMetricsLogger.Instance?.RegisterMilkCollected(playerInput.playerIndex);
         }
 
         Destroy(gameObject);

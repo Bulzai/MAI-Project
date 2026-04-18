@@ -153,6 +153,11 @@ public class PlayerHealthSystem : MonoBehaviour
                 PopupTextManager.Instance.ShowPopupForPlayer("Fatality x.x", _playerInput.playerIndex, Color.red, true);
             }
 
+            if (_playerInput != null && GameMetricsLogger.Instance != null)
+            {
+                GameMetricsLogger.Instance.RegisterDeath(_playerInput.playerIndex);
+            }
+
             Die();
         }
     }
