@@ -137,14 +137,6 @@ public class PlayerItemHandler : MonoBehaviour
 
         // start blink coroutine (it will wait until the last blinkStartSeconds)
         StopBlink(ref _slowBlinkCo);
-        _slowBlinkCo = StartCoroutine(BlinkVisual(
-            slowAuraVisual,
-            totalDuration: auraDuration,
-            blinkStartAtSeconds: blinkStartSeconds,
-            minInterval: blinkMinInterval,
-            maxInterval: blinkMaxInterval,
-            curve: blinkCurve
-        ));
 
         float t = auraDuration;
         while (t > 0f)
@@ -176,15 +168,6 @@ public class PlayerItemHandler : MonoBehaviour
     {
         repelAuraVisual.SetActive(true);
         OnRepelAuraActivated?.Invoke();
-        StopBlink(ref _repelBlinkCo);
-        _repelBlinkCo = StartCoroutine(BlinkVisual(
-            repelAuraVisual,
-            totalDuration: repelSeconds,
-            blinkStartAtSeconds: blinkStartSeconds,
-            minInterval: blinkMinInterval,
-            maxInterval: blinkMaxInterval,
-            curve: blinkCurve
-        ));
 
         float t = repelSeconds;
         while (t > 0f)
@@ -230,16 +213,6 @@ public class PlayerItemHandler : MonoBehaviour
         OnDamageAuraActivated?.Invoke();
         damageAuraVisual.SetActive(true);
 
-        StopBlink(ref _damageBlinkCo);
-        _damageBlinkCo = StartCoroutine(BlinkVisual(
-            damageAuraVisual,
-            totalDuration: damageAuraDuration,
-            blinkStartAtSeconds: blinkStartSeconds,
-            minInterval: blinkMinInterval,
-            maxInterval: blinkMaxInterval,
-            curve: blinkCurve
-        ));
-
         float remaining = damageAuraDuration;
         while (remaining > 0f)
         {
@@ -256,7 +229,7 @@ public class PlayerItemHandler : MonoBehaviour
         confusionAuraVisual.SetActive(true);
 
         // Blink-Warnung starten
-        StopBlink(ref _confusionBlinkCo);
+        /*StopBlink(ref _confusionBlinkCo);
         _confusionBlinkCo = StartCoroutine(BlinkVisual(
             confusionAuraVisual,
             totalDuration: confusionAuraDuration,
@@ -264,7 +237,7 @@ public class PlayerItemHandler : MonoBehaviour
             minInterval: blinkMinInterval,
             maxInterval: blinkMaxInterval,
             curve: blinkCurve
-        ));
+        ));*/
 
         float remaining = confusionAuraDuration;
         while (remaining > 0f)

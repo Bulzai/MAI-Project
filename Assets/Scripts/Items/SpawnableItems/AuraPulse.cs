@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AuraPulse : MonoBehaviour
 {
-    [Header("Pulse Settings")]
+    /*[Header("Pulse Settings")]
     [SerializeField] private float pulseSpeed = 2f;   // how fast it scales
     [SerializeField] private float pulseAmount = 0.1f; // how strong the pulse (e.g. 0.1 = ±10%)
     [SerializeField] private Vector3 baseScale = Vector3.one;
@@ -20,5 +20,5 @@ public class AuraPulse : MonoBehaviour
         _t += Time.deltaTime * pulseSpeed;
         float scaleOffset = Mathf.Sin(_t) * pulseAmount;
         transform.localScale = baseScale * (1f + scaleOffset);
-    }
+    }*/
 }

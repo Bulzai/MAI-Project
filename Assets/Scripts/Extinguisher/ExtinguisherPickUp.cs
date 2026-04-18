@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ExtinguisherPickUp : MonoBehaviour
 {
@@ -14,6 +15,13 @@ public class ExtinguisherPickUp : MonoBehaviour
     {
         var health = collision.GetComponent<PlayerHealthSystem>();
         if (health == null) return;
+
+        PlayerInput playerInput = collision.GetComponentInParent<PlayerInput>();
+
+        if (playerInput != null && GameMetricsLogger.Instance != null)
+        {
+            GameMetricsLogger.Instance.RegisterMilkCollected(playerInput.playerIndex);
+        }
 
         health.Extinguish();
         OnMilkCollected?.Invoke();

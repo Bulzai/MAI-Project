@@ -43,8 +43,7 @@ public class HoverHighlight : MonoBehaviour
                 ? Mathf.Lerp(popScale, hoverScale, t / popDuration)
                 : hoverScale;
 
-            float pulse = 1f + Mathf.Sin(Time.time * pulseSpeed) * pulseAmplitude;
-            float targetScale = baseTarget * pulse;
+            float targetScale = baseTarget;
 
             // Scale
             transform.localScale = Vector3.Lerp(transform.localScale, originalScale * targetScale, lerpSpeed * dt);

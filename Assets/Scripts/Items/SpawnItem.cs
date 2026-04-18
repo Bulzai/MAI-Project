@@ -40,8 +40,7 @@ public class SpawnItem : MonoBehaviour
 
     [Header("Item Expiration")]
     [SerializeField] private float itemLifespan = 10f; // Wie lange liegt es insgesamt?
-    [SerializeField] private float blinkDuration = 3f;  // Wie lange soll es am Ende blinken?
-    [SerializeField] private float blinkInterval = 0.2f; // Geschwindigkeit des Blinkens
+   
     private void OnEnable()
     {
         // Subscribe to your custom events
@@ -173,26 +172,12 @@ public class SpawnItem : MonoBehaviour
     }
     private IEnumerator ItemExpirationTimer(GameObject item)
     {
-        // 1. Warten, bis die Blink-Phase beginnt
-        float waitBeforeBlink = itemLifespan - blinkDuration;
-        yield return new WaitForSeconds(Mathf.Max(0, waitBeforeBlink));
+        yield return new WaitForSeconds(itemLifespan);
 
-        // 2. Blink-Phase
-        float elapsed = 0f;
-        while (elapsed < blinkDuration && item != null)
-        {
-            // Sichtbarkeit umschalten (funktioniert über die Active-State des GameObjects)
-            item.SetActive(!item.activeSelf);
-
-            yield return new WaitForSeconds(blinkInterval);
-            elapsed += blinkInterval;
-        }
-
-        // 3. Item zerstören, falls es nicht schon aufgesammelt wurde
         if (item != null)
         {
             Destroy(item);
-            currentItem = null; // Wichtig: Damit der AutoRespawnLoop weiß, dass er neu spawnen darf
+            currentItem = null;
         }
     }
 }

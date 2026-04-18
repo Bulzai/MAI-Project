@@ -131,6 +131,12 @@ public class PlayerHealthSystem : MonoBehaviour
         {
             OnPlayerDeath?.Invoke();
             animator.PlayDeath();
+
+            if (_playerInput != null && GameMetricsLogger.Instance != null)
+            {
+                GameMetricsLogger.Instance.RegisterDeath(_playerInput.playerIndex);
+            }
+
             Die();
             
         }
