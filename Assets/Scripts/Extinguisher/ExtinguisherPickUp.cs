@@ -23,7 +23,7 @@ public class ExtinguisherPickUp : MonoBehaviour
         PlayerInput playerInput = collision.GetComponentInParent<PlayerInput>();
         if (playerInput != null && PopupTextManager.Instance != null)
         {
-            PopupTextManager.Instance.ShowPopupForPlayer("Milk Power +6s", playerInput.playerIndex);
+            PopupTextManager.Instance.ShowPopupForPlayer("Milk Power +6s", playerInput.playerIndex, Color.cyan);
         }
 
         Destroy(gameObject);

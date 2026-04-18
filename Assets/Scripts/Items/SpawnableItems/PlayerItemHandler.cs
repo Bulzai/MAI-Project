@@ -159,7 +159,12 @@ public class PlayerItemHandler : MonoBehaviour
                 if (!otherRb) continue;
 
                 var slow = otherRb.GetComponent<SlowDebuff>();
-                if (slow) slow.ApplySpeedModifier(slowPercent, slowSeconds);
+                if (slow)
+                {
+                    slow.ApplySpeedModifier(slowPercent, slowSeconds);
+                    ShowStatusPopupForAffectedPlayer(otherRb.transform, "GOT SLOWED :(", Color.cyan);
+                }
+
                 OnOtherPlayerSlowed?.Invoke();
             }
 
@@ -286,6 +291,7 @@ public class PlayerItemHandler : MonoBehaviour
                         confusionEffect.Play();
 
                     healthSystem.ApplyConfusion(confusionDuration);
+                    ShowStatusPopupForAffectedPlayer(hit.transform, "Got CONFUSED :/", new Color(1f, 0.4f, 0.8f));
                     OnConfusionAuraHit?.Invoke();
                 }
             }
@@ -407,5 +413,16 @@ public class PlayerItemHandler : MonoBehaviour
         if (confusionAuraVisual) confusionAuraVisual.SetActive(false);
 
         repelActive = false;
+    }
+
+    private void ShowStatusPopupForAffectedPlayer(Transform affectedPlayer, string message, Color color, bool important = false)
+    {
+        if (affectedPlayer == null || PopupTextManager.Instance == null) return;
+
+        var playerInput = affectedPlayer.GetComponentInParent<UnityEngine.InputSystem.PlayerInput>();
+        if (playerInput != null)
+        {
+            PopupTextManager.Instance.ShowPopupForPlayer(message, playerInput.playerIndex, color, important);
+        }
     }
 }

@@ -367,6 +367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 2969068311962969431}
+  healthBarUI: {fileID: 0}
   maxHealth: 100
   burnTickInterval: 1
   burnDamagePerTick: 2

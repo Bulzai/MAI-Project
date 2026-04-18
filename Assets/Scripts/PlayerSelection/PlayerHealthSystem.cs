@@ -147,6 +147,12 @@ public class PlayerHealthSystem : MonoBehaviour
         {
             OnPlayerDeath?.Invoke();
             animator.PlayDeath();
+
+            if (_playerInput != null && PopupTextManager.Instance != null)
+            {
+                PopupTextManager.Instance.ShowPopupForPlayer("Fatality x.x", _playerInput.playerIndex, Color.red, true);
+            }
+
             Die();
         }
     }

@@ -13,19 +13,9 @@ public class PopupTextManager : MonoBehaviour
         Instance = this;
     }
 
-    public void ShowPopupForPlayer(string message, int playerIndex)
+    public void ShowPopupForPlayer(string message, int playerIndex, Color color, bool isImportant = false)
     {
-        if (popupPrefab == null || canvas == null)
-        {
-            Debug.LogWarning("Popup prefab or canvas not assigned.");
-            return;
-        }
-
-        if (playerIndex < 0 || playerIndex >= popupAnchors.Length || popupAnchors[playerIndex] == null)
-        {
-            Debug.LogWarning("Popup anchor missing for player index: " + playerIndex);
-            return;
-        }
+        if (popupPrefab == null || canvas == null) return;
 
         GameObject popupObj = Instantiate(popupPrefab, canvas.transform);
 
@@ -36,6 +26,8 @@ public class PopupTextManager : MonoBehaviour
         if (popup != null)
         {
             popup.SetText(message);
+            popup.SetColor(color);
+            popup.isImportant = isImportant;
         }
     }
 }

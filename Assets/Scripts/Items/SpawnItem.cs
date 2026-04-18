@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System; // for Action if needed
+using TMPro;
 
 /// <summary>
 /// Spawns a random item that curves down toward a random landing spot.
@@ -42,6 +43,11 @@ public class SpawnItem : MonoBehaviour
     [SerializeField] private float itemLifespan = 10f; // Wie lange liegt es insgesamt?
     [SerializeField] private float blinkDuration = 3f;  // Wie lange soll es am Ende blinken?
     [SerializeField] private float blinkInterval = 0.2f; // Geschwindigkeit des Blinkens
+
+    [Header("Countdown Text")]
+    [SerializeField] private TextMeshPro countdownPrefab;
+    [SerializeField] private Vector3 countdownOffset = new Vector3(0f, 1.2f, 0f);
+
     private void OnEnable()
     {
         // Subscribe to your custom events
@@ -173,26 +179,39 @@ public class SpawnItem : MonoBehaviour
     }
     private IEnumerator ItemExpirationTimer(GameObject item)
     {
-        // 1. Warten, bis die Blink-Phase beginnt
-        float waitBeforeBlink = itemLifespan - blinkDuration;
-        yield return new WaitForSeconds(Mathf.Max(0, waitBeforeBlink));
+        TextMeshPro countdownInstance = null;
 
-        // 2. Blink-Phase
-        float elapsed = 0f;
-        while (elapsed < blinkDuration && item != null)
+        if (countdownPrefab != null && item != null)
         {
-            // Sichtbarkeit umschalten (funktioniert ¸ber die Active-State des GameObjects)
-            item.SetActive(!item.activeSelf);
-
-            yield return new WaitForSeconds(blinkInterval);
-            elapsed += blinkInterval;
+            countdownInstance = Instantiate(countdownPrefab);
+            countdownInstance.transform.position = item.transform.position + countdownOffset;
+            countdownInstance.transform.rotation = Quaternion.identity;
         }
 
-        // 3. Item zerstˆren, falls es nicht schon aufgesammelt wurde
+        float remaining = itemLifespan;
+
+        while (remaining > 0f && item != null)
+        {
+            if (countdownInstance != null)
+            {
+                countdownInstance.text = Mathf.CeilToInt(remaining).ToString();
+                countdownInstance.transform.position = item.transform.position + countdownOffset;
+                countdownInstance.transform.rotation = Quaternion.identity;
+            }
+
+            yield return null;
+            remaining -= Time.deltaTime;
+        }
+
+        if (countdownInstance != null)
+        {
+            Destroy(countdownInstance.gameObject);
+        }
+
         if (item != null)
         {
             Destroy(item);
-            currentItem = null; // Wichtig: Damit der AutoRespawnLoop weiﬂ, dass er neu spawnen darf
+            currentItem = null;
         }
     }
 }
