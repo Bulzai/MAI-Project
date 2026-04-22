@@ -15,12 +15,12 @@ namespace TarodevController
         public static event Action OnTryStartGame;
         private PlayerInput _playerInput;
         private bool lockedControls = true;
-        
+
         // SFX
         public static event Action OnPlayerJumped;
         public static event Action OnPlayerLanded;
         public static event Action OnPlayerRunning;
-        
+
         [SerializeField] private ScriptableStats _stats;
         private Rigidbody2D _rb;
         private CapsuleCollider2D _col;
@@ -37,17 +37,15 @@ namespace TarodevController
 
         private Vector2 _externalImpulse;
 
-        // ======== TWO-SPEED WALK ========
         [Header("Two-Speed Movement")]
-        [Tooltip("Unterhalb dieser Stick-Magnitude (|x|) Slow-Mode, dar�ber Normal.")]
-        [SerializeField, Range(0f, 1f)] private float slowThreshold = 0.5f;  // 50%
+        [Tooltip("Unterhalb dieser Stick-Magnitude (|x|) Slow-Mode, darüber Normal.")]
+        [SerializeField, Range(0f, 1f)] private float slowThreshold = 0.5f;
         [Tooltip("MaxSpeed-Multiplikator im Slow-Mode.")]
         [SerializeField, Range(0.05f, 1f)] private float slowSpeedMultiplier = 0.4f;
         [Tooltip("Kleines Deadzone gegen Kriechen.")]
         [SerializeField, Range(0f, 0.3f)] private float analogDeadZone = 0.1f;
-        private float _moveSpeedMultiplier = 1f; // per Frame berechnet
+        private float _moveSpeedMultiplier = 1f;
 
-        // ======== ICE SURFACE ========
         [Header("Ice Surface (per Ground-Detection)")]
         [SerializeField, Range(0.1f, 2f)] private float iceAccelMultiplier = 0.6f;
         [SerializeField, Range(0.01f, 2f)] private float iceDecelMultiplier = 0.1f;
@@ -60,7 +58,7 @@ namespace TarodevController
         [SerializeField] private int iceLayer = 0;
         [Tooltip("Wenn true, gilt Eis-Effekt auch in der Luft (z.B. bei sehr glatter Luftkontrolle). Meist false.")]
         [SerializeField] private bool iceAffectsAir = false;
-        // --- Extra "ice feel" controls ---
+
         [Header("Ice Feel")]
         [Tooltip("How strongly input can steer your velocity on ice (lower = slipperier).")]
         [SerializeField, Range(0.05f, 1f)] private float iceTraction = 0.18f;
@@ -71,16 +69,14 @@ namespace TarodevController
         [Tooltip("How quickly speed bleeds off per second with no input on ice (0 = keeps sliding forever).")]
         [SerializeField, Range(0f, 1f)] private float iceSlideLossPerSecond = 0.25f;
 
+        private bool _onIce;
+        private Collider2D _lastGroundCol;
 
-        private bool _onIce;                  // aktuell auf Eis?
-        private Collider2D _lastGroundCol;    // gemerkter Boden-Collider
-
-        // ======== WALL STATE ========
         private bool _onWall;
         private int _wallDir;
         private float _lastWallTime;
         private float _wallStickCounter;
-        public event Action<bool, int> WallStateChanged; // (onWall, wallDir: -1 left, +1 right)
+        public event Action<bool, int> WallStateChanged;
         public bool IsOnWall => _onWall;
         public int WallDir => _wallDir;
 
@@ -96,12 +92,10 @@ namespace TarodevController
 
         private void Awake()
         {
-            // PlayerInput lives on PlayerRoot (parent of PlayerNoPI)
             _playerInput = GetComponentInParent<PlayerInput>();
             if (_playerInput == null)
                 Debug.LogError("PlayerController: No PlayerInput found in parents!", this);
-            
-            
+
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<CapsuleCollider2D>();
             _healthSystem = GetComponent<PlayerHealthSystem>();
@@ -112,17 +106,19 @@ namespace TarodevController
 
             if (groundLayers.value == 0)
             {
-                // Fallback: verwende die SolidLayers aus _stats, falls LayerMask leer ist
                 groundLayers = _stats != null ? _stats.SolidLayers : Physics2D.AllLayers;
             }
-            if (grounderDistance <= 0f) grounderDistance = 0.05f;
-            PlaceItemState.CountDownFinished += EnableControls;
+
+            if (grounderDistance <= 0f)
+                grounderDistance = 0.05f;
+
+            GameEvents.OnMainGameStateEntered += EnableControls;
             GameEvents.OnMainGameStateExited += DisableControls;
         }
-        
+
         private void OnDestroy()
         {
-            PlaceItemState.CountDownFinished -= EnableControls;
+            GameEvents.OnMainGameStateEntered -= EnableControls;
             GameEvents.OnMainGameStateExited -= DisableControls;
         }
 
@@ -131,7 +127,6 @@ namespace TarodevController
             _time += Time.deltaTime;
             GatherInput();
         }
-        
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -160,17 +155,16 @@ namespace TarodevController
             if (GameEvents.CurrentState == GameState.PlayerSelectionState)
             {
                 if (context.started)
-                    OnPlayerReady?.Invoke(_playerInput); 
+                    OnPlayerReady?.Invoke(_playerInput);
             }
         }
-        
+
         public void OnReturn(InputAction.CallbackContext context)
         {
             if (GameEvents.CurrentState == GameState.PlayerSelectionState)
                 OnReturnToMainMenu?.Invoke();
-
         }
-        
+
         private void GatherInput()
         {
             Vector2 adjustedInput = movementInput;
@@ -178,7 +172,6 @@ namespace TarodevController
             if (_healthSystem != null && _healthSystem.IsConfused())
                 adjustedInput = -adjustedInput;
 
-            // Two-speed: anhand *roher* X-Magnitude (vor Snap) berechnen
             float magX = Mathf.Abs(adjustedInput.x);
             if (magX < analogDeadZone) adjustedInput.x = 0f;
 
@@ -190,6 +183,7 @@ namespace TarodevController
                 JumpHeld = jumpHeld,
                 Move = adjustedInput
             };
+
             jumpPressed = false;
 
             if (_stats.SnapInput)
@@ -209,12 +203,11 @@ namespace TarodevController
         {
             CheckCollisions();
             if (lockedControls) return;
+
             HandleJump();
             HandleDirection();
             HandleGravity();
 
-
-            // external forces
             _frameVelocity += _externalImpulse;
             _externalImpulse = Vector2.zero;
 
@@ -229,7 +222,6 @@ namespace TarodevController
         {
             Physics2D.queriesStartInColliders = false;
 
-            // Ground & Ceiling als RaycastHit2D, damit wir den Boden-Collider kennen
             RaycastHit2D groundInfo = Physics2D.CapsuleCast(
                 _col.bounds.center, _col.size, _col.direction, 0,
                 Vector2.down, grounderDistance, groundLayers
@@ -244,7 +236,6 @@ namespace TarodevController
 
             if (ceilingHit) _frameVelocity.y = Mathf.Min(0, _frameVelocity.y);
 
-            // leichte Corner-Korrektur optional
             if (!_grounded && _rb.velocity.y > 0f && ceilingHit)
             {
                 const float nudge = 0.08f;
@@ -255,7 +246,6 @@ namespace TarodevController
                     transform.position += Vector3.right * nudge;
             }
 
-            // Ground state change
             if (!_grounded && groundHit)
             {
                 _grounded = true;
@@ -272,23 +262,19 @@ namespace TarodevController
                 GroundedChanged?.Invoke(false, 0);
             }
 
-            // ICE detection (nur wenn Boden ber�hrt wird)
             _onIce = false;
             _lastGroundCol = null;
             if (groundHit)
             {
                 _lastGroundCol = groundInfo.collider;
 
-                // Erkennung �ber Tag "Ice" ODER optional �ber eine Ice-Layer-ID
                 if (_lastGroundCol.CompareTag("Ice")) _onIce = true;
                 else if (iceLayer > 0 && _lastGroundCol.gameObject.layer == iceLayer) _onIce = true;
             }
 
-            // --- before you modify _onWall/_wallDir, cache previous ---
             bool prevOnWall = _onWall;
             int prevDir = _wallDir;
 
-            // WALLS
             if (!_grounded)
             {
                 bool leftHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, Vector2.left, _stats.WallCheckDistance, _stats.SolidLayers);
@@ -316,7 +302,6 @@ namespace TarodevController
                 _wallStickCounter = 0;
             }
 
-            // --- after computing, notify changes ---
             if (prevOnWall != _onWall || prevDir != _wallDir)
                 WallStateChanged?.Invoke(_onWall, _wallDir);
 
@@ -336,7 +321,8 @@ namespace TarodevController
 
         private void HandleJump()
         {
-            if (!_endedJumpEarly && !_grounded && !_frameInput.JumpHeld && _rb.velocity.y > 0) _endedJumpEarly = true;
+            if (!_endedJumpEarly && !_grounded && !_frameInput.JumpHeld && _rb.velocity.y > 0)
+                _endedJumpEarly = true;
 
             if (!_jumpToConsume && !HasBufferedJump) return;
 
@@ -386,7 +372,6 @@ namespace TarodevController
         #region Horizontal
         private void HandleDirection()
         {
-            
             bool pressingIntoWall = _onWall && Mathf.Sign(_frameInput.Move.x) == _wallDir && _wallStickCounter > 0f;
             if (pressingIntoWall)
             {
@@ -396,13 +381,10 @@ namespace TarodevController
 
             bool iceActive = ((_grounded || iceAffectsAir) && _onIce);
 
-            // --- No input: deceleration / slide ---
             if (_frameInput.Move.x == 0)
             {
                 if (iceActive)
                 {
-                    // Exponential-like decay: preserves momentum much longer than MoveTowards
-                    // speed *= (1 - k * dt)
                     float k = Mathf.Clamp01(iceSlideLossPerSecond * Time.fixedDeltaTime);
                     _frameVelocity.x *= (1f - k);
                 }
@@ -414,37 +396,30 @@ namespace TarodevController
                 return;
             }
 
-            // --- Input present: steer toward target speed ---
             float accel = _stats.Acceleration;
             if (!_grounded && Mathf.Abs(_frameVelocity.y) < _stats.ApexThreshold)
                 accel *= _stats.ApexBonusMultiplier;
 
-            // Two-speed walk support
             if (_moveSpeedMultiplier < 1f) accel *= _moveSpeedMultiplier;
             float targetMax = _stats.MaxSpeed * _moveSpeedMultiplier;
 
             if (iceActive)
             {
-                // Classic ice: weaker accel + slightly higher cap (optional) from your existing fields
                 accel *= iceAccelMultiplier;
                 targetMax *= iceMaxSpeedMultiplier;
 
-                // Compute desired velocity and steer with limited traction
                 float desired = _frameInput.Move.x * targetMax;
                 float steer = accel * Time.fixedDeltaTime;
 
-                // If reversing direction, reduce steering even more (feels like sliding past)
                 bool reversing = Mathf.Sign(_frameVelocity.x) != Mathf.Sign(desired) && Mathf.Abs(_frameVelocity.x) > 0.01f;
                 if (reversing) steer *= iceReverseControl;
 
-                // Traction limits how fast we can change toward desired
                 steer *= Mathf.Clamp01(iceTraction);
 
                 _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, desired, steer);
             }
             else
             {
-                // Normal ground/air handling
                 _frameVelocity.x = Mathf.MoveTowards(
                     _frameVelocity.x,
                     _frameInput.Move.x * targetMax,
@@ -452,7 +427,6 @@ namespace TarodevController
                 );
             }
         }
-
         #endregion
 
         #region Gravity
@@ -485,8 +459,6 @@ namespace TarodevController
         {
             lockedControls = true;
         }
-       
-
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -507,8 +479,7 @@ namespace TarodevController
     {
         event Action<bool, float> GroundedChanged;
         event Action Jumped;
-        event Action<bool, int> WallStateChanged;  // <� add this
+        event Action<bool, int> WallStateChanged;
         Vector2 FrameInput { get; }
     }
-
 }

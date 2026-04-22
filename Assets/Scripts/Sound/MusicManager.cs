@@ -21,16 +21,12 @@ public class MusicManager : MonoBehaviour
         PauseMenu.OnPauseSFXEvent += PauseMusic;
         PauseMenu.OnResumeSFXEvent += ResumeMusic;
 
-        PlaceItemState.CountDownStarted += StopMainMenuMusic;
-        PlaceItemState.CountDownFinished += PlayMainGameMusicStart;
     }
 
     private void OnDestroy()
     {
         GameEvents.OnMenuStateEntered -= RestartMainMenuMusic;
         GameEvents.OnScoreStateEntered -= RestartMainMenuMusic;
-        PlaceItemState.CountDownStarted -= StopMainMenuMusic;
-        PlaceItemState.CountDownFinished -= PlayMainGameMusicStart;
         PauseMenu.OnPauseSFXEvent -= PauseMusic;
         PauseMenu.OnResumeSFXEvent -= ResumeMusic;
 

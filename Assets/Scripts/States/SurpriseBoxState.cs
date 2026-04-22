@@ -9,10 +9,10 @@ using UnityEngine.UI;
 public class SurpriseBoxState : MonoBehaviour
 {
     public static SurpriseBoxState Instance { get; private set; }
-    public static event Action OnSurpriseBoxStateCounterStarted;
+
     public static event Action<GameObject> OnPlayerPickedItem;
     public static event Action OnFireTransitionAnimationStarted;
-    
+
     [SerializeField] private PlayerManager playerManager;
 
     public GameObject SurpriseBox;
@@ -25,17 +25,14 @@ public class SurpriseBoxState : MonoBehaviour
     [SerializeField] private List<GameObject> itemPool;
     [SerializeField] private int numberToSpawn;
 
-    [SerializeField] private TMP_Text countdownText;
-
-    private Transform itemBoxItemList;
-    private List<GameObject> itemsInBox = new List<GameObject>();
-
     public GameObject[] playerNamesToDeactive;
 
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private string playAnimTrigger = "Play";
 
-    private Coroutine countdownRoutine;
+    [SerializeField] private Transform itemBoxItemList;
+
+    private List<GameObject> itemsInBox = new List<GameObject>();
 
     private void Awake()
     {
@@ -44,6 +41,7 @@ public class SurpriseBoxState : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
@@ -59,82 +57,35 @@ public class SurpriseBoxState : MonoBehaviour
     {
         GameEvents.OnSurpriseBoxStateEntered += ActivateItemBox;
         GameEvents.OnSurpriseBoxStateEntered += SpawnObjects;
-        //GameEvents.OnSurpriseBoxStateEntered += ShowAllCursors;
         GameEvents.OnSurpriseBoxStateEntered += DeactivePlayerNames;
-
-        GameEvents.OnSurpriseBoxStateEntered += StartEnterCountdown;
+        GameEvents.OnSurpriseBoxStateEntered += ShowAllCursors;
     }
 
     private void OnDisable()
     {
         GameEvents.OnSurpriseBoxStateEntered -= ActivateItemBox;
         GameEvents.OnSurpriseBoxStateEntered -= SpawnObjects;
-        GameEvents.OnSurpriseBoxStateEntered -= ShowAllCursors;
         GameEvents.OnSurpriseBoxStateEntered -= DeactivePlayerNames;
-        GameEvents.OnSurpriseBoxStateEntered -= StartEnterCountdown;
-
-        // optional safety
-        StopCountdownIfRunning();
-    }
-
-    private void StopCountdownIfRunning()
-    {
-        if (countdownRoutine != null)
-        {
-            StopCoroutine(countdownRoutine);
-            countdownRoutine = null;
-        }
-        if (countdownText != null)
-            countdownText.gameObject.SetActive(false);
-    }
-
-    private void StartEnterCountdown()
-    {
-        StopCountdownIfRunning();
-
-        // Countdown beim Betreten -> danach Countdown-Objekt ausblenden
-        countdownRoutine = StartCoroutine(PlayCountdown( () =>
-        {
-            // Nach dem Enter-Countdown:
-            // - CountdownText wird in PlayCountdown deaktiviert
-            // - Hier kannst du optional Sachen triggern
-            // z.B. SurpriseBox offen lassen oder nochmal extra UI aktivieren.
-        }));
-    }
-
-    public IEnumerator PlayCountdown( Action onFinished, int seconds = 2, float timing = 0.6f)
-    {
-        yield return new WaitForSeconds(0.7f);
-        OnSurpriseBoxStateCounterStarted?.Invoke();
-        float countdown = seconds;
-
-        countdownText.gameObject.SetActive(true);
-
-        while (countdown > 0)
-        {
-            countdownText.text = countdown.ToString();
-            yield return new WaitForSeconds(timing);
-            countdown--;
-        }
-
-        countdownText.gameObject.SetActive(false);
-
-        ShowAllCursors();
-
-        countdownRoutine = null;
-        onFinished?.Invoke();
+        GameEvents.OnSurpriseBoxStateEntered -= ShowAllCursors;
     }
 
     public void DeactivePlayerNames()
     {
+        if (playerNamesToDeactive == null) return;
+
         foreach (var name in playerNamesToDeactive)
-            name.SetActive(false);
+        {
+            if (name != null)
+                name.SetActive(false);
+        }
     }
 
     public void SpawnObjects()
     {
         var availableTiles = new List<GameObject>(spawnBoxes);
-        if (itemPool == null || itemPool.Count == 0 || availableTiles.Count == 0) return;
+
+        if (itemPool == null || itemPool.Count == 0 || availableTiles.Count == 0)
+            return;
 
         HashSet<int> usedIndices = new HashSet<int>();
 
@@ -153,6 +104,7 @@ public class SurpriseBoxState : MonoBehaviour
             {
                 prefabIndex = UnityEngine.Random.Range(0, itemPool.Count);
                 attempts++;
+
                 if (attempts > 50)
                 {
                     Debug.LogWarning("Could not find a valid unused item after 50 attempts.");
@@ -162,7 +114,18 @@ public class SurpriseBoxState : MonoBehaviour
             while (usedIndices.Contains(prefabIndex));
 
             var prefab = itemPool[prefabIndex];
-            float rate = prefab.GetComponent<SelectableItem>().GetSpawnRate();
+
+            if (prefab == null)
+                continue;
+
+            var selectableItem = prefab.GetComponent<SelectableItem>();
+            if (selectableItem == null)
+            {
+                Debug.LogWarning($"Prefab {prefab.name} has no SelectableItem component.");
+                continue;
+            }
+
+            float rate = selectableItem.GetSpawnRate();
 
             if (UnityEngine.Random.Range(0f, 100f) > rate)
             {
@@ -176,100 +139,137 @@ public class SurpriseBoxState : MonoBehaviour
             var tile = availableTiles[idx];
             availableTiles.RemoveAt(idx);
 
+            if (tile == null)
+                continue;
+
             var col = tile.GetComponent<MeshCollider>();
             Vector2 pos;
 
             if (col != null)
             {
-                // Use the center of the collider's bounds
-                Vector3 center = col.bounds.center;   // world space
+                Vector3 center = col.bounds.center;
                 pos = new Vector2(center.x, center.y);
             }
             else
             {
                 pos = tile.transform.position;
             }
-            var go = Instantiate(prefab, pos, prefab.transform.rotation, itemBoxItemList);
+
+            GameObject go;
+
+            if (itemBoxItemList != null)
+                go = Instantiate(prefab, pos, prefab.transform.rotation, itemBoxItemList);
+            else
+                go = Instantiate(prefab, pos, prefab.transform.rotation);
+
             itemsInBox.Add(go);
         }
     }
 
     private void ActivateItemBox()
     {
-        SurpriseBox.SetActive(true);
+        if (SurpriseBox != null)
+            SurpriseBox.SetActive(true);
     }
 
     public void DeactivateItemBox()
     {
-        SurpriseBox.SetActive(false);
+        if (SurpriseBox != null)
+            SurpriseBox.SetActive(false);
 
         foreach (var go in itemsInBox)
+        {
             if (go != null)
                 Destroy(go);
+        }
 
         itemsInBox.Clear();
     }
 
     public void NotifyPlayerPicked(int idx, GameObject prefab)
     {
+        if (playerManager == null)
+        {
+            Debug.LogWarning("PlayerManager is missing.");
+            return;
+        }
+
         if (!playerManager.pickedPrefabByPlayer.ContainsKey(idx))
         {
             playerManager.pickedPrefabByPlayer[idx] = prefab;
             OnPlayerPickedItem?.Invoke(prefab);
-            var cursor = playerManager.playerRoots[idx].transform.Find("CursorNoPI").gameObject;
-            cursor.SetActive(false);
+
+            if (playerManager.playerRoots.ContainsKey(idx))
+            {
+                var cursorTransform = playerManager.playerRoots[idx].transform.Find("CursorNoPI");
+                if (cursorTransform != null)
+                    cursorTransform.gameObject.SetActive(false);
+            }
         }
 
         if (playerManager.pickedPrefabByPlayer.Count == playerManager.playerCount)
         {
-            StopCountdownIfRunning();
-
-            //OnSurpriseBoxStateCounterStarted?.Invoke();
-            /*countdownRoutine = StartCoroutine(PlayCountdown(() =>
-            {
-                StartCoroutine(ExecuteTransitionThenChangeState());
-            }));*/
-
             StartCoroutine(ExecuteTransitionThenChangeState());
-
         }
     }
 
-  
     private IEnumerator ExecuteTransitionThenChangeState()
     {
         yield return new WaitForSeconds(1.0f);
 
         OnFireTransitionAnimationStarted?.Invoke();
-        // 1. Das Parent-Objekt finden und aktivieren
-        transitionAnimator.gameObject.GetComponent<Image>().enabled = true;
 
-        // 2. Animation Trigger setzen
-        transitionAnimator.SetTrigger("Play");
+        if (transitionAnimator != null)
+        {
+            var image = transitionAnimator.GetComponent<Image>();
+            if (image != null)
+                image.enabled = true;
+
+            transitionAnimator.SetTrigger(playAnimTrigger);
+        }
 
         yield return new WaitForSeconds(1f);
 
-        // 6. Die Spiellogik ausführen
         DeactivateItemBox();
         GameEvents.ChangeState(GameState.PlaceItemState);
 
         yield return new WaitForSeconds(0.5f);
-        transitionAnimator.gameObject.GetComponent<Image>().enabled = false;
 
+        if (transitionAnimator != null)
+        {
+            var image = transitionAnimator.GetComponent<Image>();
+            if (image != null)
+                image.enabled = false;
+        }
     }
+
     public void ShowAllCursors()
     {
+        if (playerManager == null || playerManager.playerRoots == null)
+        {
+            Debug.LogWarning("PlayerManager or playerRoots is missing.");
+            return;
+        }
+
         foreach (var kvp in playerManager.playerRoots)
         {
             int idx = kvp.Key;
             var root = kvp.Value;
+
+            if (root == null)
+                continue;
+
             var pi = root.GetComponent<PlayerInput>();
-            var cursor = root.transform.Find("CursorNoPI").gameObject;
+            var cursorTransform = root.transform.Find("CursorNoPI");
 
-            playerManager.ResetCursorPositionItemSelection(idx);
+            if (playerManager != null)
+                playerManager.ResetCursorPositionItemSelection(idx);
 
-            cursor.SetActive(true);
-            pi.SwitchCurrentActionMap("Cursor");
+            if (cursorTransform != null)
+                cursorTransform.gameObject.SetActive(true);
+
+            if (pi != null)
+                pi.SwitchCurrentActionMap("Cursor");
         }
     }
 }

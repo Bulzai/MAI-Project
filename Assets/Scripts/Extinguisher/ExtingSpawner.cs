@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-
 public class ExtingSpawner : MonoBehaviour
 {
     [Header("Grid Reference")]
     [SerializeField] private GridPlacementSystem gridPlacement;
-
 
     [Header("Spawn Settings")]
     [SerializeField] private int triangleSpawns = 7;
@@ -19,16 +17,16 @@ public class ExtingSpawner : MonoBehaviour
 
     [Header("Prefabs & Containers")]
     [SerializeField] private GameObject extinguisherPrefab;
-    [SerializeField] private GameObject previewPrefab; // sprite with number
+    [SerializeField] private GameObject previewPrefab;
     [SerializeField] private GameObject CircleExtinguisherPrefab;
-    [SerializeField] private GameObject CirclePreviewPrefab; // sprite with number
+    [SerializeField] private GameObject CirclePreviewPrefab;
     [SerializeField] private Transform extinguisherContainer;
     [SerializeField] private Transform previewContainer;
-    private int maxPreviewCount;
-    private List<Vector3Int> finalSpawnCells = new();   // use cells for easy tile coloring
-    private List<GameObject> previewMarkers = new();    // spawned preview objects
-    private bool spawnPositionsPrepared = false;
 
+    private int maxPreviewCount;
+    private List<Vector3Int> finalSpawnCells = new();
+    private List<GameObject> previewMarkers = new();
+    private bool spawnPositionsPrepared = false;
 
     [Header("Triangle Parameters")]
     [SerializeField] private int downHeight = 5;
@@ -47,29 +45,22 @@ public class ExtingSpawner : MonoBehaviour
 
     [SerializeField] private BoxCollider2D spawnZone;
 
-
     [Header("UI")]
-    [SerializeField] private GameObject loadingScreen; // assign a loading overlay in inspector
-
+    [SerializeField] private GameObject loadingScreen;
 
     private HashSet<Vector3Int> extinguisherCells = new();
     private HashSet<Vector3Int> platformCells;
-    private List<Vector3> finalSpawnPositions = new List<Vector3>();
     private Coroutine _spawnRoutine;
     private int _nextIndex = 0;
     private bool _advanceRequested = false;
-    private List<bool> spawnIsTriangle = new(); // true = triangle extinguisher, false = circle extinguisher
+    private List<bool> spawnIsTriangle = new();
 
-    // ===============================================================
-    // UNITY LIFECYCLE
-    // ===============================================================
-    
     private void OnDestroy()
     {
         GameEvents.OnSurpriseBoxStateEntered -= PrepareSpawnPositions;
         GameEvents.OnPlaceItemStateEntered -= ShowPreviews;
         GameEvents.OnPlaceItemStateEntered -= MarkExtinguisherTiles;
-        PlaceItemState.CountDownStarted -= HidePreviewsAndUnblockTiles;
+        GameEvents.OnMainGameStateEntered -= HidePreviewsAndUnblockTiles;
         GameEvents.OnMainGameStateEntered -= BeginSpawning;
         GameEvents.OnMainGameStateExited -= StopSpawning;
         GameEvents.OnMainGameStateExited -= DisableExtinguisherContainer;
@@ -82,135 +73,75 @@ public class ExtingSpawner : MonoBehaviour
         GameEvents.OnSurpriseBoxStateEntered += PrepareSpawnPositions;
         GameEvents.OnPlaceItemStateEntered += ShowPreviews;
         GameEvents.OnPlaceItemStateEntered += MarkExtinguisherTiles;
-        PlaceItemState.CountDownStarted += HidePreviewsAndUnblockTiles;
+        GameEvents.OnMainGameStateEntered += HidePreviewsAndUnblockTiles;
         GameEvents.OnMainGameStateEntered += BeginSpawning;
         GameEvents.OnMainGameStateEntered += EnableExtinguisherContainer;
         GameEvents.OnMainGameStateExited += StopSpawning;
         GameEvents.OnMainGameStateExited += DisableExtinguisherContainer;
         GameEvents.OnMenuStateEntered += ResetExtinguisherSpawns;
-        
+
         platformCells = new HashSet<Vector3Int>();
         foreach (var pos in platformMap.cellBounds.allPositionsWithin)
         {
             if (platformMap.GetTile(pos) == validPlatformTile)
                 platformCells.Add(pos);
         }
-        // auto-sync preview count with configured spawn counts
-        maxPreviewCount = triangleSpawns + circleSpawns;
 
+        maxPreviewCount = triangleSpawns + circleSpawns;
     }
 
-
-    // ----------------------------------------------------------
-    // GAME FLOW
-    // ----------------------------------------------------------
     private void BeginSpawning()
     {
-        HidePreviewsAndUnblockTiles(); // ensure previews are gone
+        HidePreviewsAndUnblockTiles();
 
-        if (_spawnRoutine != null) StopCoroutine(_spawnRoutine);
+        if (_spawnRoutine != null)
+            StopCoroutine(_spawnRoutine);
+
         _spawnRoutine = StartCoroutine(SpawnLoopRoutine());
     }
 
     private void StopSpawning()
     {
-        if (_spawnRoutine != null) StopCoroutine(_spawnRoutine);
+        if (_spawnRoutine != null)
+            StopCoroutine(_spawnRoutine);
+
         _spawnRoutine = null;
     }
 
-
-
-    // ===============================================================
-    // PHASE 1: SEARCH
-    // ===============================================================
-    /*public void PrepareSpawnPositions()
-    {
-        if (spawnPositionsPrepared) return; // only do once per game
-
-        finalSpawnCells.Clear();
-        extinguisherCells.Clear();
-        previewMarkers.Clear();
-
-        Bounds b = spawnZone.bounds;
-
-        int triangleCount = 0;
-        int circleCount = 0;
-        int total = Mathf.Min(maxPreviewCount, triangleSpawns + circleSpawns);
-
-        for (int i = 0; i < total; i++)
-        {
-            // Alternate, but respect caps
-            bool useTriangle = true; // use this instead of true for alternating: (i % 2 == 0);
-            if (useTriangle && triangleCount >= triangleSpawns) useTriangle = false;
-            if (!useTriangle && circleCount >= circleSpawns) useTriangle = true;
-
-            // Find a spawn cell (in grid coords)
-            Vector3Int cell = FindSpawnPosition(b, useTriangle);
-
-            // Track cell for logic
-            finalSpawnCells.Add(cell);
-            extinguisherCells.Add(cell);
-            spawnIsTriangle.Add(useTriangle);  // ✅ record type
-
-            // Convert to world space for previews/spawning
-            //Vector3 pos = grid.CellToWorld(cell) + grid.cellSize / 2f;
-
-            // (optional) spawn preview right away here
-            // var marker = Instantiate(previewPrefab, pos, Quaternion.identity, previewContainer);
-
-            // Increment method counter
-            if (useTriangle) triangleCount++;
-            else circleCount++;
-        }
-
-        spawnPositionsPrepared = true;
-    }
-    */
-
     public void PrepareSpawnPositions()
     {
-        if (spawnPositionsPrepared) return; // only do once per game
+        if (spawnPositionsPrepared) return;
 
         finalSpawnCells.Clear();
         extinguisherCells.Clear();
         previewMarkers.Clear();
-        spawnIsTriangle.Clear(); // ✅ reset list
+        spawnIsTriangle.Clear();
 
         Bounds b = spawnZone.bounds;
-
         int total = Mathf.Min(maxPreviewCount, triangleSpawns + circleSpawns);
 
-        // --- STEP 1️⃣: Find all circle spawn positions first ---
-        int circleCount = 0;
         for (int i = 0; i < circleSpawns && finalSpawnCells.Count < total; i++)
         {
             Vector3Int cell = FindSpawnPosition(b, false);
             finalSpawnCells.Add(cell);
             extinguisherCells.Add(cell);
             spawnIsTriangle.Add(false);
-            circleCount++;
         }
 
-        // --- STEP 2️⃣: Then find triangle positions ---
-        int triangleCount = 0;
         for (int i = 0; i < triangleSpawns && finalSpawnCells.Count < total; i++)
         {
             Vector3Int cell = FindSpawnPosition(b, true);
             finalSpawnCells.Add(cell);
             extinguisherCells.Add(cell);
             spawnIsTriangle.Add(true);
-            triangleCount++;
         }
 
-        // --- STEP 3️⃣: Reorder spawn list so triangles spawn first ---
         ReorderForSpawn();
-
         spawnPositionsPrepared = true;
     }
 
     private void ReorderForSpawn()
     {
-        // Move all triangles to the front, circles after
         List<Vector3Int> triangles = new();
         List<Vector3Int> circles = new();
         List<bool> trianglesType = new();
@@ -237,7 +168,6 @@ public class ExtingSpawner : MonoBehaviour
         spawnIsTriangle.AddRange(circlesType);
     }
 
-
     private Vector3Int? TryFindSpawn(Bounds bounds, bool useTriangle, bool enforceSpacing)
     {
         for (int attempt = 0; attempt < attemptsPerSpawn; attempt++)
@@ -248,49 +178,30 @@ public class ExtingSpawner : MonoBehaviour
             Vector3 candidateWorld = new Vector3(x, y, 0);
             Vector3Int candidateCell = grid.WorldToCell(candidateWorld);
 
-            // skip platforms
-            if (platformCells.Contains(candidateCell))
-                continue;
+            if (platformCells.Contains(candidateCell)) continue;
+            if (extinguisherCells.Contains(candidateCell)) continue;
 
-            // skip cells already reserved for extinguishers
-            if (extinguisherCells.Contains(candidateCell))
-                continue;
-
-            // geometry method check
             bool valid = useTriangle
                 ? HasValidTriangles(candidateWorld, downHeight, downBase, sideHeight, sideBase)
                 : IsCircleAreaClear(candidateWorld, circleRadius);
 
             if (!valid) continue;
-
-            // spacing check
-            if (enforceSpacing && IsExtinguisherNearby(candidateCell, extinguisherSpacing))
-                continue;
+            if (enforceSpacing && IsExtinguisherNearby(candidateCell, extinguisherSpacing)) continue;
 
             return candidateCell;
         }
+
         return null;
     }
 
-
     private Vector3Int FindSpawnPosition(Bounds bounds, bool preferTriangle)
     {
-        // 1) Preferred method
         var cell = TryFindSpawn(bounds, preferTriangle, true);
         if (cell != null) return cell.Value;
 
         cell = TryFindSpawn(bounds, preferTriangle, false);
         if (cell != null) return cell.Value;
 
-        // 2) Other method
-        //bool other = !preferTriangle;
-        //cell = TryFindSpawn(bounds, other, true);
-        //if (cell != null) return cell.Value;
-
-        //cell = TryFindSpawn(bounds, other, false);
-        //if (cell != null) return cell.Value;
-
-        // 3) Fallback random
         for (int attempt = 0; attempt < attemptsPerSpawn * 2; attempt++)
         {
             float x = Random.Range(bounds.min.x, bounds.max.x);
@@ -303,14 +214,9 @@ public class ExtingSpawner : MonoBehaviour
             return candidateCell;
         }
 
-        // worst case: just return a random cell (unsafe)
         return grid.WorldToCell(Vector3.zero);
     }
 
-
-    // ----------------------------------------------------------
-    // PREVIEWS & TILE BLOCKING
-    // ----------------------------------------------------------
     private void ShowPreviews()
     {
         ClearPreviews();
@@ -321,7 +227,6 @@ public class ExtingSpawner : MonoBehaviour
             GameObject prefabToUse = spawnIsTriangle[i] ? previewPrefab : CirclePreviewPrefab;
             var marker = Instantiate(prefabToUse, pos, Quaternion.identity, previewContainer);
 
-            // set number text
             var text = marker.GetComponentInChildren<TextMesh>();
             if (text != null) text.text = (i + 1).ToString();
 
@@ -331,36 +236,41 @@ public class ExtingSpawner : MonoBehaviour
 
     private void DisableExtinguisherContainer()
     {
-        
-        foreach (Transform child in extinguisherContainer) Destroy(child.gameObject);
+        if (extinguisherContainer == null) return;
+
+        foreach (Transform child in extinguisherContainer)
+            Destroy(child.gameObject);
+
         extinguisherContainer.gameObject.SetActive(false);
     }
 
     private void EnableExtinguisherContainer()
     {
-        extinguisherContainer.gameObject.SetActive(true);
+        if (extinguisherContainer != null)
+            extinguisherContainer.gameObject.SetActive(true);
     }
 
     private void MarkExtinguisherTiles()
     {
-        gridPlacement.OccupyCellsMainTilemap(finalSpawnCells, TileType.Red);
+        if (gridPlacement != null)
+            gridPlacement.OccupyCellsMainTilemap(finalSpawnCells, TileType.Red);
     }
+
     private void HidePreviewsAndUnblockTiles()
     {
         ClearPreviews();
-
-        // reset tiles back to White
-        //gridPlacement.OccupyCellsMainTilemap(finalSpawnCells, TileType.White);
     }
 
     private void ClearPreviews()
     {
-        foreach (var go in previewMarkers) Destroy(go);
+        foreach (var go in previewMarkers)
+        {
+            if (go != null)
+                Destroy(go);
+        }
+
         previewMarkers.Clear();
     }
-    // ===============================================================
-    // PHASE 3: SPAWNING LOOP
-    // ===============================================================
 
     private IEnumerator SpawnLoopRoutine()
     {
@@ -369,14 +279,20 @@ public class ExtingSpawner : MonoBehaviour
             if (loadingScreen != null) loadingScreen.SetActive(true);
             yield return null;
         }
+
         if (loadingScreen != null) loadingScreen.SetActive(false);
 
-        float timer = 0f; // force first spawn immediately
+        float timer = 0f;
         _nextIndex = 0;
 
         while (true)
         {
-            // time to spawn, or pickup requested immediate advance
+            if (finalSpawnCells.Count == 0)
+            {
+                yield return null;
+                continue;
+            }
+
             if (timer <= 0f || _advanceRequested)
             {
                 _advanceRequested = false;
@@ -384,43 +300,35 @@ public class ExtingSpawner : MonoBehaviour
                 SpawnExtinguisherAtIndex(_nextIndex);
                 _nextIndex = (_nextIndex + 1) % finalSpawnCells.Count;
 
-                timer = spawnInterval; // reset the “counter”
+                timer = spawnInterval;
             }
 
             timer -= Time.deltaTime;
-            yield return null; // frame-by-frame so we can interrupt
+            yield return null;
         }
     }
 
-
     public void SpawnExtinguisherAtIndex(int index)
     {
+        if (index < 0 || index >= finalSpawnCells.Count) return;
+
         Vector3Int cell = finalSpawnCells[index];
         Vector3 pos = grid.CellToWorld(cell) + grid.cellSize / 2f;
 
         GameObject prefabToUse = spawnIsTriangle[index] ? extinguisherPrefab : CircleExtinguisherPrefab;
         var exting = Instantiate(prefabToUse, pos, Quaternion.identity, extinguisherContainer);
 
-        // Fade in + lifetime tied to spawnInterval
         var fade = exting.AddComponent<FadeInAndLife>();
         fade.Init(spawnInterval);
 
-        // Hook up pickup
         var pickup = exting.GetComponent<ExtinguisherPickUp>();
         if (pickup != null) pickup.Init(this);
     }
-
 
     public void RequestAdvance()
     {
         _advanceRequested = true;
     }
-
-
-
-    // ===============================================================
-    // VALIDATION FUNCTIONS
-    // ===============================================================
 
     private bool HasValidTriangles(Vector3 worldOrigin, int downHeight, int downBase, int sideHeight, int sideBase)
     {
@@ -442,11 +350,16 @@ public class ExtingSpawner : MonoBehaviour
             int halfWidth = Mathf.RoundToInt((baseLength / 2f) * (h / (float)height));
             for (int dx = -halfWidth; dx <= halfWidth; dx++)
             {
-                Vector3Int cell = origin + new Vector3Int(dir.x * h + (dir.y != 0 ? dx : 0),
-                                                          dir.y * h + (dir.x != 0 ? dx : 0), 0);
+                Vector3Int cell = origin + new Vector3Int(
+                    dir.x * h + (dir.y != 0 ? dx : 0),
+                    dir.y * h + (dir.x != 0 ? dx : 0),
+                    0
+                );
+
                 if (platformCells.Contains(cell)) return true;
             }
         }
+
         return false;
     }
 
@@ -459,8 +372,12 @@ public class ExtingSpawner : MonoBehaviour
             int halfWidth = Mathf.RoundToInt((baseLength / 2f) * (h / (float)height));
             for (int dx = -halfWidth; dx <= halfWidth; dx++)
             {
-                Vector3Int cell = origin + new Vector3Int(dir.x * h + (dir.y != 0 ? dx : 0),
-                                                          dir.y * h + (dir.x != 0 ? dx : 0), 0);
+                Vector3Int cell = origin + new Vector3Int(
+                    dir.x * h + (dir.y != 0 ? dx : 0),
+                    dir.y * h + (dir.x != 0 ? dx : 0),
+                    0
+                );
+
                 if (h == height - 1) bottomRow.Add(cell);
             }
         }
@@ -499,6 +416,7 @@ public class ExtingSpawner : MonoBehaviour
                 }
             }
         }
+
         return true;
     }
 
@@ -512,7 +430,6 @@ public class ExtingSpawner : MonoBehaviour
         return false;
     }
 
-    
     public void ResetExtinguisherSpawns()
     {
         spawnPositionsPrepared = false;

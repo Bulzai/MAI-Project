@@ -73,26 +73,19 @@ public class SoundFXManager : MonoBehaviour
         PlayerSelectionManager.OnStartGameSFX += PlayGameStartSFX;
         PlayerSelectionManager.OnPlayerReadySFX += PlayPlayerReadySFX;
         PlayerSelectionManager.OnSurpriseBoxStateTransitionStarted += PlayTransitionSFX;
-        PlayerSelectionManager.OnPlayerSelectionCountDownStarted += PlayPlayerSelectionCountdownSFX;
-        PlayerSelectionManager.OnPlayerSelectionCountDownStopped += StopPlayerSelectionCountdownSFX;
         
         // Surpriseboxstate Events
-        SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
-        SurpriseBoxState.OnSurpriseBoxStateCounterStarted += PlayCountdownSFX;
         CursorController.OnEnableCursor += PlayEnableCursorSFX;
         SurpriseBoxState.OnPlayerPickedItem += HandleItemSubmitSfx;
         GridItem.OnPlayerSelecedtItem += PlayPlayerSelecedtItemSFX;
 
         // PLACEITEM STATE EVENTS
-        PlaceItemState.CountDownStarted += PlayCountdownSFX;
-        PlaceItemState.CountDownStarted += PlayMainGameBigFlameStartSFX;
         CursorController.OnCantPlaceItem += PlayForbiddenSignSFX;
         GridItem.OnRotateItem += PlayRotateItemSFX;
         GridItem.OnGridItemPlaced += HandleItemSubmitSfx;
         //PlaceItemState.OnGuideScrollClose += PlayGuideScrollCloseSFX;
         //PlaceItemState.OnGuideScrollOpen += PlayGuideScrollOpenSFX;
         GridItem._OnBombPlaced += PlayBombExplodeSFX;
-        PlaceItemState.CountDownStarted += AllowFlameThrowerBurnSFXToPlayAgain;
         
         // Main Game Events
 
@@ -166,26 +159,19 @@ public class SoundFXManager : MonoBehaviour
         PlayerSelectionManager.OnStartGameSFX -= PlayGameStartSFX;
         PlayerSelectionManager.OnPlayerReadySFX -= PlayPlayerReadySFX;
         PlayerSelectionManager.OnSurpriseBoxStateTransitionStarted -= PlayTransitionSFX;
-        PlayerSelectionManager.OnPlayerSelectionCountDownStarted -= PlayPlayerSelectionCountdownSFX;
-        PlayerSelectionManager.OnPlayerSelectionCountDownStopped -= StopPlayerSelectionCountdownSFX;
 
         // Surpriseboxstate Events
-        SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
-        SurpriseBoxState.OnSurpriseBoxStateCounterStarted -= PlayCountdownSFX;
         CursorController.OnEnableCursor -= PlayEnableCursorSFX;
         SurpriseBoxState.OnPlayerPickedItem -= HandleItemSubmitSfx;
         GridItem.OnPlayerSelecedtItem -= PlayPlayerSelecedtItemSFX;
 
         // PLACEITEM STATE EVENTS
-        PlaceItemState.CountDownStarted -= PlayCountdownSFX;
-        PlaceItemState.CountDownStarted -= PlayMainGameBigFlameStartSFX;
         CursorController.OnCantPlaceItem -= PlayForbiddenSignSFX;
         GridItem.OnRotateItem -= PlayRotateItemSFX;
         GridItem.OnGridItemPlaced -= HandleItemSubmitSfx;
         //PlaceItemState.OnGuideScrollClose -= PlayGuideScrollCloseSFX;
         //PlaceItemState.OnGuideScrollOpen -= PlayGuideScrollOpenSFX;
         GridItem._OnBombPlaced -= PlayBombExplodeSFX;
-        PlaceItemState.CountDownStarted -= AllowFlameThrowerBurnSFXToPlayAgain;
 
         // Main Game Events
         GameEvents.OnMainGameStateExited -= PlayMainGameBigFlameEndSFX;

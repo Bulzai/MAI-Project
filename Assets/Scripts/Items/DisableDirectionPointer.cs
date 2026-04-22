@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DisableDirectionPointer : MonoBehaviour
@@ -8,13 +6,14 @@ public class DisableDirectionPointer : MonoBehaviour
 
     private void OnEnable()
     {
-        PlaceItemState.CountDownStarted += DeactiveDirectionPointer;
+        GameEvents.OnMainGameStateEntered += DeactiveDirectionPointer;
     }
+
     private void OnDisable()
     {
-        PlaceItemState.CountDownStarted -= DeactiveDirectionPointer;
-
+        GameEvents.OnMainGameStateEntered -= DeactiveDirectionPointer;
     }
+
     void DeactiveDirectionPointer()
     {
         if (directionPointer != null)

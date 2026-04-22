@@ -16,24 +16,20 @@ public class PlayerSelectionManager : MonoBehaviour
     public static event Action OnSurpriseBoxStateTransitionStarted;
     public static event Action OnNotAllPlayersReady;
     public static event Action OnNobodyJoinedYet;
-    public static event Action OnPlayerSelectionCountDownStarted;
-    public static event Action OnPlayerSelectionCountDownStopped;
-    [SerializeField] private TMP_Text countdownText;
-    private Coroutine countdownRoutine;
-    
+
     [SerializeField] private Animator transitionAnimator;
 
-    bool _isTransitionRunning = false;
+    private bool _isTransitionRunning = false;
+
     private readonly Dictionary<PlayerInput, PlayerSelectionData> _playerSelection =
         new Dictionary<PlayerInput, PlayerSelectionData>();
 
     // using the A and B UI button colors
-    [SerializeField] private Color readyColor    = new Color();  // green-ish : 39EF07
-    [SerializeField] private Color notReadyColor = new Color();  // red-ish : CF0000 using the A and B button colors
+    [SerializeField] private Color readyColor = new Color();
+    [SerializeField] private Color notReadyColor = new Color();
 
     [SerializeField] private GameObject PlayerSelection;
     [SerializeField] private GameObject MainMenu;
-
 
     [Header("UI Elements (Order: P1, P2, P3, P4)")]
     [Tooltip("Zieh hier die 'Press A' Objekte rein")]
@@ -46,44 +42,49 @@ public class PlayerSelectionManager : MonoBehaviour
     void Awake()
     {
         PlayerManager.OnPlayerJoinedGlobal += HandlePlayerJoined;
-        PlayerManager.OnPlayerLeftGlobal   += HandlePlayerLeft;
+        PlayerManager.OnPlayerLeftGlobal += HandlePlayerLeft;
         TarodevController.PlayerController.OnPlayerReady += HandlePlayerReady;
         TarodevController.PlayerController.OnTryStartGame += TryStartGame;
         GameEvents.OnPlayerSelectionStateExited += HandlePlayerSelectionStateExit;
         TarodevController.PlayerController.OnReturnToMainMenu += HandleReturnToMainMenu;
         UIController.OnCancelPressed += HandleReturnToMainMenu;
 
-
         ResetUI();
     }
+
     private void ResetUI()
     {
-        // Sicherstellen, dass am Anfang alles richtig steht
         if (joinButtonsInstructions != null)
-            foreach (var obj in joinButtonsInstructions) if (obj) obj.SetActive(true);
+            foreach (var obj in joinButtonsInstructions)
+                if (obj) obj.SetActive(true);
 
         if (PressTextInstructions != null)
-            foreach (var obj in PressTextInstructions) if (obj) obj.SetActive(true);
+            foreach (var obj in PressTextInstructions)
+                if (obj) obj.SetActive(true);
 
         if (readyInstructions != null)
-            foreach (var obj in readyInstructions) if (obj) obj.SetActive(false);
+            foreach (var obj in readyInstructions)
+                if (obj) obj.SetActive(false);
     }
+
     void OnDestroy()
     {
         PlayerManager.OnPlayerJoinedGlobal -= HandlePlayerJoined;
-        PlayerManager.OnPlayerLeftGlobal   -= HandlePlayerLeft;
+        PlayerManager.OnPlayerLeftGlobal -= HandlePlayerLeft;
         TarodevController.PlayerController.OnPlayerReady -= HandlePlayerReady;
         TarodevController.PlayerController.OnTryStartGame -= TryStartGame;
         GameEvents.OnPlayerSelectionStateExited -= HandlePlayerSelectionStateExit;
         TarodevController.PlayerController.OnReturnToMainMenu -= HandleReturnToMainMenu;
         UIController.OnCancelPressed -= HandleReturnToMainMenu;
-
     }
 
     private void HandlePlayerJoined(PlayerInput playerInput, Transform characterTf)
     {
         var readyTf = characterTf.Find("ReadyText");
-        var readyTMP = readyTf.GetComponent<TextMesh>();
+        TextMesh readyTMP = null;
+
+        if (readyTf != null)
+            readyTMP = readyTf.GetComponent<TextMesh>();
 
         var data = new PlayerSelectionData
         {
@@ -94,43 +95,35 @@ public class PlayerSelectionManager : MonoBehaviour
 
         _playerSelection[playerInput] = data;
 
-        data.ReadyText.text = " ";
-        data.ReadyText.color = notReadyColor;
+        if (data.ReadyText != null)
+        {
+            data.ReadyText.text = " ";
+            data.ReadyText.color = notReadyColor;
+        }
 
-        //  UI Logik für Join ---
-        int pIndex = playerInput.playerIndex; // Das ist 0, 1, 2 oder 3
+        int pIndex = playerInput.playerIndex;
 
-        // "Press A" ausschalten
         if (joinButtonsInstructions != null && pIndex < joinButtonsInstructions.Length)
-        {
             joinButtonsInstructions[pIndex].SetActive(false);
-        }
 
-        // "Press Y" einschalten
         if (readyInstructions != null && pIndex < readyInstructions.Length)
-        {
             readyInstructions[pIndex].SetActive(true);
-        }
-        // ------------------------------
 
         Debug.Log($"Player joined: input={playerInput.playerIndex}");
-        StopCountdownIfRunning();
     }
 
     private void HandlePlayerLeft(PlayerInput playerInput)
     {
-        // --- NEU: UI zurücksetzen wenn Spieler geht ---
         int pIndex = playerInput.playerIndex;
 
         if (joinButtonsInstructions != null && pIndex < joinButtonsInstructions.Length)
-            joinButtonsInstructions[pIndex].SetActive(true); // A wieder anzeigen
+            joinButtonsInstructions[pIndex].SetActive(true);
 
         if (PressTextInstructions != null && pIndex < PressTextInstructions.Length)
-            PressTextInstructions[pIndex].SetActive(true); // A wieder anzeigen
+            PressTextInstructions[pIndex].SetActive(true);
 
         if (readyInstructions != null && pIndex < readyInstructions.Length)
-            readyInstructions[pIndex].SetActive(false); // Y ausblenden
-        // ---------------------------------------------
+            readyInstructions[pIndex].SetActive(false);
 
         _playerSelection.Remove(playerInput);
     }
@@ -142,36 +135,25 @@ public class PlayerSelectionManager : MonoBehaviour
 
         data.IsReady = !data.IsReady;
 
-
         if (data.IsReady)
-        {
             OnPlayerReadySFX?.Invoke();
-        }
+
         if (data.ReadyText != null)
         {
-
             data.ReadyText.text = data.IsReady ? "Ready" : " ";
             data.ReadyText.color = data.IsReady ? readyColor : notReadyColor;
-
         }
 
-        // --- UI Instruction ("Press Y") togglen ---
         int pIndex = playerInput.playerIndex;
+
         if (readyInstructions != null && pIndex < readyInstructions.Length)
-        {
-            // Wenn er Ready ist -> Text weg. 
-            // Wenn er NICHT Ready ist -> Text da (damit er weiß, dass er Y drücken kann).
             readyInstructions[pIndex].SetActive(!data.IsReady);
-        }
+
         if (PressTextInstructions != null && pIndex < PressTextInstructions.Length)
-        {
-            // Wenn er Ready ist -> Text weg. 
-            // Wenn er NICHT Ready ist -> Text da (damit er weiß, dass er Y drücken kann).
             PressTextInstructions[pIndex].SetActive(!data.IsReady);
-        }
-        // -----------------------------------------------
 
         _playerSelection[playerInput] = data;
+
         TryStartGame();
     }
 
@@ -187,40 +169,43 @@ public class PlayerSelectionManager : MonoBehaviour
 
         if (!everyoneReady)
         {
-            StopCountdownIfRunning();
             OnNotAllPlayersReady?.Invoke();
             return;
         }
-        
-        // 2. Die Transition-Sequenz starten
-        StartEnterCountdown();
-        OnPlayerSelectionCountDownStarted?.Invoke();
+
+        if (_isTransitionRunning)
+            return;
+
+        OnStartGameSFX?.Invoke();
+        StartCoroutine(TransitionToSurpriseBox());
     }
 
     private IEnumerator TransitionToSurpriseBox()
     {
         _isTransitionRunning = true;
-        // Vorbereitung: Image enablen & Animation starten
-        // (Ich nehme an, transitionAnimator ist in dieser Klasse bekannt)
-        Image transitionImage = transitionAnimator.GetComponent<Image>();
-        transitionImage.enabled = true;
-        transitionAnimator.SetTrigger("Play");
-        OnSurpriseBoxStateTransitionStarted?.Invoke();
-        // 3. Warten, bis die Transition den Bildschirm verdeckt (deine 1.1s)
-        yield return new WaitForSeconds(1.1f);
 
-        // 4. State-Wechsel genau JETZT ausf�hren
+        Image transitionImage = transitionAnimator.GetComponent<Image>();
+        if (transitionImage != null)
+            transitionImage.enabled = true;
+
+        if (transitionAnimator != null)
+            transitionAnimator.SetTrigger("Play");
+
+        OnSurpriseBoxStateTransitionStarted?.Invoke();
+
+        yield return new WaitForSeconds(1.1f);
 
         if (GameEvents.CurrentState == GameState.PlayerSelectionState)
         {
             GameEvents.ChangeState(GameState.SurpriseBoxState);
         }
 
-        // 5. Kurz warten, damit der neue State geladen/initialisiert ist
         yield return new WaitForSeconds(0.45f);
+
         _isTransitionRunning = false;
-        // 6. Transition wieder unsichtbar machen
-        transitionImage.enabled = false;
+
+        if (transitionImage != null)
+            transitionImage.enabled = false;
     }
 
     private void HandlePlayerSelectionStateExit()
@@ -236,63 +221,22 @@ public class PlayerSelectionManager : MonoBehaviour
 
     private void HandleReturnToMainMenu()
     {
-        if (GameEvents.CurrentState != GameState.PlayerSelectionState) return;
-        StopCountdownIfRunning();
+        if (GameEvents.CurrentState != GameState.PlayerSelectionState)
+            return;
+
         OnReturnToMainMenu?.Invoke();
-        PlayerSelection.SetActive(false);
-        MainMenu.SetActive(true);
-    }
-    
-    
-    //countdown stuff
-    private void StopCountdownIfRunning()
-    {
-        OnPlayerSelectionCountDownStopped?.Invoke();
-        if (countdownRoutine != null)
-        {
-            StopCoroutine(countdownRoutine);
-            countdownRoutine = null;
-        }
-        if (countdownText != null)
-            countdownText.gameObject.SetActive(false);
-    }
-    
-    private void StartEnterCountdown()
-    {
-        StopCountdownIfRunning();
-        countdownRoutine = StartCoroutine(PlayCountdown(OnCountdownFinished));
-    }
 
-    private void OnCountdownFinished()
-    {
-        if (_isTransitionRunning) return;
-        StartCoroutine(TransitionToSurpriseBox());
-        OnStartGameSFX?.Invoke();
+        if (PlayerSelection != null)
+            PlayerSelection.SetActive(false);
+
+        if (MainMenu != null)
+            MainMenu.SetActive(true);
     }
-
-    public IEnumerator PlayCountdown(Action onFinished, int seconds = 3, float timing = 1f)
-    {
-        float countdown = seconds;
-        countdownText.gameObject.SetActive(true);
-
-        while (countdown > 0)
-        {
-            countdownText.text = countdown.ToString();
-            yield return new WaitForSeconds(timing);
-            countdown--;
-        }
-
-        countdownText.gameObject.SetActive(false);
-        countdownRoutine = null;
-        onFinished?.Invoke();  // Only called on successful finish
-    }
-
-    
 }
 
 public struct PlayerSelectionData
 {
     public bool IsReady;
     public Transform CharacterTransform;
-    public TextMesh ReadyText;   // or TextMeshProUGUI
+    public TextMesh ReadyText;
 }

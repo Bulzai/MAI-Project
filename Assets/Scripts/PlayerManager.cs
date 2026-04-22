@@ -11,34 +11,27 @@ using Object = UnityEngine.Object;
 
 public class PlayerManager : MonoBehaviour
 {
-    
-    // Player selection events
     public static event Action<PlayerInput, Transform> OnPlayerJoinedGlobal;
     public static event Action<PlayerInput> OnPlayerLeftGlobal;
-
     public static event Action OnPlayerJoinedSFX;
-    
-    
+
     public static PlayerManager Instance { get; private set; }
 
     public PlayerAnimator playerAnimator;
 
     public Transform[] spawnPositionsForGame;
-
     public List<PlayerInput> players = new List<PlayerInput>();
     private List<PlayerInput> _eliminationOrder = new List<PlayerInput>();
 
     public int playerCount = 0;
 
     [Header("Avatars")]
-    public Sprite[] playerAvatars = new Sprite[4];  // set per slot in Inspector
+    public Sprite[] playerAvatars = new Sprite[4];
     public Sprite[] playerCursors = new Sprite[4];
     public CharacterAnimationLibrary[] characterLibraries = new CharacterAnimationLibrary[4];
 
-
     [Header("PlayerJoin Names")]
     public Transform[] namePositionsInJoinMenu;
-
 
     [Header("Spawn Positions")]
     public Transform[] spawnPositionsForMenu;
@@ -61,45 +54,40 @@ public class PlayerManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
     }
- 
+
     private void Start()
     {
         playerInputManager = GetComponent<PlayerInputManager>();
     }
 
-
     private void OnEnable()
     {
-        //GameEvents.OnMenuStateEntered += SetInputToActiveAndUI;
         GameEvents.OnPlayerSelectionStateEntered += EnablePlayerJoining;
         GameEvents.OnPlayerSelectionStateExited += DeactivateCharacterPrefab;
         GameEvents.OnPlayerSelectionStateExited += DisablePlayerJoining;
 
         GameEvents.OnMainGameStateEntered += ResetEliminations;
-        PlaceItemState.CountDownStarted += ActivateCharacterPrefab;
+        GameEvents.OnMainGameStateEntered += ActivateCharacterPrefab;
         GameEvents.OnMainGameStateExited += DeactivateCharacterPrefab;
 
         GameEvents.OnPlayerEliminated += HandlePlayerElimination;
-
     }
 
     private void OnDisable()
     {
         GameEvents.OnPlayerSelectionStateEntered -= EnablePlayerJoining;
         GameEvents.OnPlayerSelectionStateExited -= DeactivateCharacterPrefab;
-        PlaceItemState.CountDownStarted -= ActivateCharacterPrefab;
+        GameEvents.OnPlayerSelectionStateExited -= DisablePlayerJoining;
+
+        GameEvents.OnMainGameStateEntered -= ResetEliminations;
+        GameEvents.OnMainGameStateEntered -= ActivateCharacterPrefab;
         GameEvents.OnMainGameStateExited -= DeactivateCharacterPrefab;
-        GameEvents.OnPlayerSelectionStateEntered -= DisablePlayerJoining;
+
         GameEvents.OnPlayerEliminated -= HandlePlayerElimination;
-        //GameEvents.OnMenuStateEntered -= SetInputToActiveAndUI;
-
     }
-
-   
-
-    // ============== EXISTING PLAYERMANAGER METHODS (with lobby integration) ==============
 
     public void ResetEliminations()
     {
@@ -118,16 +106,15 @@ public class PlayerManager : MonoBehaviour
         int aliveCount = players.Count - _eliminationOrder.Count;
         if (aliveCount <= 1)
         {
-            // last survivor:
             var winner = players.Where(pi => !_eliminationOrder.Contains(pi) && !IsDestroyed(pi)).FirstOrDefault();
             if (winner != null) _eliminationOrder.Add(winner);
             StartCoroutine(TransitionToScoreState());
         }
     }
+
     private IEnumerator TransitionToScoreState()
     {
-        yield return new WaitForSeconds(2f);  // Adjust delay as needed
-    
+        yield return new WaitForSeconds(2f);
         GameEvents.ChangeState(GameState.ScoreState);
     }
 
@@ -166,7 +153,6 @@ public class PlayerManager : MonoBehaviour
 
     public IReadOnlyList<PlayerInput> GetRoundRanking()
     {
-        // _eliminationOrder is [first out, ..., winner], return reversed but minus destroyed refs
         return _eliminationOrder
             .Where(pi => !IsDestroyed(pi))
             .Reverse()
@@ -192,33 +178,20 @@ public class PlayerManager : MonoBehaviour
         if (players.Contains(playerInput))
             return;
 
-
         playerCount++;
         players.Add(playerInput);
 
         int idx = playerInput.playerIndex;
-
-        //PlayerNames
         GameObject root = playerInput.gameObject;
 
         switch (idx)
         {
-            case 0:
-                root.name = "Cutesy";
-                break;
-            case 1:
-                root.name = "Jokesy";
-                break;
-            case 2:
-                root.name = "xX_GamerL0rd_Xx";
-                break;
-            case 3:
-                root.name = "Currywurst";
-                break;
-
+            case 0: root.name = "Cutesy"; break;
+            case 1: root.name = "Jokesy"; break;
+            case 2: root.name = "xX_GamerL0rd_Xx"; break;
+            case 3: root.name = "Currywurst"; break;
         }
 
-        // Find children
         var cursorTf = root.transform.Find("CursorNoPI");
         var characterTf = root.transform.Find("PlayerNoPI");
 
@@ -228,18 +201,19 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
-        // Position at selection/menu spawns
         if (idx < spawnPositionsForMenu.Length)
         {
             characterTf.transform.position = spawnPositionsForMenu[idx].position;
             namePositionsInJoinMenu[idx].gameObject.SetActive(true);
         }
         else
+        {
             characterTf.transform.position = Vector3.one;
+        }
 
         OnPlayerJoinedGlobal?.Invoke(playerInput, characterTf);
         OnPlayerJoinedSFX?.Invoke();
-        
+
         if (idx < spawnPositionsForItemPlacement.Length)
             cursorTf.transform.position = spawnPositionsForItemPlacement[idx].position;
         else
@@ -254,13 +228,9 @@ public class PlayerManager : MonoBehaviour
             if (box2 != null) cursorCtrl.SetBoundsPlaceItemState(box2);
         }
 
-        // Hide cursor until placement phase
         cursorTf.gameObject.SetActive(false);
-
-        // Cache root
         playerRoots[idx] = root;
 
-        // ----- Assign AVATAR + Cursor -----
         var characterSpriteRenderer = characterTf.Find("Visual/Sprite")?.GetComponent<SpriteRenderer>();
         var cursorSpriteRenderer = cursorTf.GetComponentInChildren<SpriteRenderer>();
 
@@ -270,30 +240,22 @@ public class PlayerManager : MonoBehaviour
                 characterSpriteRenderer.sprite = playerAvatars[idx];
         }
 
-        // Cursor Farbe UND Sprite setzen
         if (cursorSpriteRenderer != null)
         {
-
-
-            // 2. Einzigartiges Cursor-Sprite setzen (NEU)
             if (playerCursors != null && idx < playerCursors.Length && playerCursors[idx] != null)
-            {
                 cursorSpriteRenderer.sprite = playerCursors[idx];
-            }
         }
         else
         {
             Debug.LogWarning($"CursorSpriteRenderer not found for Player {idx}");
         }
 
-        // ------------ASSIGN CHARACTER ANIMATION SET---------------------
         var characterAnimator = characterTf.Find("Visual")?.GetComponent<PlayerAnimator>();
         if (characterAnimator != null)
         {
             characterAnimator.SetLibrary(characterLibraries[idx]);
         }
 
-        // Setup input
         var pi = root.GetComponent<PlayerInput>();
         if (pi != null)
         {
@@ -301,15 +263,11 @@ public class PlayerManager : MonoBehaviour
             pi.ActivateInput();
         }
 
-
-
         if (playerInput.devices.Count > 0)
         {
             deviceToPlayerMap[playerInput.devices[0]] = idx;
             Debug.Log($"Player {idx} is using device: {playerInput.devices[0].name}");
         }
-
-
     }
 
     public void OnPlayerLeft(PlayerInput pi)
@@ -317,7 +275,6 @@ public class PlayerManager : MonoBehaviour
         if (IsDestroyed(pi)) return;
         int idx = pi.playerIndex;
 
-        // Reuse shared cleanup
         CleanupPlayerBookkeeping(idx, pi);
 
         if (playerRoots.TryGetValue(idx, out var root) && root != null)
@@ -328,11 +285,10 @@ public class PlayerManager : MonoBehaviour
 
         pickedPrefabByPlayer.Remove(idx);
         playersThatPlaced.Remove(idx);
-        
+
         OnPlayerLeftGlobal?.Invoke(pi);
         Destroy(pi);
         Debug.Log("player left");
-
     }
 
     public void DeactivateCharacterPrefab()
@@ -340,6 +296,7 @@ public class PlayerManager : MonoBehaviour
         foreach (var root in playerRoots.Values.ToArray())
         {
             if (IsDestroyed(root)) continue;
+
             var characterTf = root.transform.Find("PlayerNoPI");
             if (characterTf != null)
             {
@@ -368,7 +325,6 @@ public class PlayerManager : MonoBehaviour
 
             var health = characterGO.GetComponent<PlayerHealthSystem>();
 
-
             if (health != null)
             {
                 health.ResetDeathFlags();
@@ -378,11 +334,8 @@ public class PlayerManager : MonoBehaviour
 
                 health.currentHealth = health.maxHealth;
                 health.isBurning = false;
-                // If SetOnFire() actually sets burning, consider renaming;
-                // keeping your call to preserve behavior.
                 health.SetOnFire();
             }
-
 
             var pi = root.GetComponent<PlayerInput>();
             if (pi != null)
@@ -390,8 +343,6 @@ public class PlayerManager : MonoBehaviour
                 pi.ActivateInput();
                 pi.SwitchCurrentActionMap("Player");
             }
-
-           
 
             if (idx < spawnPositionsForGame.Length)
             {
@@ -425,36 +376,26 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    // -------------------- RESET PIPELINE --------------------
-
     public void HardResetGame()
     {
-        // Stop any player-related coroutines (like elimination animations)
         StopAllCoroutines();
-
-        // Block joins during reset
         DisablePlayerJoining();
 
-        // Quiet the characters first
         try { DeactivateCharacterPrefab(); } catch { }
 
-        // Kick off coroutine to ensure Destroy() flushes this frame
         StartCoroutine(HardResetRoutine());
     }
 
     private IEnumerator HardResetRoutine()
     {
-        // Snapshot: we'll mutate 'players' while removing
         var snapshot = players.ToArray();
         foreach (var pi in snapshot)
         {
             ForceRemovePlayer_NoManager(pi);
         }
 
-        // Also nuke any lingering PlayerInput objects not tracked in our lists
         NukeAllPlayerObjects();
 
-        // Clear all runtime state
         _eliminationOrder.Clear();
         players.Clear();
         playerRoots.Clear();
@@ -462,19 +403,11 @@ public class PlayerManager : MonoBehaviour
         playersThatPlaced.Clear();
         playerCount = 0;
 
-        // Let Destroy() process
         yield return null;
 
-        // Final sanitization
         PruneDestroyedPlayers();
-
-        // Optionally allow re-joining immediately:
-        // EnablePlayerJoining();
     }
 
-    /// <summary>
-    /// Finds all PlayerInput objects everywhere (active, inactive, DDOL) and destroys their roots.
-    /// </summary>
     private void NukeAllPlayerObjects()
     {
         var allPlayerInputs = Resources.FindObjectsOfTypeAll<PlayerInput>();
@@ -482,7 +415,6 @@ public class PlayerManager : MonoBehaviour
         {
             if (IsDestroyed(pi)) continue;
 
-            // Skip assets/prefabs (not scene instances)
             var go = pi.gameObject;
             var scene = go.scene;
             if (!scene.IsValid() || !scene.isLoaded) continue;
@@ -498,20 +430,12 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Fully removes a player WITHOUT relying on PlayerInputManager.RemovePlayer:
-    /// - Deactivates input
-    /// - Unpairs devices (no ghost input after destroy)
-    /// - Destroys the player root
-    /// - Mirrors your bookkeeping
-    /// </summary>
     private void ForceRemovePlayer_NoManager(PlayerInput pi)
     {
         if (IsDestroyed(pi)) return;
 
         int idx = pi.playerIndex;
 
-        // 1) Stop any input from this player
         try { pi.DeactivateInput(); } catch { }
         try
         {
@@ -522,10 +446,8 @@ public class PlayerManager : MonoBehaviour
         }
         catch { }
 
-        // 2) Bookkeeping (same behavior as OnPlayerLeft)
         CleanupPlayerBookkeeping(idx, pi);
 
-        // 3) Destroy the root object
         if (playerRoots.TryGetValue(idx, out var root) && root != null)
         {
             Destroy(root);
@@ -535,44 +457,32 @@ public class PlayerManager : MonoBehaviour
             Destroy(pi.gameObject);
         }
 
-        // 4) Remove all references
         playerRoots.Remove(idx);
         pickedPrefabByPlayer.Remove(idx);
         playersThatPlaced.Remove(idx);
-
-
     }
 
-    /// <summary>
-    /// Shared bookkeeping so we don't duplicate logic.
-    /// </summary>
     private void CleanupPlayerBookkeeping(int idx, PlayerInput pi)
     {
         playerCount = Mathf.Max(0, playerCount - 1);
         players.Remove(pi);
     }
 
-    /// <summary>
-    /// Remove destroyed refs from lists/dicts to avoid MissingReferenceException.
-    /// </summary>
     public void PruneDestroyedPlayers()
     {
         players.RemoveAll(p => IsDestroyed(p));
 
-        // Clean up dead roots
         var keys = playerRoots.Keys.ToArray();
         foreach (var k in keys)
         {
             if (!playerRoots[k]) playerRoots.Remove(k);
         }
 
-        // Also ensure elimination order has no dead refs
         _eliminationOrder = _eliminationOrder.Where(pi => !IsDestroyed(pi)).ToList();
     }
-    
+
     public void HardResetFinalScore()
     {
         StartCoroutine(HardResetRoutine());
-
     }
 }

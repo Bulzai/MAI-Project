@@ -9,24 +9,19 @@ using UnityEngine.InputSystem;
 public class PlaceItemState : MonoBehaviour
 {
     public static PlaceItemState Instance { get; private set; }
-    private Coroutine countdownCoroutine;
 
     [SerializeField] private PlayerManager playerManager;
     [SerializeField] private GameObject GameWorld;
     //[SerializeField] private GridPlacementSystem gridPlacementSystem;
 
-    [SerializeField] private TMP_Text countdownText;
-
-    public static Action CountDownStarted;
-    public static Action CountDownFinished;
-    //public static event Action OnGuideScrollOpen;
-    //public static event Action OnGuideScrollClose;
-
+    //public static Action CountDownStarted;
+    //public static Action CountDownFinished;
 
     public GameObject guideScreen;
-    //public Animator guideAnimator;
-    
     public RoundController roundController;
+
+    private bool isTransitioningToMainGame = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -34,6 +29,7 @@ public class PlaceItemState : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
@@ -43,162 +39,175 @@ public class PlaceItemState : MonoBehaviour
         GameEvents.OnPlaceItemStateEntered += BeginPlacementPhaseAll;
     }
 
+    private void OnDisable()
+    {
+        GameEvents.OnPlaceItemStateEntered -= BeginPlacementPhaseAll;
+    }
+
     public void HideAllCursors()
     {
+        if (playerManager == null || playerManager.playerRoots == null)
+        {
+            Debug.LogWarning("PlayerManager or playerRoots is missing.");
+            return;
+        }
+
         foreach (var root in playerManager.playerRoots.Values)
         {
-            var cursor = root.transform.Find("CursorNoPI").gameObject;
-            cursor.SetActive(false);
-            root.GetComponent<PlayerInput>().SwitchCurrentActionMap("Cursor");
+            if (root == null)
+                continue;
+
+            var cursorTransform = root.transform.Find("CursorNoPI");
+            if (cursorTransform != null)
+                cursorTransform.gameObject.SetActive(false);
+
+            var playerInput = root.GetComponent<PlayerInput>();
+            if (playerInput != null)
+                playerInput.SwitchCurrentActionMap("Cursor");
         }
     }
 
-
     private void AllPlayersFinishedPlacing()
     {
+        if (GridPlacementSystem.Instance != null)
+            GridPlacementSystem.Instance.HideGrid();
 
-        GridPlacementSystem.Instance.HideGrid();
-        playerManager.pickedPrefabByPlayer.Clear();
-        playerManager.playersThatPlaced.Clear();
-        HideAllCursors();
-
-        if (countdownCoroutine == null)
+        if (playerManager != null)
         {
-            StartCoroutine(ShowGuideSequence());
-            Debug.Log("Finshed placing starting roll seq");
+            playerManager.pickedPrefabByPlayer.Clear();
+            playerManager.playersThatPlaced.Clear();
         }
 
+        HideAllCursors();
+
+        if (!isTransitioningToMainGame)
+        {
+            StartCoroutine(ShowGuideSequence());
+            Debug.Log("Finished placing, starting next sequence");
+        }
     }
 
     private IEnumerator ShowGuideSequence()
     {
-        // Prüfen, ob es die erste Runde ist
-        if (roundController.currentRound == 0)
+        isTransitioningToMainGame = true;
+
+        if (roundController != null && roundController.currentRound == 0)
         {
             yield return new WaitForSeconds(1.45f);
 
-            guideScreen.SetActive(true);
+            if (guideScreen != null)
+                guideScreen.SetActive(true);
 
             float showTime = 6.0f;
             yield return new WaitForSeconds(showTime);
 
-            guideScreen.SetActive(false);
+            if (guideScreen != null)
+                guideScreen.SetActive(false);
+
             yield return new WaitForSeconds(0.7f);
         }
         else
         {
-            // damit das Spiel in späteren Runden nicht zu abrupt startet.
             yield return new WaitForSeconds(0.7f);
         }
 
-        // 5. In JEDEM Fall (oder nach der Animation) den Countdown starten
-        countdownCoroutine = StartCoroutine(CountdownBeforeMainGame());
-    }
-    private IEnumerator CountdownBeforeMainGame( int countdown = 2, float timing = 0.6f)
-    {
-        CountDownStarted?.Invoke();
-        
-        while (countdown > 0)
-        {
-            countdownText.gameObject.SetActive(true);
-            countdownText.text = countdown.ToString();
-
-
-
-            yield return new WaitForSeconds(timing);
-            countdown--;
-        }
-
         GameEvents.ChangeState(GameState.MainGameState);
-        CountDownFinished?.Invoke();
-        countdownText.gameObject.SetActive(false);
-        countdownCoroutine = null;               
-
+        isTransitioningToMainGame = false;
     }
 
     private void BeginPlacementPhaseAll()
     {
-        GameWorld.SetActive(true);
+        if (GameWorld != null)
+            GameWorld.SetActive(true);
 
-        if (playerManager.pickedPrefabByPlayer.Count == 0)
+        if (playerManager == null)
+        {
+            Debug.LogError("PlayerManager is missing.");
+            return;
+        }
+
+        if (playerManager.pickedPrefabByPlayer == null || playerManager.pickedPrefabByPlayer.Count == 0)
         {
             Debug.Log("No picks yet, aborting");
             return;
         }
 
-
         playerManager.playersThatPlaced.Clear();
-        GridPlacementSystem.Instance.ShowGrid();
+
+        if (GridPlacementSystem.Instance != null)
+            GridPlacementSystem.Instance.ShowGrid();
 
         foreach (var kv in playerManager.pickedPrefabByPlayer)
         {
             int idx = kv.Key;
             GameObject prefab = kv.Value;
 
-            if (!playerManager.playerRoots.TryGetValue(idx, out var root))
+            if (!playerManager.playerRoots.TryGetValue(idx, out var root) || root == null)
             {
                 Debug.LogError("Missing root for idx=" + idx);
                 continue;
             }
 
-            // enable cursor, disable character
-            var cursor = root.transform.Find("CursorNoPI").gameObject;
-            var character = root.transform.Find("PlayerNoPI").gameObject;
+            var cursorTransform = root.transform.Find("CursorNoPI");
+            var characterTransform = root.transform.Find("PlayerNoPI");
+
+            if (cursorTransform == null)
+            {
+                Debug.LogError("CursorNoPI not found for idx=" + idx);
+                continue;
+            }
+
+            if (characterTransform == null)
+            {
+                Debug.LogError("PlayerNoPI not found for idx=" + idx);
+                continue;
+            }
+
+            var cursor = cursorTransform.gameObject;
+            var character = characterTransform.gameObject;
+
             playerManager.ResetCursorPositionItemPlacement(idx);
+
             cursor.SetActive(true);
             character.SetActive(false);
-            /*
-            // position at placement spawn. should be already set in playermanagerfinal
-            Vector3 pos = (idx < playerManagerFinal.spawnPositionsForPlacement.Length)
-                ? playerManagerFinal.spawnPositionsForPlacement[idx]
-                : Vector3.zero;
-            //otherwise should work like the following line
 
-            //cursor.transform.position = spawnPositionsForSelection[idx].transform.position;
-
-            cursor.transform.position = pos;
-            */
-
-            //Debug.Log("Cursor idx=" + idx + " moved to " + pos);
-
-            // switch input map
             var pi = root.GetComponent<PlayerInput>();
-            pi.SwitchCurrentActionMap("Cursor");
+            if (pi != null)
+                pi.SwitchCurrentActionMap("Cursor");
 
-            // begin placement on cursor controller
             var cc = cursor.GetComponent<CursorController>();
-            cc.BeginPlacementPhase(prefab, cc.transform);
+            if (cc != null)
+            {
+                cc.BeginPlacementPhase(prefab, cc.transform);
+            }
+            else
+            {
+                Debug.LogError("CursorController missing on cursor for idx=" + idx);
+            }
         }
-
     }
 
-
-
-    // Called by CursorController when a player places their item
     public void NotifyPlayerPlaced(int idx)
     {
-        //Debug.Log("NotifyPlayerPlaced idx=" + idx);
+        if (playerManager == null)
+        {
+            Debug.LogError("PlayerManager is missing.");
+            return;
+        }
 
         if (!playerManager.playersThatPlaced.Contains(idx))
             playerManager.playersThatPlaced.Add(idx);
 
-        // deactivate cursor
-        if (playerManager.playerRoots.TryGetValue(idx, out var root))
+        if (playerManager.playerRoots.TryGetValue(idx, out var root) && root != null)
         {
-            var cursor = root.transform.Find("CursorNoPI").gameObject;
-            cursor.SetActive(false);
-            //Debug.Log("Deactivated cursor idx=" + idx);
+            var cursorTransform = root.transform.Find("CursorNoPI");
+            if (cursorTransform != null)
+                cursorTransform.gameObject.SetActive(false);
         }
-
-       // Debug.Log("placedCount=" + playerManagerFinal.playersThatPlaced.Count +
-              //    " joinedCount=" + playerManagerFinal.PlayerCount);
 
         if (playerManager.playersThatPlaced.Count == playerManager.playerCount)
         {
-           // Debug.Log("All placed → AllPlayersFinishedPlacing");
             AllPlayersFinishedPlacing();
-
         }
     }
-
 }

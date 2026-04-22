@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ForbiddenSignPlayerSpawn : MonoBehaviour
@@ -9,23 +7,25 @@ public class ForbiddenSignPlayerSpawn : MonoBehaviour
     private void Start()
     {
         GameEvents.OnPlaceItemStateEntered += ShowSign;
-        PlaceItemState.CountDownStarted += HideSign;
+        GameEvents.OnMainGameStateEntered += HideSign;
         ShowSign();
     }
 
     private void OnDestroy()
     {
         GameEvents.OnPlaceItemStateEntered -= ShowSign;
-        PlaceItemState.CountDownStarted -= HideSign;
+        GameEvents.OnMainGameStateEntered -= HideSign;
     }
 
     private void ShowSign()
     {
-        spriteRenderer.enabled = true;
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = true;
     }
 
     private void HideSign()
     {
-        spriteRenderer.enabled = false;
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = false;
     }
 }
