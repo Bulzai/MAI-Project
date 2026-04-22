@@ -19,12 +19,12 @@ public class PlaceItemState : MonoBehaviour
 
     public static Action CountDownStarted;
     public static Action CountDownFinished;
-    public static event Action OnGuideScrollOpen;
-    public static event Action OnGuideScrollClose;
+    //public static event Action OnGuideScrollOpen;
+    //public static event Action OnGuideScrollClose;
 
 
     public GameObject guideScreen;
-    public Animator guideAnimator;
+    //public Animator guideAnimator;
     
     public RoundController roundController;
     private void Awake()
@@ -75,26 +75,12 @@ public class PlaceItemState : MonoBehaviour
         // Prüfen, ob es die erste Runde ist
         if (roundController.currentRound == 0)
         {
-            // --- ANIMATIONS-SEQUENZ ---
             yield return new WaitForSeconds(1.45f);
 
             guideScreen.SetActive(true);
 
-            // 1. Trigger the "Open" animation
-            guideAnimator.SetTrigger("Open");
-            OnGuideScrollOpen?.Invoke();
-
-            // 2. Wait for the screen to stay visible
             float showTime = 6.0f;
             yield return new WaitForSeconds(showTime);
-
-            // 3. Trigger the "Close" animation
-            guideAnimator.SetTrigger("Close");
-            OnGuideScrollClose?.Invoke();
-
-            // 4. WAIT for the closing animation to actually finish
-            float closeAnimDuration = 2f;
-            yield return new WaitForSeconds(closeAnimDuration);
 
             guideScreen.SetActive(false);
             yield return new WaitForSeconds(0.7f);

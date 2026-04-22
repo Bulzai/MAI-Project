@@ -89,8 +89,8 @@ public class SoundFXManager : MonoBehaviour
         CursorController.OnCantPlaceItem += PlayForbiddenSignSFX;
         GridItem.OnRotateItem += PlayRotateItemSFX;
         GridItem.OnGridItemPlaced += HandleItemSubmitSfx;
-        PlaceItemState.OnGuideScrollClose += PlayGuideScrollCloseSFX;
-        PlaceItemState.OnGuideScrollOpen += PlayGuideScrollOpenSFX;
+        //PlaceItemState.OnGuideScrollClose += PlayGuideScrollCloseSFX;
+        //PlaceItemState.OnGuideScrollOpen += PlayGuideScrollOpenSFX;
         GridItem._OnBombPlaced += PlayBombExplodeSFX;
         PlaceItemState.CountDownStarted += AllowFlameThrowerBurnSFXToPlayAgain;
         
@@ -182,8 +182,8 @@ public class SoundFXManager : MonoBehaviour
         CursorController.OnCantPlaceItem -= PlayForbiddenSignSFX;
         GridItem.OnRotateItem -= PlayRotateItemSFX;
         GridItem.OnGridItemPlaced -= HandleItemSubmitSfx;
-        PlaceItemState.OnGuideScrollClose -= PlayGuideScrollCloseSFX;
-        PlaceItemState.OnGuideScrollOpen -= PlayGuideScrollOpenSFX;
+        //PlaceItemState.OnGuideScrollClose -= PlayGuideScrollCloseSFX;
+        //PlaceItemState.OnGuideScrollOpen -= PlayGuideScrollOpenSFX;
         GridItem._OnBombPlaced -= PlayBombExplodeSFX;
         PlaceItemState.CountDownStarted -= AllowFlameThrowerBurnSFXToPlayAgain;
 

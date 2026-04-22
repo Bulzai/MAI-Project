@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 6952407667446782866}
   - component: {fileID: 7024903264484540056}
   - component: {fileID: 1421244998186324480}
-  - component: {fileID: -6479043176845770858}
-  - component: {fileID: -6782266233697416225}
   m_Layer: 0
   m_Name: SlowItem
   m_TagString: Untagged
@@ -136,38 +134,3 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.45
---- !u!95 &-6479043176845770858
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8465109100554358415}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 92c25688902dac44d8f726092ea1dea1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-6782266233697416225
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8465109100554358415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7125d28ffc84a742a348398af3f2af4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
-  pulseFactor: 1.5
