@@ -52,7 +52,7 @@ public class RoundController : MonoBehaviour
             if (questionnairePanel != null)
                 questionnairePanel.SetActive(true);
 
-            StartCoroutine(EnableMenuButtonAfterDelay());
+            //StartCoroutine(EnableMenuButtonAfterDelay());
             return;
         }
 
@@ -102,12 +102,12 @@ public class RoundController : MonoBehaviour
         // --- ENDE DER TRANSITION ---
     }
 
-    private IEnumerator EnableMenuButtonAfterDelay()
+    /*private IEnumerator EnableMenuButtonAfterDelay()
     {
         yield return new WaitForSeconds(6f);
         playerScoreManager.SetMenuButtonActiveOrDeactive(true);
         PlayerManager.Instance.HardResetFinalScore();
-    }
+    }*/
 
     public void ResetRounds()
     {

@@ -1,16 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class GameMetricsLogger : MonoBehaviour
 {
     public static GameMetricsLogger Instance;
 
-    public string uiVersion = "Maximal";
-    public int sessionID = 1;
-
-    private string sessionCode;
     private float roundStartTime;
     private int currentRound = 0;
 
@@ -25,16 +20,17 @@ public class GameMetricsLogger : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else
+        {
             Destroy(gameObject);
-
-        sessionCode = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            return;
+        }
 
         filePath = Path.Combine(Application.dataPath, "../metrics.csv");
         Debug.Log("Saving metrics to: " + filePath);
 
         if (!File.Exists(filePath))
         {
-            File.WriteAllText(filePath, "UIVersion,SessionID,Round,PlayerIndex,SurvivalTime,Deaths,MilkCollected\n");
+            File.WriteAllText(filePath, "UIVersion,SessionID,Round,PlayerIndex,CharacterName,SurvivalTime,Deaths,MilkCollected\n");
         }
     }
 
@@ -83,13 +79,14 @@ public class GameMetricsLogger : MonoBehaviour
                 survivalTimes[playerIndex] = roundDuration;
             }
 
-            string line = uiVersion + "," +
-              SessionData.SessionID + "," +
-              currentRound + "," +
-              playerIndex + "," +
-              survivalTimes[playerIndex].ToString("F2") + "," +
-              deaths[playerIndex] + "," +
-              milkCollected[playerIndex] + "\n";
+            string line = SessionData.BuildType + "," +
+                SessionData.SessionID + "," +
+                currentRound + "," +
+                playerIndex + "," +
+                GetCharacterName(playerIndex) + "," +
+                survivalTimes[playerIndex].ToString("F2") + "," +
+                deaths[playerIndex] + "," +
+                milkCollected[playerIndex] + "\n";
 
             File.AppendAllText(filePath, line);
         }
@@ -110,5 +107,18 @@ public class GameMetricsLogger : MonoBehaviour
     {
         if (milkCollected.ContainsKey(playerIndex))
             milkCollected[playerIndex]++;
+    }
+
+    private string GetCharacterName(int playerIndex)
+    {
+        switch (playerIndex)
+        {
+            case 0:
+                return "Cutesy";
+            case 1:
+                return "Jokesy";
+            default:
+                return "Unknown";
+        }
     }
 }
