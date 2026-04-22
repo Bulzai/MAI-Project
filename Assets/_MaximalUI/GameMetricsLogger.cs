@@ -34,7 +34,7 @@ public class GameMetricsLogger : MonoBehaviour
 
         if (!File.Exists(filePath))
         {
-            File.WriteAllText(filePath, "UIVersion,SessionCode,Round,PlayerIndex,SurvivalTime,Deaths,MilkCollected\n");
+            File.WriteAllText(filePath, "UIVersion,SessionID,Round,PlayerIndex,SurvivalTime,Deaths,MilkCollected\n");
         }
     }
 
@@ -84,7 +84,7 @@ public class GameMetricsLogger : MonoBehaviour
             }
 
             string line = uiVersion + "," +
-              sessionCode + "," +
+              SessionData.SessionID + "," +
               currentRound + "," +
               playerIndex + "," +
               survivalTimes[playerIndex].ToString("F2") + "," +

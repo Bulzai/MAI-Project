@@ -43,7 +43,7 @@ public class PickUpItem : MonoBehaviour
             case ItemType.Speed:
                 return "Fastest Now!";
             case ItemType.Confusion:
-                return "Confused :P";
+                return "Confuse Others!";
             default:
                 return "Aura";
         }
