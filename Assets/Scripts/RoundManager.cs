@@ -12,6 +12,8 @@ public class RoundController : MonoBehaviour
     [Header("Transition")]
     [SerializeField] private Animator transitionAnimator; // Hier den Animator zuweisen
 
+    [SerializeField] private GameObject questionnairePanel;
+
     public GameObject EndScoreText;
     public PlayerManager playerManagerFinal;
     private PlayerScoreManager playerScoreManager;
@@ -40,9 +42,16 @@ public class RoundController : MonoBehaviour
         bool isLastRound = currentRound >= maxRounds;
         EndScoreText.SetActive(false);
 
+        if (questionnairePanel != null)
+            questionnairePanel.SetActive(false);
+
         if (isLastRound)
         {
             EndScoreText.SetActive(true);
+
+            if (questionnairePanel != null)
+                questionnairePanel.SetActive(true);
+
             StartCoroutine(EnableMenuButtonAfterDelay());
             return;
         }
