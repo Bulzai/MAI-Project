@@ -5,7 +5,6 @@ public class PopupTextManager : MonoBehaviour
     public static PopupTextManager Instance;
 
     public GameObject popupPrefab;
-    public Canvas canvas;
     public RectTransform[] popupAnchors; // size 4
 
     private void Awake()
@@ -15,12 +14,16 @@ public class PopupTextManager : MonoBehaviour
 
     public void ShowPopupForPlayer(string message, int playerIndex, Color color, bool isImportant = false)
     {
-        if (popupPrefab == null || canvas == null) return;
+        if (popupPrefab == null) return;
+        if (popupAnchors == null) return;
+        if (playerIndex < 0 || playerIndex >= popupAnchors.Length) return;
+        if (popupAnchors[playerIndex] == null) return;
 
-        GameObject popupObj = Instantiate(popupPrefab, canvas.transform);
+        GameObject popupObj = Instantiate(popupPrefab, popupAnchors[playerIndex]);
 
         RectTransform popupRect = popupObj.GetComponent<RectTransform>();
-        popupRect.anchoredPosition = popupAnchors[playerIndex].anchoredPosition;
+        popupRect.anchoredPosition = Vector2.zero;
+        popupRect.localScale = Vector3.one;
 
         PopupText popup = popupObj.GetComponent<PopupText>();
         if (popup != null)
