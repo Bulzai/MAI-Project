@@ -9,6 +9,10 @@ public class HealthBarUI : MonoBehaviour
     public Color fullHealthColor = Color.green;
     public Color lowHealthColor = Color.red;
 
+    [Header("Avatar")]
+    [SerializeField] private Image avatarImage;
+    [SerializeField] private Color lowHpAvatarColor = new Color(1f, 0.5f, 0.5f);
+
     [Header("Aura Indicator")]
     [SerializeField] private Image auraIconImage;
     [SerializeField] private Sprite pushAuraIcon;
@@ -59,6 +63,26 @@ public class HealthBarUI : MonoBehaviour
             pulseSpeed = 3f;
         else
             pulseSpeed = 0f;
+
+        if (avatarImage != null)
+        {
+            if (value < 0.3f)
+            {
+                float pulse = Mathf.Abs(Mathf.Sin(Time.time * 6f));
+                float intensity = Mathf.Lerp(0.6f, 1f, pulse);
+
+                avatarImage.color = new Color(
+                    lowHpAvatarColor.r * intensity,
+                    lowHpAvatarColor.g * intensity,
+                    lowHpAvatarColor.b * intensity,
+                    1f
+                );
+            }
+            else
+            {
+                avatarImage.color = Color.white;
+            }
+        }
     }
 
     public void ShowAuraIcon(PickUpItem.ItemType itemType)

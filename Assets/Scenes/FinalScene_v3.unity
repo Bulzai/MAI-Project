@@ -106026,6 +106026,8 @@ MonoBehaviour:
   maxHealth: 100
   fullHealthColor: {r: 0, g: 1, b: 0, a: 1}
   lowHealthColor: {r: 1, g: 0, b: 0, a: 1}
+  avatarImage: {fileID: 0}
+  lowHpAvatarColor: {r: 1, g: 0.5, b: 0.5, a: 1}
   auraIconImage: {fileID: 0}
   pushAuraIcon: {fileID: 0}
   confuseAuraIcon: {fileID: 0}
@@ -114521,6 +114523,8 @@ MonoBehaviour:
   maxHealth: 100
   fullHealthColor: {r: 0, g: 1, b: 0, a: 1}
   lowHealthColor: {r: 1, g: 0, b: 0, a: 1}
+  avatarImage: {fileID: 1475939241}
+  lowHpAvatarColor: {r: 1, g: 0.5, b: 0.5, a: 1}
   auraIconImage: {fileID: 1948306540}
   pushAuraIcon: {fileID: -1942202230, guid: dab79d8dd3bac934fb0e1a99e532b3be, type: 3}
   confuseAuraIcon: {fileID: 21300000, guid: 87f796ed6c1cd9b41985d78e1e49a7c6, type: 3}
@@ -121629,6 +121633,8 @@ MonoBehaviour:
   maxHealth: 100
   fullHealthColor: {r: 0, g: 1, b: 0, a: 1}
   lowHealthColor: {r: 1, g: 0, b: 0, a: 1}
+  avatarImage: {fileID: 339353246}
+  lowHpAvatarColor: {r: 1, g: 0.5, b: 0.5, a: 1}
   auraIconImage: {fileID: 1328560235}
   pushAuraIcon: {fileID: -1942202230, guid: dab79d8dd3bac934fb0e1a99e532b3be, type: 3}
   confuseAuraIcon: {fileID: 21300000, guid: 87f796ed6c1cd9b41985d78e1e49a7c6, type: 3}
@@ -129723,6 +129729,8 @@ MonoBehaviour:
   maxHealth: 100
   fullHealthColor: {r: 0, g: 1, b: 0, a: 1}
   lowHealthColor: {r: 1, g: 0, b: 0, a: 1}
+  avatarImage: {fileID: 0}
+  lowHpAvatarColor: {r: 1, g: 0.5, b: 0.5, a: 1}
   auraIconImage: {fileID: 0}
   pushAuraIcon: {fileID: 0}
   confuseAuraIcon: {fileID: 0}
