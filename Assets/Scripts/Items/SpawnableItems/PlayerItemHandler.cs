@@ -98,31 +98,36 @@ public class PlayerItemHandler : MonoBehaviour
         switch (itemType)
         {
             case PickUpItem.ItemType.Slow:
-                // Stoppe die alte, falls sie läuft
+                ShowHealthBarAuraIcon(PickUpItem.ItemType.Slow);
                 if (_activeSlowCo != null) StopCoroutine(_activeSlowCo);
                 _activeSlowCo = StartCoroutine(ApplySlowAura());
                 break;
 
             case PickUpItem.ItemType.Repel:
+                ShowHealthBarAuraIcon(PickUpItem.ItemType.Repel);
                 if (_activeRepelCo != null) StopCoroutine(_activeRepelCo);
                 _activeRepelCo = StartCoroutine(EnableRepelAura());
                 break;
 
             case PickUpItem.ItemType.Speed:
+                ShowHealthBarAuraIcon(PickUpItem.ItemType.Speed);
                 var selfBuff = GetComponent<SlowDebuff>();
                 if (selfBuff)
                 {
-                    // SlowDebuff sollte idealerweise intern das Refreshing handhaben
                     selfBuff.ApplySpeedModifier(speedMultiplier, speedDuration);
                     OnSpeedAuraActivated?.Invoke();
+                    StartCoroutine(HideHealthBarAuraIconAfterDelay(speedDuration));
                 }
                 break;
 
             case PickUpItem.ItemType.Damage:
+                ShowHealthBarAuraIcon(PickUpItem.ItemType.Damage);
                 if (_activeDamageCo != null) StopCoroutine(_activeDamageCo);
                 _activeDamageCo = StartCoroutine(ApplyDamageAura());
                 break;
+
             case PickUpItem.ItemType.Confusion:
+                ShowHealthBarAuraIcon(PickUpItem.ItemType.Confusion);
                 if (_activeConfusionCo != null) StopCoroutine(_activeConfusionCo);
                 _activeConfusionCo = StartCoroutine(ApplyConfusionAura());
                 break;
@@ -174,6 +179,7 @@ public class PlayerItemHandler : MonoBehaviour
 
         StopBlink(ref _slowBlinkCo);
         slowAuraVisual.SetActive(false);
+        HideHealthBarAuraIcon();
     }
 
     // ---------- Repel aura ----------
@@ -213,6 +219,7 @@ public class PlayerItemHandler : MonoBehaviour
         }
 
         repelAuraVisual.SetActive(false);
+        HideHealthBarAuraIcon();
         OnRepelAuraDeactivated?.Invoke();
     }
 
@@ -255,6 +262,7 @@ public class PlayerItemHandler : MonoBehaviour
 
         StopBlink(ref _damageBlinkCo);
         damageAuraVisual.SetActive(false);
+        HideHealthBarAuraIcon();
     }
     private IEnumerator ApplyConfusionAura()
     {
@@ -302,6 +310,7 @@ public class PlayerItemHandler : MonoBehaviour
 
         StopBlink(ref _confusionBlinkCo);
         confusionAuraVisual.SetActive(false);
+        HideHealthBarAuraIcon();
     }
     private void DoDamageTick()
     {
@@ -413,6 +422,7 @@ public class PlayerItemHandler : MonoBehaviour
         if (confusionAuraVisual) confusionAuraVisual.SetActive(false);
 
         repelActive = false;
+        HideHealthBarAuraIcon();
     }
 
     private void ShowStatusPopupForAffectedPlayer(Transform affectedPlayer, string message, Color color, bool important = false)
@@ -424,5 +434,35 @@ public class PlayerItemHandler : MonoBehaviour
         {
             PopupTextManager.Instance.ShowPopupForPlayer(message, playerInput.playerIndex, color, important);
         }
+    }
+
+    private void ShowHealthBarAuraIcon(PickUpItem.ItemType itemType)
+    {
+        var playerInput = GetComponentInParent<UnityEngine.InputSystem.PlayerInput>();
+        if (playerInput == null || HealthBarManager.Instance == null) return;
+
+        HealthBarUI bar = HealthBarManager.Instance.GetHealthBar(playerInput.playerIndex);
+        if (bar != null)
+        {
+            bar.ShowAuraIcon(itemType);
+        }
+    }
+
+    private void HideHealthBarAuraIcon()
+    {
+        var playerInput = GetComponentInParent<UnityEngine.InputSystem.PlayerInput>();
+        if (playerInput == null || HealthBarManager.Instance == null) return;
+
+        HealthBarUI bar = HealthBarManager.Instance.GetHealthBar(playerInput.playerIndex);
+        if (bar != null)
+        {
+            bar.HideAuraIcon();
+        }
+    }
+
+    private IEnumerator HideHealthBarAuraIconAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        HideHealthBarAuraIcon();
     }
 }
