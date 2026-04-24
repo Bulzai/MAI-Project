@@ -100818,7 +100818,7 @@ Animator:
   m_GameObject: {fileID: 382065970}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8dbb8a690ade7ff4d8324fdb79e5cd72, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7d1e913c54628da4684b6c563dc290eb, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -100870,7 +100870,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -2
-  m_Sprite: {fileID: 2055272334, guid: ffe16dc9926d2a64a876bb127a67a61d, type: 3}
+  m_Sprite: {fileID: -1441324825, guid: 4fd2f619cff4417418a8fc0a736098d3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -113963,8 +113963,8 @@ Transform:
   m_GameObject: {fileID: 1031526820}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 30, y: 20, z: 0.3703704}
+  m_LocalPosition: {x: -3.1885, y: -0.1099, z: 0}
+  m_LocalScale: {x: 144.12341, y: 79.15055, z: 0.3703704}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 196134550}
@@ -114010,8 +114010,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -3
-  m_Sprite: {fileID: 21300000, guid: 353b83ef6e1e32f4eb102a1993f345e9, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 38f0b4811be7cda469d8899b3f951697, type: 3}
+  m_Color: {r: 0.1882353, g: 0.23921569, b: 0.12941177, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -121878,6 +121878,7 @@ GameObject:
   - component: {fileID: 1476749235}
   - component: {fileID: 1476749237}
   - component: {fileID: 1476749236}
+  - component: {fileID: 1476749238}
   m_Layer: 5
   m_Name: GameCountdownText
   m_TagString: Untagged
@@ -121902,7 +121903,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -621, y: -103}
+  m_AnchoredPosition: {x: -634, y: -112}
   m_SizeDelta: {x: 325.3152, y: 274.9247}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1476749236
@@ -121934,8 +121935,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4281281658
+  m_fontColor: {r: 0.4784314, g: 0.17254902, b: 0.18431373, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -121952,8 +121953,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 120
-  m_fontSizeBase: 120
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -122002,6 +122003,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1476749234}
   m_CullTransparentMesh: 1
+--- !u!223 &1476749238
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476749234}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 2
+  m_TargetDisplay: 0
 --- !u!1 &1477122879
 GameObject:
   m_ObjectHideFlags: 0
@@ -128479,6 +128503,8 @@ GameObject:
   - component: {fileID: 1763679134}
   - component: {fileID: 1763679136}
   - component: {fileID: 1763679135}
+  - component: {fileID: 1763679137}
+  - component: {fileID: 1763679138}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -128495,14 +128521,14 @@ RectTransform:
   m_GameObject: {fileID: 1763679133}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.74, y: 1.74, z: 1.74}
+  m_LocalScale: {x: 5.45, y: 5.45, z: 5.45}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1476749235}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -142.1, y: 111.6}
+  m_AnchoredPosition: {x: -117, y: 78}
   m_SizeDelta: {x: 233.8191, y: 233.8184}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1763679135
@@ -128525,7 +128551,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bd87134a9cd10f247b4edba855c98fbd, type: 3}
+  m_Sprite: {fileID: -1139813693, guid: e843dedac58f22348bbe6efe6baf590f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -128543,6 +128569,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1763679133}
   m_CullTransparentMesh: 1
+--- !u!95 &1763679137
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763679133}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 468b826bbf6e7f043bdd0e797e3be7db, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!223 &1763679138
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763679133}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 1
+  m_TargetDisplay: 0
 --- !u!1 &1765369792
 GameObject:
   m_ObjectHideFlags: 0
