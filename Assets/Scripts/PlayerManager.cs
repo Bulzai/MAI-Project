@@ -204,10 +204,10 @@ public class PlayerManager : MonoBehaviour
         switch (idx)
         {
             case 0:
-                root.name = "NoobMaster69";
+                root.name = "Cutesy";
                 break;
             case 1:
-                root.name = "Schwarzer Ritter";
+                root.name = "Jokesy";
                 break;
             case 2:
                 root.name = "xX_GamerL0rd_Xx";

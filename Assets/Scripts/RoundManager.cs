@@ -42,6 +42,14 @@ public class RoundController : MonoBehaviour
         bool isLastRound = currentRound >= maxRounds;
         EndScoreText.SetActive(false);
 
+        ShowLeaderBanner();
+
+        if (currentRound == maxRounds - 1)
+        {
+            if (GlobalEventBannerUI.Instance != null)
+                GlobalEventBannerUI.Instance.ShowBanner("FINAL ROUND", Color.yellow);
+        }
+
         if (questionnairePanel != null)
             questionnairePanel.SetActive(false);
 
@@ -52,7 +60,7 @@ public class RoundController : MonoBehaviour
             if (questionnairePanel != null)
                 questionnairePanel.SetActive(true);
 
-            //StartCoroutine(EnableMenuButtonAfterDelay());
+            StartCoroutine(EnableMenuButtonAfterDelay());
             return;
         }
 
@@ -102,13 +110,34 @@ public class RoundController : MonoBehaviour
         // --- ENDE DER TRANSITION ---
     }
 
-    /*private IEnumerator EnableMenuButtonAfterDelay()
+    private IEnumerator EnableMenuButtonAfterDelay()
     {
         yield return new WaitForSeconds(6f);
         playerScoreManager.SetMenuButtonActiveOrDeactive(true);
         PlayerManager.Instance.HardResetFinalScore();
-    }*/
+    }
 
+    private void ShowLeaderBanner()
+    {
+        if (GlobalEventBannerUI.Instance == null || playerManagerFinal == null)
+            return;
+
+        var ranking = playerManagerFinal.GetRoundRanking();
+
+        if (ranking == null || ranking.Count == 0 || ranking[0] == null)
+            return;
+
+        int winnerIndex = ranking[0].playerIndex;
+
+        if (winnerIndex == 0)
+        {
+            GlobalEventBannerUI.Instance.ShowBanner("CUTESY LEADS", Color.white);
+        }
+        else if (winnerIndex == 1)
+        {
+            GlobalEventBannerUI.Instance.ShowBanner("JOKESY LEADS", Color.white);
+        }
+    }
     public void ResetRounds()
     {
         currentRound = 0;

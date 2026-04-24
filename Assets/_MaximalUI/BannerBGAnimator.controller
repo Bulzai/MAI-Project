@@ -7,7 +7,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BannerBG
+  m_Name: ScoreboardBG
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -20,7 +20,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: ce33e05978110f542a2716fce05852f0, type: 2}
+  m_Motion: {fileID: 7400000, guid: 8e22fa2ca783d4a4e9cd4d76d9bdde01, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -32,7 +32,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ScoreboardBGAnimator
+  m_Name: BannerBGAnimator
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:

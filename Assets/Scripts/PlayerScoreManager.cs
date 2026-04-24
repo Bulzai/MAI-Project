@@ -139,6 +139,10 @@ public class PlayerScoreManager : MonoBehaviour
         menuButton.SetActive(isLastRound);
     }
 
+    public int GetScoreForPlayer(int playerIndex)
+    {
+        return _totalScores.GetValueOrDefault(playerIndex, 0);
+    }
 
     private void InternalShowScores(bool isLastRound)
     {
