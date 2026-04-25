@@ -405,6 +405,12 @@ public class ExtingSpawner : MonoBehaviour
         var fade = exting.AddComponent<FadeInAndLife>();
         fade.Init(spawnInterval);
 
+        var countdown = exting.GetComponentInChildren<MilkCountdown>();
+        if (countdown != null)
+        {
+            countdown.Init(spawnInterval);
+        }
+
         // Hook up pickup
         var pickup = exting.GetComponent<ExtinguisherPickUp>();
         if (pickup != null) pickup.Init(this);
