@@ -194,8 +194,44 @@ public class SpawnItem : MonoBehaviour
         {
             if (countdownInstance != null)
             {
-                countdownInstance.text = Mathf.CeilToInt(remaining).ToString();
-                countdownInstance.transform.position = item.transform.position + countdownOffset;
+                int display = Mathf.CeilToInt(remaining);
+                countdownInstance.text = display.ToString();
+
+                Color normalColor = new Color(224f / 255f, 187f / 255f, 120f / 255f); // #E0BB78
+
+                if (display <= 5)
+                {
+                    countdownInstance.color = Color.red;
+                }
+                else
+                {
+                    countdownInstance.color = normalColor;
+                    countdownInstance.transform.localScale = Vector3.one;
+                }
+
+                Vector3 finalPosition = item.transform.position + countdownOffset;
+
+                if (display <= 3)
+                {
+                    // SCALE (same logic as milk)
+                    float targetScale = (display == 3) ? 1.35f : 1.25f;
+                    countdownInstance.transform.localScale = Vector3.one * targetScale;
+
+                    // SHAKE
+                    float shakeAmount = 0.2f;
+                    finalPosition += new Vector3(
+                        UnityEngine.Random.Range(-shakeAmount, shakeAmount),
+                        UnityEngine.Random.Range(-shakeAmount, shakeAmount),
+                        0f
+                    );
+                }
+                else
+                {
+                    // reset scale when not in last 3 seconds
+                    countdownInstance.transform.localScale = Vector3.one;
+                }
+
+                countdownInstance.transform.position = finalPosition;
                 countdownInstance.transform.rotation = Quaternion.identity;
             }
 
