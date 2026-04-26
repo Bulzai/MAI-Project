@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,9 @@ public class FinalQuestionnairePanel : MonoBehaviour
 
     [Header("Questionnaire URL")]
     [SerializeField] private string questionnaireURL;
+
+    [SerializeField] private GameObject copiedFeedbackText;
+    [SerializeField] private float feedbackDuration = 1.2f;
 
     private void OnEnable()
     {
@@ -18,8 +22,25 @@ public class FinalQuestionnairePanel : MonoBehaviour
 
     public void CopySessionID()
     {
-        GUIUtility.systemCopyBuffer = SessionData.SessionID;
-        Debug.Log("Session ID copied: " + SessionData.SessionID);
+        string sessionID = sessionIDText.text;
+
+        GUIUtility.systemCopyBuffer = sessionID;
+
+        // Show feedback
+        if (copiedFeedbackText != null)
+        {
+            StopAllCoroutines();
+            StartCoroutine(ShowCopiedFeedback());
+        }
+    }
+
+    private IEnumerator ShowCopiedFeedback()
+    {
+        copiedFeedbackText.SetActive(true);
+
+        yield return new WaitForSeconds(feedbackDuration);
+
+        copiedFeedbackText.SetActive(false);
     }
 
     public void OpenQuestionnaire()

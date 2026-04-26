@@ -12,6 +12,9 @@ public class RoundController : MonoBehaviour
     [Header("Transition")]
     [SerializeField] private Animator transitionAnimator; // Hier den Animator zuweisen
 
+    [SerializeField] private GameObject scoreboardView;
+    [SerializeField] private GameObject questionnaireView;
+
     [SerializeField] private GameObject questionnairePanel;
 
     public GameObject EndScoreText;
@@ -57,10 +60,7 @@ public class RoundController : MonoBehaviour
         {
             EndScoreText.SetActive(true);
 
-            if (questionnairePanel != null)
-                questionnairePanel.SetActive(true);
-
-            StartCoroutine(EnableMenuButtonAfterDelay());
+            StartCoroutine(ShowQuestionnaireAfterDelay());
             return;
         }
 
@@ -115,6 +115,37 @@ public class RoundController : MonoBehaviour
         yield return new WaitForSeconds(6f);
         playerScoreManager.SetMenuButtonActiveOrDeactive(true);
         PlayerManager.Instance.HardResetFinalScore();
+    }
+
+    private IEnumerator ShowQuestionnaireAfterDelay()
+    {
+        // 1. Let players see final scoreboard
+        yield return new WaitForSeconds(5f);
+
+        // 2. START TRANSITION (fade to black)
+        Image transitionImage = transitionAnimator.GetComponent<Image>();
+        transitionImage.enabled = true;
+
+        transitionAnimator.SetTrigger("Play");
+
+        // wait until screen is covered
+        yield return new WaitForSeconds(1.1f);
+
+        // 3. SWITCH VIEWS while screen is hidden
+        if (scoreboardView != null)
+            scoreboardView.SetActive(false);
+
+        if (questionnaireView != null)
+            questionnaireView.SetActive(true);
+
+        // 4. small delay so new UI settles
+        yield return new WaitForSeconds(0.3f);
+
+        // 5. END TRANSITION (reveal questionnaire)
+        transitionImage.enabled = false;
+
+        // 6. enable buttons
+        playerScoreManager.SetMenuButtonActiveOrDeactive(true);
     }
 
     private void ShowLeaderBanner()
