@@ -14,11 +14,18 @@ public class PickUpItem : MonoBehaviour
         {
             Debug.Log("Item picked up: " + itemType);
 
+            PlayerInput playerInput = other.GetComponentInParent<PlayerInput>();
+
             // Tell the player to apply the effect
             other.GetComponent<PlayerItemHandler>().ApplyItem(itemType);
 
-            // Show popup near the correct player's health barokay 
-            PlayerInput playerInput = other.GetComponentInParent<PlayerInput>();
+            // Track aura collection per player
+            if (playerInput != null && GameMetricsLogger.Instance != null)
+            {
+                GameMetricsLogger.Instance.RegisterAuraCollected(playerInput.playerIndex, itemType);
+            }
+
+            // Show popup near the correct player's health bar
             if (playerInput != null && PopupTextManager.Instance != null)
             {
                 string popupText = GetPopupText(itemType);

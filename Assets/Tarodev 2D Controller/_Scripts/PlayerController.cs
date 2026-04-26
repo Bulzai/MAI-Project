@@ -146,6 +146,8 @@ namespace TarodevController
                 jumpPressed = true;
                 jumpHeld = true;
                 OnPlayerJumped?.Invoke();
+
+                GameMetricsLogger.Instance?.RegisterJump(_playerInput.playerIndex);
             }
             else if (context.canceled)
             {

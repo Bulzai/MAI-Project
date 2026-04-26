@@ -129,6 +129,11 @@ public class PlayerHealthSystem : MonoBehaviour
     {
         currentHealth -= amount;
 
+        if (_playerInput != null && GameMetricsLogger.Instance != null && amount > 0)
+        {
+            GameMetricsLogger.Instance.RegisterDamageTaken(_playerInput.playerIndex, amount);
+        }
+
         if (healthBarUI != null)
         {
             healthBarUI.SetHealth(currentHealth);
