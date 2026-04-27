@@ -90671,6 +90671,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 131488716}
   m_CullTransparentMesh: 1
+--- !u!1 &132386834 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1293603593108180, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
+  m_PrefabInstance: {fileID: 1053083801}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &134743103
 GameObject:
   m_ObjectHideFlags: 0
@@ -103759,6 +103764,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 464471019}
   m_CullTransparentMesh: 1
+--- !u!1 &466106347 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1293603593108180, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
+  m_PrefabInstance: {fileID: 533452254}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &471118195
 GameObject:
   m_ObjectHideFlags: 0
@@ -110991,7 +111001,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxRounds: 1
-  scoreDisplayTime: 15
+  scoreDisplayTime: 8
   transitionAnimator: {fileID: 2010682647}
   scoreboardView: {fileID: 1228359223}
   questionnaireView: {fileID: 1490246907}
@@ -231454,6 +231464,9 @@ MonoBehaviour:
   notReadyColor: {r: 0.8117647, g: 0, b: 0, a: 1}
   PlayerSelection: {fileID: 1754208610}
   MainMenu: {fileID: 1707829880}
+  pressTexts:
+  - {fileID: 466106347}
+  - {fileID: 132386834}
   joinButtonsInstructions:
   - {fileID: 398143194}
   - {fileID: 1119104533}

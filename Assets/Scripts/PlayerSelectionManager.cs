@@ -34,6 +34,8 @@ public class PlayerSelectionManager : MonoBehaviour
     [SerializeField] private GameObject PlayerSelection;
     [SerializeField] private GameObject MainMenu;
 
+    [SerializeField] private GameObject[] pressTexts; // the "PRESS" word
+
     [Header("UI Elements (Order: P1, P2, P3, P4)")]
     [SerializeField] private GameObject[] joinButtonsInstructions; // X button
     [SerializeField] private GameObject[] joinTextInstructions;    // "TO JOIN"
@@ -71,6 +73,10 @@ public class PlayerSelectionManager : MonoBehaviour
         if (readyTextInstructions != null)
             foreach (var obj in readyTextInstructions)
                 if (obj) obj.SetActive(false);
+
+        if (pressTexts != null)
+            foreach (var obj in pressTexts)
+                if (obj) obj.SetActive(true);
     }
     void OnDestroy()
     {
@@ -117,6 +123,9 @@ public class PlayerSelectionManager : MonoBehaviour
 
         if (readyTextInstructions != null && pIndex < readyTextInstructions.Length)
             readyTextInstructions[pIndex].SetActive(true);
+
+        if (pressTexts != null && pIndex < pressTexts.Length)
+            pressTexts[pIndex].SetActive(true);
         // ------------------------------
 
         Debug.Log($"Player joined: input={playerInput.playerIndex}");
@@ -141,6 +150,9 @@ public class PlayerSelectionManager : MonoBehaviour
 
         if (readyTextInstructions != null && pIndex < readyTextInstructions.Length)
             readyTextInstructions[pIndex].SetActive(false);
+
+        if (pressTexts != null && pIndex < pressTexts.Length)
+            pressTexts[pIndex].SetActive(true);
         // ---------------------------------------------
 
         _playerSelection.Remove(playerInput);
@@ -176,6 +188,9 @@ public class PlayerSelectionManager : MonoBehaviour
 
         if (readyTextInstructions != null && pIndex < readyTextInstructions.Length)
             readyTextInstructions[pIndex].SetActive(!data.IsReady);
+
+        if (pressTexts != null && pIndex < pressTexts.Length)
+            pressTexts[pIndex].SetActive(!data.IsReady);
         // -----------------------------------------------
 
         _playerSelection[playerInput] = data;
