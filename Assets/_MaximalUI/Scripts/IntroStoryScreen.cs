@@ -16,6 +16,9 @@ public class IntroStoryScreen : MonoBehaviour
     [SerializeField] private GameObject playerSelectionState;
     [SerializeField] private float lineDelay = 0.8f;
 
+    [SerializeField] private Animator transitionAnimator;
+    public static event System.Action OnFireTransitionAnimationStarted;
+
     private bool skipRequested = false;
     private bool isTyping = false;
 
@@ -96,6 +99,22 @@ public class IntroStoryScreen : MonoBehaviour
 
     public void ContinueToNext()
     {
+        StartCoroutine(TransitionToPlayerSelection());
+    }
+
+    private IEnumerator TransitionToPlayerSelection()
+    {
+        if (continueButton != null)
+            continueButton.interactable = false;
+
+        OnFireTransitionAnimationStarted?.Invoke();
+
+        Image transitionImage = transitionAnimator.GetComponent<Image>();
+        transitionImage.enabled = true;
+        transitionAnimator.SetTrigger("Play");
+
+        yield return new WaitForSeconds(1.1f);
+
         gameObject.SetActive(false);
 
         if (playerSelectionGameObject != null)
@@ -106,5 +125,9 @@ public class IntroStoryScreen : MonoBehaviour
 
         if (playerSelectionState != null)
             playerSelectionState.SetActive(true);
+
+        yield return new WaitForSeconds(0.45f);
+
+        transitionImage.enabled = false;
     }
 }

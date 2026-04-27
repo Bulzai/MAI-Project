@@ -39,8 +39,8 @@ public class SoundFXManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         // MAIN MENU EVENTS
-        PlayButtonEvents.OnPlayButtonSelected += PlayPlayButtonSelectSFX;
-        PlayButtonEvents.OnPlayButtonSubmitted += PlayTransitionSFX;
+        //PlayButtonEvents.OnPlayButtonSelected += PlayPlayButtonSelectSFX;
+        //PlayButtonEvents.OnPlayButtonSubmitted += PlayTransitionSFX;
         QuitButtonEvents.OnQuitButtonSelected += PlayQuitButtonSelectSFX;
         QuitButtonEvents.OnQuitButtonSubmitted += PlayQuitButtonSubmitSFX;
         QuitButtonEvents.OnQuitButtonDeselected += StopQuitButtonSelectSFX;
@@ -132,6 +132,7 @@ public class SoundFXManager : MonoBehaviour
 
         // Transition Events
         SurpriseBoxState.OnFireTransitionAnimationStarted += PlayTransitionSFX;
+        IntroStoryScreen.OnFireTransitionAnimationStarted += PlayTransitionSFX;
 
     }
 

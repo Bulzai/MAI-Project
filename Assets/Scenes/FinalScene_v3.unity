@@ -492,6 +492,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 19490365}
+        m_TargetAssemblyTypeName: MenuFireTransition, Assembly-CSharp
+        m_MethodName: PlayFireTransitionAnimation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
       - m_Target: {fileID: 1707829880}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -112302,11 +112314,11 @@ RectTransform:
   - {fileID: 1228359224}
   - {fileID: 1490246908}
   - {fileID: 238950885}
+  - {fileID: 593394601}
   - {fileID: 1856140569}
   - {fileID: 538661468}
   - {fileID: 1824151386}
   - {fileID: 713111450}
-  - {fileID: 593394601}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
