@@ -18,7 +18,7 @@ public class PopupText : MonoBehaviour
 
         if (isImportant)
         {
-            lifeTime = 1.5f;
+            lifeTime = 1f;
             moveSpeed = 0.6f;
             transform.localScale = Vector3.one * 1.5f;
         }
