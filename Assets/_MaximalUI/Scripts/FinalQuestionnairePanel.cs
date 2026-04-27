@@ -5,32 +5,53 @@ using UnityEngine;
 public class FinalQuestionnairePanel : MonoBehaviour
 {
     [SerializeField] private TMP_Text sessionIDText;
+    [SerializeField] private TMP_Text versionText;
 
     [Header("Questionnaire URL")]
     [SerializeField] private string questionnaireURL;
 
+    [Header("Copy Feedback")]
     [SerializeField] private GameObject copiedFeedbackText;
     [SerializeField] private float feedbackDuration = 1.2f;
+
+    private Coroutine feedbackRoutine;
 
     private void OnEnable()
     {
         if (sessionIDText != null)
-        {
             sessionIDText.text = "Your Session ID: " + SessionData.SessionID;
-        }
+
+        if (versionText != null)
+            versionText.text = "Game Version: A";
+
+        if (copiedFeedbackText != null)
+            copiedFeedbackText.SetActive(false);
     }
 
     public void CopySessionID()
     {
-        string sessionID = sessionIDText.text;
+        GUIUtility.systemCopyBuffer = SessionData.SessionID;
 
-        GUIUtility.systemCopyBuffer = sessionID;
-
-        // Show feedback
         if (copiedFeedbackText != null)
         {
-            StopAllCoroutines();
-            StartCoroutine(ShowCopiedFeedback());
+            if (feedbackRoutine != null)
+                StopCoroutine(feedbackRoutine);
+
+            feedbackRoutine = StartCoroutine(ShowCopiedFeedback());
+        }
+    }
+
+    public void OpenQuestionnaire()
+    {
+        GUIUtility.systemCopyBuffer = SessionData.SessionID;
+
+        if (!string.IsNullOrEmpty(questionnaireURL))
+        {
+            Application.OpenURL(questionnaireURL);
+        }
+        else
+        {
+            Debug.LogWarning("Questionnaire URL is empty.");
         }
     }
 
@@ -41,20 +62,6 @@ public class FinalQuestionnairePanel : MonoBehaviour
         yield return new WaitForSeconds(feedbackDuration);
 
         copiedFeedbackText.SetActive(false);
-    }
-
-    public void OpenQuestionnaire()
-    {
-        GUIUtility.systemCopyBuffer = SessionData.SessionID;
-        Debug.Log("Opening questionnaire. Session ID copied: " + SessionData.SessionID);
-
-        if (!string.IsNullOrEmpty(questionnaireURL))
-        {
-            Application.OpenURL(questionnaireURL);
-        }
-        else
-        {
-            Debug.LogWarning("Questionnaire URL is empty.");
-        }
+        feedbackRoutine = null;
     }
 }
