@@ -492,18 +492,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 19490365}
-        m_TargetAssemblyTypeName: MenuFireTransition, Assembly-CSharp
-        m_MethodName: PlayFireTransitionAnimation
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 1707829880}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -1014,6 +1002,11 @@ PrefabInstance:
 --- !u!4 &26247319 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
+  m_PrefabInstance: {fileID: 26247318}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &26247320 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1293603593108180, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
   m_PrefabInstance: {fileID: 26247318}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &30628840
@@ -100034,7 +100027,7 @@ Transform:
   m_GameObject: {fileID: 291631270}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.048046, y: 2.34714, z: 0}
+  m_LocalPosition: {x: 15.048046, y: 2.47, z: 0}
   m_LocalScale: {x: 1.7046506, y: 1.7046506, z: 1.7046506}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -102317,7 +102310,7 @@ Transform:
   m_GameObject: {fileID: 398143194}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -14.038076, y: 2.3471403, z: 0}
+  m_LocalPosition: {x: -14.2, y: 2.47, z: 0}
   m_LocalScale: {x: 1.7046506, y: 1.7046506, z: 1.7046506}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -107007,6 +107000,7 @@ MonoBehaviour:
   playerSelectionGameObject: {fileID: 1754208610}
   playerSelectionState: {fileID: 849097961}
   lineDelay: 0.8
+  transitionAnimator: {fileID: 2010682647}
 --- !u!1 &597207895
 GameObject:
   m_ObjectHideFlags: 0
@@ -110597,6 +110591,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
   m_PrefabInstance: {fileID: 753579097}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &753579099 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1293603593108180, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
+  m_PrefabInstance: {fileID: 753579097}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &761398362
 GameObject:
   m_ObjectHideFlags: 0
@@ -112480,7 +112479,7 @@ Transform:
   m_GameObject: {fileID: 842110104}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -14.038077, y: 2.34714, z: 0}
+  m_LocalPosition: {x: -14.038077, y: 2.47, z: 0}
   m_LocalScale: {x: 1.7046506, y: 1.7046506, z: 1.7046506}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -117776,7 +117775,7 @@ Transform:
   m_GameObject: {fileID: 1119104533}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.048044, y: 2.34714, z: 0}
+  m_LocalPosition: {x: 15.048044, y: 2.47, z: 0}
   m_LocalScale: {x: 1.7046506, y: 1.7046506, z: 1.7046506}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -132549,11 +132548,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791771920}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1801999811 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1293603593108180, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
-  m_PrefabInstance: {fileID: 533452254}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1801999812 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
@@ -133875,6 +133869,11 @@ PrefabInstance:
 --- !u!4 &1856812886 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
+  m_PrefabInstance: {fileID: 1856812885}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1856812887 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1293603593108180, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
   m_PrefabInstance: {fileID: 1856812885}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1858366929
@@ -224721,7 +224720,7 @@ GameObject:
   - component: {fileID: 2010682648}
   - component: {fileID: 2010682647}
   m_Layer: 5
-  m_Name: Image
+  m_Name: FireTransitionImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224889,11 +224888,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &2017991809 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1293603593108180, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
-  m_PrefabInstance: {fileID: 1053083801}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2017991810 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
@@ -226112,6 +226106,11 @@ PrefabInstance:
 --- !u!4 &2048417338 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4915952705314410, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
+  m_PrefabInstance: {fileID: 2048417337}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2048417339 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1293603593108180, guid: 92d60a2e17d9a4bb8bd3801b14fc2926, type: 3}
   m_PrefabInstance: {fileID: 2048417337}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2050046633
@@ -231446,18 +231445,15 @@ MonoBehaviour:
   joinButtonsInstructions:
   - {fileID: 398143194}
   - {fileID: 1119104533}
-  - {fileID: 0}
-  - {fileID: 0}
-  PressTextInstructions:
-  - {fileID: 1801999811}
-  - {fileID: 2017991809}
-  - {fileID: 0}
-  - {fileID: 0}
-  readyInstructions:
+  joinTextInstructions:
+  - {fileID: 1856812887}
+  - {fileID: 753579099}
+  readyButtonsInstructions:
   - {fileID: 842110104}
   - {fileID: 291631270}
-  - {fileID: 0}
-  - {fileID: 0}
+  readyTextInstructions:
+  - {fileID: 26247320}
+  - {fileID: 2048417339}
 --- !u!4 &2072970265
 Transform:
   m_ObjectHideFlags: 0

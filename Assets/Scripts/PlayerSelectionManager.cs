@@ -34,14 +34,12 @@ public class PlayerSelectionManager : MonoBehaviour
     [SerializeField] private GameObject PlayerSelection;
     [SerializeField] private GameObject MainMenu;
 
-
     [Header("UI Elements (Order: P1, P2, P3, P4)")]
-    [Tooltip("Zieh hier die 'Press A' Objekte rein")]
-    [SerializeField] private GameObject[] joinButtonsInstructions;
-    [SerializeField] private GameObject[] PressTextInstructions;
+    [SerializeField] private GameObject[] joinButtonsInstructions; // X button
+    [SerializeField] private GameObject[] joinTextInstructions;    // "TO JOIN"
 
-    [Tooltip("Zieh hier die 'Press Y' Objekte rein")]
-    [SerializeField] private GameObject[] readyInstructions;
+    [SerializeField] private GameObject[] readyButtonsInstructions; // Y button
+    [SerializeField] private GameObject[] readyTextInstructions;    // "TO GET READY"
 
     void Awake()
     {
@@ -58,15 +56,21 @@ public class PlayerSelectionManager : MonoBehaviour
     }
     private void ResetUI()
     {
-        // Sicherstellen, dass am Anfang alles richtig steht
         if (joinButtonsInstructions != null)
-            foreach (var obj in joinButtonsInstructions) if (obj) obj.SetActive(true);
+            foreach (var obj in joinButtonsInstructions)
+                if (obj) obj.SetActive(true);
 
-        if (PressTextInstructions != null)
-            foreach (var obj in PressTextInstructions) if (obj) obj.SetActive(true);
+        if (joinTextInstructions != null)
+            foreach (var obj in joinTextInstructions)
+                if (obj) obj.SetActive(true);
 
-        if (readyInstructions != null)
-            foreach (var obj in readyInstructions) if (obj) obj.SetActive(false);
+        if (readyButtonsInstructions != null)
+            foreach (var obj in readyButtonsInstructions)
+                if (obj) obj.SetActive(false);
+
+        if (readyTextInstructions != null)
+            foreach (var obj in readyTextInstructions)
+                if (obj) obj.SetActive(false);
     }
     void OnDestroy()
     {
@@ -98,19 +102,21 @@ public class PlayerSelectionManager : MonoBehaviour
         data.ReadyText.color = notReadyColor;
 
         //  UI Logik für Join ---
-        int pIndex = playerInput.playerIndex; // Das ist 0, 1, 2 oder 3
+        int pIndex = playerInput.playerIndex;
 
-        // "Press A" ausschalten
+        // hide X + "TO JOIN"
         if (joinButtonsInstructions != null && pIndex < joinButtonsInstructions.Length)
-        {
             joinButtonsInstructions[pIndex].SetActive(false);
-        }
 
-        // "Press Y" einschalten
-        if (readyInstructions != null && pIndex < readyInstructions.Length)
-        {
-            readyInstructions[pIndex].SetActive(true);
-        }
+        if (joinTextInstructions != null && pIndex < joinTextInstructions.Length)
+            joinTextInstructions[pIndex].SetActive(false);
+
+        // show Y + "TO GET READY"
+        if (readyButtonsInstructions != null && pIndex < readyButtonsInstructions.Length)
+            readyButtonsInstructions[pIndex].SetActive(true);
+
+        if (readyTextInstructions != null && pIndex < readyTextInstructions.Length)
+            readyTextInstructions[pIndex].SetActive(true);
         // ------------------------------
 
         Debug.Log($"Player joined: input={playerInput.playerIndex}");
@@ -122,14 +128,19 @@ public class PlayerSelectionManager : MonoBehaviour
         // --- NEU: UI zurücksetzen wenn Spieler geht ---
         int pIndex = playerInput.playerIndex;
 
+        // show X + "TO JOIN"
         if (joinButtonsInstructions != null && pIndex < joinButtonsInstructions.Length)
-            joinButtonsInstructions[pIndex].SetActive(true); // A wieder anzeigen
+            joinButtonsInstructions[pIndex].SetActive(true);
 
-        if (PressTextInstructions != null && pIndex < PressTextInstructions.Length)
-            PressTextInstructions[pIndex].SetActive(true); // A wieder anzeigen
+        if (joinTextInstructions != null && pIndex < joinTextInstructions.Length)
+            joinTextInstructions[pIndex].SetActive(true);
 
-        if (readyInstructions != null && pIndex < readyInstructions.Length)
-            readyInstructions[pIndex].SetActive(false); // Y ausblenden
+        // hide Y + "TO GET READY"
+        if (readyButtonsInstructions != null && pIndex < readyButtonsInstructions.Length)
+            readyButtonsInstructions[pIndex].SetActive(false);
+
+        if (readyTextInstructions != null && pIndex < readyTextInstructions.Length)
+            readyTextInstructions[pIndex].SetActive(false);
         // ---------------------------------------------
 
         _playerSelection.Remove(playerInput);
@@ -157,18 +168,14 @@ public class PlayerSelectionManager : MonoBehaviour
 
         // --- UI Instruction ("Press Y") togglen ---
         int pIndex = playerInput.playerIndex;
-        if (readyInstructions != null && pIndex < readyInstructions.Length)
-        {
-            // Wenn er Ready ist -> Text weg. 
-            // Wenn er NICHT Ready ist -> Text da (damit er weiß, dass er Y drücken kann).
-            readyInstructions[pIndex].SetActive(!data.IsReady);
-        }
-        if (PressTextInstructions != null && pIndex < PressTextInstructions.Length)
-        {
-            // Wenn er Ready ist -> Text weg. 
-            // Wenn er NICHT Ready ist -> Text da (damit er weiß, dass er Y drücken kann).
-            PressTextInstructions[pIndex].SetActive(!data.IsReady);
-        }
+
+        // if ready: hide Y + "TO GET READY"
+        // if not ready: show Y + "TO GET READY"
+        if (readyButtonsInstructions != null && pIndex < readyButtonsInstructions.Length)
+            readyButtonsInstructions[pIndex].SetActive(!data.IsReady);
+
+        if (readyTextInstructions != null && pIndex < readyTextInstructions.Length)
+            readyTextInstructions[pIndex].SetActive(!data.IsReady);
         // -----------------------------------------------
 
         _playerSelection[playerInput] = data;
