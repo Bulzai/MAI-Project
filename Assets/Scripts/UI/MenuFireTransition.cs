@@ -1,66 +1,65 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MenuFireTransition : MonoBehaviour
 {
-   public StateChanger _stateChanger;
-   public GameObject playerSelectionGameObject;
-   public GameObject playerSelectionState;
-   [SerializeField] private Animator transitionAnimator;
-   public MainMenu mainMenu;
-   private bool isPlaying = false;
+    [SerializeField] private Animator transitionAnimator;
+    [SerializeField] private MainMenu mainMenu;
+    [SerializeField] private IntroStoryScreen introStoryScreen;
 
+    private bool isPlaying = false;
 
-   private void Awake()
-   {
-       
-       PlayerSelectionManager.OnReturnToMainMenu += SetIsPlayingFalse;
-       GameEvents.OnMenuStateEntered += SetIsPlayingFalse;
-       GameEvents.OnScoreStateEntered += SetIsPlayingFalse;
+    private void Awake()
+    {
+        PlayerSelectionManager.OnReturnToMainMenu += SetIsPlayingFalse;
+        GameEvents.OnMenuStateEntered += SetIsPlayingFalse;
+        GameEvents.OnScoreStateEntered += SetIsPlayingFalse;
+    }
 
-   }
-   private void OnDestroy()
-   {
-       PlayerSelectionManager.OnReturnToMainMenu -= SetIsPlayingFalse;
-       GameEvents.OnMenuStateEntered -= SetIsPlayingFalse;
-       GameEvents.OnScoreStateEntered -= SetIsPlayingFalse;
+    private void OnDestroy()
+    {
+        PlayerSelectionManager.OnReturnToMainMenu -= SetIsPlayingFalse;
+        GameEvents.OnMenuStateEntered -= SetIsPlayingFalse;
+        GameEvents.OnScoreStateEntered -= SetIsPlayingFalse;
+    }
 
-   }
+    public void PlayFireTransitionAnimation()
+    {
+        Debug.Log("is playing: " + isPlaying);
 
-   public void PlayFireTransitionAnimation()
-   {
-       Debug.Log("is playing: " + isPlaying);
-       if (isPlaying) return;
-       isPlaying = true;
-       StartCoroutine(ExecuteTransitionThenChangeState());
-   }
-   
-   private IEnumerator ExecuteTransitionThenChangeState()
-   {
-       // 1. Das Parent-Objekt finden und aktivieren
-       transitionAnimator.gameObject.GetComponent<Image>().enabled = true;
+        if (isPlaying) return;
 
-       // 2. Animation Trigger setzen
-       transitionAnimator.SetTrigger("Play");
-        
-       yield return new WaitForSeconds(1f);
+        isPlaying = true;
+        StartCoroutine(ExecuteTransitionThenShowIntro());
+    }
 
-       playerSelectionGameObject.SetActive(true);
-       _stateChanger.GoToPlayerSelectState();
-       playerSelectionState.SetActive(true);
+    private IEnumerator ExecuteTransitionThenShowIntro()
+    {
+        Image transitionImage = transitionAnimator.GetComponent<Image>();
+        transitionImage.enabled = true;
 
-       mainMenu.PlayGame(); 
-       yield return new WaitForSeconds(0.5f);
-       transitionAnimator.gameObject.GetComponent<Image>().enabled = false;
-       isPlaying = false;
-       yield return new WaitForSeconds(0.5f);
+        transitionAnimator.SetTrigger("Play");
 
-   }
-   private void SetIsPlayingFalse()
-   {
-       isPlaying = false;
-   }
+        yield return new WaitForSeconds(1f);
+
+        // Hide main menu
+        if (mainMenu != null)
+            mainMenu.PlayGame();
+
+        // Show intro instead of going directly to player selection
+        if (introStoryScreen != null)
+            introStoryScreen.StartIntro();
+
+        yield return new WaitForSeconds(0.5f);
+
+        transitionImage.enabled = false;
+        isPlaying = false;
+    }
+
+    private void SetIsPlayingFalse()
+    {
+        isPlaying = false;
+    }
 }

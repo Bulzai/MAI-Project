@@ -85,7 +85,7 @@ public class PlaceItemState : MonoBehaviour
             OnGuideScrollOpen?.Invoke();
 
             // 2. Wait for the screen to stay visible
-            float showTime = 6.0f;
+            float showTime = 8.0f;
             yield return new WaitForSeconds(showTime);
 
             // 3. Trigger the "Close" animation

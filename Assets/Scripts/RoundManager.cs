@@ -18,6 +18,7 @@ public class RoundController : MonoBehaviour
     [SerializeField] private GameObject questionnairePanel;
 
     public GameObject EndScoreText;
+    public GameObject GoToThankYouScreenButton;
     public PlayerManager playerManagerFinal;
     private PlayerScoreManager playerScoreManager;
 
@@ -44,6 +45,7 @@ public class RoundController : MonoBehaviour
         currentRound++;
         bool isLastRound = currentRound >= maxRounds;
         EndScoreText.SetActive(false);
+        GoToThankYouScreenButton.SetActive(false);
 
         ShowLeaderBanner();
 
@@ -59,6 +61,7 @@ public class RoundController : MonoBehaviour
         if (isLastRound)
         {
             EndScoreText.SetActive(true);
+            GoToThankYouScreenButton.SetActive(true);
 
             StartCoroutine(ShowQuestionnaireAfterDelay());
             return;
@@ -120,7 +123,7 @@ public class RoundController : MonoBehaviour
     private IEnumerator ShowQuestionnaireAfterDelay()
     {
         // 1. Let players see final scoreboard
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(90f);
 
         // 2. START TRANSITION (fade to black)
         Image transitionImage = transitionAnimator.GetComponent<Image>();

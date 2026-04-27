@@ -5,18 +5,16 @@ public class GIFManager : MonoBehaviour
     public static GIFManager Instance;
     private GameObject currentGIF;
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
     }
 
     public void ShowGIF(string gifName)
     {
-        // Destroy old
         if (currentGIF != null)
             Destroy(currentGIF);
 
-        // Load the new prefab
         GameObject prefab = Resources.Load<GameObject>("ItemDescriptionGIFs/" + gifName);
 
         if (!prefab)
@@ -25,7 +23,6 @@ public class GIFManager : MonoBehaviour
             return;
         }
 
-        // Create new GIF
         currentGIF = Instantiate(prefab, transform);
         currentGIF.SetActive(true);
     }
@@ -33,6 +30,9 @@ public class GIFManager : MonoBehaviour
     public void HideGIF()
     {
         if (currentGIF != null)
-            currentGIF.SetActive(false);
+        {
+            Destroy(currentGIF);
+            currentGIF = null;
+        }
     }
 }
