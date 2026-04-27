@@ -101995,8 +101995,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4288468978
-  m_fontColor: {r: 0.9490196, g: 0.84313726, b: 0.6117647, a: 1}
+    rgba: 4294901502
+  m_fontColor: {r: 0.9960785, g: 0.9960785, b: 0.9960785, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -108129,7 +108129,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 145, y: -41}
+  m_AnchoredPosition: {x: 145, y: -14}
   m_SizeDelta: {x: 1418.65, y: 911.1794}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &770055026
@@ -108214,7 +108214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cca50fa746007bc449dc806f2b885ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRounds: 1
+  maxRounds: 4
   scoreDisplayTime: 7
   transitionAnimator: {fileID: 2010682647}
   scoreboardView: {fileID: 1228359223}
@@ -129442,8 +129442,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4288468978
-  m_fontColor: {r: 0.9490196, g: 0.84313726, b: 0.6117647, a: 1}
+    rgba: 4294901502
+  m_fontColor: {r: 0.9960785, g: 0.9960785, b: 0.9960785, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

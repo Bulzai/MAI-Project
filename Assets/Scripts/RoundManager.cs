@@ -143,7 +143,7 @@ public class RoundController : MonoBehaviour
             questionnairePanel.SetActive(false);
 
         if (scoreboardView != null)
-            scoreboardView.SetActive(true);
+            scoreboardView.SetActive(false);
 
         if (playerScoreManager != null)
             playerScoreManager.SetMenuButtonActiveOrDeactive(false);
