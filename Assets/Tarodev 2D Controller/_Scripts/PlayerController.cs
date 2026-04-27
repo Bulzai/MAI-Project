@@ -138,9 +138,15 @@ namespace TarodevController
             if (context.started)
             {
                 if (lockedControls) return;
+
                 jumpPressed = true;
                 jumpHeld = true;
                 OnPlayerJumped?.Invoke();
+
+                if (_playerInput != null && GameMetricsLogger.Instance != null)
+                {
+                    GameMetricsLogger.Instance.RegisterJump(_playerInput.playerIndex);
+                }
             }
             else if (context.canceled)
             {

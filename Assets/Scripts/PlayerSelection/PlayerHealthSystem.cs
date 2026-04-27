@@ -114,6 +114,11 @@ public class PlayerHealthSystem : MonoBehaviour
     {
         currentHealth -= amount;
 
+        if (_playerInput != null && GameMetricsLogger.Instance != null && amount > 0)
+        {
+            GameMetricsLogger.Instance.RegisterDamageTaken(_playerInput.playerIndex, amount);
+        }
+
         if (isItemDmg && amount > 0)
         {
             OnPlayerTakeDamage?.Invoke();
@@ -127,7 +132,9 @@ public class PlayerHealthSystem : MonoBehaviour
         if (currentHealth <= 0)
         {
             OnPlayerDeath?.Invoke();
-            animator.PlayDeath();
+
+            if (animator != null)
+                animator.PlayDeath();
 
             if (_playerInput != null && GameMetricsLogger.Instance != null)
             {

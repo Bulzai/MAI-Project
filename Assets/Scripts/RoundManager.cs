@@ -6,13 +6,16 @@ public class RoundController : MonoBehaviour
 {
     public static event System.Action OnScoreboardTransitionStarted;
     [Header("Round Settings")]
-    [SerializeField] private int maxRounds = 3;
+    [SerializeField] private int maxRounds = 4;
     [SerializeField] private float scoreDisplayTime = 5f;
 
     [Header("Transition")]
     [SerializeField] private Animator transitionAnimator; // Hier den Animator zuweisen
 
+    [Header("Final Questionnaire Flow")]
+    [SerializeField] private GameObject scoreboardView;
     [SerializeField] private GameObject questionnairePanel;
+    [SerializeField] private float finalScoreDisplayTime = 3.5f;
 
     public GameObject EndScoreText;
     public PlayerManager playerManagerFinal;
@@ -24,6 +27,9 @@ public class RoundController : MonoBehaviour
     private void Awake()
     {
         playerScoreManager = GetComponent<PlayerScoreManager>();
+
+        if (questionnairePanel != null)
+            questionnairePanel.SetActive(false);
     }
 
     private void OnEnable()
@@ -40,19 +46,19 @@ public class RoundController : MonoBehaviour
     {
         currentRound++;
         bool isLastRound = currentRound >= maxRounds;
-        EndScoreText.SetActive(false);
+
+        if (EndScoreText != null)
+            EndScoreText.SetActive(false);
 
         if (questionnairePanel != null)
             questionnairePanel.SetActive(false);
 
         if (isLastRound)
         {
-            EndScoreText.SetActive(true);
+            if (EndScoreText != null)
+                EndScoreText.SetActive(true);
 
-            if (questionnairePanel != null)
-                questionnairePanel.SetActive(true);
-
-            StartCoroutine(EnableMenuButtonAfterDelay());
+            StartCoroutine(ShowQuestionnaireAfterDelay());
             return;
         }
 
@@ -64,59 +70,80 @@ public class RoundController : MonoBehaviour
 
     private IEnumerator AdvanceAfterDelay()
     {
-        // 1. Warte die normale Anzeigezeit des Scoreboards ab
         yield return new WaitForSeconds(scoreDisplayTime);
 
-        // --- START DER TRANSITION ---
         Image transitionImage = transitionAnimator.GetComponent<Image>();
 
-        // 2. Transition-Image aktivieren und Animation starten
         transitionImage.enabled = true;
         transitionAnimator.SetTrigger("Play");
         OnScoreboardTransitionStarted?.Invoke();
-        
-        // 3. Warten, bis der Bildschirm verdeckt ist (deine 1.1 Sekunden)
+
         yield return new WaitForSeconds(1.1f);
 
-        // --- LOGIK IM HINTERGRUND (Bildschirm ist verdeckt) ---
-
-        // 4. Scoreboard UI ausblenden
         if (playerScoreManager != null && playerScoreManager.scoreboardUI != null)
             playerScoreManager.scoreboardUI.SetActive(false);
 
-        // 5. Spiel-Logik für die nächste Runde vorbereiten
         if (currentRound < maxRounds)
         {
             if (playerManagerFinal != null)
                 playerManagerFinal.ResetEliminations();
 
-            // State wechseln
             GameEvents.ChangeState(GameState.SurpriseBoxState);
         }
 
-        // 6. Ein winziger Moment warten, damit der neue State geladen ist
         yield return new WaitForSeconds(0.45f);
 
-        // 7. Transition-Image wieder deaktivieren
         transitionImage.enabled = false;
-        // --- ENDE DER TRANSITION ---
     }
 
-    private IEnumerator EnableMenuButtonAfterDelay()
+    private IEnumerator ShowQuestionnaireAfterDelay()
     {
-        yield return new WaitForSeconds(6f);
-        playerScoreManager.SetMenuButtonActiveOrDeactive(true);
-        PlayerManager.Instance.HardResetFinalScore();
+        yield return new WaitForSeconds(finalScoreDisplayTime);
+
+        Image transitionImage = null;
+
+        if (transitionAnimator != null)
+        {
+            transitionImage = transitionAnimator.GetComponent<Image>();
+
+            if (transitionImage != null)
+                transitionImage.enabled = true;
+
+            transitionAnimator.SetTrigger("Play");
+
+            yield return new WaitForSeconds(1.1f);
+        }
+
+        if (scoreboardView != null)
+            scoreboardView.SetActive(false);
+
+        if (questionnairePanel != null)
+            questionnairePanel.SetActive(true);
+
+        yield return new WaitForSeconds(0.3f);
+
+        if (transitionImage != null)
+            transitionImage.enabled = false;
+
+        if (playerScoreManager != null)
+            playerScoreManager.SetMenuButtonActiveOrDeactive(true);
     }
 
     public void ResetRounds()
     {
         currentRound = 0;
+
         if (_advanceRoutine != null)
         {
             StopCoroutine(_advanceRoutine);
             _advanceRoutine = null;
         }
+
+        if (questionnairePanel != null)
+            questionnairePanel.SetActive(false);
+
+        if (scoreboardView != null)
+            scoreboardView.SetActive(true);
 
         if (playerScoreManager != null)
             playerScoreManager.SetMenuButtonActiveOrDeactive(false);

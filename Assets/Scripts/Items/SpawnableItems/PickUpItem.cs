@@ -1,23 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PickUpItem : MonoBehaviour
 {
-    public enum ItemType { Slow, Repel, Speed,Damage,Confusion}  
+    public enum ItemType { Slow, Repel, Speed, Damage, Confusion }
     public ItemType itemType;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player")) return;
+
+        Debug.Log("Item picked up: " + itemType);
+
+        PlayerInput playerInput = other.GetComponentInParent<PlayerInput>();
+
+        other.GetComponent<PlayerItemHandler>()?.ApplyItem(itemType);
+
+        if (playerInput != null && GameMetricsLogger.Instance != null)
         {
-
-            Debug.Log("Item picked up: " + itemType);
-            // Tell the player to apply the effect
-            other.GetComponent<PlayerItemHandler>().ApplyItem(itemType);
-
-            // Destroy or disable the item
-            Destroy(gameObject);
+            GameMetricsLogger.Instance.RegisterAuraCollected(playerInput.playerIndex, itemType);
         }
+
+        Destroy(gameObject);
     }
 }

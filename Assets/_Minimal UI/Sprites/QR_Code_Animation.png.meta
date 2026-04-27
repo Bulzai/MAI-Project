@@ -1,0 +1,1038 @@
+fileFormatVersion: 2
+guid: bedb66347373b384d8ef150abd849bf8
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: QR_Code_Animation_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 13824
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fb2a3e0cffc68e45bf01d7803f6bc43
+      internalID: 675253468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_1
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 13824
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17bc89068d9c0d7428eb0b3145e7e4f0
+      internalID: -1779813741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_2
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 13824
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c046519e2ccfdf4ea83f17873572c96
+      internalID: -566192758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_3
+      rect:
+        serializedVersion: 2
+        x: 6912
+        y: 13824
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3914c0160dd907447ab0d6545bfc14f5
+      internalID: 1080870041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_4
+      rect:
+        serializedVersion: 2
+        x: 9216
+        y: 13824
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e10ad69c38f569b4f90a1a260062c258
+      internalID: -68639802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_5
+      rect:
+        serializedVersion: 2
+        x: 11520
+        y: 13824
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2f412a9fcb1baf44949d1f96ef7ff12
+      internalID: 353544193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 11520
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f486025a4c1222048934312ae6be0f7f
+      internalID: -1505205687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_7
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 11520
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7523bcc37dcbc6940a71742f4ec410d7
+      internalID: -430404520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_8
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 11520
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2eeba1f6ac648554984a56ca6aeac2f3
+      internalID: 127442691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_9
+      rect:
+        serializedVersion: 2
+        x: 6912
+        y: 11520
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e348d1e0d803823449ae0e3abed004f5
+      internalID: -949198572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_10
+      rect:
+        serializedVersion: 2
+        x: 9216
+        y: 11520
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4be05877a1c8ff84caad9fd6aca226c7
+      internalID: -1058944056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_11
+      rect:
+        serializedVersion: 2
+        x: 11520
+        y: 11520
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 635fe711d508c0042833af81a7de1641
+      internalID: -724016069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 9216
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f16f660464e75446bbf12e10288f706
+      internalID: 1322497298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_13
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 9216
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8ba9a0122438994294b29edcf4539ff
+      internalID: -924754984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_14
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 9216
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a10b40ccd8c2509468b88c1c5badffc8
+      internalID: 1917016932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_15
+      rect:
+        serializedVersion: 2
+        x: 6912
+        y: 9216
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 291c8686a6481bd49bbbc23137be94ad
+      internalID: -232961642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_16
+      rect:
+        serializedVersion: 2
+        x: 9216
+        y: 9216
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8caf52714652b146b72875a9da9b275
+      internalID: 1458503193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_17
+      rect:
+        serializedVersion: 2
+        x: 11520
+        y: 9216
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ef3c71f9f7ae1a4c8a3e8c5481ac101
+      internalID: 969322033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6912
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa1e6911bf0cec1448e9ed7f0dad5784
+      internalID: -960042788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_19
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 6912
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 870e34673273e704792158266b0dc97d
+      internalID: 1568404862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_20
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 6912
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbbd0c95394699c45b8a7f7a07a0a367
+      internalID: -1946445727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_21
+      rect:
+        serializedVersion: 2
+        x: 6912
+        y: 6912
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5952c840f29d5c04fad6f5c1f5344e00
+      internalID: 1848878890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_22
+      rect:
+        serializedVersion: 2
+        x: 9216
+        y: 6912
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0d1b7cd4be2a394a84a2b575d82bfac
+      internalID: -456761265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_23
+      rect:
+        serializedVersion: 2
+        x: 11520
+        y: 6912
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01e3faccd8862dd4fb929610e3cf2c43
+      internalID: -117008656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4608
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4c989e14e191f7409eecde39effdeed
+      internalID: 1550149004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_25
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 4608
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9689a1325c5c07045927df8882c24e45
+      internalID: -599139287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_26
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 4608
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f17fa88af88e460429ab8963f1da0a84
+      internalID: 184582265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_27
+      rect:
+        serializedVersion: 2
+        x: 6912
+        y: 4608
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33f05616ef7e0794a974df6ac55463d0
+      internalID: -905052321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_28
+      rect:
+        serializedVersion: 2
+        x: 9216
+        y: 4608
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7faba1791997514db0d004503465690
+      internalID: -93923321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_29
+      rect:
+        serializedVersion: 2
+        x: 11520
+        y: 4608
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b00587ee07f6eb49b22f25d5e2fcc7e
+      internalID: -376146647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2304
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2c591dc5cf6f12439684f1d2b86093a
+      internalID: 452372495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_31
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 2304
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f74e0c22a9a8d9448e3777d032dabe9
+      internalID: -1295341017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_32
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 2304
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 021ed7abff48c77459f1c3232d72dee7
+      internalID: 1619673820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_33
+      rect:
+        serializedVersion: 2
+        x: 6912
+        y: 2304
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73def5901f72314479a9ebdd5202911b
+      internalID: -1208478204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_34
+      rect:
+        serializedVersion: 2
+        x: 9216
+        y: 2304
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b54ce99bdf7ad64390afa8fca8c8829
+      internalID: -109653429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_35
+      rect:
+        serializedVersion: 2
+        x: 11520
+        y: 2304
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf3f354e33c2b964c8ad36d5481f9f56
+      internalID: 546873684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_36
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95aa07053cd876a44a74355b7e075eaf
+      internalID: -1084859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_37
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 0
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4aab290c2687c874b9fd3b5d45aca418
+      internalID: 1351976757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_38
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 0
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 027202b17ee04834e97761c4a25c78d1
+      internalID: 612131947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_39
+      rect:
+        serializedVersion: 2
+        x: 6912
+        y: 0
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c6b692af6576664ab79da46f1cd44ae
+      internalID: 680745367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_40
+      rect:
+        serializedVersion: 2
+        x: 9216
+        y: 0
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce3aa7c2532b6fe4fa8e81ef7ace6610
+      internalID: 1248615925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QR_Code_Animation_41
+      rect:
+        serializedVersion: 2
+        x: 11520
+        y: 0
+        width: 2304
+        height: 2304
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc4ceda57e15f4f4ea250390e9d66b8a
+      internalID: -296360464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      QR_Code_Animation_0: 675253468
+      QR_Code_Animation_1: -1779813741
+      QR_Code_Animation_10: -1058944056
+      QR_Code_Animation_11: -724016069
+      QR_Code_Animation_12: 1322497298
+      QR_Code_Animation_13: -924754984
+      QR_Code_Animation_14: 1917016932
+      QR_Code_Animation_15: -232961642
+      QR_Code_Animation_16: 1458503193
+      QR_Code_Animation_17: 969322033
+      QR_Code_Animation_18: -960042788
+      QR_Code_Animation_19: 1568404862
+      QR_Code_Animation_2: -566192758
+      QR_Code_Animation_20: -1946445727
+      QR_Code_Animation_21: 1848878890
+      QR_Code_Animation_22: -456761265
+      QR_Code_Animation_23: -117008656
+      QR_Code_Animation_24: 1550149004
+      QR_Code_Animation_25: -599139287
+      QR_Code_Animation_26: 184582265
+      QR_Code_Animation_27: -905052321
+      QR_Code_Animation_28: -93923321
+      QR_Code_Animation_29: -376146647
+      QR_Code_Animation_3: 1080870041
+      QR_Code_Animation_30: 452372495
+      QR_Code_Animation_31: -1295341017
+      QR_Code_Animation_32: 1619673820
+      QR_Code_Animation_33: -1208478204
+      QR_Code_Animation_34: -109653429
+      QR_Code_Animation_35: 546873684
+      QR_Code_Animation_36: -1084859
+      QR_Code_Animation_37: 1351976757
+      QR_Code_Animation_38: 612131947
+      QR_Code_Animation_39: 680745367
+      QR_Code_Animation_4: -68639802
+      QR_Code_Animation_40: 1248615925
+      QR_Code_Animation_41: -296360464
+      QR_Code_Animation_5: 353544193
+      QR_Code_Animation_6: -1505205687
+      QR_Code_Animation_7: -430404520
+      QR_Code_Animation_8: 127442691
+      QR_Code_Animation_9: -949198572
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

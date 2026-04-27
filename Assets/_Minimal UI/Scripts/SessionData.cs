@@ -3,7 +3,7 @@ using UnityEngine;
 public class SessionData : MonoBehaviour
 {
     public static string SessionID;
-    public static string BuildType = "Minimal"; // Change this in Maximal build
+    public static string BuildType = "Minimal";
 
     private void Awake()
     {
