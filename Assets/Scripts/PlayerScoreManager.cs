@@ -20,7 +20,6 @@ public class PlayerScoreManager : MonoBehaviour
     public GameObject scoreboardUI;
     [SerializeField] private Transform rowsContainer; // has Row_1..Row_4 (each with ScoreboardRowUI)
 
-
     [Header("Last Round UI")]
     [SerializeField] private GameObject menuButton; // <-- assign in inspector
 

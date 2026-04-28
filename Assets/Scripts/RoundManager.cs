@@ -17,6 +17,9 @@ public class RoundController : MonoBehaviour
     [SerializeField] private GameObject questionnairePanel;
     [SerializeField] private float finalScoreDisplayTime = 3.5f;
 
+    [Header("Final Button")]
+    [SerializeField] private GameObject goToEndScreenButton;
+
     public GameObject EndScoreText;
     public PlayerManager playerManagerFinal;
     private PlayerScoreManager playerScoreManager;
@@ -28,8 +31,12 @@ public class RoundController : MonoBehaviour
     {
         playerScoreManager = GetComponent<PlayerScoreManager>();
 
+        if (goToEndScreenButton != null)
+            goToEndScreenButton.SetActive(false);
+
         if (questionnairePanel != null)
             questionnairePanel.SetActive(false);
+
     }
 
     private void OnEnable()
@@ -47,6 +54,9 @@ public class RoundController : MonoBehaviour
         currentRound++;
         bool isLastRound = currentRound >= maxRounds;
 
+        if (goToEndScreenButton != null)
+            goToEndScreenButton.SetActive(false);
+
         if (EndScoreText != null)
             EndScoreText.SetActive(false);
 
@@ -58,7 +68,9 @@ public class RoundController : MonoBehaviour
             if (EndScoreText != null)
                 EndScoreText.SetActive(true);
 
-            StartCoroutine(ShowQuestionnaireAfterDelay());
+            if (goToEndScreenButton != null)
+                goToEndScreenButton.SetActive(true);
+
             return;
         }
 
@@ -138,6 +150,9 @@ public class RoundController : MonoBehaviour
             StopCoroutine(_advanceRoutine);
             _advanceRoutine = null;
         }
+
+        if (goToEndScreenButton != null)
+            goToEndScreenButton.SetActive(false);
 
         if (questionnairePanel != null)
             questionnairePanel.SetActive(false);
