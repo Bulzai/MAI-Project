@@ -100044,7 +100044,7 @@ Transform:
   m_GameObject: {fileID: 291631270}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.048046, y: 2.47, z: 0}
+  m_LocalPosition: {x: 15.04804, y: 2.47, z: 0}
   m_LocalScale: {x: 1.7046506, y: 1.7046506, z: 1.7046506}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -102633,7 +102633,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 35, y: 65}
+  m_AnchoredPosition: {x: 140, y: 65}
   m_SizeDelta: {x: 1402.2528, y: 709.5846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &415600750
@@ -109819,7 +109819,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &713111450
 RectTransform:
   m_ObjectHideFlags: 0
@@ -110866,7 +110866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cca50fa746007bc449dc806f2b885ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRounds: 1
+  maxRounds: 5
   scoreDisplayTime: 8
   transitionAnimator: {fileID: 2010682647}
   scoreboardView: {fileID: 1228359223}
@@ -112366,7 +112366,7 @@ Transform:
   m_GameObject: {fileID: 842110104}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -14.038077, y: 2.47, z: 0}
+  m_LocalPosition: {x: -14.2, y: 2.47, z: 0}
   m_LocalScale: {x: 1.7046506, y: 1.7046506, z: 1.7046506}
   m_ConstrainProportionsScale: 0
   m_Children: []
