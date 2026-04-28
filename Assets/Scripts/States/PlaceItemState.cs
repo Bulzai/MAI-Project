@@ -98,7 +98,7 @@ public class PlaceItemState : MonoBehaviour
             if (guideScreen != null)
                 guideScreen.SetActive(true);
 
-            float showTime = 6.0f;
+            float showTime = 8.0f;
             yield return new WaitForSeconds(showTime);
 
             if (guideScreen != null)

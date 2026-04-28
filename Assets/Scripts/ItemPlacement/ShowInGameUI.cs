@@ -41,7 +41,6 @@ public class ShowInGameUI : MonoBehaviour
     private void Hide()
     {
 
-
         if (tmpText != null)
             tmpText.enabled = false;
 
