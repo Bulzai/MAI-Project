@@ -20,18 +20,21 @@ public class MusicManager : MonoBehaviour
         GameEvents.OnScoreStateEntered += RestartMainMenuMusic;
         PauseMenu.OnPauseSFXEvent += PauseMusic;
         PauseMenu.OnResumeSFXEvent += ResumeMusic;
-
+        GameEvents.OnMainGameStateEntered += StopMainMenuMusic;
+        GameEvents.OnMainGameStateEntered += PlayMainGameMusicStart;
     }
 
     private void OnDestroy()
     {
         GameEvents.OnMenuStateEntered -= RestartMainMenuMusic;
         GameEvents.OnScoreStateEntered -= RestartMainMenuMusic;
+        GameEvents.OnMainGameStateEntered -= StopMainMenuMusic;
+        GameEvents.OnMainGameStateEntered -= PlayMainGameMusicStart;
         PauseMenu.OnPauseSFXEvent -= PauseMusic;
         PauseMenu.OnResumeSFXEvent -= ResumeMusic;
 
     }
-    
+
     void UpdateCurrentPlaying()
     {
         // Call this whenever you change music
@@ -64,7 +67,7 @@ public class MusicManager : MonoBehaviour
         }
         gameIsPaused = false;
     }
-    
+
     private void RestartMainMenuMusic()
     {
         cancelIntroToLoop = true;
@@ -78,8 +81,8 @@ public class MusicManager : MonoBehaviour
         if (mainMenuMusic.isPlaying) return;
         mainMenuMusic.Play();
     }
-    
-    
+
+
     private void StopMainMenuMusic()
     {
         StartCoroutine(FadeOutAndStop(mainMenuMusic, 3f));
@@ -103,7 +106,7 @@ public class MusicManager : MonoBehaviour
         source.Stop();
         source.volume = startVolume; // reset for next time
     }
-    
+
     /*
     private void PlayMainGameMusicStart()
     {
@@ -126,7 +129,7 @@ public class MusicManager : MonoBehaviour
     private void PlayMainGameMusicStart()
     {
         if (MainGameMusicStart.isPlaying) return;
-            MainGameMusicStart.Play();
+        MainGameMusicStart.Play();
     }
     private IEnumerator PlayLoopWhenIntroDone()
     {
