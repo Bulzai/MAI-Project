@@ -12,6 +12,7 @@ TagManager:
   - Candle
   - GridItem
   - GIFCamera
+  - Dangerzone
   layers:
   - Default
   - TransparentFX
