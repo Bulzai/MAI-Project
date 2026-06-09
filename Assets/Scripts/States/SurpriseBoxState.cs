@@ -103,7 +103,7 @@ public class SurpriseBoxState : MonoBehaviour
         }));
     }
 
-    public IEnumerator PlayCountdown( Action onFinished, int seconds = 2, float timing = 0.6f)
+    public IEnumerator PlayCountdown( Action onFinished, int seconds = 3, float timing = 0.45f)
     {
         yield return new WaitForSeconds(0.7f);
         OnSurpriseBoxStateCounterStarted?.Invoke();

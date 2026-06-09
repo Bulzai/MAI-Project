@@ -34,6 +34,11 @@ public class RoundController : MonoBehaviour
         GameEvents.OnScoreStateEntered -= HandleScoreState;
     }
 
+    public int getMaxRounds()
+    {
+        return maxRounds;
+    }
+
     private void HandleScoreState()
     {
         currentRound++;
