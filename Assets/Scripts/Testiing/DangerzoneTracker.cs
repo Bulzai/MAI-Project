@@ -68,7 +68,6 @@ public class DangerzoneTracker : MonoBehaviour
         if(playerRoot != null && playersDangerzoneTime.ContainsKey(playerRoot))
         {
             playersDangerzoneTime[playerRoot][roundManager.currentRound] += Time.deltaTime;
-            Debug.Log($"{playerRoot.name} tracking time: {playersDangerzoneTime[playerRoot][roundManager.currentRound]}");
         }
 
     }

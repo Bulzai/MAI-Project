@@ -106,7 +106,7 @@ public class PlayerDeathTrack : MonoBehaviour
         // check if the round controller has reached max rounds.
         if (roundManager.currentRound >= roundManager.getMaxRounds())
         {
-            Debug.LogWarning("GAME OVER: FINAL MATCH DEATH CAUSES");
+            Debug.Log("GAME OVER: FINAL MATCH DEATH CAUSES");
 
             foreach (var entry in playerDeathRecords)
             {
