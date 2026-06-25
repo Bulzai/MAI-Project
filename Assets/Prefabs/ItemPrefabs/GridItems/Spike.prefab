@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 7432882348710643068}
   - component: {fileID: 206564354665691013}
   m_Layer: 6
-  m_Name: HitCollider
+  m_Name: SpikeCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

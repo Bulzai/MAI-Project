@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1995605555963193135}
   - component: {fileID: 7481269362220866464}
   m_Layer: 0
-  m_Name: candle_drop
+  m_Name: CandleDrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -388,6 +388,7 @@ public class PlayerManager : MonoBehaviour
                     health.spriteRenderer.color = health.originalColor;
 
                 health.currentHealth = health.maxHealth;
+                health.lastTouched = null;
                 health.isBurning = false;
                 // If SetOnFire() actually sets burning, consider renaming;
                 // keeping your call to preserve behavior.

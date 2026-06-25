@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
 using TarodevController;
+using UnityEditor.Rendering;
 
 public class PlayerHealthSystem : MonoBehaviour
 {
@@ -23,6 +24,12 @@ public class PlayerHealthSystem : MonoBehaviour
     public bool isBurning = false;
     public bool isConfused = false;
 
+    public string lastTouched;
+    private bool isDead;
+
+    private string knockbackSource;
+    [SerializeField] private float knockbackExpiryTime;
+    [SerializeField] private float fallExpiryTime;
 
     public SpriteRenderer spriteRenderer;
     public Color originalColor;
@@ -61,12 +68,14 @@ public class PlayerHealthSystem : MonoBehaviour
     }
     private void OnEnable()
     {
+        BreakableCracker.OnCrackerBroken += HandleCrackerBroken;
         GameEvents.OnMainGameStateExited += ResetConfusion;
         GameEvents.OnMainGameStateEntered += ResetConfusion;
         PlaceItemState.CountDownFinished += RespawnPlayer;
     }
     private void OnDisable()
     {
+        BreakableCracker.OnCrackerBroken -= HandleCrackerBroken;
         PlaceItemState.CountDownFinished -= RespawnPlayer;
         GameEvents.OnMainGameStateExited -= ResetConfusion;
         GameEvents.OnMainGameStateEntered -= ResetConfusion;
@@ -108,14 +117,34 @@ public class PlayerHealthSystem : MonoBehaviour
     {
         while (isBurning)
         {
-            TakeDamage(burnDamagePerTick,false);
+            if (!isDead)
+                TakeDamage(burnDamagePerTick, false, "Burnt");
             yield return new WaitForSeconds(burnTickInterval);
         }
     }
 
-    public void TakeDamage(int amount, bool isItemDmg)
+    private void HandleCrackerBroken()
     {
+        fallExpiryTime = Time.time + 2f;
+    }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GridItem")) lastTouched = collision.gameObject.name;
+
+        if (collision.CompareTag("Flame")) lastTouched = "Flame";
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        // if player is dead, do not delete
+        if (isDead) return;
+
+        if (collision.gameObject.name == lastTouched) lastTouched = null;
+    }
+
+    public void TakeDamage(int amount, bool isItemDmg, string cause)
+    {
         currentHealth -= amount;
 
         if (isItemDmg && amount > 0)
@@ -129,12 +158,32 @@ public class PlayerHealthSystem : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            lastTouched = cause;
+
+            // check for knockback deaths
+            if (Time.time <= knockbackExpiryTime)
+            {
+                if (cause != knockbackSource && cause != "CandyCane")
+                {
+                    lastTouched = $"{cause} (pushed by {knockbackSource})";
+                }
+            }
+            // check for falling deaths
+            else if (Time.time <= fallExpiryTime)
+            {
+                lastTouched = "Cracker";
+            }
+
+
+                isDead = true;
+
             OnPlayerDeath?.Invoke();
             animator.PlayDeath();
             Die();
-            
+
         }
     }
+
     private IEnumerator FlashRed()
     {
         if (spriteRenderer == null)
@@ -156,6 +205,7 @@ public class PlayerHealthSystem : MonoBehaviour
     }
     void RespawnPlayer()
     {
+        isDead = false;
         playerController.EnableControls();
         DisableOrEnableFireSprite(true);
         //DisableOrEnableCollider(true);
@@ -231,7 +281,7 @@ public class PlayerHealthSystem : MonoBehaviour
     {
         transform.GetChild(0).GetChild(0).gameObject.SetActive(enabled);
     }
-    public void Knockback(Vector2 direction, float strength)
+    public void Knockback(Vector2 direction, float strength, string source)
     {
         // Normalize for safety
         if (direction.sqrMagnitude > 0.0001f) direction.Normalize();
@@ -247,6 +297,9 @@ public class PlayerHealthSystem : MonoBehaviour
 
         pc.AddImpulse(impulse);
         OnPlayerKnockedBack?.Invoke();
+
+        knockbackSource = source;
+        knockbackExpiryTime = Time.time + 2f;
     }
 
 }

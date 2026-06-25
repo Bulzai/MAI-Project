@@ -15,7 +15,7 @@ public class PlayerSurvivalTracker : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
@@ -27,7 +27,7 @@ public class PlayerSurvivalTracker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -37,11 +37,11 @@ public class PlayerSurvivalTracker : MonoBehaviour
 
         int currentRoundIndex = roundManager.currentRound;
 
-        if (currentRoundIndex >= 0 && currentRoundIndex < roundManager.getMaxRounds()) 
+        if (currentRoundIndex >= 0 && currentRoundIndex < roundManager.getMaxRounds())
         {
             var ranking = PlayerManager.Instance.GetRoundRanking();
 
-            foreach(PlayerInput pi in PlayerManager.Instance.players)
+            foreach (PlayerInput pi in PlayerManager.Instance.players)
             {
                 if (pi == null || GameState.MainGameState != GameEvents.CurrentState) continue;
 
@@ -63,27 +63,32 @@ public class PlayerSurvivalTracker : MonoBehaviour
             Debug.LogError("PlayerSurvivalTracker: RoundController not found in scene!");
         }
 
-        GameEvents.OnMainGameStateEntered += StartSurvivalTracking;
+        GameEvents.OnMainGameStateEntered += InitializeSurvivalTracking;
         GameEvents.OnPlayerEliminated += HandleSurvivalEnd;
         GameEvents.OnMainGameStateExited += StopTrackingOnMatchEnd;
+
+        GameEvents.OnScoreStateEntered += PrintFinalSurvivalTime;
+        GameEvents.OnScoreStateEntered += ResetSurvivalTimeList;
     }
 
     private void OnDisable()
     {
-        GameEvents.OnMainGameStateEntered -= StartSurvivalTracking;
+        GameEvents.OnMainGameStateEntered -= InitializeSurvivalTracking;
         GameEvents.OnPlayerEliminated -= HandleSurvivalEnd;
         GameEvents.OnMainGameStateExited -= StopTrackingOnMatchEnd;
+
+        GameEvents.OnScoreStateEntered -= PrintFinalSurvivalTime;
+        GameEvents.OnScoreStateEntered -= ResetSurvivalTimeList;
     }
 
-    private void StartSurvivalTracking()
+    private void InitializeSurvivalTracking()
     {
         if (roundManager == null) return;
 
         isTrackingTime = true;
-        int currentRoundIndex = roundManager.currentRound;
 
         // init entries for all players
-        foreach (PlayerInput pi in PlayerManager.Instance.players) 
+        foreach (PlayerInput pi in PlayerManager.Instance.players)
         {
             if (pi == null) continue;
 
@@ -109,6 +114,39 @@ public class PlayerSurvivalTracker : MonoBehaviour
 
     private void StopTrackingOnMatchEnd()
     {
-        isTrackingTime=false;
+        isTrackingTime = false;
+    }
+
+    private void PrintFinalSurvivalTime()
+    {
+        if (roundManager == null) return;
+
+        // check if the round controller has reached max rounds.
+        if (roundManager.currentRound >= roundManager.getMaxRounds())
+        {
+            Debug.LogWarning("GAME OVER: FINAL MATCH SURVIVAL TIMES");
+
+            foreach (var entry in playerSurvivalTimes)
+            {
+                string playerName = entry.Key;
+                float[] roundTimes = entry.Value;
+
+                string roundBreakdownText = "";
+
+                for (int i = 0; i < roundTimes.Length; i++)
+                {
+                    roundBreakdownText += $"Round {i + 1}: {roundTimes[i]:F2}s | ";
+                }
+
+                Debug.Log($"{playerName} -> {roundBreakdownText}");
+            }
+
+        }
+    }
+
+    private void ResetSurvivalTimeList()
+    {
+        if (roundManager.currentRound >= roundManager.getMaxRounds())
+            playerSurvivalTimes.Clear();
     }
 }

@@ -138,7 +138,7 @@ public class LaserController : MonoBehaviour
             if (player != null)
             {
                 Debug.Log("Player hit by Laser." + laserDamage + " damage took");
-                player.TakeDamage(laserDamage, true);
+                player.TakeDamage(laserDamage, true, gameObject.name);
             }
             else
             {

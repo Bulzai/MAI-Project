@@ -13,6 +13,7 @@ TagManager:
   - GridItem
   - GIFCamera
   - Dangerzone
+  - Flame
   layers:
   - Default
   - TransparentFX
