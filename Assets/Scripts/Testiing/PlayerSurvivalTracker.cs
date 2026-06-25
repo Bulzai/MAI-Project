@@ -124,7 +124,7 @@ public class PlayerSurvivalTracker : MonoBehaviour
         // check if the round controller has reached max rounds.
         if (roundManager.currentRound >= roundManager.getMaxRounds())
         {
-            Debug.LogWarning("GAME OVER: FINAL MATCH SURVIVAL TIMES");
+            Debug.Log("GAME OVER: FINAL MATCH SURVIVAL TIMES");
 
             foreach (var entry in playerSurvivalTimes)
             {
