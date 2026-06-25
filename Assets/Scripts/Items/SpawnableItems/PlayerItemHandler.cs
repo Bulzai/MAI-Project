@@ -312,7 +312,7 @@ public class PlayerItemHandler : MonoBehaviour
             if (!uniquePlayers.Add(root)) continue;
 
             var health = root.GetComponent<PlayerHealthSystem>();
-            if (health != null) health.TakeDamage(damagePerTick, true);
+            if (health != null) health.TakeDamage(damagePerTick, true, gameObject.name);
         }
     }
 

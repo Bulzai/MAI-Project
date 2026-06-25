@@ -50,14 +50,14 @@ public class Projectile2D : MonoBehaviour
             var player = other.gameObject.GetComponent<PlayerHealthSystem>();
             if (player != null)
             {
-                player.TakeDamage(damage, true);
+                player.TakeDamage(damage, true, gameObject.name);
 
                 // Direction from projectile -> player
                 Vector2 dir = (other.transform.position - transform.position);
                 if (dir.sqrMagnitude > 0.0001f) dir.Normalize();
 
 
-                player.Knockback(dir, knockBackStrength);
+                player.Knockback(dir, knockBackStrength, gameObject.name);
             }
             else
             {
@@ -78,14 +78,14 @@ public class Projectile2D : MonoBehaviour
             var player = other.GetComponent<PlayerHealthSystem>();
             if (player != null)
             {
-                player.TakeDamage(damage, true);
+                player.TakeDamage(damage, true, gameObject.name);
 
                 // Direction from projectile -> player
                 Vector2 dir = (other.transform.position - transform.position);
                 if (dir.sqrMagnitude > 0.0001f) dir.Normalize();
 
 
-                player.Knockback(dir, knockBackStrength);
+                player.Knockback(dir, knockBackStrength, gameObject.name);
             }
             else
             {

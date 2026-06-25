@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 2832930965220591239}
   - component: {fileID: 2855242538641702707}
   m_Layer: 0
-  m_Name: candy_cane
+  m_Name: CandyCane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

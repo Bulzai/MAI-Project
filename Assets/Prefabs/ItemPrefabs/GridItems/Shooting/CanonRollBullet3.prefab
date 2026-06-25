@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 300608397831589637}
   - component: {fileID: 1085324235682310819}
   m_Layer: 0
-  m_Name: Bullet3
+  m_Name: CanonRollBullet3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
