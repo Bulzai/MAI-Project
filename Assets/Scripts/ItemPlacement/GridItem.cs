@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 //things to make sure: supported Items should only have a collider thinner than one cell and it should not overlap 2 cells
@@ -44,6 +45,8 @@ public class GridItem : MonoBehaviour
     public FacingDirection currentFacingDirection;
     //public int length = 1; // 1 or 2
     private List<Vector3Int> occupiedCells = new List<Vector3Int>();
+
+    public PlayerInput player;
 
 
     [SerializeField] private bool isBomb = false;
@@ -343,8 +346,14 @@ public class GridItem : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             if (GameEvents.CurrentState == GameState.SurpriseBoxState)
-                OnPlayerSelecedtItem?.Invoke(gameObject);
-            
+            {
+                PlayerInput pi = other.GetComponentInParent<PlayerInput>();
+                if (pi != null)
+                {
+                    player = pi;
+                    OnPlayerSelecedtItem?.Invoke(gameObject);
+                }
+            }            
         }
     }
 

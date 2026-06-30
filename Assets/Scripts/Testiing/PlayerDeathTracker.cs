@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerDeathTrack : MonoBehaviour
+public class PlayerDeathTracker : MonoBehaviour
 {
-    public static PlayerDeathTrack Instance { get; private set; }
+    public static PlayerDeathTracker Instance { get; private set; }
 
     private Dictionary<string, string[]> playerDeathRecords = new Dictionary<string, string[]>();
 
     private RoundController roundManager;
+    private string sessionID;
+
+    private float lastLog = -999f;
+    private float cooldown = 1f;
 
     private void Awake()
     {
@@ -25,7 +29,7 @@ public class PlayerDeathTrack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        sessionID = TestingManager.Instance.GetSessionID();
     }
 
     // Update is called once per frame
@@ -45,7 +49,7 @@ public class PlayerDeathTrack : MonoBehaviour
         GameEvents.OnMainGameStateEntered += InitializeRoundTracking;
         GameEvents.OnPlayerEliminated += RecordPlayerDeath;
         GameEvents.OnScoreStateEntered += PrintFinalPlayerDeathList;
-        //GameEvents.OnMenuStateEntered += ResetPlayerDeathList;
+        GameEvents.OnMenuStateEntered += ResetPlayerDeathList;
     }
 
     private void OnDisable()
@@ -53,7 +57,7 @@ public class PlayerDeathTrack : MonoBehaviour
         GameEvents.OnMainGameStateEntered -= InitializeRoundTracking;
         GameEvents.OnPlayerEliminated -= RecordPlayerDeath;
         GameEvents.OnScoreStateEntered -= PrintFinalPlayerDeathList;
-        //GameEvents.OnMenuStateEntered -= ResetPlayerDeathList;
+        GameEvents.OnMenuStateEntered -= ResetPlayerDeathList;
     }
 
     private void InitializeRoundTracking()
@@ -74,14 +78,18 @@ public class PlayerDeathTrack : MonoBehaviour
 
     private void RecordPlayerDeath(PlayerInput eliminatedPlayer)
     {
+        // prevent double call
+        if (Time.time - lastLog < cooldown) return;
+        lastLog = Time.time;
+
         if (eliminatedPlayer == null || roundManager == null) return;
 
-        int currentRoundIndex = roundManager.currentRound;
+        int round = roundManager.currentRound;
         string playerName = eliminatedPlayer.gameObject.name;
 
         var healthSystem = eliminatedPlayer.GetComponentInChildren<PlayerHealthSystem>();
 
-        if (playerDeathRecords.ContainsKey(playerName) && currentRoundIndex >= 0 && currentRoundIndex < roundManager.getMaxRounds())
+        if (playerDeathRecords.ContainsKey(playerName) && round >= 0 && round < roundManager.getMaxRounds())
         {
             string finalCause = "Unknown";
 
@@ -93,9 +101,12 @@ public class PlayerDeathTrack : MonoBehaviour
             finalCause = finalCause.Trim();
             finalCause = finalCause.ToLower();
 
-            playerDeathRecords[playerName][currentRoundIndex] = finalCause;
+            playerDeathRecords[playerName][round] = finalCause;
 
-            Debug.Log($"{playerName} died in round {currentRoundIndex + 1} from {finalCause}");
+            string data = $"{sessionID},{round+1},Death,{playerName},{finalCause}";    
+            TestingLogger.LogToCSV(data);
+
+            Debug.Log($"{playerName} died in round {round + 1} from {finalCause}");
         }
     }
 
@@ -128,14 +139,6 @@ public class PlayerDeathTrack : MonoBehaviour
 
     private void ResetPlayerDeathList()
     {
-        StartCoroutine(WaitAndResetList());
-    }
-
-    private IEnumerator WaitAndResetList()
-    {
-        yield return new WaitForSeconds(3);
-
-        if (roundManager.currentRound >= roundManager.getMaxRounds())
-            playerDeathRecords.Clear();
+        playerDeathRecords.Clear();
     }
 }
