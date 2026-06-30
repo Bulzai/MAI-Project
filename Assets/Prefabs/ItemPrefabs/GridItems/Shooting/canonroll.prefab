@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 2767159703154924588}
   - component: {fileID: 3685308726705563545}
   m_Layer: 6
-  m_Name: Effect_Shooter
+  m_Name: canonroll
   m_TagString: GridItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
