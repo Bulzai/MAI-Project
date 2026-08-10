@@ -6,7 +6,9 @@ public class CursorController : MonoBehaviour
 {
     public static event Action OnCantPlaceItem;
     public static event Action OnEnableCursor;
-    
+    public static event Action<GameObject> OnSkipItemPlacement;
+
+
     [Header("Movement Settings")]
     [SerializeField] private float maxMoveSpeed = 25f;   // Units per second
     [SerializeField] private float stickDeadzone = 0.2f; // Ignore tiny stick inputs
@@ -225,6 +227,8 @@ public class CursorController : MonoBehaviour
 
         if (gridItem != null)
         {
+            OnSkipItemPlacement?.Invoke(gridItem.gameObject);
+
             Destroy(gridItem.gameObject);
             gridItem = null;
         }

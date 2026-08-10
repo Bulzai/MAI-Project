@@ -20,14 +20,26 @@ public class ItemPlacementTracker : MonoBehaviour
     private void OnEnable()
     {
         GridItem.OnGridItemPlaced += RecordItemPlacement;
+        CursorController.OnSkipItemPlacement += RecordItemSkip;
     }
 
     private void OnDisable()
     {
         GridItem.OnGridItemPlaced -= RecordItemPlacement;
+        CursorController.OnSkipItemPlacement -= RecordItemSkip;
     }
 
     private void RecordItemPlacement (GameObject placedGridItem)
+    {
+        LogItem(placedGridItem, true);
+    }
+
+    private void RecordItemSkip (GameObject skippedGridItem)
+    {
+        LogItem(skippedGridItem, false);
+    }
+
+    private void LogItem (GameObject placedGridItem, bool isPlaced)
     {
         GridItem gridItem = placedGridItem.GetComponent<GridItem>();
         if (gridItem == null) return;
@@ -38,15 +50,19 @@ public class ItemPlacementTracker : MonoBehaviour
         itemName = itemName.Trim();
         itemName = itemName.ToLower();
 
-        Vector3 position = placedGridItem.transform.position;
 
-        RoundController roundController = Object.FindAnyObjectByType<RoundController>();
+        Vector3 position;
+
+        if (isPlaced) position = placedGridItem.transform.position;
+        else position = new Vector3(-999, -999, -999);
+
+            RoundController roundController = Object.FindAnyObjectByType<RoundController>();
         if (roundController == null) Debug.LogError("ItemPlacementTracker: RoundController not found in scene!");
         int round = roundController.currentRound;
 
         string data = "";
 
-        if (!isRandomPlacement) data = $"{round},ItemPlacement,{playerName},{itemName}:{position}";
+        if (!isRandomPlacement) data = $"{round+1},ItemPlacement,{itemName},{playerName}:{position}";
         else data = $"{round+1},ItemPlacement,COM,{position}";
 
         TestingLogger.LogToCSV(data);
