@@ -46,7 +46,7 @@ public class PlayerPositionTracker : MonoBehaviour
             if (health == null || health.currentHealth < 0) continue;
 
             Vector3 position = playerNoPI.position;
-            string data = $"{sessionID},{round+1},Position,{pi.gameObject.name},{position}";
+            string data = $"{round+1},Position,{pi.gameObject.name},{position}";
 
             TestingLogger.LogToCSV(data);
 

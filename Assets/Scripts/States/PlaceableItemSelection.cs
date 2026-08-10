@@ -61,7 +61,7 @@ public class PlaceableItemSelection : MonoBehaviour
     // MAIN LOGIC
     public void ToggleItemAvailability(GameObject itemPrefab, bool isSelected)
     {
-        if (!isSelected && activeItemPool.Count <= 1)
+        if (!isSelected && activeItemPool.Count <= 5)
         {
             LastItemWarning();
             Debug.LogWarning("Cannot deselect the last item! The Surprise Box needs at least one thing to spawn.");

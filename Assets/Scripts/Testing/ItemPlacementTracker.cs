@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class ItemPlacementTracker : MonoBehaviour
 {
-    private string sessionID;
     private bool isRandomPlacement = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        sessionID = TestingManager.Instance.GetSessionID();
     }
 
     // Update is called once per frame
@@ -48,11 +46,11 @@ public class ItemPlacementTracker : MonoBehaviour
 
         string data = "";
 
-        if (!isRandomPlacement) data = $"{sessionID},{round},ItemPlacement,{playerName},{itemName}:{position}";
-        else data = $"{sessionID},{round+1},ItemPlacement,COM,{position}";
+        if (!isRandomPlacement) data = $"{round},ItemPlacement,{playerName},{itemName}:{position}";
+        else data = $"{round+1},ItemPlacement,COM,{position}";
 
         TestingLogger.LogToCSV(data);
 
-        Debug.Log($"{sessionID}: item {itemName} placed at {position} in round {round + 1}");
+        Debug.Log($"item {itemName} placed at {position} in round {round + 1}");
     }
 }

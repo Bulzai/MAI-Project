@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class FadeInAndLife : MonoBehaviour
@@ -9,6 +10,8 @@ public class FadeInAndLife : MonoBehaviour
     private float lifetime;
     [SerializeField] private float fadeInDuration = 1f;
     [SerializeField] private float blinkDuration = 3;
+
+    private bool collected = false;
 
     public void Init(float lifetimeSeconds)
     {
@@ -26,6 +29,21 @@ public class FadeInAndLife : MonoBehaviour
         sr.color = c;
 
         StartCoroutine(FadeInThenLife());
+    }
+
+    public void MarkAsCollected ()
+    {
+        collected = true;
+    }
+
+    private void MarkAsNotCollected()
+    {
+        int round = Object.FindAnyObjectByType<RoundController>().currentRound;
+
+        string data = $"{round+1},ExtinguisherCollection,{transform.position}:-999";
+        TestingLogger.LogToCSV(data);
+
+        Debug.Log($"Extinguisher Pickup: extinguisher not collected at {transform.position}.");
     }
 
     private IEnumerator FadeInThenLife()
@@ -57,6 +75,8 @@ public class FadeInAndLife : MonoBehaviour
             blinkTime += Time.deltaTime;
             yield return null;
         }
+
+        if (!collected) MarkAsNotCollected();
 
         Destroy(gameObject);
     }

@@ -17,10 +17,16 @@ public static class TestingLogger
         // check if files exists
         bool fileExists = File.Exists(path);
 
+        // TO DO ADD SO SESSION ID AND MODE ON TOP IS ONLY ON TOP
         using (StreamWriter writer = File.AppendText(path))
         {
-            if (!fileExists) writer.WriteLine("Mode,SessionID,Round,EventType,Name,Value");
-            writer.WriteLine($"{mode},{data}");
+            if (!fileExists)
+            {
+                writer.WriteLine($"{mode}");
+                writer.WriteLine($"{TestingManager.Instance.GetSessionID()}");
+                writer.WriteLine("Round,EventType,Name,Value");
+            }
+            writer.WriteLine($"{data}");
         }
     }
 }

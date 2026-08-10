@@ -12,7 +12,6 @@ public class PlayerSurvivalTracker : MonoBehaviour
     private Dictionary<string, float[]> playerSurvivalTimes = new Dictionary<string, float[]>();
 
     private RoundController roundManager;
-    private string sessionID;
     private bool isTrackingTime = false;
 
     private void Awake()
@@ -29,7 +28,6 @@ public class PlayerSurvivalTracker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sessionID = TestingManager.Instance.GetSessionID();
     }
 
     // Update is called once per frame
@@ -112,7 +110,7 @@ public class PlayerSurvivalTracker : MonoBehaviour
             float finalTime = playerSurvivalTimes[playerName][round];
             string time = finalTime.ToString("F2", CultureInfo.InvariantCulture);
 
-            string data = $"{sessionID},{round+1},SurvivalTime,{playerName},{time}";
+            string data = $"{round+1},SurvivalTime,{playerName},{time}";
             TestingLogger.LogToCSV(data);
 
             Debug.Log($"{playerName} died in round {round + 1} after surviving {finalTime:F2} seconds.");
