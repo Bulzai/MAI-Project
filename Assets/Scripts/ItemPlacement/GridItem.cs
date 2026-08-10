@@ -345,15 +345,15 @@ public class GridItem : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (GameEvents.CurrentState == GameState.SurpriseBoxState)
-            {
-                PlayerInput pi = other.GetComponentInParent<PlayerInput>();
-                if (pi != null)
-                {
-                    player = pi;
-                    OnPlayerSelecedtItem?.Invoke(gameObject);
-                }
-            }            
+            //if (GameEvents.CurrentState == GameState.SurpriseBoxState)
+            //{
+            //    PlayerInput pi = other.GetComponentInParent<PlayerInput>();
+            //    if (pi != null)
+            //    {
+            //        player = pi;
+            //        OnPlayerSelecedtItem?.Invoke(gameObject);
+            //    }
+            //}            
         }
     }
 
