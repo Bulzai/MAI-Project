@@ -46,7 +46,7 @@ public class ItemPlacementTracker : MonoBehaviour
 
         string data = "";
 
-        if (!isRandomPlacement) data = $"{round},ItemPlacement,{playerName},{itemName}:{position}";
+        if (!isRandomPlacement) data = $"{round},ItemPlacement,{itemName},COM:{position}";
         else data = $"{round+1},ItemPlacement,COM,{position}";
 
         TestingLogger.LogToCSV(data);
