@@ -60,6 +60,9 @@ public class ExtingSpawner : MonoBehaviour
     private bool _advanceRequested = false;
     private List<bool> spawnIsTriangle = new(); // true = triangle extinguisher, false = circle extinguisher
 
+    // track extinguisher stats
+    public static float ExtinguisherSpawnTime { get; private set; } = 0f;
+
     // ===============================================================
     // UNITY LIFECYCLE
     // ===============================================================
@@ -399,6 +402,9 @@ public class ExtingSpawner : MonoBehaviour
     {
         Vector3Int cell = finalSpawnCells[index];
         Vector3 pos = grid.CellToWorld(cell) + grid.cellSize / 2f;
+
+        // log spawn data
+        ExtinguisherSpawnTime = Time.time;
 
         GameObject prefabToUse = spawnIsTriangle[index] ? extinguisherPrefab : CircleExtinguisherPrefab;
         var exting = Instantiate(prefabToUse, pos, Quaternion.identity, extinguisherContainer);

@@ -10,7 +10,6 @@ public class PlayerDeathTracker : MonoBehaviour
     private Dictionary<string, string[]> playerDeathRecords = new Dictionary<string, string[]>();
 
     private RoundController roundManager;
-    private string sessionID;
 
     private float lastLog = -999f;
     private float cooldown = 1f;
@@ -29,7 +28,6 @@ public class PlayerDeathTracker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sessionID = TestingManager.Instance.GetSessionID();
     }
 
     // Update is called once per frame
@@ -103,7 +101,7 @@ public class PlayerDeathTracker : MonoBehaviour
 
             playerDeathRecords[playerName][round] = finalCause;
 
-            string data = $"{sessionID},{round+1},Death,{playerName},{finalCause}";    
+            string data = $"{round+1},Death,{playerName},{finalCause}";    
             TestingLogger.LogToCSV(data);
 
             Debug.Log($"{playerName} died in round {round + 1} from {finalCause}");
