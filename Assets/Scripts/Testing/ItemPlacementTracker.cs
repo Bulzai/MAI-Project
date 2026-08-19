@@ -43,7 +43,9 @@ public class ItemPlacementTracker : MonoBehaviour
     {
         GridItem gridItem = placedGridItem.GetComponent<GridItem>();
         if (gridItem == null) return;
-        string playerName = gridItem.player.gameObject.name;
+        string playerName = "COM";
+        if(gridItem.player != null) playerName = gridItem.player.gameObject.name;
+
 
         string itemName = placedGridItem.name;
         itemName = System.Text.RegularExpressions.Regex.Replace(itemName, @"\(Clone\)", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
