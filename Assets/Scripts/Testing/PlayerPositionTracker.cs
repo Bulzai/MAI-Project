@@ -7,7 +7,7 @@ public class PlayerPositionTracker : MonoBehaviour
 {
     private string sessionID;
     private float time;
-    private float logTick = 2f;
+    private float logTick = 1f;
 
 
     // Start is called before the first frame update

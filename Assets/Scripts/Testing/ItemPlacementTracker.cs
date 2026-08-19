@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemPlacementTracker : MonoBehaviour
 {
-    private bool isRandomPlacement = false;
+    private bool isRandomPlacement = true;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +31,11 @@ public class ItemPlacementTracker : MonoBehaviour
     {
         GridItem gridItem = placedGridItem.GetComponent<GridItem>();
         if (gridItem == null) return;
-        string playerName = gridItem.player.gameObject.name;
+
+        string playerName = "COM";
+        if (gridItem.player != null)
+            playerName = gridItem.player.gameObject.name;
+
 
         string itemName = placedGridItem.name;
         itemName = System.Text.RegularExpressions.Regex.Replace(itemName, @"\(Clone\)", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
@@ -46,8 +50,8 @@ public class ItemPlacementTracker : MonoBehaviour
 
         string data = "";
 
-        if (!isRandomPlacement) data = $"{round},ItemPlacement,{itemName},COM:{position}";
-        else data = $"{round+1},ItemPlacement,COM,{position}";
+        if (!isRandomPlacement) data = $"{round+1},ItemPlacement,{itemName},{playerName}:{position}";
+        else data = $"{round+1},ItemPlacement,{itemName},COM:{position}";
 
         TestingLogger.LogToCSV(data);
 
